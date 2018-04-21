@@ -31,74 +31,67 @@ func main() {
 	}
 	ps := parser.New()
 
-	// removes blank lines
-	ps.AddNewRule(
+	emptyRule := parser.NewRule(
 		"^\\s*$",
-		func(ctx *parser.Context, p map[string]string) error {
+		func(ctx *parser.Context) {
 			ctx.RemoveLine()
-			return nil
 		},
 	)
+	ps.Add(emptyRule)
 
-	// removes trailing whitespace
-	ps.AddNewRule(
+	whitespaceRule := parser.NewRule(
 		"^(?P<content>.+?)\\s+$",
-		func(ctx *parser.Context, p map[string]string) error {
-			ctx.ReplaceLine(p["content"])
-			return nil
+		func(ctx *parser.Context) {
+			ctx.ReplaceLine(ctx.Param("content"))
 		},
 	)
+	ps.Add(whitespaceRule)
 
-	// removes comments
-	ps.AddNewRule(
+	commentRule := parser.NewRule(
 		"^(?P<content>[^#]*)(#.*)$",
-		func(ctx *parser.Context, p map[string]string) error {
-			ctx.ReplaceLine(p["content"])
-			return nil
+		func(ctx *parser.Context) {
+			ctx.ReplaceLine(ctx.Param("content"))
 		},
 	)
+	ps.Add(commentRule)
 
-	// checks that a supported version is declared
-	var versionRule *parser.Rule
-	versionRule = parser.NewRule(
+	versionRule := parser.NewRule(
 		"^(version:(?P<number>\\d+))?(?P<content>.*)$",
-		func(ctx *parser.Context, p map[string]string) error {
-			number := p["number"]
-			if number == "" || p["content"] != "" {
-				return fmt.Errorf("could not find version")
+		func(ctx *parser.Context) {
+			number := ctx.Param("number")
+			if number == "" || ctx.Param("content") != "" {
+				ctx.Error("could not find version")
+				return
 			}
 			if number != "1" {
-				return fmt.Errorf("unsupported version")
+				ctx.Error("unsupported version")
+				return
 			}
 			pg.Version = number
 			ctx.RemoveLine()
-			versionRule.Disable()
-			return nil
+			ctx.DisableRule()
 		},
 	)
 	ps.Add(versionRule)
 
-	// matches metadata key-value pairs
-	ps.AddNewRule(
+	metadataRule := parser.NewRule(
 		"^(?P<key>[A-Za-z0-9_-]+)=\"(?P<value>.*)\"$",
-		func(ctx *parser.Context, p map[string]string) error {
-			pg.Meta[p["key"]] = p["value"]
+		func(ctx *parser.Context) {
+			pg.Meta[ctx.Param("key")] = ctx.Param("value")
 			ctx.RemoveLine()
-			return nil
 		},
 	)
+	ps.Add(metadataRule)
 
-	// matches the header
-	var headerRule *parser.Rule
-	headerRule = parser.NewRule(
+	headerRule := parser.NewRule(
 		"^(===)?(?P<content>.*)$",
-		func(ctx *parser.Context, p map[string]string) error {
-			if p["content"] != "" {
-				return fmt.Errorf("could not parse header")
+		func(ctx *parser.Context) {
+			if ctx.Param("content") != "" {
+				ctx.Error("could not parse header")
+				return
 			}
 			ctx.RemoveLine()
-			headerRule.Disable()
-			return nil
+			ctx.DisableRule()
 		},
 	)
 	ps.Add(headerRule)
@@ -106,33 +99,32 @@ func main() {
 	currentGroup := 0
 	prevIndentLevel := 0
 
-	// matches group separators
-	ps.AddNewRule(
+	groupRule := parser.NewRule(
 		"^---$",
-		func(ctx *parser.Context, p map[string]string) error {
+		func(ctx *parser.Context) {
 			currentGroup++
 			pg.Groups = append(pg.Groups, &Group{Items: []*Item{}})
 			prevIndentLevel = 0
 			ctx.RemoveLine()
-			return nil
 		},
 	)
+	ps.Add(groupRule)
 
-	// matches links and labels
 	ancestry := []*Item{}
-	ps.AddNewRule(
+	labelRule := parser.NewRule(
 		"^(?P<indent>(?:\\s{4})*)(?P<label>[^\\s].+?)?(?:\\[(?P<link>.*)\\])?$",
-		func(ctx *parser.Context, p map[string]string) error {
-			indent := p["indent"]
-			label := strings.TrimSpace(p["label"])
-			link := strings.TrimSpace(p["link"])
+		func(ctx *parser.Context) {
+			indent := ctx.Param("indent")
+			label := strings.TrimSpace(ctx.Param("label"))
+			link := strings.TrimSpace(ctx.Param("link"))
 
 			indentLevel := 0
 			if len(indent) > 0 {
 				indentLevel = len(indent) / 4
 			}
 			if indentLevel-prevIndentLevel > 1 {
-				return fmt.Errorf("line over-indented")
+				ctx.Error("line over-indented")
+				return
 			}
 
 			if label == "" {
@@ -177,9 +169,9 @@ func main() {
 			prevIndentLevel = indentLevel
 
 			ctx.RemoveLine()
-			return nil
 		},
 	)
+	ps.Add(labelRule)
 
 	err := ps.Parse(spec)
 	if err != nil {

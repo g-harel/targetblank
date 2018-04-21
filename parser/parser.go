@@ -6,19 +6,15 @@ import (
 )
 
 type parser struct {
-	rules []*Rule
+	rules []*rule
 }
 
 func New() *parser {
 	return &parser{}
 }
 
-func (p *parser) Add(r *Rule) {
+func (p *parser) Add(r *rule) {
 	p.rules = append(p.rules, r)
-}
-
-func (p *parser) AddNewRule(pattern string, handler RuleHandler) {
-	p.rules = append(p.rules, NewRule(pattern, handler))
 }
 
 func (p *parser) Parse(s string) error {
@@ -35,24 +31,28 @@ func (p *parser) Parse(s string) error {
 	for ctx.lineNumber >= 0 && ctx.lineNumber < len(ctx.lines) {
 		matched := false
 		for _, r := range p.rules {
-			if r.pattern == nil {
+			if r.disabled || r.pattern == nil || r.handler == nil {
 				continue
 			}
 			match := r.pattern.FindStringSubmatch(ctx.lines[ctx.lineNumber])
 			if match == nil {
+				if r.strict {
+					return fmt.Errorf(r.strictMessage)
+				}
 				continue
 			}
 			matched = true
 
-			params := make(map[string]string)
+			ctx.params = make(map[string]string)
 			for i, s := range r.pattern.SubexpNames() {
 				if i <= len(match) {
-					params[s] = match[i]
+					ctx.params[s] = match[i]
 				}
 			}
-			err := (*r.handler)(ctx, params)
-			if err != nil {
-				return err
+			ctx.currentRule = r
+			(*r.handler)(ctx)
+			if ctx.err != nil {
+				return ctx.err
 			}
 			break
 		}
