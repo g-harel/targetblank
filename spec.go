@@ -1,5 +1,8 @@
+package main
+
+var spec = `
 # single-line comments can be added anywhere
-version:1.0.0                   # semver version before any content
+version:1                       # version before any content
                                 # blank lines are ignored
 key="value"                     # header contains key-value pairs
 search="google"                 # search bar provider is customizable
@@ -15,3 +18,4 @@ label6
     http://ee.co/9              # labels that look like links should be clickable
     [http://ee.co/10]           # label is optional
     label10
+`

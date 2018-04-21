@@ -18,7 +18,7 @@
                     "items": [
                         {
                             "label": "label3",
-                            "link": "",
+                            "link": "label3",
                             "items": [
                                 {
                                     "label": "label4",
@@ -28,7 +28,7 @@
                             ]
                         },
                         {
-                            "label": "label5",
+                            "label": "label-5",
                             "link": "http://ee.co/5",
                             "items": []
                         }
@@ -39,24 +39,30 @@
         {
             "items": [
                 {
-                    "label": "label7",
-                    "link": "",
-                    "items": []
-                },
-                {
-                    "label": "http://ee.co/9",
-                    "link": "http://ee.co/9",
-                    "items": []
-                },
-                {
-                    "label": "http://ee.co/10",
-                    "link": "http://ee.co/10",
-                    "items": []
-                },
-                {
-                    "label": "label10",
-                    "link": "",
-                    "items": []
+                    "label": "label6",
+                    "link": "label6",
+                    "items": [
+                        {
+                            "label": "label7",
+                            "link": "label7",
+                            "items": []
+                        },
+                        {
+                            "label": "http://ee.co/9",
+                            "link": "http://ee.co/9",
+                            "items": []
+                        },
+                        {
+                            "label": "[http://ee.co/10]",
+                            "link": "[http://ee.co/10]",
+                            "items": []
+                        },
+                        {
+                            "label": "label10",
+                            "link": "label10",
+                            "items": []
+                        }
+                    ]
                 }
             ]
         }
