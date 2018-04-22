@@ -22,7 +22,7 @@ label 2 [http://ee.co/2]        # label can contain spaces
 ---                             # groups split layout into columns
 label6
     label7                      # indentation level of 4 spaces
-    http://ee.co/9              # labels that look like links should be clickable
+    localhost:80/test           # labels that look like links should be clickable
     [http://ee.co/10]           # label is optional
     label10
 `

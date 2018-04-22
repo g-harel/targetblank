@@ -5,6 +5,7 @@ import (
 	"github.com/g-harel/targetblank/parser"
 )
 
+// Parse uses this package's rules to parse the input string into a page.
 func Parse(s string) (*page.Page, error) {
 	pg := page.New()
 

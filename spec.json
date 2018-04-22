@@ -18,7 +18,7 @@
                     "items": [
                         {
                             "label": "label3",
-                            "link": "label3",
+                            "link": "",
                             "items": [
                                 {
                                     "label": "label4",
@@ -40,26 +40,26 @@
             "items": [
                 {
                     "label": "label6",
-                    "link": "label6",
+                    "link": "",
                     "items": [
                         {
                             "label": "label7",
-                            "link": "label7",
+                            "link": "",
                             "items": []
                         },
                         {
-                            "label": "http://ee.co/9",
-                            "link": "http://ee.co/9",
+                            "label": "localhost:80/test",
+                            "link": "localhost:80/test",
                             "items": []
                         },
                         {
-                            "label": "[http://ee.co/10]",
-                            "link": "[http://ee.co/10]",
+                            "label": "http://ee.co/10",
+                            "link": "http://ee.co/10",
                             "items": []
                         },
                         {
                             "label": "label10",
-                            "link": "label10",
+                            "link": "",
                             "items": []
                         }
                     ]

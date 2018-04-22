@@ -6,6 +6,7 @@ import (
 	"github.com/g-harel/targetblank/parser"
 )
 
+// Empty removes lines that are entirely whitespace.
 func Empty(p *page.Page) *parser.Rule {
 	return parser.NewRule().
 		Name("empty").
@@ -15,6 +16,7 @@ func Empty(p *page.Page) *parser.Rule {
 		})
 }
 
+// Whitespace removes empty whitespace at the end of lines.
 func Whitespace(p *page.Page) *parser.Rule {
 	return parser.NewRule().
 		Name("whitespace").
@@ -24,6 +26,7 @@ func Whitespace(p *page.Page) *parser.Rule {
 		})
 }
 
+// Comment removes comments.
 func Comment(p *page.Page) *parser.Rule {
 	return parser.NewRule().
 		Name("comment").
@@ -33,25 +36,25 @@ func Comment(p *page.Page) *parser.Rule {
 		})
 }
 
+// Version is a required rule which matches with a version declaration.
+// When the version is found, the corresponding rules are added to the parser.
 func Version(p *page.Page) *parser.Rule {
 	return parser.NewRule().
 		Name("version").
 		Required().
 		Pattern("version (?P<number>\\d+)").
 		Handler(func(ctx *parser.Context) {
-			number := ctx.Param("number")
-			if number == "1" {
+			version := ctx.Param("number")
+			if version == "1" {
 				ctx.AddRules(
 					v1rules.Metadata(p),
 					v1rules.Header(p),
-					v1rules.Group(p),
-					v1rules.Label(p),
 				)
 			} else {
 				ctx.Error("unsupported version")
 				return
 			}
-			p.SetVersion(number)
+			p.SetVersion(version)
 			ctx.IgnoreLine()
 			ctx.DisableRule()
 		})
