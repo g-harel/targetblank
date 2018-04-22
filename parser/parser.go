@@ -5,26 +5,27 @@ import (
 	"strings"
 )
 
-type parser struct {
-	rules []*rule
+type Parser struct {
+	rules []*Rule
 }
 
-func New() *parser {
-	return &parser{}
+func New() *Parser {
+	return &Parser{}
 }
 
-func (p *parser) Add(rules ...*rule) {
+func (p *Parser) Add(rules ...*Rule) {
 	p.rules = append(p.rules, rules...)
 }
 
-func (p *parser) Parse(s string) error {
+func (p *Parser) Parse(s string) error {
 	lines := strings.Split(s, "\n")
 	if len(lines) == 0 {
 		return fmt.Errorf("input string is empty")
 	}
 
 	ctx := &Context{
-		lines: lines,
+		lines:  lines,
+		parser: p,
 	}
 
 	for len(ctx.lines) > 0 {
@@ -35,8 +36,8 @@ func (p *parser) Parse(s string) error {
 			}
 			match := r.pattern.FindStringSubmatch(ctx.lines[0])
 			if match == nil {
-				if r.strict {
-					ctx.Error(r.strictMessage)
+				if r.required {
+					ctx.Error("expected %s", r.name)
 					return ctx.currentErr
 				}
 				continue
@@ -58,7 +59,14 @@ func (p *parser) Parse(s string) error {
 			break
 		}
 		if !matched {
-			ctx.Error("could not match line")
+			ctx.Error("syntax error")
+			return ctx.currentErr
+		}
+	}
+
+	for _, r := range p.rules {
+		if r.required && !r.disabled {
+			ctx.Error("expected %s", r.name)
 			return ctx.currentErr
 		}
 	}

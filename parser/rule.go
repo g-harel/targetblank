@@ -4,35 +4,34 @@ import "regexp"
 
 type RuleHandler func(ctx *Context)
 
-type rule struct {
-	pattern       *regexp.Regexp
-	handler       *RuleHandler
-	disabled      bool
-	strict        bool
-	strictMessage string
+type Rule struct {
+	pattern  *regexp.Regexp
+	handler  *RuleHandler
+	disabled bool
+	required bool
+	name     string
 }
 
-func NewRule() *rule {
-	return &rule{}
+func NewRule() *Rule {
+	return &Rule{}
 }
 
-func (r *rule) Pattern(p string) *rule {
+func (r *Rule) Name(n string) *Rule {
+	r.name = n
+	return r
+}
+
+func (r *Rule) Pattern(p string) *Rule {
 	r.pattern = regexp.MustCompile("^" + p + "$")
 	return r
 }
 
-func (r *rule) Handler(h RuleHandler) *rule {
+func (r *Rule) Handler(h RuleHandler) *Rule {
 	r.handler = &h
 	return r
 }
 
-func (r *rule) Strict(m string) *rule {
-	r.strict = true
-	r.strictMessage = m
-	return r
-}
-
-func (r *rule) Disable() *rule {
-	r.disabled = true
+func (r *Rule) Required() *Rule {
+	r.required = true
 	return r
 }
