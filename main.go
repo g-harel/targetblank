@@ -5,179 +5,126 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/g-harel/targetblank/page"
 	"github.com/g-harel/targetblank/parser"
 )
 
-type Item struct {
-	Label string  `json:"label"`
-	Link  string  `json:"link"`
-	Items []*Item `json:"items"`
-}
-
-type Group struct {
-	Items []*Item `json:"items"`
-}
-
-type Page struct {
-	Version string            `json:"version"`
-	Meta    map[string]string `json:"meta"`
-	Groups  []*Group          `json:"groups"`
-}
+var spec = `
+# single-line comments can be added anywhere
+version 1                       # version before any content
+                                # blank lines are ignored
+key="value"                     # header contains key-value pairs
+search="google"                 # search bar provider is customizable
+===                             # header is mandatory
+label_1 [http://ee.co/1]        # label can contain underscores
+label 2 [http://ee.co/2]        # label can contain spaces
+    label3                      # link is optional
+        label4 [http://ee.co/4] # list is infinitely nestable
+    label-5 [http://ee.co/5]    # label can contain dashes
+---                             # groups split layout into columns
+label6
+    label7                      # indentation level of 4 spaces
+    http://ee.co/9              # labels that look like links should be clickable
+    [http://ee.co/10]           # label is optional
+    label10
+`
 
 func main() {
-	pg := Page{
-		Meta:   make(map[string]string),
-		Groups: []*Group{&Group{Items: []*Item{}}},
-	}
-	ps := parser.New()
+	tmp := page.New()
 
-	emptyRule := parser.NewRule(
-		"^\\s*$",
-		func(ctx *parser.Context) {
-			ctx.RemoveLine()
-		},
-	)
-	ps.Add(emptyRule)
+	emptyRule := parser.NewRule().
+		Pattern("\\s*").
+		Handler(func(ctx *parser.Context) {
+			ctx.IgnoreLine()
+		})
 
-	whitespaceRule := parser.NewRule(
-		"^(?P<content>.+?)\\s+$",
-		func(ctx *parser.Context) {
+	whitespaceRule := parser.NewRule().
+		Pattern("(?P<content>.+?)\\s+").
+		Handler(func(ctx *parser.Context) {
 			ctx.ReplaceLine(ctx.Param("content"))
-		},
-	)
-	ps.Add(whitespaceRule)
+		})
 
-	commentRule := parser.NewRule(
-		"^(?P<content>[^#]*)(#.*)$",
-		func(ctx *parser.Context) {
+	commentRule := parser.NewRule().
+		Pattern("(?P<content>[^#]*)(#.*)").
+		Handler(func(ctx *parser.Context) {
 			ctx.ReplaceLine(ctx.Param("content"))
-		},
-	)
-	ps.Add(commentRule)
+		})
 
-	versionRule := parser.NewRule(
-		"^(version:(?P<number>\\d+))?(?P<content>.*)$",
-		func(ctx *parser.Context) {
+	versionRule := parser.NewRule().
+		Strict("unkown syntax is not version (version X)").
+		Pattern("version (?P<number>\\d+)").
+		Handler(func(ctx *parser.Context) {
 			number := ctx.Param("number")
-			if number == "" || ctx.Param("content") != "" {
-				ctx.Error("could not find version")
-				return
-			}
 			if number != "1" {
 				ctx.Error("unsupported version")
 				return
 			}
-			pg.Version = number
-			ctx.RemoveLine()
+			tmp.SetVersion(number)
+			ctx.IgnoreLine()
 			ctx.DisableRule()
-		},
-	)
-	ps.Add(versionRule)
+		})
 
-	metadataRule := parser.NewRule(
-		"^(?P<key>[A-Za-z0-9_-]+)=\"(?P<value>.*)\"$",
-		func(ctx *parser.Context) {
-			pg.Meta[ctx.Param("key")] = ctx.Param("value")
-			ctx.RemoveLine()
-		},
-	)
-	ps.Add(metadataRule)
+	metadataRule := parser.NewRule().
+		Pattern("(?P<key>[A-Za-z0-9_-]+)=\"(?P<value>.*)\"").
+		Handler(func(ctx *parser.Context) {
+			tmp.AddMeta(ctx.Param("key"), ctx.Param("value"))
+			ctx.IgnoreLine()
+		})
 
-	headerRule := parser.NewRule(
-		"^(===)?(?P<content>.*)$",
-		func(ctx *parser.Context) {
-			if ctx.Param("content") != "" {
-				ctx.Error("could not parse header")
-				return
-			}
-			ctx.RemoveLine()
+	headerRule := parser.NewRule().
+		Strict("unkown syntax is not header (===)").
+		Pattern("===").
+		Handler(func(ctx *parser.Context) {
+			ctx.IgnoreLine()
 			ctx.DisableRule()
-		},
-	)
-	ps.Add(headerRule)
+			metadataRule.Disable()
+		})
 
-	currentGroup := 0
-	prevIndentLevel := 0
+	groupRule := parser.NewRule().
+		Pattern("---").
+		Handler(func(ctx *parser.Context) {
+			tmp.AddGroup()
+			ctx.IgnoreLine()
+		})
 
-	groupRule := parser.NewRule(
-		"^---$",
-		func(ctx *parser.Context) {
-			currentGroup++
-			pg.Groups = append(pg.Groups, &Group{Items: []*Item{}})
-			prevIndentLevel = 0
-			ctx.RemoveLine()
-		},
-	)
-	ps.Add(groupRule)
-
-	ancestry := []*Item{}
-	labelRule := parser.NewRule(
-		"^(?P<indent>(?:\\s{4})*)(?P<label>[^\\s].+?)?(?:\\[(?P<link>.*)\\])?$",
-		func(ctx *parser.Context) {
+	labelRule := parser.NewRule().
+		Pattern("(?P<indent>\\s*)(?P<label>[^\\s].+?)?(?:\\[(?P<link>.*)\\])?").
+		Handler(func(ctx *parser.Context) {
 			indent := ctx.Param("indent")
 			label := strings.TrimSpace(ctx.Param("label"))
 			link := strings.TrimSpace(ctx.Param("link"))
 
-			indentLevel := 0
-			if len(indent) > 0 {
-				indentLevel = len(indent) / 4
-			}
-			if indentLevel-prevIndentLevel > 1 {
-				ctx.Error("line over-indented")
+			if len(indent)%4 != 0 {
+				ctx.Error("indentation must be in 4 space increments")
 				return
 			}
+			indentLevel := len(indent) / 4
 
-			if label == "" {
-				label = link
+			err := tmp.AddItem(indentLevel, page.NewItem(link, label))
+			if err != nil {
+				ctx.Error(err.Error())
+				return
 			}
-			if link == "" {
-				link = label
-			}
+			ctx.IgnoreLine()
+		})
 
-			item := &Item{
-				Label: label,
-				Link:  link,
-				Items: []*Item{},
-			}
-
-			if indentLevel == 0 {
-				pg.Groups[currentGroup].Items = append(
-					pg.Groups[currentGroup].Items,
-					item,
-				)
-				ancestry = []*Item{item}
-			} else if indentLevel == prevIndentLevel {
-				ancestry[len(ancestry)-2].Items = append(
-					ancestry[len(ancestry)-2].Items,
-					item,
-				)
-				ancestry[len(ancestry)-1] = item
-			} else if indentLevel > prevIndentLevel {
-				ancestry[len(ancestry)-1].Items = append(
-					ancestry[len(ancestry)-1].Items,
-					item,
-				)
-				ancestry = append(ancestry, item)
-			} else {
-				ancestry[indentLevel-1].Items = append(
-					ancestry[indentLevel-1].Items,
-					item,
-				)
-				ancestry = append(ancestry[indentLevel+1:], item)
-			}
-
-			prevIndentLevel = indentLevel
-
-			ctx.RemoveLine()
-		},
+	ps := parser.New()
+	ps.Add(
+		emptyRule,
+		whitespaceRule,
+		commentRule,
+		versionRule,
+		metadataRule,
+		headerRule,
+		groupRule,
+		labelRule,
 	)
-	ps.Add(labelRule)
 
 	err := ps.Parse(spec)
 	if err != nil {
 		panic(err)
 	}
 
-	b, _ := json.MarshalIndent(pg, "", "    ")
+	b, _ := json.MarshalIndent(tmp, "", "    ")
 	fmt.Println(string(b))
 }

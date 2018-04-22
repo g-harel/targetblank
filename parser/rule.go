@@ -12,12 +12,12 @@ type rule struct {
 	strictMessage string
 }
 
-func NewRule(pattern string, handler RuleHandler) *rule {
-	return (&rule{}).Pattern(pattern).Handler(handler)
+func NewRule() *rule {
+	return &rule{}
 }
 
 func (r *rule) Pattern(p string) *rule {
-	r.pattern = regexp.MustCompile(p)
+	r.pattern = regexp.MustCompile("^" + p + "$")
 	return r
 }
 

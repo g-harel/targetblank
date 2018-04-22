@@ -5,22 +5,26 @@ import (
 )
 
 type Context struct {
-	lines       []string
-	lineNumber  int
-	currentRule *rule
-	params      map[string]string
-	err         error
+	lines         []string
+	ignoredLines  int
+	currentRule   *rule
+	currentParams map[string]string
+	currentErr    error
 }
 
-func (c *Context) RemoveLine() {
-	c.lines = append(
-		c.lines[:c.lineNumber],
-		c.lines[1+c.lineNumber:]...,
-	)
+func (c *Context) reset() {
+	c.currentRule = nil
+	c.currentErr = nil
+	c.currentParams = make(map[string]string)
+}
+
+func (c *Context) IgnoreLine() {
+	c.lines = c.lines[1:]
+	c.ignoredLines++
 }
 
 func (c *Context) ReplaceLine(s string) {
-	c.lines[c.lineNumber] = s
+	c.lines[0] = s
 }
 
 func (c *Context) DisableRule() {
@@ -28,9 +32,10 @@ func (c *Context) DisableRule() {
 }
 
 func (c *Context) Param(s string) string {
-	return c.params[s]
+	return c.currentParams[s]
 }
 
 func (c *Context) Error(s string, args ...interface{}) {
-	c.err = fmt.Errorf(s, args...)
+	errString := fmt.Sprintf(s, args...)
+	c.currentErr = fmt.Errorf("Error on line %d: %v", c.ignoredLines+1, errString)
 }

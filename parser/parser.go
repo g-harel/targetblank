@@ -13,8 +13,8 @@ func New() *parser {
 	return &parser{}
 }
 
-func (p *parser) Add(r *rule) {
-	p.rules = append(p.rules, r)
+func (p *parser) Add(rules ...*rule) {
+	p.rules = append(p.rules, rules...)
 }
 
 func (p *parser) Parse(s string) error {
@@ -24,40 +24,42 @@ func (p *parser) Parse(s string) error {
 	}
 
 	ctx := &Context{
-		lineNumber: 0,
-		lines:      lines,
+		lines: lines,
 	}
 
-	for ctx.lineNumber >= 0 && ctx.lineNumber < len(ctx.lines) {
+	for len(ctx.lines) > 0 {
 		matched := false
 		for _, r := range p.rules {
 			if r.disabled || r.pattern == nil || r.handler == nil {
 				continue
 			}
-			match := r.pattern.FindStringSubmatch(ctx.lines[ctx.lineNumber])
+			match := r.pattern.FindStringSubmatch(ctx.lines[0])
 			if match == nil {
 				if r.strict {
-					return fmt.Errorf(r.strictMessage)
+					ctx.Error(r.strictMessage)
+					return ctx.currentErr
 				}
 				continue
 			}
 			matched = true
 
-			ctx.params = make(map[string]string)
+			ctx.reset()
+			ctx.currentRule = r
 			for i, s := range r.pattern.SubexpNames() {
 				if i <= len(match) {
-					ctx.params[s] = match[i]
+					ctx.currentParams[s] = match[i]
 				}
 			}
-			ctx.currentRule = r
+
 			(*r.handler)(ctx)
-			if ctx.err != nil {
-				return ctx.err
+			if ctx.currentErr != nil {
+				return ctx.currentErr
 			}
 			break
 		}
 		if !matched {
-			return fmt.Errorf("could not match line: %s", ctx.lines[ctx.lineNumber])
+			ctx.Error("could not match line")
+			return ctx.currentErr
 		}
 	}
 
