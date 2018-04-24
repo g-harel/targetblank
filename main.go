@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/g-harel/targetblank/page"
+
 	"github.com/g-harel/targetblank/page/parser"
 )
 
@@ -28,10 +30,11 @@ label6
 `
 
 func main() {
-	tmp, parseErr := pageparser.Parse(spec)
+	pg := page.New()
+	parseErr := pageparser.Parser(pg).Parse(spec)
 	if parseErr != nil {
 		panic(parseErr)
 	}
-	b, _ := json.MarshalIndent(tmp, "", "    ")
+	b, _ := json.MarshalIndent(pg, "", "    ")
 	fmt.Println(string(b))
 }

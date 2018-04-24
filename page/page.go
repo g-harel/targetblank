@@ -4,11 +4,10 @@ import "fmt"
 
 // Page is a list of labels/links and metadata.
 type Page struct {
-	Version string            `json:"version"`
-	Meta    map[string]string `json:"meta"`
-	Groups  []*Group          `json:"groups"`
-	// Maintains the list of parents of the last inserted item.
-	ancestry []*Item
+	Version  string            `json:"version"`
+	Meta     map[string]string `json:"meta"`
+	Groups   []*Group          `json:"groups"`
+	ancestry []*Item           // Maintains the list of parents of the last inserted item.
 }
 
 // New creates a new page with non-nil data structures.
@@ -36,25 +35,25 @@ func (p *Page) AddGroup() {
 	p.ancestry = []*Item{}
 }
 
-// AddItem adds a new item to the page relative to the most recently inserted item.
+// AddItem adds a new item to the page relative to the current ancestry.
 func (p *Page) AddItem(depth int, item *Item) error {
-	if depth < 0 {
+	if depth == 0 {
+		parent := p.Groups[len(p.Groups)-1]
+		parent.Items = append(parent.Items, item)
+		p.ancestry = []*Item{item}
+		return nil
+	}
+
+	l := len(p.ancestry)
+	if depth < 0 || depth > l {
 		return fmt.Errorf("invalid depth")
 	}
-	if depth == 0 {
-		group := p.Groups[len(p.Groups)-1]
-		group.Items = append(group.Items, item)
-		p.ancestry = []*Item{item}
-	} else if depth == len(p.ancestry) {
-		parent := p.ancestry[depth-1]
-		parent.Items = append(parent.Items, item)
-		p.ancestry = append(p.ancestry, item)
-	} else if depth < len(p.ancestry) {
-		parent := p.ancestry[depth-1]
-		parent.Items = append(parent.Items, item)
-		p.ancestry = append(p.ancestry[depth-1:], item)
-	} else {
-		return fmt.Errorf("depth skipped")
+
+	if depth < l {
+		p.ancestry = p.ancestry[:depth]
 	}
+	parent := p.ancestry[depth-1]
+	parent.Items = append(parent.Items, item)
+	p.ancestry = append(p.ancestry, item)
 	return nil
 }

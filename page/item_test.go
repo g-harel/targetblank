@@ -44,13 +44,13 @@ func TestNewItem(t *testing.T) {
 		expectLabel(t, i, strings.TrimSpace(label))
 	})
 
-	t.Run("should create items that do not contain null values when serialized", func(t *testing.T) {
+	t.Run("should create Items that do not contain null values when serialized", func(t *testing.T) {
 		i := NewItem("", "")
 		b, _ := json.Marshal(i)
 		s := string(b)
 
 		if strings.Index(s, "null") >= 0 {
-			t.Errorf("serialized object contains a null value: \"%v\"", s)
+			t.Errorf("Serialized Item contains a null value: \"%v\"", s)
 		}
 	})
 
