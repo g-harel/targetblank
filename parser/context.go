@@ -11,7 +11,7 @@ type Context struct {
 	ignoredLines  int
 	currentRule   *Rule
 	currentParams map[string]string
-	currentErr    error
+	currentErr    *Error
 }
 
 // Resets all temporary context state.
@@ -34,7 +34,7 @@ func (c *Context) ReplaceLine(s string) {
 }
 
 // AddRules allow rule handlers to add more rules once they've matched.
-// This functionality (coupled with the rule disablings) makes it easier to parse different sections of files independently.
+// This functionality (coupled with rule disabling) makes it easier to parse different sections of files independently.
 func (c *Context) AddRules(r ...*Rule) {
 	c.parser.Add(r...)
 }
@@ -62,5 +62,8 @@ func (c *Context) Param(s string) string {
 // Error adds an error to the context and formats it to include the line number.
 func (c *Context) Error(s string, args ...interface{}) {
 	errString := fmt.Sprintf(s, args...)
-	c.currentErr = fmt.Errorf("Error on line %d: %v", c.ignoredLines+1, errString)
+	c.currentErr = &Error{
+		line:  c.ignoredLines + 1,
+		cause: errString,
+	}
 }

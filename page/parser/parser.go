@@ -6,7 +6,7 @@ import (
 )
 
 // Parse uses this package's rules to parse the input string into a page.
-func Parse(s string) (*page.Page, error) {
+func Parse(s string) (*page.Page, *parser.Error) {
 	pg := page.New()
 
 	ps := parser.New()

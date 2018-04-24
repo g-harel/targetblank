@@ -28,9 +28,9 @@ label6
 `
 
 func main() {
-	tmp, err := pageparser.Parse(spec)
-	if err != nil {
-		panic(err)
+	tmp, parseErr := pageparser.Parse(spec)
+	if parseErr != nil {
+		panic(parseErr)
 	}
 	b, _ := json.MarshalIndent(tmp, "", "    ")
 	fmt.Println(string(b))

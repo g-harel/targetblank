@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Matches urls with a priority on reducing misses.
+// Matches strings that look like urls.
 var urlPattern = regexp.MustCompile("^\\S+((\\.|:)\\S+)+(\\/\\S*)*$")
 
 // Item contains information about a single label/link and any potential children.

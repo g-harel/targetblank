@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -22,7 +21,7 @@ func (p *Parser) Add(rules ...*Rule) {
 }
 
 // Parse parses the given string according to the added rules.
-func (p *Parser) Parse(s string) error {
+func (p *Parser) Parse(s string) *Error {
 	ctx := &Context{
 		lines:  strings.Split(s, "\n"),
 		parser: p,
@@ -35,7 +34,8 @@ func (p *Parser) Parse(s string) error {
 				continue
 			}
 			if r.pattern == nil || r.handler == nil {
-				return fmt.Errorf("invalid rule (name: \"%s\")", r.name)
+				ctx.Error("invalid rule (name: \"%s\")", r.name)
+				return ctx.currentErr
 			}
 
 			match := r.pattern.FindStringSubmatch(ctx.lines[0])
