@@ -20,19 +20,22 @@ func New() *Page {
 }
 
 // SetVersion changes the page's version.
-func (p *Page) SetVersion(v string) {
+func (p *Page) SetVersion(v string) *Page {
 	p.Version = v
+	return p
 }
 
 // AddMeta adds a key/value pair into the page's metadata map.
-func (p *Page) AddMeta(key, value string) {
+func (p *Page) AddMeta(key, value string) *Page {
 	p.Meta[key] = value
+	return p
 }
 
 // AddGroup creates a new empty group.
-func (p *Page) AddGroup() {
+func (p *Page) AddGroup() *Page {
 	p.Groups = append(p.Groups, &Group{Items: []*Item{}})
 	p.ancestry = []*Item{}
+	return p
 }
 
 // AddItem adds a new item to the page relative to the current ancestry.

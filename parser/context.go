@@ -63,7 +63,7 @@ func (c *Context) Param(s string) string {
 func (c *Context) Error(s string, args ...interface{}) {
 	errString := fmt.Sprintf(s, args...)
 	c.currentErr = &Error{
-		line:  c.ignoredLines + 1,
+		Line:  c.ignoredLines + 1,
 		cause: errString,
 	}
 }

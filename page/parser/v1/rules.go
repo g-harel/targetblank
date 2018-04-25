@@ -1,56 +1,56 @@
-package rules
+package v1
 
 import (
 	"github.com/g-harel/targetblank/page"
 	"github.com/g-harel/targetblank/parser"
 )
 
-// Metadata matches with header metadata values.
-func Metadata(p *page.Page) *parser.Rule {
+// MetadataRule matches with header metadata values.
+func MetadataRule(p *page.Page) *parser.Rule {
 	return parser.NewRule().
-		Name("metadata").
-		Pattern("(?P<key>[A-Za-z0-9_-]+)=\"(?P<value>.*)\"").
+		Name("v1metadata").
+		Pattern("(?P<key>[A-Za-z0-9_-]+)\\s*=\\s*(?P<value>.*)\\s*").
 		Handler(func(ctx *parser.Context) {
 			p.AddMeta(ctx.Param("key"), ctx.Param("value"))
 			ctx.IgnoreLine()
 		})
 }
 
-// Header is a required rule which matches with the header delimiter.
+// HeaderRule is a required rule which matches with the header delimiter.
 // Once the header is found, the remaining rules are added to the parser.
-func Header(p *page.Page) *parser.Rule {
+func HeaderRule(p *page.Page) *parser.Rule {
 	return parser.NewRule().
-		Name("header").
+		Name("v1header").
 		Required().
 		Pattern("===").
 		Handler(func(ctx *parser.Context) {
 			ctx.IgnoreLine()
 			ctx.DisableRule()
 			ctx.AddRules(
-				Group(p),
-				Label(p),
+				GroupRule(p),
+				LabelRule(p),
 			)
 		})
 }
 
-// Group matches group delimiters.
+// GroupRule matches group delimiters.
 // These delimiters indicate a new group should be created.
-func Group(p *page.Page) *parser.Rule {
+func GroupRule(p *page.Page) *parser.Rule {
 	return parser.NewRule().
-		Name("group").
+		Name("v1group").
 		Pattern("---").
 		Handler(func(ctx *parser.Context) {
 			p.AddGroup()
 			ctx.IgnoreLine()
-			ctx.DisableOtherRule("metadata")
+			ctx.DisableOtherRule("v1metadata")
 		})
 }
 
-// Label matches labelled links.
+// LabelRule matches labelled links.
 // Item are added to the page at the specified depth.
-func Label(p *page.Page) *parser.Rule {
+func LabelRule(p *page.Page) *parser.Rule {
 	return parser.NewRule().
-		Name("label").
+		Name("v1label").
 		Pattern("(?P<indent>\\s*)(?P<label>[^\\s\\[].+?)?(?:\\[(?P<link>.*)\\])?").
 		Handler(func(ctx *parser.Context) {
 			indent := ctx.Param("indent")

@@ -9,10 +9,10 @@ import (
 func Parser(pg *page.Page) *parser.Parser {
 	ps := parser.New()
 	ps.Add(
-		Empty(pg),
-		Whitespace(pg),
-		Comment(pg),
-		Version(pg),
+		EmptyRule(pg),
+		WhitespaceRule(pg),
+		CommentRule(pg),
+		VersionRule(pg),
 	)
 	return ps
 }
