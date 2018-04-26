@@ -1,18 +1,15 @@
-package pageparser
+package page
 
 import (
 	"encoding/json"
 	"regexp"
 	"strings"
 	"testing"
-
-	"github.com/g-harel/targetblank/page"
 )
 
-func samePage(t *testing.T, target *page.Page, s ...string) {
+func samePage(t *testing.T, target *Page, s ...string) {
 	spec := strings.Join(s, "\n")
-	result := page.New()
-	perr := Parser(result).Parse(spec)
+	result, perr := NewFromSpec(spec)
 	if perr != nil {
 		t.Fatalf("Unexpected parsing error: %v\n%v", perr, spec)
 	}
@@ -40,7 +37,7 @@ func produceErr(t *testing.T, line int, pattern string, s ...string) {
 	if err != nil {
 		t.Fatalf("Error compiling expected error pattern /%v/: %v", pattern, err)
 	}
-	perr := Parser(page.New()).Parse(spec)
+	_, perr := NewFromSpec(spec)
 
 	if perr == nil || perr.Line != line || !p.Match([]byte(perr.Error())) {
 		t.Fatalf("Parsing should have produced an error on line %v matching /%v/ but got: %v", line, pattern, perr)
@@ -61,14 +58,14 @@ func TestParser(t *testing.T) {
 	})
 
 	t.Run("should correctly parse the version from a minimal spec", func(t *testing.T) {
-		samePage(t, page.New().SetVersion("1"),
+		samePage(t, New().SetVersion("1"),
 			"version 1",
 			"===",
 		)
 	})
 
 	t.Run("should correctly ignore blank lines", func(t *testing.T) {
-		samePage(t, page.New().SetVersion("1"),
+		samePage(t, New().SetVersion("1"),
 			"",
 			"version 1",
 			"",
@@ -78,14 +75,14 @@ func TestParser(t *testing.T) {
 	})
 
 	t.Run("should correctly ignore trailing whitespace", func(t *testing.T) {
-		samePage(t, page.New().SetVersion("1"),
+		samePage(t, New().SetVersion("1"),
 			"version 1 ",
 			"===       ",
 		)
 	})
 
 	t.Run("should correctly ignore comments", func(t *testing.T) {
-		samePage(t, page.New().SetVersion("1"),
+		samePage(t, New().SetVersion("1"),
 			"          # comment",
 			"version 1 # other comment",
 			"===       # other other comment",
@@ -95,7 +92,7 @@ func TestParser(t *testing.T) {
 
 	t.Run("should correctly add metadata", func(t *testing.T) {
 		samePage(t,
-			page.New().
+			New().
 				SetVersion("1").
 				AddMeta("key", "value"),
 			"version 1",

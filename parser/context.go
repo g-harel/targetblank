@@ -35,7 +35,7 @@ func (c *Context) ReplaceLine(s string) {
 
 // AddRules allow rule handlers to add more rules once they've matched.
 // This functionality (coupled with rule disabling) makes it easier to parse different sections of files independently.
-func (c *Context) AddRules(r ...*Rule) {
+func (c *Context) AddRules(r ...Rule) {
 	c.parser.Add(r...)
 }
 
@@ -48,7 +48,7 @@ func (c *Context) DisableRule() {
 // This can be used to disallow rules after a certain marker.
 func (c *Context) DisableOtherRule(name string) {
 	for _, r := range c.parser.rules {
-		if r.name == name {
+		if r.Name == name {
 			r.disabled = true
 		}
 	}

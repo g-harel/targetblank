@@ -22,7 +22,7 @@ func TestNewItem(t *testing.T) {
 	t.Run("should use the provided link and label", func(t *testing.T) {
 		link := "link"
 		label := "label"
-		i := NewItem(link, label)
+		i := newItem(link, label)
 
 		expectLink(t, i, link)
 		expectLabel(t, i, label)
@@ -30,7 +30,7 @@ func TestNewItem(t *testing.T) {
 
 	t.Run("should use the provided link as label if label is missing", func(t *testing.T) {
 		link := "link"
-		i := NewItem(link, "")
+		i := newItem(link, "")
 
 		expectLabel(t, i, link)
 	})
@@ -38,14 +38,14 @@ func TestNewItem(t *testing.T) {
 	t.Run("should trim whitespace from both link and label", func(t *testing.T) {
 		link := " link "
 		label := " label "
-		i := NewItem(link, label)
+		i := newItem(link, label)
 
 		expectLink(t, i, strings.TrimSpace(link))
 		expectLabel(t, i, strings.TrimSpace(label))
 	})
 
 	t.Run("should create Items that do not contain null values when serialized", func(t *testing.T) {
-		i := NewItem("", "")
+		i := newItem("", "")
 		b, _ := json.Marshal(i)
 		s := string(b)
 
@@ -56,7 +56,7 @@ func TestNewItem(t *testing.T) {
 
 	t.Run("should use label as link if it resembles a url", func(t *testing.T) {
 		expectURL := func(isURL bool, label string) {
-			i := NewItem("", label)
+			i := newItem("", label)
 			if isURL {
 				if i.Link != label {
 					t.Errorf("Label should have been used as link: \"%v\"", label)

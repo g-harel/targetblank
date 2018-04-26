@@ -15,9 +15,14 @@ func New() *Parser {
 }
 
 // Add allows one or more rules to be registered with the parser.
-// At parse time, rules which are added the earliest are given the highest priority.
-func (p *Parser) Add(rules ...*Rule) {
-	p.rules = append(p.rules, rules...)
+// At parse time, rules which were added the earliest are given the highest priority.
+// Added rules are passed by value in order to isolate the original rules, but are stored as references to enable Context to make changes.
+func (p *Parser) Add(rules ...Rule) {
+	r := make([]*Rule, len(rules))
+	for i := range rules {
+		r[i] = &rules[i]
+	}
+	p.rules = append(p.rules, r...)
 }
 
 // Parse parses the given string according to the added rules.
@@ -33,16 +38,12 @@ func (p *Parser) Parse(s string) *Error {
 			if r.disabled {
 				continue
 			}
-			if r.pattern == nil || r.handler == nil {
-				ctx.Error("invalid rule (name: \"%s\")", r.name)
-				return ctx.currentErr
-			}
 
-			match := r.pattern.FindStringSubmatch(ctx.lines[0])
+			match := r.Pattern.FindStringSubmatch(ctx.lines[0])
 			if match == nil {
 				// Required rules must match when checked (rules added before the required ones are still given priority).
-				if r.required {
-					ctx.Error("expected %s", r.name)
+				if r.Required {
+					ctx.Error("expected %s", r.Name)
 					return ctx.currentErr
 				}
 				continue
@@ -52,13 +53,13 @@ func (p *Parser) Parse(s string) *Error {
 			// Context is prepared to be passed to the handler.
 			ctx.reset()
 			ctx.currentRule = r
-			for i, s := range r.pattern.SubexpNames() {
+			for i, s := range r.Pattern.SubexpNames() {
 				if i <= len(match) {
 					ctx.currentParams[s] = match[i]
 				}
 			}
 
-			(*r.handler)(ctx)
+			r.Handler(ctx)
 			if ctx.currentErr != nil {
 				return ctx.currentErr
 			}
@@ -74,8 +75,8 @@ func (p *Parser) Parse(s string) *Error {
 
 	// If any required rules are still enabled after parsing the full string, content is missing.
 	for _, r := range p.rules {
-		if r.required && !r.disabled {
-			ctx.Error("expected %s", r.name)
+		if r.Required && !r.disabled {
+			ctx.Error("expected %s", r.Name)
 			return ctx.currentErr
 		}
 	}

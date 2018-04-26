@@ -5,8 +5,6 @@ import (
 	"fmt"
 
 	"github.com/g-harel/targetblank/page"
-
-	"github.com/g-harel/targetblank/page/parser"
 )
 
 var spec = `
@@ -30,8 +28,7 @@ label6
 `
 
 func main() {
-	pg := page.New()
-	parseErr := pageparser.Parser(pg).Parse(spec)
+	pg, parseErr := page.NewFromSpec(spec)
 	if parseErr != nil {
 		panic(parseErr)
 	}

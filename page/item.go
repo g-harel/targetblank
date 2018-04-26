@@ -15,8 +15,7 @@ type Item struct {
 	Items []*Item `json:"items"`
 }
 
-// NewItem creates a new item
-func NewItem(link, label string) *Item {
+func newItem(link, label string) *Item {
 	link = strings.TrimSpace(link)
 	label = strings.TrimSpace(label)
 

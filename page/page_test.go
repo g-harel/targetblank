@@ -68,7 +68,7 @@ func TestPageAddItem(t *testing.T) {
 	t.Run("should add the item to the last group when depth is zero", func(t *testing.T) {
 		for i := 0; i < 3; i++ {
 			p := New()
-			item := NewItem("link", "label")
+			item := newItem("link", "label")
 
 			for j := 0; j < i; j++ {
 				p.AddGroup()
@@ -87,7 +87,7 @@ func TestPageAddItem(t *testing.T) {
 
 	t.Run("should not allow negative depths", func(t *testing.T) {
 		p := New()
-		err := p.AddItem(-1, NewItem("", ""))
+		err := p.AddItem(-1, newItem("", ""))
 		if err == nil {
 			t.Fatalf("Expected invalid depth error")
 		}
@@ -98,12 +98,12 @@ func TestPageAddItem(t *testing.T) {
 
 	t.Run("should not allow depths to be skipped", func(t *testing.T) {
 		p := New()
-		err := p.AddItem(0, NewItem("", ""))
+		err := p.AddItem(0, newItem("", ""))
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
-		err = p.AddItem(2, NewItem("", ""))
+		err = p.AddItem(2, newItem("", ""))
 		if err == nil {
 			t.Fatalf("Expected invalid depth error")
 		}
@@ -129,7 +129,7 @@ func TestPageAddItem(t *testing.T) {
 			}
 
 			l := label(address)
-			err := p.AddItem(depth, NewItem(l, ""))
+			err := p.AddItem(depth, newItem(l, ""))
 			if err != nil {
 				t.Fatalf("Unexpected error when adding Item{depth:%v,label:\"%v\"}: %v", depth, l, err)
 			}
