@@ -14,7 +14,7 @@ type Page struct {
 func New() *Page {
 	return &Page{
 		Meta:     make(map[string]string),
-		Groups:   []*Group{&Group{Items: []*Item{}}},
+		Groups:   []*Group{newGroup()},
 		ancestry: []*Item{},
 	}
 }
@@ -31,10 +31,16 @@ func (p *Page) AddMeta(key, value string) *Page {
 	return p
 }
 
-// AddGroup creates a new empty group.
+// AddGroup adds a new empty group.
 func (p *Page) AddGroup() *Page {
-	p.Groups = append(p.Groups, &Group{Items: []*Item{}})
+	p.Groups = append(p.Groups, newGroup())
 	p.ancestry = []*Item{}
+	return p
+}
+
+// AddGroupMeta adds a key/value pair into the last group's metadata map.
+func (p *Page) AddGroupMeta(key, value string) *Page {
+	p.Groups[len(p.Groups)-1].Meta[key] = value
 	return p
 }
 

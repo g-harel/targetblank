@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 	})
 
 	t.Run("should create Pages that do not contain null values when serialized", func(t *testing.T) {
-		p := New()
+		p := New().AddGroup()
 		b, _ := json.Marshal(p)
 		s := string(b)
 
@@ -60,6 +60,19 @@ func TestPageAddGroup(t *testing.T) {
 
 		if len(p.Groups) <= qty {
 			t.Errorf("Group was not added to Page")
+		}
+	})
+}
+
+func TestPageAddGroupMeta(t *testing.T) {
+	t.Run("should add values to last group's meta", func(t *testing.T) {
+		p := New()
+		key := "key"
+		value := "value"
+		p.AddGroupMeta(key, value)
+
+		if p.Groups[0].Meta[key] != value {
+			t.Errorf("Incorrect meta value (expected : \"%v\", received: \"%v\")", value, p.Meta[key])
 		}
 	})
 }
