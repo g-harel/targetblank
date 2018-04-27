@@ -16,7 +16,7 @@ func New() *Parser {
 
 // Add allows one or more rules to be registered with the parser.
 // At parse time, rules which were added the earliest are given the highest priority.
-// Added rules are passed by value in order to isolate the original rules, but are stored as references to enable Context to make changes.
+// Added rules are passed by value to isolate the originals, but are stored as references for Context's changes to be sticky.
 func (p *Parser) Add(rules ...Rule) {
 	r := make([]*Rule, len(rules))
 	for i := range rules {
@@ -66,7 +66,7 @@ func (p *Parser) Parse(s string) *Error {
 			break
 		}
 
-		// No match has occurred with all rule patterns. This means the line has incorrect syntax.
+		// No match has occurred with any rule's pattern. Line has incorrect syntax.
 		if !matched {
 			ctx.Error("syntax error")
 			return ctx.currentErr
