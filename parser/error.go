@@ -6,10 +6,10 @@ import (
 
 // Error adds line number to parser errors.
 type Error struct {
-	Line  int
-	cause string
+	error
+	Line int
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("Error on line %v: %v", e.Line, e.cause)
+	return fmt.Sprintf("Error on line %v: %v", e.Line, e.error)
 }

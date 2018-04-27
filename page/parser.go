@@ -17,7 +17,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Pattern:  regexp.MustCompile("^(?P<key>[A-Za-z0-9_-]+)\\s*=\\s*(?P<value>.*)$"),
 		Handler: func(ctx *parser.Context) {
 			p.AddMeta(ctx.Param("key"), ctx.Param("value"))
-			ctx.IgnoreLine()
+			ctx.LineParsed()
 		},
 	}
 	// v1GroupMetadataRule matches with header metadata values.
@@ -27,7 +27,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Pattern:  v1HeaderMetadataRule.Pattern,
 		Handler: func(ctx *parser.Context) {
 			p.AddGroupMeta(ctx.Param("key"), ctx.Param("value"))
-			ctx.IgnoreLine()
+			ctx.LineParsed()
 		},
 	}
 
@@ -39,8 +39,8 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Pattern:  regexp.MustCompile("^---$"),
 		Handler: func(ctx *parser.Context) {
 			p.AddGroup()
-			ctx.IgnoreLine()
 			ctx.EnableOther(v1GroupMetadataRule.Name)
+			ctx.LineParsed()
 		},
 	}
 
@@ -66,8 +66,9 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 				ctx.Error(err.Error())
 				return
 			}
-			ctx.IgnoreLine()
+
 			ctx.DisableOther(v1GroupMetadataRule.Name)
+			ctx.LineParsed()
 		},
 	}
 
@@ -78,12 +79,12 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Required: true,
 		Pattern:  regexp.MustCompile("^===$"),
 		Handler: func(ctx *parser.Context) {
-			ctx.IgnoreLine()
 			ctx.DisableSelf()
 			ctx.DisableOther(v1HeaderMetadataRule.Name)
 			ctx.EnableOther(v1GroupMetadataRule.Name)
 			ctx.EnableOther(v1GroupRule.Name)
 			ctx.EnableOther(v1LabelRule.Name)
+			ctx.LineParsed()
 		},
 	}
 
@@ -92,7 +93,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Name:    "empty",
 		Pattern: regexp.MustCompile("^\\s*$"),
 		Handler: func(ctx *parser.Context) {
-			ctx.IgnoreLine()
+			ctx.LineParsed()
 		},
 	}
 
@@ -130,8 +131,8 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 				return
 			}
 			p.SetVersion(version)
-			ctx.IgnoreLine()
 			ctx.DisableSelf()
+			ctx.LineParsed()
 		},
 	}
 

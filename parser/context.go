@@ -21,8 +21,8 @@ func (c *Context) reset() {
 	c.currentParams = make(map[string]string)
 }
 
-// IgnoreLine signals that the line has been processed and can now be ignored.
-func (c *Context) IgnoreLine() {
+// LineParsed signals that the line has been processed and can now be ignored.
+func (c *Context) LineParsed() {
 	c.lines = c.lines[1:]
 	c.ignoredLines++
 }
@@ -65,9 +65,8 @@ func (c *Context) Param(s string) string {
 
 // Error adds an error to the context and formats it to include the line number.
 func (c *Context) Error(s string, args ...interface{}) {
-	errString := fmt.Sprintf(s, args...)
 	c.currentErr = &Error{
 		Line:  c.ignoredLines + 1,
-		cause: errString,
+		error: fmt.Errorf(s, args...),
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// Checks that the passed page and the passed spec are equal when serialized to json.
 func samePage(t *testing.T, target *Page, s ...string) {
 	spec := strings.Join(s, "\n")
 	result, perr := NewFromSpec(spec)
@@ -56,6 +57,7 @@ func samePage(t *testing.T, target *Page, s ...string) {
 	}
 }
 
+// Checks assertions on expected parsing errors when parsing the passed spec.
 func produceErr(t *testing.T, line int, pattern string, s ...string) {
 	spec := strings.Join(s, "\n")
 	p, err := regexp.Compile(pattern)
@@ -123,7 +125,7 @@ func TestParser(t *testing.T) {
 		)
 	})
 
-	t.Run("should not accept version > 2", func(t *testing.T) {
+	t.Run("should not accept version > 1", func(t *testing.T) {
 		produceErr(t, 1, "unsupported version",
 			"version 2",
 			"===",
@@ -213,13 +215,13 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should correctly add group metadata", func(t *testing.T) {
-			samePage(t,
-				New().
-					SetVersion("1").
-					AddGroupMeta("key1", "value1").
-					AddGroup().
-					AddGroupMeta("key2", "value2").
-					AddGroupMeta("kEy_-3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~"),
+			p := New()
+			p.SetVersion("1")
+			p.AddGroupMeta("key1", "value1")
+			p.AddGroup()
+			p.AddGroupMeta("key2", "value2")
+			p.AddGroupMeta("kEy_-3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~")
+			samePage(t, p,
 				"version 1",
 				"===",
 				"key1=value1",
