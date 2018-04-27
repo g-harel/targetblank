@@ -10,12 +10,23 @@ import (
 func NewFromSpec(s string) (*Page, *parser.Error) {
 	p := New()
 
-	// v1MetadataRule matches with header metadata values.
-	v1MetadataRule := parser.Rule{
-		Name:    "metadata",
-		Pattern: regexp.MustCompile("^(?P<key>[A-Za-z0-9_-]+)\\s*=\\s*(?P<value>.*)\\s*$"),
+	// v1HeaderMetadataRule matches with header metadata values.
+	v1HeaderMetadataRule := parser.Rule{
+		Name:     "header-metadata",
+		Disabled: true,
+		Pattern:  regexp.MustCompile("^(?P<key>[A-Za-z0-9_-]+)\\s*=\\s*(?P<value>.*)$"),
 		Handler: func(ctx *parser.Context) {
 			p.AddMeta(ctx.Param("key"), ctx.Param("value"))
+			ctx.IgnoreLine()
+		},
+	}
+	// v1GroupMetadataRule matches with header metadata values.
+	v1GroupMetadataRule := parser.Rule{
+		Name:     "group-metadata",
+		Disabled: true,
+		Pattern:  v1HeaderMetadataRule.Pattern,
+		Handler: func(ctx *parser.Context) {
+			p.AddGroupMeta(ctx.Param("key"), ctx.Param("value"))
 			ctx.IgnoreLine()
 		},
 	}
@@ -23,20 +34,22 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	// v1GroupRule matches group delimiters.
 	// These delimiters indicate a new group should be created.
 	v1GroupRule := parser.Rule{
-		Name:    "group",
-		Pattern: regexp.MustCompile("^---$"),
+		Name:     "group",
+		Disabled: true,
+		Pattern:  regexp.MustCompile("^---$"),
 		Handler: func(ctx *parser.Context) {
 			p.AddGroup()
 			ctx.IgnoreLine()
-			ctx.DisableOtherRule(v1MetadataRule.Name)
+			ctx.EnableOther(v1GroupMetadataRule.Name)
 		},
 	}
 
 	// v1LabelRule matches labelled links.
 	// Item are added to the page at the specified depth.
 	v1LabelRule := parser.Rule{
-		Name:    "label",
-		Pattern: regexp.MustCompile("^(?P<indent>\\s*)(?P<label>[^\\s\\[].+?)?(?:\\[(?P<link>.*)\\])?$"),
+		Name:     "label",
+		Disabled: true,
+		Pattern:  regexp.MustCompile("^(?P<indent>\\s*)(?P<label>[^\\s\\[].+?)?(?:\\[(?P<link>.*)\\])?$"),
 		Handler: func(ctx *parser.Context) {
 			indent := ctx.Param("indent")
 			label := ctx.Param("label")
@@ -54,6 +67,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 				return
 			}
 			ctx.IgnoreLine()
+			ctx.DisableOther(v1GroupMetadataRule.Name)
 		},
 	}
 
@@ -65,11 +79,11 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Pattern:  regexp.MustCompile("^===$"),
 		Handler: func(ctx *parser.Context) {
 			ctx.IgnoreLine()
-			ctx.DisableRule()
-			ctx.AddRules(
-				v1GroupRule,
-				v1LabelRule,
-			)
+			ctx.DisableSelf()
+			ctx.DisableOther(v1HeaderMetadataRule.Name)
+			ctx.EnableOther(v1GroupMetadataRule.Name)
+			ctx.EnableOther(v1GroupRule.Name)
+			ctx.EnableOther(v1LabelRule.Name)
 		},
 	}
 
@@ -109,17 +123,15 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Handler: func(ctx *parser.Context) {
 			version := ctx.Param("number")
 			if version == "1" {
-				ctx.AddRules(
-					v1MetadataRule,
-					v1HeaderRule,
-				)
+				ctx.EnableOther(v1HeaderMetadataRule.Name)
+				ctx.EnableOther(v1HeaderRule.Name)
 			} else {
 				ctx.Error("unsupported version")
 				return
 			}
 			p.SetVersion(version)
 			ctx.IgnoreLine()
-			ctx.DisableRule()
+			ctx.DisableSelf()
 		},
 	}
 
@@ -129,6 +141,11 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		whitespaceRule,
 		commentRule,
 		versionRule,
+		v1HeaderMetadataRule,
+		v1HeaderRule,
+		v1GroupRule,
+		v1GroupMetadataRule,
+		v1LabelRule,
 	)
 	return p, ps.Parse(s)
 }

@@ -10,5 +10,5 @@ type Rule struct {
 	Pattern  *regexp.Regexp
 	Handler  func(ctx *Context)
 	Required bool
-	disabled bool // Unexported to give Context exclusive control to change.
+	Disabled bool
 }

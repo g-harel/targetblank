@@ -35,7 +35,7 @@ func (p *Parser) Parse(s string) *Error {
 	for len(ctx.lines) > 0 {
 		matched := false
 		for _, r := range p.rules {
-			if r.disabled {
+			if r.Disabled {
 				continue
 			}
 
@@ -75,7 +75,7 @@ func (p *Parser) Parse(s string) *Error {
 
 	// If any required rules are still enabled after parsing the full string, content is missing.
 	for _, r := range p.rules {
-		if r.Required && !r.disabled {
+		if r.Required && !r.Disabled {
 			ctx.Error("expected %s", r.Name)
 			return ctx.currentErr
 		}
