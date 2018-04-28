@@ -1,3 +1,6 @@
 *.bin
 *.out
 *.zip
+.terraform
+credentials.tf
+*.tfstate*
