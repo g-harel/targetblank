@@ -45,7 +45,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	}
 
 	// v1LabelRule matches labelled links.
-	// Item are added to the page at the specified depth.
+	// Items are added to the page at the specified depth.
 	v1LabelRule := parser.Rule{
 		Name:     "label",
 		Disabled: true,

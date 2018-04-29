@@ -4,7 +4,7 @@ resource "aws_api_gateway_rest_api" "targetblank" {
 }
 
 resource "aws_api_gateway_deployment" "targetblank" {
-  count = 0 # change value when ready to deploy
+  count = 0 # remove when ready to deploy
 
   depends_on = [
     "aws_api_gateway_method.api_v1_auth_address_delete",

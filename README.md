@@ -47,6 +47,9 @@ links
 - https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html
 - https://serverless.com/framework/docs/providers/aws/examples/hello-world/go/
 
+- https://www.terraform.io/docs/providers/terraform/d/remote_state.html
+- https://www.terraform.io/docs/backends/types/s3.html
+
 - https://stackoverflow.com/questions/3319479/can-i-git-commit-a-file-and-ignore-its-content-changes
 
 -->
