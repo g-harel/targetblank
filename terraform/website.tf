@@ -1,28 +1,20 @@
 resource "aws_route53_zone" "primary" {
-  name = "${var.name}.org"
+  name = "${var.domain}"
 }
 
-resource "aws_route53_record" "record" {
+resource "aws_route53_record" "cloudfront_alias" {
   zone_id = "${aws_route53_zone.primary.zone_id}"
-  name    = "${var.name}.org"
+  name    = "${var.domain}"
   type    = "A"
 
   alias {
-    zone_id                = "${aws_cloudfront_distribution.static_distribution.hosted_zone_id}"
-    name                   = "${aws_cloudfront_distribution.static_distribution.domain_name}"
+    zone_id                = "${aws_cloudfront_distribution.website.hosted_zone_id}"
+    name                   = "${aws_cloudfront_distribution.website.domain_name}"
     evaluate_target_health = false
   }
 }
 
-resource "aws_s3_bucket" "static_files" {
-  bucket = "${var.name}-static-files"
-
-  website {
-    index_document = "index.html"
-  }
-}
-
-resource "aws_cloudfront_distribution" "static_distribution" {
+resource "aws_cloudfront_distribution" "website" {
   origin {
     custom_origin_config {
       http_port              = 80
@@ -31,8 +23,8 @@ resource "aws_cloudfront_distribution" "static_distribution" {
       origin_ssl_protocols   = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = "${aws_s3_bucket.static_files.id}.s3-website-${var.region}.amazonaws.com"
-    origin_id   = "${aws_s3_bucket.static_files.id}"
+    domain_name = "${aws_s3_bucket.website.id}.s3-website.${var.region}.amazonaws.com"
+    origin_id   = "${aws_s3_bucket.website.id}"
   }
 
   enabled             = true
@@ -49,7 +41,7 @@ resource "aws_cloudfront_distribution" "static_distribution" {
   default_cache_behavior {
     allowed_methods        = ["HEAD", "GET", "OPTIONS"]
     cached_methods         = ["HEAD", "GET", "OPTIONS"]
-    target_origin_id       = "${aws_s3_bucket.static_files.id}"
+    target_origin_id       = "${aws_s3_bucket.website.id}"
     viewer_protocol_policy = "redirect-to-https"
 
     forwarded_values {
@@ -70,4 +62,35 @@ resource "aws_cloudfront_distribution" "static_distribution" {
   viewer_certificate {
     cloudfront_default_certificate = true # TODO
   }
+}
+
+resource "aws_s3_bucket" "website" {
+  bucket = "${var.name}-static-files"
+  acl    = "public-read"
+
+  website {
+    index_document = "index.html"
+  }
+
+  policy = <<EOF
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Sid":"AddPerm",
+      "Effect":"Allow",
+      "Principal": "*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::${var.name}-static-files/*"]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_s3_bucket_object" "home" {
+  bucket       = "${aws_s3_bucket.website.bucket}"
+  key          = "index.html"
+  source       = "../website/index.html"
+  content_type = "text/html"
 }

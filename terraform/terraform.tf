@@ -7,18 +7,18 @@ provider "aws" {
 terraform {
   backend "s3" {
     encrypt = true
-    bucket  = "terraform-state-u2j91"
+    bucket  = "terraform-state-u2j91" # cannot use interpolation
     key     = "targetblank"           # cannot use interpolation
-    region  = "us-east-2"
+    region  = "us-east-2"             # cannot use interpolation
   }
 }
 
-data "terraform_remote_state" "terraform_state" {
+data "terraform_remote_state" "tfstate" {
   backend = "s3"
 
   config {
     bucket = "terraform-state-u2j91"
-    key    = "terraform.tfstate"
-    region = "us-east-2"
+    key    = "${var.name}"
+    region = "${var.region}"
   }
 }
