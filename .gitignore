@@ -2,5 +2,4 @@
 *.out
 *.zip
 .terraform
-credentials.tf
-*.tfstate*
+secret.tf

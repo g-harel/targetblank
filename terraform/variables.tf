@@ -1,4 +1,7 @@
-variable "env" {
-  description = "environment"
-  default     = "test"
+variable "name" {
+  default = "targetblank"
+}
+
+variable "domain" {
+  default = "targetblank.org"
 }

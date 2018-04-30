@@ -1,22 +1,24 @@
+provider "aws" {
+  region     = "${var.region}"
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
+}
+
 terraform {
   backend "s3" {
     encrypt = true
-    bucket  = "terraform-state-targetblank"
+    bucket  = "terraform-state-u2j91"
+    key     = "targetblank"           # cannot use interpolation
     region  = "us-east-2"
-    key     = "terraform.tfstate"
   }
 }
 
-data "terraform_remote_state" "terraform_state_targetblank" {
+data "terraform_remote_state" "terraform_state" {
   backend = "s3"
 
   config {
-    bucket = "${aws_s3_bucket.terraform_state_targetblank.bucket}"
-    region = "us-east-2"
+    bucket = "terraform-state-u2j91"
     key    = "terraform.tfstate"
+    region = "us-east-2"
   }
-}
-
-resource "aws_s3_bucket" "terraform_state_targetblank" {
-  bucket = "terraform-state-targetblank"
 }
