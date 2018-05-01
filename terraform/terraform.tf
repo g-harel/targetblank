@@ -22,3 +22,11 @@ data "terraform_remote_state" "tfstate" {
     region = "${var.region}"
   }
 }
+
+module "website" {
+  source = "./website"
+
+  name   = "${var.name}"
+  domain = "${var.domain}"
+  region = "${var.region}"
+}

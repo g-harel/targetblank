@@ -1,33 +1,3 @@
-resource "aws_s3_bucket" "static_website" {
-  bucket = "${var.name}-static-website"
-  acl    = "public-read"
-
-  website {
-    index_document = "index.html"
-  }
-
-  policy = <<EOF
-{
-  "Version":"2012-10-17",
-  "Statement":[
-    {
-      "Sid":"AddPerm",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::${var.name}-static-website/*"]
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_acm_certificate" "ssl_cert" {
-  domain_name               = "${var.domain}"
-  validation_method         = "EMAIL"
-  subject_alternative_names = ["*.${var.domain}"]
-}
-
 resource "aws_cloudfront_distribution" "static_website" {
   origin {
     custom_origin_config {
@@ -77,28 +47,4 @@ resource "aws_cloudfront_distribution" "static_website" {
     acm_certificate_arn = "${aws_acm_certificate.ssl_cert.arn}"
     ssl_support_method  = "sni-only"
   }
-}
-
-resource "aws_route53_zone" "primary" {
-  name = "${var.domain}"
-}
-
-resource "aws_route53_record" "cloudfront_alias" {
-  zone_id = "${aws_route53_zone.primary.zone_id}"
-  name    = "${var.domain}"
-  type    = "A"
-
-  alias {
-    zone_id                = "${aws_cloudfront_distribution.static_website.hosted_zone_id}"
-    name                   = "${aws_cloudfront_distribution.static_website.domain_name}"
-    evaluate_target_health = false
-  }
-}
-
-resource "aws_s3_bucket_object" "root" {
-  bucket       = "${aws_s3_bucket.static_website.bucket}"
-  key          = "index.html"
-  source       = "../website/index.html"
-  content_type = "text/html"
-  etag         = "${md5(file("../website/index.html"))}"
 }
