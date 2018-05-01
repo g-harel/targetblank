@@ -2,7 +2,7 @@ resource "aws_api_gateway_rest_api" "gateway" {
   name = "${var.name}-api"
 }
 
-resource "aws_api_gateway_deployment" "api_deployment" {
+resource "aws_api_gateway_deployment" "deployment" {
   count = 0 # remove when ready to deploy
 
   depends_on = [
