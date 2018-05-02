@@ -1,7 +1,11 @@
 provider "aws" {
-  region     = "${var.region}"
-  access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
+  region = "${var.region}"
+
+  # credentials should be included as environment variables
+  #   export AWS_ACCESS_KEY_ID="access_key"
+  #   export AWS_SECRET_ACCESS_KEY="secret_key"
+  #   export AWS_DEFAULT_REGION="us-east-1"
+  #   export AWS_REGION="us-east-1"
 }
 
 terraform {
@@ -25,6 +29,14 @@ data "terraform_remote_state" "tfstate" {
 
 module "website" {
   source = "./website"
+
+  name   = "${var.name}"
+  domain = "${var.domain}"
+  region = "${var.region}"
+}
+
+module "api" {
+  source = "./api"
 
   name   = "${var.name}"
   domain = "${var.domain}"

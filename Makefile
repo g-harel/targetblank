@@ -1,10 +1,6 @@
-AWS=aws
 GO=go
-ZIP=zip
 
-BIN_FILE=main.bin
 COV_FILE=coverage.out
-ZIP_FILE=deployment.zip
 
 build:
 	@echo soon™
