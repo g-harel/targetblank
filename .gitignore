@@ -1,5 +1,4 @@
-*.bin
 *.out
-*.zip
-.terraform
-secret.tf
+node_modules
+dist
+.*

@@ -1,11 +1,16 @@
 <html>
 
 <head>
-  <script>
-    document.location.href = 'http://github.com/g-harel/targetblank/';
-  </script>
+    <script>
+        // redirect if served from real host (temporarily)
+        if (document.location.hostname === 'targetblank.org') {
+            document.location.href = 'http://github.com/g-harel/targetblank/';
+        }
+    </script>
 </head>
 
-<body></body>
+<body>
+    <script src="./index.js"></script>
+</body>
 
 </html>
