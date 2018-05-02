@@ -3,7 +3,7 @@ package page
 import (
 	"regexp"
 
-	"github.com/g-harel/targetblank/parser"
+	"github.com/g-harel/targetblank/internal/parser"
 )
 
 // NewFromSpec creates a new page from an input specification.
