@@ -43,13 +43,7 @@ links
 - https://github.com/nzoschke/gofaas
 - https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0
 - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
-- https://hackernoon.com/introduction-to-aws-with-terraform-7a8daf261dc0?__s=vbsgitpwqxmgtteyr9km
-- https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html
 - https://serverless.com/framework/docs/providers/aws/examples/hello-world/go/
-
-- https://www.terraform.io/docs/providers/terraform/d/remote_state.html
-- https://www.terraform.io/docs/backends/types/s3.html
-
-- https://stackoverflow.com/questions/3319479/can-i-git-commit-a-file-and-ignore-its-content-changes
+- http://www.alexedwards.net/blog/serverless-api-with-go-and-aws-lambda
 
 -->

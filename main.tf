@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "${var.region}"
+  region = "us-east-1"
 
   # credentials should be included as environment variables
   #   export AWS_ACCESS_KEY_ID="access_key"
@@ -22,23 +22,15 @@ data "terraform_remote_state" "tfstate" {
 
   config {
     bucket = "terraform-state-u2j51"
-    key    = "${var.name}.tfstate"
-    region = "${var.region}"
+    key    = "targetblank.tfstate"
+    region = "us-east-1"
   }
 }
 
 module "website" {
-  source = "./website"
-
-  name   = "${var.name}"
-  domain = "${var.domain}"
-  region = "${var.region}"
+  source = "./frontend/terraform"
 }
 
 module "api" {
-  source = "./api"
-
-  name   = "${var.name}"
-  domain = "${var.domain}"
-  region = "${var.region}"
+  source = "./functions/terraform"
 }

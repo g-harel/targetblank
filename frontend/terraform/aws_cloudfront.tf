@@ -7,13 +7,13 @@ resource "aws_cloudfront_distribution" "static_website" {
       origin_ssl_protocols   = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = "${aws_s3_bucket.static_website.id}.s3-website.${var.region}.amazonaws.com"
+    domain_name = "${aws_s3_bucket.static_website.id}.s3-website.us-east-1.amazonaws.com"
     origin_id   = "${aws_s3_bucket.static_website.id}"
   }
 
   enabled             = true
   default_root_object = "${aws_s3_bucket_object.root.key}"
-  aliases             = ["${var.domain}"]
+  aliases             = ["targetblank.org"]
   http_version        = "http2"
 
   custom_error_response {

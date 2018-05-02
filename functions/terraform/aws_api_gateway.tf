@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "gateway" {
-  name = "${var.name}-api"
+  name = "targetblank-api"
 }
 
 resource "aws_api_gateway_deployment" "deployment" {

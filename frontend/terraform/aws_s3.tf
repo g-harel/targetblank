@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "static_website" {
-  bucket = "${var.name}-static-website"
+  bucket = "targetblank-static-website"
   acl    = "public-read"
 
   website {
@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "static_website" {
       "Effect":"Allow",
       "Principal": "*",
       "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::${var.name}-static-website/*"]
+      "Resource":["arn:aws:s3:::targetblank-static-website/*"]
     }
   ]
 }
@@ -25,7 +25,7 @@ EOF
 resource "aws_s3_bucket_object" "root" {
   bucket       = "${aws_s3_bucket.static_website.bucket}"
   key          = "index.html"
-  source       = "../website/index.html"
+  source       = ".build/index.html"
   content_type = "text/html"
-  etag         = "${md5(file("../website/index.html"))}"
+  etag         = "${md5(file(".build/index.html"))}"
 }

@@ -1,10 +1,10 @@
 resource "aws_route53_zone" "primary" {
-  name = "${var.domain}"
+  name = "targetblank.org"
 }
 
 resource "aws_route53_record" "cloudfront_alias" {
   zone_id = "${aws_route53_zone.primary.zone_id}"
-  name    = "${var.domain}"
+  name    = "targetblank.org"
   type    = "A"
 
   alias {
