@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "build": "parcel build --no-source-maps website/index.html",
-    "dev": " opn http://localhost:1324 && parcel -p 1324 website/index.html",
-    "lint": "eslint website/**/*.js"
+    "build": "parcel build --no-source-maps -d .build frontend/index.html",
+    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist frontend/index.html",
+    "lint": "eslint frontend/**/*.js"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -30,6 +30,10 @@
       "indent": [
         "error",
         4
+      ],
+      "object-curly-spacing": [
+        "error",
+        "never"
       ]
     }
   }

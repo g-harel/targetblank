@@ -7,5 +7,7 @@ const app = okwolo(document.body);
 app.setState({});
 
 app(() => () => (
-    ['h2', { a: 3 }, ['targetblank']]
+    ['h2', {a: 3}, [
+        'targetblank',
+    ]]
 ));
