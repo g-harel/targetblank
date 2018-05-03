@@ -3,15 +3,17 @@ NPM=npm
 ZIP=zip
 
 BUILD_DIR=.build
-FUNC_DIR=./functions
+FUNCS_DIR=./functions
 
 COVERAGE_FILE=.coverage
 
+FUNC_NAMES=$(patsubst $(FUNCS_DIR)/%/main.go, %, $(wildcard $(FUNCS_DIR)/*/main.go))
+
 build:
 	$(NPM) run build
-	@for FILE in $(wildcard $(FUNC_DIR)/*/main.go) ; do \
-		NAME=$$(echo $$FILE | grep -oP "(?<=functions\/).+(?=/main.go)") ;\
-		GOOS=linux $(GO) build -o "$(BUILD_DIR)/$$NAME" "$$FILE" ;\
+	@for NAME in $(FUNC_NAMES) ; do \
+		GOOS=linux GOARCH=amd64 \
+		$(GO) build -o "$(BUILD_DIR)/$$NAME" "$(FUNCS_DIR)/$$NAME" ;\
 		$(ZIP) -j "$(BUILD_DIR)/$$NAME.zip" "$(BUILD_DIR)/$$NAME" ;\
 	done
 

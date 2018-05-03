@@ -40,10 +40,9 @@ nosql schema {
 }
 
 links
-- https://github.com/nzoschke/gofaas
-- https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0
-- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
-- https://serverless.com/framework/docs/providers/aws/examples/hello-world/go/
 - http://www.alexedwards.net/blog/serverless-api-with-go-and-aws-lambda
+- https://github.com/nzoschke/gofaas
+- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
+- https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0
 
 -->
