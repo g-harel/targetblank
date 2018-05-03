@@ -4,13 +4,28 @@
     <script>
         // redirect if served from real host (temporarily)
         if (document.location.hostname === 'targetblank.org') {
-            document.location.href = 'http://github.com/g-harel/targetblank/';
+            setTimeout(() => {
+                document.location.href = 'http://github.com/g-harel/targetblank/';
+            }, 200)
         }
     </script>
 </head>
 
 <body>
     <script src="./index.js"></script>
+    <style>
+        body {
+            text-align: center;
+            padding-top: 250px;
+        }
+        .wave {
+            -moz-user-select: none;
+            user-select: none;
+            font-size:250px;
+            display: inline;
+        }
+    </style>
+    <div class="wave">&#x1f44b;</div>
 </body>
 
 </html>
