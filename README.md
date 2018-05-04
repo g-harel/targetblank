@@ -2,7 +2,6 @@
 
 <!--
 
-
 requirements
 - text template specs for links, labels, categories, etc.
 - optional search bar with a few search providers
@@ -29,7 +28,7 @@ endpoints (/api/v1..)
 - make homepage public      (PATCH  /page/:address [auth]         )
 
 nosql schema {
-    address: string (6 alphanumeric chars),
+    addr: string (6 alphanumeric chars),
     password: string (hashed),
     email: string (hashed),
     temporary: string (hashed) || null,
