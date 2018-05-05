@@ -27,31 +27,6 @@ func TestNew(t *testing.T) {
 	})
 }
 
-func TestPageSetVersion(t *testing.T) {
-	t.Run("should change the page version", func(t *testing.T) {
-		p := New()
-		version := "v1"
-		p.SetVersion(version)
-
-		if p.Version != version {
-			t.Errorf("Incorrect version value (expected : \"%v\", received: \"%v\")", version, p.Version)
-		}
-	})
-}
-
-func TestPageAddMeta(t *testing.T) {
-	t.Run("should add values to meta", func(t *testing.T) {
-		p := New()
-		key := "key"
-		value := "value"
-		p.AddMeta(key, value)
-
-		if p.Meta[key] != value {
-			t.Errorf("Incorrect meta value (expected : \"%v\", received: \"%v\")", value, p.Meta[key])
-		}
-	})
-}
-
 func TestPageAddGroup(t *testing.T) {
 	t.Run("should add a new Group to the page", func(t *testing.T) {
 		p := New()

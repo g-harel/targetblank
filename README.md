@@ -19,6 +19,7 @@ notes
 
 endpoints (/api/v1..)
 - create new homepage       (POST   /page                 email   )
+- validate homepage spec    (GET    /page                 spec    )
 - fetch homepage            (GET    /page/:address [auth]         )
 - authenticate per homepage (POST   /auth/:address        password)
 - change homepage password  (PUT    /auth/:address [auth] password)

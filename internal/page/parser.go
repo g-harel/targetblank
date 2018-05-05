@@ -9,6 +9,7 @@ import (
 // NewFromSpec creates a new page from an input specification.
 func NewFromSpec(s string) (*Page, *parser.Error) {
 	p := New()
+	p.Spec = s
 
 	// v1HeaderMetadataRule matches with header metadata values.
 	v1HeaderMetadataRule := parser.Rule{
@@ -16,7 +17,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 		Disabled: true,
 		Pattern:  regexp.MustCompile("^(?P<key>[A-Za-z0-9_-]+)\\s*=\\s*(?P<value>.*)$"),
 		Handler: func(ctx *parser.Context) {
-			p.AddMeta(ctx.Param("key"), ctx.Param("value"))
+			p.Meta[ctx.Param("key")] = ctx.Param("value")
 			ctx.LineParsed()
 		},
 	}
@@ -130,7 +131,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 				ctx.Error("unsupported version")
 				return
 			}
-			p.SetVersion(version)
+			p.Version = version
 			ctx.DisableSelf()
 			ctx.LineParsed()
 		},

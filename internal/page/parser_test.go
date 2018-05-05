@@ -15,6 +15,7 @@ func samePage(t *testing.T, target *Page, s ...string) {
 		t.Fatalf("Unexpected parsing error: %v\n%v", perr, spec)
 	}
 
+	target.Spec = spec
 	tb, err := json.MarshalIndent(target, "| ", "  ")
 	if err != nil {
 		t.Fatalf("Unexpected error when marshalling target Page: %v", err)
@@ -86,7 +87,7 @@ func TestParser(t *testing.T) {
 
 	t.Run("should correctly parse the version from a minimal spec", func(t *testing.T) {
 		p := New()
-		p.SetVersion("1")
+		p.Version = "1"
 		samePage(t, p,
 			"version 1",
 			"===",
@@ -95,7 +96,7 @@ func TestParser(t *testing.T) {
 
 	t.Run("should correctly ignore blank lines", func(t *testing.T) {
 		p := New()
-		p.SetVersion("1")
+		p.Version = "1"
 		samePage(t, p,
 			"",
 			"version 1",
@@ -107,7 +108,7 @@ func TestParser(t *testing.T) {
 
 	t.Run("should correctly ignore trailing whitespace", func(t *testing.T) {
 		p := New()
-		p.SetVersion("1")
+		p.Version = "1"
 		samePage(t, p,
 			"version 1 ",
 			"===       ",
@@ -116,7 +117,7 @@ func TestParser(t *testing.T) {
 
 	t.Run("should correctly ignore comments", func(t *testing.T) {
 		p := New()
-		p.SetVersion("1")
+		p.Version = "1"
 		samePage(t, p,
 			"          # comment",
 			"version 1 # other comment",
@@ -135,7 +136,7 @@ func TestParser(t *testing.T) {
 	t.Run("v1", func(t *testing.T) {
 		t.Run("should accept version 1", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			samePage(t, p,
 				"version 1",
 				"===",
@@ -144,10 +145,10 @@ func TestParser(t *testing.T) {
 
 		t.Run("should correctly add page metadata", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
-			p.AddMeta("key1", "value1")
-			p.AddMeta("key2", "value2")
-			p.AddMeta("kEy_-3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~")
+			p.Version = "1"
+			p.Meta["key1"] = "value1"
+			p.Meta["key2"] = "value2"
+			p.Meta["kEy_-3"] = "!@ $%^& *()[] +-_= <>?,.; ':|\\`~"
 			samePage(t, p,
 				"version 1",
 				"key1=value1",
@@ -167,7 +168,7 @@ func TestParser(t *testing.T) {
 
 		t.Run("should allow for new groups", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			p.AddGroup()
 			p.AddGroup()
 			samePage(t, p,
@@ -180,7 +181,7 @@ func TestParser(t *testing.T) {
 
 		t.Run("should correctly identify item's link and label", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			p.AddItem(0, newItem("link", "label"))
 			p.AddItem(0, newItem("", "label"))
 			p.AddItem(0, newItem("link", ""))
@@ -199,7 +200,7 @@ func TestParser(t *testing.T) {
 
 		t.Run("should assign items to correct groups", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			p.AddItem(0, newItem("", "group1"))
 			p.AddGroup().AddItem(0, newItem("", "group2"))
 			p.AddGroup().AddItem(0, newItem("", "group3"))
@@ -216,7 +217,7 @@ func TestParser(t *testing.T) {
 
 		t.Run("should correctly add group metadata", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			p.AddGroupMeta("key1", "value1")
 			p.AddGroup()
 			p.AddGroupMeta("key2", "value2")
@@ -241,7 +242,7 @@ func TestParser(t *testing.T) {
 
 		t.Run("should not accept group metadata after the first item", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			p.AddGroupMeta("key1", "value1")
 			p.AddGroup()
 			p.AddGroupMeta("key2", "value2")
@@ -282,7 +283,7 @@ func TestParser(t *testing.T) {
 
 		t.Run("should correctly parse complex item hierarchies", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
+			p.Version = "1"
 			p.AddItem(0, newItem("", "label"))
 			p.AddItem(1, newItem("", "label"))
 			p.AddItem(2, newItem("", "label"))
@@ -313,9 +314,9 @@ func TestParser(t *testing.T) {
 
 		t.Run("should correctly parse the original spec", func(t *testing.T) {
 			p := New()
-			p.SetVersion("1")
-			p.AddMeta("key", "value")
-			p.AddMeta("search", "google")
+			p.Version = "1"
+			p.Meta["key"] = "value"
+			p.Meta["search"] = "google"
 			p.AddGroupMeta("key", "value")
 			p.AddItem(0, newItem("http://ee.co/1", "label_1"))
 			p.AddItem(0, newItem("http://ee.co/2", "label 2"))

@@ -8,10 +8,11 @@ import (
 )
 
 func TestHandler(t *testing.T) {
+	// TODO mock datbase package
 	t.Run("", func(t *testing.T) {
 		res := &function.Response{}
 		handler(&function.Request{
-			Body: "123456",
+			Body: "version 1\n===\nexample.com",
 		}, res)
 		fmt.Println(res)
 	})

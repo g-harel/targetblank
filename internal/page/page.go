@@ -5,6 +5,7 @@ import "fmt"
 // Page is a list of labels/links and metadata.
 type Page struct {
 	Version  string            `json:"version"`
+	Spec     string            `json:"spec"`
 	Meta     map[string]string `json:"meta"`
 	Groups   []*Group          `json:"groups"`
 	ancestry []*Item           // Maintains the list of parents of the last inserted item.
@@ -17,18 +18,6 @@ func New() *Page {
 		Groups:   []*Group{newGroup()},
 		ancestry: []*Item{},
 	}
-}
-
-// SetVersion changes the page's version.
-func (p *Page) SetVersion(v string) *Page {
-	p.Version = v
-	return p
-}
-
-// AddMeta adds a key/value pair into the page's metadata map.
-func (p *Page) AddMeta(key, value string) *Page {
-	p.Meta[key] = value
-	return p
 }
 
 // AddGroup adds a new empty group.

@@ -18,6 +18,9 @@ func New(c *Config, h Handler) func(events.APIGatewayProxyRequest) (events.APIGa
 		request := Request(req)
 		response := &Response{
 			StatusCode: http.StatusOK,
+			Headers: map[string]string{
+				"Content-Type": "application/json",
+			},
 		}
 		h(&request, response)
 		return events.APIGatewayProxyResponse(*response), nil

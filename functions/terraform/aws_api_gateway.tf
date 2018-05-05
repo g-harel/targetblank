@@ -9,6 +9,7 @@ resource "aws_api_gateway_deployment" "deployment" {
     "aws_api_gateway_method.api_v1_auth_addr_delete",
     "aws_api_gateway_method.api_v1_auth_addr_post",
     "aws_api_gateway_method.api_v1_auth_addr_put",
+    "aws_api_gateway_method.api_v1_page_get",
     "aws_api_gateway_method.api_v1_page_post",
     "aws_api_gateway_method.api_v1_page_addr_delete",
     "aws_api_gateway_method.api_v1_page_addr_get",
@@ -74,6 +75,13 @@ resource "aws_api_gateway_method" "api_v1_auth_addr_put" {
   rest_api_id   = "${aws_api_gateway_rest_api.gateway.id}"
   resource_id   = "${aws_api_gateway_resource.api_v1_auth_addr.id}"
   http_method   = "PUT"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "api_v1_page_get" {
+  rest_api_id   = "${aws_api_gateway_rest_api.gateway.id}"
+  resource_id   = "${aws_api_gateway_resource.api_v1_page.id}"
+  http_method   = "GET"
   authorization = "NONE"
 }
 

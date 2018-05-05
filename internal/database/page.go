@@ -8,20 +8,21 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// Page represents the documents stored in the database.
-type Page struct {
+// PageItem represents a document stored in the page table.
+type PageItem struct {
 	Addr     string `json:"addr"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Public   bool   `json:"public"`
-	Page     string `json:"page"`
-	Spec     string `json:"spec"`
 	Temp     bool   `json:"temporary"`
+	Page     string `json:"page"`
 }
 
+// PageNotFoundError communicates the error type to the caller.
 type PageNotFoundError struct{ error }
 
-func GetPage(addr string) (*Page, error) {
+// GetPage fetches the page attribute from the item with the specified address.
+func GetPage(addr string) (*PageItem, error) {
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("targetblank-pages"),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -39,7 +40,7 @@ func GetPage(addr string) (*Page, error) {
 		return nil, PageNotFoundError{errors.New("page not found for given key")}
 	}
 
-	item := &Page{}
+	item := &PageItem{}
 	err = dynamodbattribute.UnmarshalMap(result.Item, item)
 	if err != nil {
 		return nil, err
