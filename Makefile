@@ -9,6 +9,9 @@ COVERAGE_FILE=.coverage
 
 FUNC_NAMES=$(patsubst ./$(FUNCS_DIR)/%/main.go, %, $(wildcard ./$(FUNCS_DIR)/*/main.go))
 
+help:
+	@echo soon™
+
 build:
 	$(NPM) run build
 	@for NAME in $(FUNC_NAMES) ; do \
@@ -18,7 +21,7 @@ build:
 	done
 
 test:
-	$(GO) test ./... -cover
+	$(GO) test ./... -cover -count=1
 
 coverage:
 	$(GO) test ./... -coverprofile=$(COVERAGE_FILE)

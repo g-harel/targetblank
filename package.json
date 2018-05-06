@@ -4,6 +4,9 @@
     "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist frontend/index.html",
     "lint": "eslint frontend/**/*.js"
   },
+  "dependencies": {
+    "okwolo": "^3.4.0"
+  },
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -12,10 +15,7 @@
     "eslint-plugin-react": "^7.7.0",
     "node-sass": "^4.9.0",
     "opn-cli": "^3.1.0",
-    "parcel-bundler": "^1.7.1"
-  },
-  "dependencies": {
-    "okwolo": "^3.3.1"
+    "parcel-bundler": "^1.8.1"
   },
   "eslintConfig": {
     "extends": [
