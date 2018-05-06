@@ -15,3 +15,12 @@ resource "aws_lambda_function" "page_validate" {
   handler          = "page_validate"
   runtime          = "go1.x"
 }
+
+resource "aws_lambda_function" "page_create" {
+  function_name    = "page_create"
+  filename         = ".build/page_create.zip"
+  source_code_hash = "${base64sha256(file(".build/page_create.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "page_create"
+  runtime          = "go1.x"
+}
