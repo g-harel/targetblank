@@ -7,7 +7,9 @@ import (
 )
 
 // Config contains options for the handler's middleware.
-type Config struct{}
+type Config struct {
+	RequireAuth bool
+}
 
 // Handler is a custom type representing a lambda handler.
 type Handler func(*Request, *Response)
@@ -21,6 +23,7 @@ func New(c *Config, h Handler) func(events.APIGatewayProxyRequest) (events.APIGa
 			Headers: map[string]string{
 				"Content-Type": "application/json",
 			},
+			Body: "{}",
 		}
 		h(&request, response)
 		return events.APIGatewayProxyResponse(*response), nil
