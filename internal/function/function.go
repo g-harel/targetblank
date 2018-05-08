@@ -8,7 +8,8 @@ import (
 
 // Config contains options for the handler's middleware.
 type Config struct {
-	RequireAuth bool
+	RequireAuth bool     // TODO implement
+	PathParams  []string // TODO implement
 }
 
 // Handler is a custom type representing a lambda handler.

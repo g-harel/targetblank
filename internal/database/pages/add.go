@@ -39,34 +39,23 @@ func (p *Pages) Add(email string) (addr, pass string, err error) {
 		return "", "", err
 	}
 
+	item := &Item{
+		Email:    hashedEmail,
+		Password: hashedPass,
+		Public:   false,
+		Temp:     false,
+		Page:     string(marshalledPageB),
+	}
+
 	input := &dynamodb.PutItemInput{
 		TableName:           aws.String(p.name),
 		ConditionExpression: aws.String("attribute_not_exists(addr)"),
-		Item: map[string]*dynamodb.AttributeValue{
-			"addr": {
-				S: aws.String(""),
-			},
-			"email": {
-				S: aws.String(hashedEmail),
-			},
-			"password": {
-				S: aws.String(hashedPass),
-			},
-			"public": {
-				BOOL: aws.Bool(false),
-			},
-			"temporary": {
-				BOOL: aws.Bool(false),
-			},
-			"page": {
-				S: aws.String(string(marshalledPageB)),
-			},
-		},
 	}
 
 	for {
 		addr = database.RandString(6)
-		input.Item["addr"].S = aws.String(addr)
+		item.Key = addr
+		input.Item = item.toAttributeValueMap()
 
 		_, err := p.client.PutItem(input)
 		if err != nil {

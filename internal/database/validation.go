@@ -16,6 +16,10 @@ var validationKinds = map[string]*validation{
 		pattern: regexp.MustCompile("^\\S+@\\S+\\.\\S+$"),
 		message: "value does not match an email address (address@domain.tld)",
 	},
+	"password": &validation{
+		pattern: regexp.MustCompile("^.{8,}$"),
+		message: "password is shorter than eight characters",
+	},
 }
 
 // Validate checks that the input string has the correct format for it's decalred kind.

@@ -15,6 +15,7 @@ func TestHandler(t *testing.T) {
 			PathParameters: map[string]string{
 				"address": "123456",
 			},
+			Body: "version 1\n===",
 		}, res)
 		fmt.Println(res)
 	})

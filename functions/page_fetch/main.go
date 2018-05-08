@@ -10,7 +10,7 @@ import (
 )
 
 func handler(req *function.Request, res *function.Response) {
-	page, err := pages.New(database.New()).Get(req.Body)
+	page, err := pages.New(database.New()).Get(req.PathParameters["address"])
 	switch err.(type) {
 	case nil:
 		res.Body = page.Page
@@ -23,6 +23,7 @@ func handler(req *function.Request, res *function.Response) {
 
 func main() {
 	lambda.Start(function.New(&function.Config{
-		RequireAuth: false,
+		RequireAuth: false, // TODO needs if not public
+		PathParams:  []string{"address"},
 	}, handler))
 }
