@@ -25,9 +25,12 @@ func handler(req *function.Request, res *function.Response) {
 	}
 	p := string(bytes)
 
-	err = pages.New(database.New()).Edit(req.PathParameters["address"], pages.Item{
-		Page: p,
-	})
+	err = pages.New(database.New()).Edit(
+		req.PathParameters["address"],
+		pages.Item{
+			Page: p,
+		},
+	)
 	if err != nil {
 		res.ServerErr(http.StatusInternalServerError, err)
 		return
@@ -38,7 +41,6 @@ func handler(req *function.Request, res *function.Response) {
 
 func main() {
 	lambda.Start(function.New(&function.Config{
-		RequireAuth: true,
-		PathParams:  []string{"address"},
+		PathParams: []string{"address"},
 	}, handler))
 }

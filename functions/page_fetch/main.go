@@ -23,7 +23,6 @@ func handler(req *function.Request, res *function.Response) {
 
 func main() {
 	lambda.Start(function.New(&function.Config{
-		RequireAuth: false, // TODO needs if not public
-		PathParams:  []string{"address"},
+		PathParams: []string{"address"},
 	}, handler))
 }

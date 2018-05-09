@@ -324,7 +324,7 @@ func TestParser(t *testing.T) {
 			p.AddItem(2, newItem("http://ee.co/4", "label4"))
 			p.AddItem(1, newItem("http://ee.co/5", "label-5"))
 			p.AddGroup()
-			p.AddGroupMeta("name", "todo")
+			p.AddGroupMeta("name", "tasks")
 			p.AddItem(0, newItem("", "label6"))
 			p.AddItem(1, newItem("", "label7"))
 			p.AddItem(1, newItem("", "localhost:80/test"))
@@ -344,7 +344,7 @@ func TestParser(t *testing.T) {
 				"        label4 [http://ee.co/4] # list is infinitely nestable",
 				"    label-5 [http://ee.co/5]    # label can contain dashes",
 				"---                             # groups split layout into columns",
-				"name=todo                       # ex. group name can be added",
+				"name=tasks                      # ex. group name can be added",
 				"label6",
 				"    label7                      # indentation level of 4 spaces",
 				"    localhost:80/test           # labels that look like links should be clickable",

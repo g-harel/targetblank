@@ -1,6 +1,7 @@
 package function
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -8,8 +9,7 @@ import (
 
 // Config contains options for the handler's middleware.
 type Config struct {
-	RequireAuth bool     // TODO implement
-	PathParams  []string // TODO implement
+	PathParams []string
 }
 
 // Handler is a custom type representing a lambda handler.
@@ -17,6 +17,7 @@ type Handler func(*Request, *Response)
 
 // New creates a lambda handler from a Handler and a Config.
 func New(c *Config, h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// TODO read jwt
 	return func(req events.APIGatewayProxyRequest) (res events.APIGatewayProxyResponse, err error) {
 		request := Request(req)
 		response := &Response{
@@ -26,6 +27,15 @@ func New(c *Config, h Handler) func(events.APIGatewayProxyRequest) (events.APIGa
 			},
 			Body: "{}",
 		}
+
+		if c.PathParams != nil {
+			for _, p := range c.PathParams {
+				if request.PathParameters[p] == "" {
+					response.ClientErr(http.StatusBadRequest, errors.New("missing path parameter: "+p))
+				}
+			}
+		}
+
 		h(&request, response)
 		return events.APIGatewayProxyResponse(*response), nil
 	}

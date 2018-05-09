@@ -23,7 +23,5 @@ func handler(req *function.Request, res *function.Response) {
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{
-		RequireAuth: false,
-	}, handler))
+	lambda.Start(function.New(&function.Config{}, handler))
 }
