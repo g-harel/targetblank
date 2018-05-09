@@ -55,7 +55,7 @@ func (p *Pages) Add(email string) (addr, pass string, err error) {
 	for {
 		addr = database.RandString(6)
 		item.Key = addr
-		input.Item = item.toAttributeValueMap()
+		input.Item = item.toCreateMap()
 
 		_, err := p.client.PutItem(input)
 		if err != nil {

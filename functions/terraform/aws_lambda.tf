@@ -24,3 +24,12 @@ resource "aws_lambda_function" "page_create" {
   handler          = "page_create"
   runtime          = "go1.x"
 }
+
+resource "aws_lambda_function" "page_edit" {
+  function_name    = "page_edit"
+  filename         = ".build/page_edit.zip"
+  source_code_hash = "${base64sha256(file(".build/page_edit.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "page_edit"
+  runtime          = "go1.x"
+}
