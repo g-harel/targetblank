@@ -33,3 +33,21 @@ resource "aws_lambda_function" "page_edit" {
   handler          = "page_edit"
   runtime          = "go1.x"
 }
+
+resource "aws_lambda_function" "page_publish" {
+  function_name    = "page_publish"
+  filename         = ".build/page_publish.zip"
+  source_code_hash = "${base64sha256(file(".build/page_publish.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "page_publish"
+  runtime          = "go1.x"
+}
+
+resource "aws_lambda_function" "password_change" {
+  function_name    = "password_change"
+  filename         = ".build/password_change.zip"
+  source_code_hash = "${base64sha256(file(".build/password_change.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "password_change"
+  runtime          = "go1.x"
+}
