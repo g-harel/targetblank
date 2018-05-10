@@ -18,22 +18,22 @@ notes
 - api gatweay + functions backed by dynamodb
 
 endpoints (/api/v1..)
-- create new homepage       (POST   /page                 email   )
-- validate homepage spec    (GET    /page                         )
-- fetch homepage            (GET    /page/:address [auth]         )
+x create new homepage       (POST   /page                 email   )
+x validate homepage spec    (GET    /page                         )
+x fetch homepage            (GET    /page/:address [auth]         )
 - authenticate per homepage (POST   /auth/:address        password)
-- change homepage password  (PUT    /auth/:address [auth] password)
+x change homepage password  (PUT    /auth/:address [auth] password)
 - reset homepage password   (DELETE /auth/:address [auth] email   )
-- edit homepage template    (PUT    /page/:address [auth] data    )
+x edit homepage template    (PUT    /page/:address [auth] data    )
 - delete homepage           (DELETE /page/:address [auth]         )
-- make homepage public      (PATCH  /page/:address [auth]         )
+x make homepage public      (PATCH  /page/:address [auth]         )
 
 nosql schema {
     addr: string (6 alphanumeric chars),
     password: string (hashed),
     email: string (hashed),
     temporary: string (hashed) || null,
-    public: bool,
+    published: bool,
     rawSpec: string,
     rawSpecVersion: string,
     spec: ...
@@ -44,5 +44,7 @@ links
 - https://github.com/nzoschke/gofaas
 - https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0
 - https://gist.github.com/prwhite/8168133
+- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
+- https://scene-si.org/2018/05/08/protecting-api-access-with-jwt/
 
 -->

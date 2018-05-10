@@ -7,7 +7,6 @@ import (
 )
 
 func TestHandler(t *testing.T) {
-	// TODO mock database package
 	t.Run("", func(t *testing.T) {
 		res := &function.Response{}
 		handler(&function.Request{

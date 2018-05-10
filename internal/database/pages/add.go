@@ -40,11 +40,11 @@ func (p *Pages) Add(email string) (addr, pass string, err error) {
 	}
 
 	item := &Item{
-		Email:    hashedEmail,
-		Password: hashedPass,
-		Public:   false,
-		Temp:     false,
-		Page:     string(marshalledPageB),
+		Email:     hashedEmail,
+		Password:  hashedPass,
+		Published: false,
+		Temp:      false,
+		Page:      string(marshalledPageB),
 	}
 
 	input := &dynamodb.PutItemInput{

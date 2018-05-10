@@ -13,6 +13,12 @@ func (p *Pages) Edit(addr string, i Item) error {
 		if err != nil {
 			return err
 		}
+
+		hashedEmail, err := database.Hash(i.Email)
+		if err != nil {
+			return err
+		}
+		i.Email = hashedEmail
 	}
 
 	if i.Password != "" {
@@ -20,26 +26,25 @@ func (p *Pages) Edit(addr string, i Item) error {
 		if err != nil {
 			return err
 		}
+
+		hashedPass, err := database.Hash(i.Password)
+		if err != nil {
+			return err
+		}
+		i.Password = hashedPass
 	}
 
-	i.Key = addr
-
-	hashedPass, err := database.Hash(i.Password)
-	if err != nil {
-		return err
-	}
-	i.Password = hashedPass
-
-	hashedEmail, err := database.Hash(i.Email)
-	if err != nil {
-		return err
-	}
-	i.Email = hashedEmail
-
-	_, err = p.client.UpdateItem(&dynamodb.UpdateItemInput{
-		TableName:                 aws.String(p.name),
-		ConditionExpression:       aws.String("attribute_exists(addr)"),
-		ExpressionAttributeValues: i.toUpdateMap(),
+	expression, values := i.toUpdateExpression()
+	_, err := p.client.UpdateItem(&dynamodb.UpdateItemInput{
+		TableName:           aws.String(p.name),
+		ConditionExpression: aws.String("attribute_exists(addr)"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"addr": &dynamodb.AttributeValue{
+				S: aws.String(addr),
+			},
+		},
+		ExpressionAttributeValues: values,
+		UpdateExpression:          aws.String(expression),
 	})
 
 	return err
