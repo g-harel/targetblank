@@ -51,3 +51,12 @@ resource "aws_lambda_function" "password_change" {
   handler          = "password_change"
   runtime          = "go1.x"
 }
+
+resource "aws_lambda_function" "password_reset" {
+  function_name    = "password_reset"
+  filename         = ".build/password_reset.zip"
+  source_code_hash = "${base64sha256(file(".build/password_reset.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "password_reset"
+  runtime          = "go1.x"
+}

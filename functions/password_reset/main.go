@@ -11,7 +11,12 @@ import (
 
 func handler(req *function.Request, res *function.Response) {
 	pass := database.RandString(16)
-	_, err := pages.New(database.New()).Add(req.Body, pass)
+	err := pages.New(database.New()).Edit(
+		req.PathParameters["address"],
+		pages.Item{
+			Password: pass,
+		},
+	)
 	switch err.(type) {
 	case nil:
 	case database.ValidationError:
@@ -24,5 +29,7 @@ func handler(req *function.Request, res *function.Response) {
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{}, handler))
+	lambda.Start(function.New(&function.Config{
+		PathParams: []string{"address"},
+	}, handler))
 }

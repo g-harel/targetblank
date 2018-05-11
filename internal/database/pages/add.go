@@ -11,32 +11,30 @@ import (
 )
 
 // Add creates a new page item.
-func (p *Pages) Add(email string) (addr, pass string, err error) {
+func (p *Pages) Add(email, pass string) (addr string, err error) {
 	err = database.Validate(email, "email")
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	page, parseErr := page.NewFromSpec("version 1\n===")
 	if parseErr != nil {
-		return addr, pass, parseErr
+		return addr, parseErr
 	}
 
 	marshalledPageB, err := json.Marshal(page)
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
-
-	pass = database.RandString(16)
 
 	hashedPass, err := database.Hash(pass)
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	hashedEmail, err := database.Hash(email)
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	item := &Item{
@@ -64,11 +62,11 @@ func (p *Pages) Add(email string) (addr, pass string, err error) {
 					continue
 				}
 			}
-			return "", "", err
+			return "", err
 		}
 
 		break
 	}
 
-	return addr, pass, nil
+	return addr, nil
 }
