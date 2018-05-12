@@ -12,32 +12,36 @@ import (
 	"github.com/g-harel/targetblank/internal/page"
 )
 
-func handler(req *function.Request, res *function.Response) {
+var client = database.New()
+
+func handler(req *function.Request, res *function.Response) *function.Error {
+	addr, err := req.Param("address")
+	if err != nil {
+		return function.ServerErr(http.StatusInternalServerError, err)
+	}
+
 	page, parseErr := page.NewFromSpec(req.Body)
 	if parseErr != nil {
-		res.ClientErr(http.StatusBadRequest, parseErr)
-		return
+		return function.ClientErr(http.StatusBadRequest, parseErr)
 	}
 
 	bytes, err := json.Marshal(page)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 	item := &pages.Item{
 		Page: string(bytes),
 	}
 
-	err = pages.New(database.New()).Change(req.PathParameters["address"], item)
+	err = pages.New(client).Change(addr, item)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
-		return
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 
 	res.Body = item.Page
+	return nil
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{
-		PathParams: []string{"address"},
-	}, handler))
+	lambda.Start(function.New(handler))
 }

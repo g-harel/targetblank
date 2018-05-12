@@ -9,20 +9,27 @@ import (
 	"github.com/g-harel/targetblank/internal/function"
 )
 
-func handler(req *function.Request, res *function.Response) {
-	item, err := pages.New(database.New()).Fetch(req.PathParameters["address"])
+var client = database.New()
+
+func handler(req *function.Request, res *function.Response) *function.Error {
+	addr, err := req.Param("address")
+	if err != nil {
+		return function.ServerErr(http.StatusInternalServerError, err)
+	}
+
+	item, err := pages.New(client).Fetch(addr)
 	switch err.(type) {
 	case nil:
 		res.Body = item.Page
 	case database.ItemNotFoundError:
-		res.ClientErr(http.StatusNotFound, err)
+		return function.ClientErr(http.StatusNotFound, err)
 	default:
-		res.ServerErr(http.StatusInternalServerError, err)
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
+
+	return nil
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{
-		PathParams: []string{"address"},
-	}, handler))
+	lambda.Start(function.New(handler))
 }

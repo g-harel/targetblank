@@ -9,19 +9,20 @@ import (
 	"github.com/g-harel/targetblank/internal/page"
 )
 
-func handler(req *function.Request, res *function.Response) {
+func handler(req *function.Request, res *function.Response) *function.Error {
 	page, parseErr := page.NewFromSpec(req.Body)
 	if parseErr != nil {
-		res.ClientErr(http.StatusBadRequest, parseErr)
-		return
+		return function.ClientErr(http.StatusBadRequest, parseErr)
 	}
 
 	_, err := json.Marshal(page)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
+
+	return nil
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{}, handler))
+	lambda.Start(function.New(handler))
 }

@@ -11,51 +11,50 @@ import (
 	"github.com/g-harel/targetblank/internal/page"
 )
 
-func handler(req *function.Request, res *function.Response) {
+var client = database.New()
+
+func handler(req *function.Request, res *function.Response) *function.Error {
 	item := &pages.Item{Email: req.Body}
 
 	err := database.Validate(item.Email, "email")
 	if err != nil {
-		res.ClientErr(http.StatusBadRequest, err)
-		return
+		return function.ClientErr(http.StatusBadRequest, err)
 	}
 	email, err := database.Hash(item.Email)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
-		return
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 	item.Email = email
 
 	pass, err := database.Hash(database.RandString(16))
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
-		return
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 	item.Password = pass
 	item.TempPass = true
 
 	page, parseErr := page.NewFromSpec("version 1\n===")
 	if parseErr != nil {
-		res.ServerErr(http.StatusInternalServerError, parseErr)
-		return
+		return function.ServerErr(http.StatusInternalServerError, parseErr)
 	}
 	marshalledPageB, err := json.Marshal(page)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
-		return
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 	item.Page = string(marshalledPageB)
 
 	item.Published = false
 
-	err = pages.New(database.New()).Create(item)
+	err = pages.New(client).Create(item)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 
 	// TODO send email
+
+	return nil
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{}, handler))
+	lambda.Start(function.New(handler))
 }

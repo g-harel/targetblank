@@ -9,22 +9,25 @@ import (
 	"github.com/g-harel/targetblank/internal/function"
 )
 
-func handler(req *function.Request, res *function.Response) {
-	err := pages.New(database.New()).Change(
-		req.PathParameters["address"],
-		&pages.Item{
-			Published:           true,
-			PublishedHasBeenSet: true,
-		},
-	)
+var client = database.New()
+
+func handler(req *function.Request, res *function.Response) *function.Error {
+	addr, err := req.Param("address")
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
-		return
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
+
+	err = pages.New(client).Change(addr, &pages.Item{
+		Published:           true,
+		PublishedHasBeenSet: true,
+	})
+	if err != nil {
+		return function.ServerErr(http.StatusInternalServerError, err)
+	}
+
+	return nil
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{
-		PathParams: []string{"address"},
-	}, handler))
+	lambda.Start(function.New(handler))
 }

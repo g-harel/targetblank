@@ -9,13 +9,17 @@ import (
 	"github.com/g-harel/targetblank/internal/function"
 )
 
-func handler(req *function.Request, res *function.Response) {
-	err := pages.New(database.New()).Delete(req.Body)
+var client = database.New()
+
+func handler(req *function.Request, res *function.Response) *function.Error {
+	err := pages.New(client).Delete(req.Body)
 	if err != nil {
-		res.ServerErr(http.StatusInternalServerError, err)
+		return function.ServerErr(http.StatusInternalServerError, err)
 	}
+
+	return nil
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{}, handler))
+	lambda.Start(function.New(handler))
 }

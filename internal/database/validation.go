@@ -29,7 +29,7 @@ func Validate(s, kind string) error {
 		return errors.New("validation kind unknown")
 	}
 	if !v.pattern.Match([]byte(strings.TrimSpace(s))) {
-		return ValidationError(errors.New(v.message))
+		return errors.New(v.message)
 	}
 	return nil
 }
