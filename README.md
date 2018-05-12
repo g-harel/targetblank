@@ -25,7 +25,7 @@ x fetch homepage            (GET    /page/:address [auth]         )
 x change homepage password  (PUT    /auth/:address [auth] password)
 x reset homepage password   (DELETE /auth/:address [auth] email   )
 x edit homepage template    (PUT    /page/:address [auth] data    )
-X delete homepage           (DELETE /page/:address [auth]         )
+x delete homepage           (DELETE /page/:address [auth]         )
 x make homepage public      (PATCH  /page/:address [auth]         )
 
 nosql schema {

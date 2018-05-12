@@ -11,19 +11,20 @@ import (
 
 func handler(req *function.Request, res *function.Response) {
 	pass := database.RandString(16)
-	err := pages.New(database.New()).Change(
-		req.PathParameters["address"],
-		pages.Item{
-			Password:           pass,
-			TempPass:           true,
-			TempPassHasBeenSet: true,
-		},
-	)
-	switch err.(type) {
-	case nil:
-	case database.ValidationError:
-		res.ClientErr(http.StatusBadRequest, err)
-	default:
+	item := &pages.Item{
+		TempPass:           true,
+		TempPassHasBeenSet: true,
+	}
+
+	var err error
+	item.Password, err = database.Hash(pass)
+	if err != nil {
+		res.ServerErr(http.StatusInternalServerError, err)
+		return
+	}
+
+	err = pages.New(database.New()).Change(req.PathParameters["address"], item)
+	if err != nil {
 		res.ServerErr(http.StatusInternalServerError, err)
 	}
 

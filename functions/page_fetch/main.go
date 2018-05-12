@@ -10,10 +10,10 @@ import (
 )
 
 func handler(req *function.Request, res *function.Response) {
-	page, err := pages.New(database.New()).Fetch(req.PathParameters["address"])
+	item, err := pages.New(database.New()).Fetch(req.PathParameters["address"])
 	switch err.(type) {
 	case nil:
-		res.Body = page.Page
+		res.Body = item.Page
 	case database.ItemNotFoundError:
 		res.ClientErr(http.StatusNotFound, err)
 	default:

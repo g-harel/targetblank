@@ -12,7 +12,7 @@ import (
 func handler(req *function.Request, res *function.Response) {
 	err := pages.New(database.New()).Change(
 		req.PathParameters["address"],
-		pages.Item{
+		&pages.Item{
 			Published:           true,
 			PublishedHasBeenSet: true,
 		},

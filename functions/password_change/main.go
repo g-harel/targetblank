@@ -10,20 +10,27 @@ import (
 )
 
 func handler(req *function.Request, res *function.Response) {
-	err := pages.New(database.New()).Change(
-		req.PathParameters["address"],
-		pages.Item{
-			Password:           req.Body,
-			TempPass:           false,
-			TempPassHasBeenSet: true,
-		},
-	)
-	switch err.(type) {
-	case nil:
-	case database.ValidationError:
+	item := &pages.Item{
+		Password:           req.Body,
+		TempPass:           false,
+		TempPassHasBeenSet: true,
+	}
+
+	err := database.Validate(item.Password, "password")
+	if err != nil {
 		res.ClientErr(http.StatusBadRequest, err)
-	default:
+		return
+	}
+	item.Password, err = database.Hash(item.Password)
+	if err != nil {
 		res.ServerErr(http.StatusInternalServerError, err)
+		return
+	}
+
+	err = pages.New(database.New()).Change(req.PathParameters["address"], item)
+	if err != nil {
+		res.ServerErr(http.StatusInternalServerError, err)
+		return
 	}
 }
 

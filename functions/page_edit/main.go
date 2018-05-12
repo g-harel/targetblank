@@ -23,20 +23,17 @@ func handler(req *function.Request, res *function.Response) {
 	if err != nil {
 		res.ServerErr(http.StatusInternalServerError, err)
 	}
-	p := string(bytes)
+	item := &pages.Item{
+		Page: string(bytes),
+	}
 
-	err = pages.New(database.New()).Change(
-		req.PathParameters["address"],
-		pages.Item{
-			Page: p,
-		},
-	)
+	err = pages.New(database.New()).Change(req.PathParameters["address"], item)
 	if err != nil {
 		res.ServerErr(http.StatusInternalServerError, err)
 		return
 	}
 
-	res.Body = p
+	res.Body = item.Page
 }
 
 func main() {
