@@ -11,10 +11,12 @@ import (
 
 func handler(req *function.Request, res *function.Response) {
 	pass := database.RandString(16)
-	err := pages.New(database.New()).Edit(
+	err := pages.New(database.New()).Change(
 		req.PathParameters["address"],
 		pages.Item{
-			Password: pass,
+			Password:           pass,
+			TempPass:           true,
+			TempPassHasBeenSet: true,
 		},
 	)
 	switch err.(type) {

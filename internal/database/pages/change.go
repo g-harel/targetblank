@@ -6,8 +6,8 @@ import (
 	"github.com/g-harel/targetblank/internal/database"
 )
 
-// Edit modifies a page item's values.
-func (p *Pages) Edit(addr string, i Item) error {
+// Change modifies an item's values.
+func (p *Pages) Change(addr string, i Item) error {
 	if i.Email != "" {
 		err := database.Validate(i.Email, "email")
 		if err != nil {

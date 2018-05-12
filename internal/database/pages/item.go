@@ -13,12 +13,12 @@ type Item struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Published bool   `json:"published"`
-	Temp      bool   `json:"temporary"`
+	TempPass  bool   `json:"temp_pass"`
 	Page      string `json:"page"`
 
 	// Flags used when using Item object as a source of updates.
 	PublishedHasBeenSet bool `json:"-"`
-	TempHasBeenSet      bool `json:"-"`
+	TempPassHasBeenSet  bool `json:"-"`
 }
 
 func (i *Item) toCreateMap() map[string]*dynamodb.AttributeValue {
@@ -35,8 +35,8 @@ func (i *Item) toCreateMap() map[string]*dynamodb.AttributeValue {
 		"published": {
 			BOOL: aws.Bool(i.Published),
 		},
-		"temporary": {
-			BOOL: aws.Bool(i.Temp),
+		"temp_pass": {
+			BOOL: aws.Bool(i.TempPass),
 		},
 		"page": {
 			S: aws.String(i.Page),
@@ -71,11 +71,11 @@ func (i *Item) toUpdateExpression() (string, map[string]*dynamodb.AttributeValue
 		expression += "published = :published,"
 	}
 
-	if i.TempHasBeenSet {
-		values[":temporary"] = &dynamodb.AttributeValue{
-			BOOL: aws.Bool(i.Temp),
+	if i.TempPassHasBeenSet {
+		values[":temp_pass"] = &dynamodb.AttributeValue{
+			BOOL: aws.Bool(i.TempPass),
 		}
-		expression += "temporary = :temporary,"
+		expression += "temp_pass = :temp_pass,"
 	}
 
 	if i.Page != "" {

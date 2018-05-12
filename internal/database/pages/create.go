@@ -10,8 +10,8 @@ import (
 	"github.com/g-harel/targetblank/internal/page"
 )
 
-// Add creates a new page item.
-func (p *Pages) Add(email, pass string) (addr string, err error) {
+// Create adds a new page item.
+func (p *Pages) Create(email, pass string) (addr string, err error) {
 	err = database.Validate(email, "email")
 	if err != nil {
 		return "", err
@@ -41,7 +41,7 @@ func (p *Pages) Add(email, pass string) (addr string, err error) {
 		Email:     hashedEmail,
 		Password:  hashedPass,
 		Published: false,
-		Temp:      false,
+		TempPass:  true,
 		Page:      string(marshalledPageB),
 	}
 

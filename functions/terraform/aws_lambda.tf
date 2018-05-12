@@ -16,12 +16,12 @@ resource "aws_lambda_function" "page_validate" {
   runtime          = "go1.x"
 }
 
-resource "aws_lambda_function" "page_create" {
-  function_name    = "page_create"
-  filename         = ".build/page_create.zip"
-  source_code_hash = "${base64sha256(file(".build/page_create.zip"))}"
+resource "aws_lambda_function" "create" {
+  function_name    = "create"
+  filename         = ".build/create.zip"
+  source_code_hash = "${base64sha256(file(".build/create.zip"))}"
   role             = "${aws_iam_role.lambda.arn}"
-  handler          = "page_create"
+  handler          = "create"
   runtime          = "go1.x"
 }
 
@@ -34,12 +34,12 @@ resource "aws_lambda_function" "page_edit" {
   runtime          = "go1.x"
 }
 
-resource "aws_lambda_function" "page_publish" {
-  function_name    = "page_publish"
-  filename         = ".build/page_publish.zip"
-  source_code_hash = "${base64sha256(file(".build/page_publish.zip"))}"
+resource "aws_lambda_function" "publish" {
+  function_name    = "publish"
+  filename         = ".build/publish.zip"
+  source_code_hash = "${base64sha256(file(".build/publish.zip"))}"
   role             = "${aws_iam_role.lambda.arn}"
-  handler          = "page_publish"
+  handler          = "publish"
   runtime          = "go1.x"
 }
 
@@ -58,5 +58,14 @@ resource "aws_lambda_function" "password_reset" {
   source_code_hash = "${base64sha256(file(".build/password_reset.zip"))}"
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "password_reset"
+  runtime          = "go1.x"
+}
+
+resource "aws_lambda_function" "delete" {
+  function_name    = "delete"
+  filename         = ".build/delete.zip"
+  source_code_hash = "${base64sha256(file(".build/delete.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "delete"
   runtime          = "go1.x"
 }

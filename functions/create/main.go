@@ -10,14 +10,8 @@ import (
 )
 
 func handler(req *function.Request, res *function.Response) {
-	err := pages.New(database.New()).Change(
-		req.PathParameters["address"],
-		pages.Item{
-			Password:           req.Body,
-			TempPass:           false,
-			TempPassHasBeenSet: true,
-		},
-	)
+	pass := database.RandString(16)
+	_, err := pages.New(database.New()).Create(req.Body, pass)
 	switch err.(type) {
 	case nil:
 	case database.ValidationError:
@@ -25,10 +19,10 @@ func handler(req *function.Request, res *function.Response) {
 	default:
 		res.ServerErr(http.StatusInternalServerError, err)
 	}
+
+	// TODO send email
 }
 
 func main() {
-	lambda.Start(function.New(&function.Config{
-		PathParams: []string{"address"},
-	}, handler))
+	lambda.Start(function.New(&function.Config{}, handler))
 }

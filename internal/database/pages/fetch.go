@@ -9,22 +9,20 @@ import (
 	"github.com/g-harel/targetblank/internal/database"
 )
 
-// Get fetches the page attribute from the item with the specified address.
-func (p *Pages) Get(addr string) (*Item, error) {
-	input := &dynamodb.GetItemInput{
+// Fetch gets the page attribute from the item with the specified address.
+func (p *Pages) Fetch(addr string) (*Item, error) {
+	result, err := p.client.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(p.name),
 		Key: map[string]*dynamodb.AttributeValue{
 			"addr": {
 				S: aws.String(addr),
 			},
 		},
-	}
-
-	result, err := p.client.GetItem(input)
+	})
 	if err != nil {
 		return nil, err
 	}
-	if result == nil {
+	if len(result.Item) == 0 {
 		return nil, database.ItemNotFoundError(
 			errors.New("page not found for given key"),
 		)

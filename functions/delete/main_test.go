@@ -10,10 +10,7 @@ func TestHandler(t *testing.T) {
 	t.Run("", func(t *testing.T) {
 		res := &function.Response{}
 		handler(&function.Request{
-			PathParameters: map[string]string{
-				"address": "123456",
-			},
-			Body: "test1234",
+			Body: "123456",
 		}, res)
 	})
 }

@@ -10,17 +10,10 @@ import (
 )
 
 func handler(req *function.Request, res *function.Response) {
-	pass := database.RandString(16)
-	_, err := pages.New(database.New()).Add(req.Body, pass)
-	switch err.(type) {
-	case nil:
-	case database.ValidationError:
-		res.ClientErr(http.StatusBadRequest, err)
-	default:
+	err := pages.New(database.New()).Delete(req.Body)
+	if err != nil {
 		res.ServerErr(http.StatusInternalServerError, err)
 	}
-
-	// TODO send email
 }
 
 func main() {

@@ -25,7 +25,7 @@ func handler(req *function.Request, res *function.Response) {
 	}
 	p := string(bytes)
 
-	err = pages.New(database.New()).Edit(
+	err = pages.New(database.New()).Change(
 		req.PathParameters["address"],
 		pages.Item{
 			Page: p,

@@ -23,9 +23,9 @@ x validate homepage spec    (GET    /page                         )
 x fetch homepage            (GET    /page/:address [auth]         )
 - authenticate per homepage (POST   /auth/:address        password)
 x change homepage password  (PUT    /auth/:address [auth] password)
-- reset homepage password   (DELETE /auth/:address [auth] email   )
+x reset homepage password   (DELETE /auth/:address [auth] email   )
 x edit homepage template    (PUT    /page/:address [auth] data    )
-- delete homepage           (DELETE /page/:address [auth]         )
+X delete homepage           (DELETE /page/:address [auth]         )
 x make homepage public      (PATCH  /page/:address [auth]         )
 
 nosql schema {
