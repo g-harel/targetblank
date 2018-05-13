@@ -7,6 +7,8 @@ import (
 	"github.com/g-harel/targetblank/internal/database"
 	"github.com/g-harel/targetblank/internal/database/pages"
 	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/hash"
+	"github.com/g-harel/targetblank/internal/rand"
 )
 
 var client = database.New()
@@ -17,13 +19,13 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 
-	pass := database.RandString(16)
+	pass := rand.String(16)
 	item := &pages.Item{
 		TempPass:           true,
 		TempPassHasBeenSet: true,
 	}
 
-	item.Password, err = database.Hash(pass)
+	item.Password, err = hash.New(pass)
 	if err != nil {
 		return function.ServerErr(http.StatusInternalServerError, err)
 	}

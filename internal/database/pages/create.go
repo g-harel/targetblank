@@ -4,7 +4,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/g-harel/targetblank/internal/database"
+	"github.com/g-harel/targetblank/internal/rand"
 )
 
 // Create adds a new page item.
@@ -16,7 +16,7 @@ func (p *Pages) Create(item *Item) error {
 	}
 
 	for {
-		item.Key = database.RandString(6)
+		item.Key = rand.String(6)
 		input.Item = item.toCreateMap()
 
 		_, err := p.client.PutItem(input)

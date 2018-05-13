@@ -1,4 +1,4 @@
-package database
+package rand
 
 import (
 	"math/rand"
@@ -14,8 +14,8 @@ var randBucket = []rune(
 		"abcdefghijkmnopqrstuvwxyz" +
 		"ABCDEFGHJKLMNOPQRSTUVWXYZ")
 
-// RandString generates a pseudorandom string of the specified length.
-func RandString(l int) string {
+// String generates a pseudorandom string of the specified length.
+func String(l int) string {
 	b := make([]rune, l)
 	for i := range b {
 		b[i] = randBucket[rand.Intn(len(randBucket))]

@@ -5,10 +5,13 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/g-harel/targetblank/internal/check"
 	"github.com/g-harel/targetblank/internal/database"
 	"github.com/g-harel/targetblank/internal/database/pages"
 	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/page"
+	"github.com/g-harel/targetblank/internal/rand"
 )
 
 var client = database.New()
@@ -16,17 +19,17 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	item := &pages.Item{Email: req.Body}
 
-	err := database.Validate(item.Email, "email")
+	err := check.That(item.Email).Is(check.EMAIL)
 	if err != nil {
 		return function.ClientErr(http.StatusBadRequest, err)
 	}
-	email, err := database.Hash(item.Email)
+	email, err := hash.New(item.Email)
 	if err != nil {
 		return function.ServerErr(http.StatusInternalServerError, err)
 	}
 	item.Email = email
 
-	pass, err := database.Hash(database.RandString(16))
+	pass, err := hash.New(rand.String(16))
 	if err != nil {
 		return function.ServerErr(http.StatusInternalServerError, err)
 	}
