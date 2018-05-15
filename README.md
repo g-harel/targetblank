@@ -32,11 +32,9 @@ nosql schema {
     addr: string (6 alphanumeric chars),
     password: string (hashed),
     email: string (hashed),
-    temporary: string (hashed) || null,
+    temp_pass: bool,
     published: bool,
-    rawSpec: string,
-    rawSpecVersion: string,
-    spec: ...
+    page: string
 }
 
 links
