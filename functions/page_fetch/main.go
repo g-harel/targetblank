@@ -14,7 +14,7 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, err := req.Param("address")
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	item, err := pages.New(client).Fetch(addr)
@@ -22,9 +22,9 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	case nil:
 		res.Body = item.Page
 	case database.ItemNotFoundError:
-		return function.ClientErr(http.StatusNotFound, err)
+		return function.CustomErr(http.StatusNotFound, err)
 	default:
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	return nil

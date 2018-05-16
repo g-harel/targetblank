@@ -21,28 +21,28 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	err := check.That(item.Email).Is(check.EMAIL)
 	if err != nil {
-		return function.ClientErr(http.StatusBadRequest, err)
+		return function.CustomErr(http.StatusBadRequest, err)
 	}
 	email, err := hash.New(item.Email)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 	item.Email = email
 
 	pass, err := hash.New(rand.String(16))
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 	item.Password = pass
 	item.TempPass = true
 
 	page, parseErr := page.NewFromSpec("version 1\n===")
 	if parseErr != nil {
-		return function.ServerErr(http.StatusInternalServerError, parseErr)
+		return function.Err(http.StatusInternalServerError, parseErr)
 	}
 	marshalledPageB, err := json.Marshal(page)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 	item.Page = string(marshalledPageB)
 
@@ -50,7 +50,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	err = pages.New(client).Create(item)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	// TODO send email

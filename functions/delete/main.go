@@ -14,7 +14,7 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	err := pages.New(client).Delete(req.Body)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	return nil

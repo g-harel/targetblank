@@ -16,7 +16,7 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, err := req.Param("address")
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	pass := rand.String(16)
@@ -27,12 +27,12 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	item.Password, err = hash.New(pass)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	err = pages.New(client).Change(addr, item)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	// TODO send email

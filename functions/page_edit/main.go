@@ -17,17 +17,17 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, err := req.Param("address")
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	page, parseErr := page.NewFromSpec(req.Body)
 	if parseErr != nil {
-		return function.ClientErr(http.StatusBadRequest, parseErr)
+		return function.CustomErr(http.StatusBadRequest, parseErr)
 	}
 
 	bytes, err := json.Marshal(page)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 	item := &pages.Item{
 		Page: string(bytes),
@@ -35,7 +35,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	err = pages.New(client).Change(addr, item)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	res.Body = item.Page

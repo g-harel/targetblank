@@ -17,7 +17,7 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, err := req.Param("address")
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	item := &pages.Item{
@@ -28,16 +28,16 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	err = check.That(item.Password).Is(check.PASSWORD)
 	if err != nil {
-		return function.ClientErr(http.StatusBadRequest, err)
+		return function.CustomErr(http.StatusBadRequest, err)
 	}
 	item.Password, err = hash.New(item.Password)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	err = pages.New(client).Change(addr, item)
 	if err != nil {
-		return function.ServerErr(http.StatusInternalServerError, err)
+		return function.Err(http.StatusInternalServerError, err)
 	}
 
 	return nil
