@@ -12,24 +12,33 @@ func TestHandler(t *testing.T) {
 	s := "test payload"
 	tt, err := token.Seal([]byte(s))
 	if err != nil {
-		t.Fatalf("!! %v", err)
+		t.Fatalf(err.Error())
 	}
-	fmt.Println(tt)
 	pp, err := token.Open(tt)
 	if err != nil {
-		t.Fatalf("!! %v", err)
+		t.Fatalf(err.Error())
 	}
 	if s != string(pp) {
-		t.Fatalf("didn't work")
+		t.Fatalf("token does not match")
 	}
 
 	t.Run("", func(t *testing.T) {
-		res := &function.Response{}
+		res := &function.Response{
+			Headers: map[string]string{},
+		}
+		tok, err := function.MakeToken(false, "123456")
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
+		fmt.Println(tok)
 		handler(&function.Request{
 			PathParameters: map[string]string{
 				"address": "123456",
 			},
-			Body: "test123",
+			Headers: map[string]string{
+				"Token": tok,
+			},
+			Body: "",
 		}, res)
 	})
 }

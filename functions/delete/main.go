@@ -12,7 +12,17 @@ import (
 var client = database.New()
 
 func handler(req *function.Request, res *function.Response) *function.Error {
-	err := pages.New(client).Delete(req.Body)
+	addr, err := req.Param("address")
+	if err != nil {
+		return function.Err(http.StatusInternalServerError, err)
+	}
+
+	_, funcErr := req.ValidateToken(addr)
+	if err != nil {
+		return funcErr
+	}
+
+	err = pages.New(client).Delete(addr)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

@@ -11,8 +11,6 @@ type Handler func(*Request, *Response) *Error
 
 // New creates a lambda handler from a Handler and a Config.
 func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// TODO read jwt
-
 	return func(req events.APIGatewayProxyRequest) (res events.APIGatewayProxyResponse, err error) {
 		request := Request(req)
 		response := &Response{

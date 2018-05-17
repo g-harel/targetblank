@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/database"
 	"github.com/g-harel/targetblank/internal/database/pages"
-
-	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/page"
 )
@@ -20,9 +19,14 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
+	_, funcErr := req.ValidateToken(addr)
+	if err != nil {
+		return funcErr
+	}
+
 	page, parseErr := page.NewFromSpec(req.Body)
 	if parseErr != nil {
-		return function.CustomErr(http.StatusBadRequest, parseErr)
+		return function.CustomErr(parseErr)
 	}
 
 	bytes, err := json.Marshal(page)

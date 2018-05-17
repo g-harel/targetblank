@@ -12,7 +12,7 @@ import (
 func handler(req *function.Request, res *function.Response) *function.Error {
 	page, parseErr := page.NewFromSpec(req.Body)
 	if parseErr != nil {
-		return function.CustomErr(http.StatusBadRequest, parseErr)
+		return function.CustomErr(parseErr)
 	}
 
 	_, err := json.Marshal(page)

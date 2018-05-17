@@ -3,13 +3,12 @@ package main
 import (
 	"net/http"
 
-	"github.com/g-harel/targetblank/internal/check"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/database"
 	"github.com/g-harel/targetblank/internal/database/pages"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/hash"
+	"github.com/g-harel/targetblank/internal/kind"
 )
 
 var client = database.New()
@@ -20,15 +19,20 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
+	_, funcErr := req.ValidateToken(addr)
+	if err != nil {
+		return funcErr
+	}
+
 	item := &pages.Item{
 		Password:           req.Body,
 		TempPass:           false,
 		TempPassHasBeenSet: true,
 	}
 
-	err = check.That(item.Password).Is(check.PASSWORD)
+	err = kind.Of(item.Password).Is(kind.PASSWORD)
 	if err != nil {
-		return function.CustomErr(http.StatusBadRequest, err)
+		return function.CustomErr(err)
 	}
 	item.Password, err = hash.New(item.Password)
 	if err != nil {

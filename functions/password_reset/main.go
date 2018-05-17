@@ -19,6 +19,11 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
+	_, funcErr := req.ValidateToken(addr)
+	if err != nil {
+		return funcErr
+	}
+
 	pass := rand.String(16)
 	item := &pages.Item{
 		TempPass:           true,

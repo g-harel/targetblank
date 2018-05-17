@@ -6,7 +6,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"io"
 )
 
@@ -41,7 +40,6 @@ func Open(token string) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-	fmt.Println(ciphertext)
 
 	block, err := aes.NewCipher(key)
 	if err != nil {

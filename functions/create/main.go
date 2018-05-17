@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/internal/check"
 	"github.com/g-harel/targetblank/internal/database"
 	"github.com/g-harel/targetblank/internal/database/pages"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/hash"
+	"github.com/g-harel/targetblank/internal/kind"
 	"github.com/g-harel/targetblank/internal/page"
 	"github.com/g-harel/targetblank/internal/rand"
 )
@@ -19,9 +19,9 @@ var client = database.New()
 func handler(req *function.Request, res *function.Response) *function.Error {
 	item := &pages.Item{Email: req.Body}
 
-	err := check.That(item.Email).Is(check.EMAIL)
+	err := kind.Of(item.Email).Is(kind.EMAIL)
 	if err != nil {
-		return function.CustomErr(http.StatusBadRequest, err)
+		return function.CustomErr(err)
 	}
 	email, err := hash.New(item.Email)
 	if err != nil {

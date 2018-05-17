@@ -19,7 +19,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
-	if req.ValidateToken() != nil {
+	if req.Body != "" {
 		item, err := pages.New(client).Fetch(addr)
 		switch err.(type) {
 		case nil:
@@ -29,13 +29,28 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 			return function.Err(http.StatusInternalServerError, err)
 		}
 
-		match := hash.Check(req.Body, item.Password)
-		if !match {
+		if !hash.Check(req.Body, item.Password) {
 			return function.Err(http.StatusForbidden, errors.New("password mismatch"))
+		}
+	} else {
+		restricted, funcErr := req.ValidateToken(addr)
+		if funcErr != nil {
+			return funcErr
+		}
+		if restricted {
+			return function.CustomErr(errors.New("cannot refresh restricted token"))
 		}
 	}
 
-	return res.SendToken()
+	token, funcErr := function.MakeToken(false, addr)
+	if err != nil {
+		return funcErr
+	}
+
+	req.Body = token
+	req.Headers["Content-Type"] = "text/plain"
+
+	return nil
 }
 
 func main() {

@@ -69,3 +69,12 @@ resource "aws_lambda_function" "delete" {
   handler          = "delete"
   runtime          = "go1.x"
 }
+
+resource "aws_lambda_function" "authenticate" {
+  function_name    = "authenticate"
+  filename         = ".build/authenticate.zip"
+  source_code_hash = "${base64sha256(file(".build/authenticate.zip"))}"
+  role             = "${aws_iam_role.lambda.arn}"
+  handler          = "authenticate"
+  runtime          = "go1.x"
+}

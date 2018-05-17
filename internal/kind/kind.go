@@ -1,4 +1,4 @@
-package check
+package kind
 
 import (
 	"errors"
@@ -45,7 +45,7 @@ func (s *state) Is(k kind) error {
 	return nil
 }
 
-// That creates a new checker state.
-func That(s string) *state {
+// Of creates a new checker state.
+func Of(s string) *state {
 	return &state{s}
 }

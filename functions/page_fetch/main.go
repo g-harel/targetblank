@@ -20,13 +20,20 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	item, err := pages.New(client).Fetch(addr)
 	switch err.(type) {
 	case nil:
-		res.Body = item.Page
 	case database.ItemNotFoundError:
-		return function.CustomErr(http.StatusNotFound, err)
+		return function.Err(http.StatusNotFound, err)
 	default:
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
+	if !item.Published {
+		_, funcErr := req.ValidateToken(addr)
+		if err != nil {
+			return funcErr
+		}
+	}
+
+	res.Body = item.Page
 	return nil
 }
 

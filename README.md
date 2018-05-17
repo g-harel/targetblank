@@ -18,15 +18,15 @@ notes
 - api gatweay + functions backed by dynamodb
 
 endpoints (/api/v1..)
-x create new homepage       (POST   /page                 email   )
-x validate homepage spec    (GET    /page                         )
-x fetch homepage            (GET    /page/:address [auth]         )
+- create new homepage       (POST   /page                 email   )
+- validate homepage spec    (GET    /page                         )
+- fetch homepage            (GET    /page/:address [auth]         )
 - authenticate per homepage (POST   /auth/:address        password)
-x change homepage password  (PUT    /auth/:address [auth] password)
-x reset homepage password   (DELETE /auth/:address [auth] email   )
-x edit homepage template    (PUT    /page/:address [auth] data    )
-x delete homepage           (DELETE /page/:address [auth]         )
-x make homepage public      (PATCH  /page/:address [auth]         )
+- change homepage password  (PUT    /auth/:address [auth] password)
+- reset homepage password   (DELETE /auth/:address [auth] email   )
+- edit homepage template    (PUT    /page/:address [auth] data    )
+- delete homepage           (DELETE /page/:address [auth]         )
+- make homepage public      (PATCH  /page/:address [auth]         )
 
 nosql schema {
     addr: string (6 alphanumeric chars),
