@@ -19,7 +19,7 @@ type tokenPayload struct {
 	Secret     string `json:"c"`
 }
 
-// MakeToken creates a new authentication token in the response.
+// MakeToken creates a new authentication token.
 func MakeToken(restricted bool, secret string) (string, *Error) {
 	expire := time.Now()
 	if restricted {

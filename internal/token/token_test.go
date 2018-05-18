@@ -24,7 +24,7 @@ func TestSeal(t *testing.T) {
 		}
 	})
 
-	t.Run("should produce base64 encoded strings", func(t *testing.T) {
+	t.Run("should produce base64 encoded tokens", func(t *testing.T) {
 		payloads := []string{
 			"test payload 1",
 			"test payload 2",
@@ -38,7 +38,6 @@ func TestSeal(t *testing.T) {
 			}
 
 			_, err = base64.URLEncoding.DecodeString(tkn)
-			println(payload)
 			if err != nil {
 				t.Fatalf("Failed to decode base64 token")
 			}
