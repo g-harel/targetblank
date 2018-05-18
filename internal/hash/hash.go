@@ -2,7 +2,7 @@ package hash
 
 import "golang.org/x/crypto/bcrypt"
 
-var hashComplexity = 12
+var hashComplexity = 10
 
 // New hashes the input string.
 func New(s string) (string, error) {
@@ -12,6 +12,5 @@ func New(s string) (string, error) {
 
 // Check compares the input string to the input hash.
 func Check(s, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(s))
-	return err == nil
+	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(s)) == nil
 }
