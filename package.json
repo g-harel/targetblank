@@ -2,8 +2,7 @@
   "scripts": {
     "build": "parcel build --no-source-maps -d .build app/index.html",
     "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist app/index.html",
-    "lint": "eslint app/**/*.js",
-    "test": "echo"
+    "lint": "eslint app/**/*.js"
   },
   "dependencies": {
     "okwolo": "^3.4.0"

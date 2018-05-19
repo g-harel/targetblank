@@ -5,12 +5,9 @@ go:
 
 before_install:
   - go get -t -v ./...
-  - nvm install v10.1.0 --latest-npm
-  - npm install
 
 script:
-  - make test
-  - make build
+  - go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
