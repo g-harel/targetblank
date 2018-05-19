@@ -21,8 +21,8 @@ build:
 	done
 
 test:
-	$(GO) test ./... -cover -count=1
 	$(NPM) run test
+	$(GO) test ./... -cover -race -count=1
 
 coverage:
 	$(GO) test ./... -coverprofile=$(COVERAGE_FILE)
