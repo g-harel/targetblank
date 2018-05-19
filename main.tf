@@ -22,9 +22,9 @@ data "terraform_remote_state" "tfstate" {
 }
 
 module "website" {
-  source = "./frontend/terraform"
+  source = "./app/terraform"
 }
 
 module "api" {
-  source = "./functions/terraform"
+  source = "./api/terraform"
 }

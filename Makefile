@@ -3,7 +3,7 @@ NPM=npm
 ZIP=zip
 
 BUILD_DIR=.build
-FUNCS_DIR=functions
+FUNCS_DIR=api/functions
 
 COVERAGE_FILE=.coverage
 
@@ -22,6 +22,7 @@ build:
 
 test:
 	$(GO) test ./... -cover -count=1
+	$(NPM) run test
 
 coverage:
 	$(GO) test ./... -coverprofile=$(COVERAGE_FILE)
