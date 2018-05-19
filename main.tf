@@ -21,7 +21,7 @@ data "terraform_remote_state" "tfstate" {
   }
 }
 
-module "website" {
+module "app" {
   source = "./app/terraform"
 }
 
