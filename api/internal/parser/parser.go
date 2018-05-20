@@ -1,8 +1,19 @@
 package parser
 
 import (
+	"fmt"
+	"regexp"
 	"strings"
 )
+
+// Rule defines behavior associated with patterns in the input string.
+type Rule struct {
+	Name     string
+	Pattern  *regexp.Regexp
+	Handler  func(ctx *Context)
+	Required bool
+	Disabled bool
+}
 
 // Parser is used to accumulate rules and parse strings.
 type Parser struct {
@@ -82,4 +93,14 @@ func (p *Parser) Parse(s string) *Error {
 	}
 
 	return nil
+}
+
+// Error adds line number to parser errors.
+type Error struct {
+	error
+	Line int
+}
+
+func (e *Error) Error() string {
+	return fmt.Sprintf("Error on line %v: %v", e.Line, e.error)
 }

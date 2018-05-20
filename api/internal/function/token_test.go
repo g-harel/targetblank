@@ -63,7 +63,7 @@ func TestValidateToken(t *testing.T) {
 		}
 		_, err = ValidateToken(tkn, secret)
 		if err != nil {
-			t.Fatal("Unexpected error when validating with a correct secret")
+			t.Fatalf("Unexpected error when validating with a correct secret: %v", err)
 		}
 
 		tkn, err = MakeToken(false, secret)

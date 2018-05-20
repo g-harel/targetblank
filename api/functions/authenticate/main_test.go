@@ -12,11 +12,11 @@ func TestHandler(t *testing.T) {
 	s := "test payload"
 	tt, err := token.Seal([]byte(s))
 	if err != nil {
-		t.Fatal(err.Error())
+		t.Fatalf("Unexpected error when sealing token: %v", err)
 	}
 	pp, err := token.Open(tt)
 	if err != nil {
-		t.Fatal(err.Error())
+		t.Fatalf("Unexpected error when opening token: %v", err)
 	}
 	if s != string(pp) {
 		t.Fatal("token does not match")
@@ -28,7 +28,7 @@ func TestHandler(t *testing.T) {
 		}
 		tok, err := function.MakeToken(false, "123456")
 		if err != nil {
-			t.Fatal(err.Error())
+			t.Fatalf("Unexpected error when making token: %v", err)
 		}
 		fmt.Println(tok)
 		handler(&function.Request{
