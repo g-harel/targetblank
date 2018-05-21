@@ -132,6 +132,8 @@ func TestParse(t *testing.T) {
 			t.Fatal("Expected parsing error")
 		}
 	})
+
+	// TODO test more context funcs
 }
 
 func TestError(t *testing.T) {

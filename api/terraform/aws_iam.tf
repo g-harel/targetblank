@@ -10,9 +10,29 @@ resource "aws_iam_role" "lambda" {
       "Principal": {
         "Service": "lambda.amazonaws.com"
       },
-      "Effect": "Allow"
+      "Effect": "Allow",
+      "Sid": ""
     }
   ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "lambda_dynamodb" {
+  name = "dynamo-policy"
+  role = "${aws_iam_role.lambda.id}"
+
+  policy = <<EOF
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Action": "dynamodb:*",
+            "Resource": "${aws_dynamodb_table.pages.arn}",
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
 }
 EOF
 }

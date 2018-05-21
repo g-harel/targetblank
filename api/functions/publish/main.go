@@ -12,7 +12,7 @@ import (
 var client = database.New()
 
 func handler(req *function.Request, res *function.Response) *function.Error {
-	addr, funcErr := req.Param("address")
+	addr, funcErr := req.Param("addr")
 	if funcErr != nil {
 		return funcErr
 	}
