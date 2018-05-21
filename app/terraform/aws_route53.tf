@@ -1,9 +1,7 @@
-resource "aws_route53_zone" "primary" {
-  name = "targetblank.org"
-}
+variable primary_zone_id {}
 
 resource "aws_route53_record" "cloudfront_alias" {
-  zone_id = "${aws_route53_zone.primary.zone_id}"
+  zone_id = "${var.primary_zone_id}"
   name    = "targetblank.org"
   type    = "A"
 

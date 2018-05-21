@@ -21,10 +21,18 @@ data "terraform_remote_state" "tfstate" {
   }
 }
 
+resource "aws_route53_zone" "primary" {
+  name = "targetblank.org"
+}
+
 module "app" {
   source = "./app/terraform"
+
+  primary_zone_id = "${aws_route53_zone.primary.zone_id}"
 }
 
 module "api" {
   source = "./api/terraform"
+
+  primary_zone_id = "${aws_route53_zone.primary.zone_id}"
 }
