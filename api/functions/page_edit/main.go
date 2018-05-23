@@ -5,13 +5,12 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/api/internal/database"
-	"github.com/g-harel/targetblank/api/internal/database/pages"
 	"github.com/g-harel/targetblank/api/internal/function"
 	"github.com/g-harel/targetblank/api/internal/page"
+	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var client = database.New()
+var pages = tables.NewPage()
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -33,11 +32,11 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &pages.Item{
+	item := &tables.PageItem{
 		Page: string(bytes),
 	}
 
-	err = pages.New(client).Change(addr, item)
+	err = pages.Change(addr, item)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

@@ -1,4 +1,4 @@
-package pages
+package tables
 
 import (
 	"strings"
@@ -7,8 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
-// Item represents a document stored in the page table.
-type Item struct {
+// PageItem represents a document stored in the page table.
+type PageItem struct {
 	Key       string `json:"addr"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
@@ -17,11 +17,11 @@ type Item struct {
 	Page      string `json:"page"`
 
 	// Flags used when using Item object as a source of updates.
-	PublishedHasBeenSet bool `json:"-"`
-	TempPassHasBeenSet  bool `json:"-"`
+	PublishedHasBeenSetForUpdateExpression bool `json:"-"`
+	TempPassHasBeenSetForUpdateExpression  bool `json:"-"`
 }
 
-func (i *Item) toCreateMap() map[string]*dynamodb.AttributeValue {
+func (i *PageItem) toCreateMap() map[string]*dynamodb.AttributeValue {
 	return map[string]*dynamodb.AttributeValue{
 		"addr": {
 			S: aws.String(i.Key),
@@ -46,7 +46,7 @@ func (i *Item) toCreateMap() map[string]*dynamodb.AttributeValue {
 
 // No fields can be empty string to avoid the default value problem and is consistent with DynamoDB's no empty string policy.
 // Key will never be included in the updated values.
-func (i *Item) toUpdateExpression() (string, map[string]*dynamodb.AttributeValue) {
+func (i *PageItem) toUpdateExpression() (string, map[string]*dynamodb.AttributeValue) {
 	expression := "SET "
 	values := map[string]*dynamodb.AttributeValue{}
 
@@ -64,14 +64,14 @@ func (i *Item) toUpdateExpression() (string, map[string]*dynamodb.AttributeValue
 		expression += "password = :password,"
 	}
 
-	if i.PublishedHasBeenSet {
+	if i.PublishedHasBeenSetForUpdateExpression {
 		values[":published"] = &dynamodb.AttributeValue{
 			BOOL: aws.Bool(i.Published),
 		}
 		expression += "published = :published,"
 	}
 
-	if i.TempPassHasBeenSet {
+	if i.TempPassHasBeenSetForUpdateExpression {
 		values[":temp_pass"] = &dynamodb.AttributeValue{
 			BOOL: aws.Bool(i.TempPass),
 		}

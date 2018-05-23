@@ -5,13 +5,12 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/api/internal/database"
-	"github.com/g-harel/targetblank/api/internal/database/pages"
 	"github.com/g-harel/targetblank/api/internal/function"
 	"github.com/g-harel/targetblank/api/internal/hash"
+	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var client = database.New()
+var pages = tables.NewPage()
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -20,13 +19,12 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	}
 
 	if req.Body != "" {
-		item, err := pages.New(client).Fetch(addr)
-		switch err.(type) {
-		case nil:
-		case database.ItemNotFoundError:
-			return function.Err(http.StatusForbidden, err)
-		default:
+		item, err := pages.Fetch(addr)
+		if err != nil {
 			return function.Err(http.StatusInternalServerError, err)
+		}
+		if item == nil {
+			return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
 		}
 
 		if !hash.Check(req.Body, item.Password) {

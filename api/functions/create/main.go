@@ -5,21 +5,20 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/api/internal/database"
-	"github.com/g-harel/targetblank/api/internal/database/pages"
 	"github.com/g-harel/targetblank/api/internal/function"
 	"github.com/g-harel/targetblank/api/internal/hash"
 	"github.com/g-harel/targetblank/api/internal/kind"
 	"github.com/g-harel/targetblank/api/internal/page"
 	"github.com/g-harel/targetblank/api/internal/rand"
+	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var client = database.New()
+var pages = tables.NewPage()
 
 var defaultPage = "version 1\n==="
 
 func handler(req *function.Request, res *function.Response) *function.Error {
-	item := &pages.Item{Email: req.Body}
+	item := &tables.PageItem{Email: req.Body}
 
 	err := kind.Of(item.Email).Is(kind.EMAIL)
 	if err != nil {
@@ -50,7 +49,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	item.Published = false
 
-	err = pages.New(client).Create(item)
+	err = pages.Create(item)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

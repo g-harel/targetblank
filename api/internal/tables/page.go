@@ -1,33 +1,39 @@
-package pages
+package tables
 
 import (
-	"errors"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/g-harel/targetblank/api/internal/database"
 	"github.com/g-harel/targetblank/api/internal/rand"
 )
 
-// Pages represents the table of page items.
-type Pages struct {
-	name   string
-	client database.Client
+// IPage represents the actions that can be done on a page table.
+type IPage interface {
+	Create(*PageItem) error
+	Change(string, *PageItem) error
+	Delete(string) error
+	Fetch(string) (*PageItem, error)
 }
 
-// New creates a new Pages object.
-func New(c database.Client) *Pages {
-	return &Pages{
+// Page represents the table of page items.
+type Page struct {
+	name   string
+	client *dynamodb.DynamoDB
+}
+
+// NewPage creates a new Pages object.
+func NewPage() IPage {
+	return &Page{
 		name:   "targetblank-pages",
-		client: c,
+		client: dynamodb.New(session.New(), aws.NewConfig().WithRegion("us-east-1")),
 	}
 }
 
 // Create adds a new page item.
 // Final key is added to the referenced Item object.
-func (p *Pages) Create(item *Item) error {
+func (p *Page) Create(item *PageItem) error {
 	input := &dynamodb.PutItemInput{
 		TableName:           aws.String(p.name),
 		ConditionExpression: aws.String("attribute_not_exists(addr)"),
@@ -54,7 +60,7 @@ func (p *Pages) Create(item *Item) error {
 }
 
 // Change modifies an item's values.
-func (p *Pages) Change(addr string, i *Item) error {
+func (p *Page) Change(addr string, i *PageItem) error {
 	expression, values := i.toUpdateExpression()
 
 	_, err := p.client.UpdateItem(&dynamodb.UpdateItemInput{
@@ -73,7 +79,7 @@ func (p *Pages) Change(addr string, i *Item) error {
 }
 
 // Delete removes an item from the table.
-func (p *Pages) Delete(addr string) error {
+func (p *Page) Delete(addr string) error {
 	_, err := p.client.DeleteItem(&dynamodb.DeleteItemInput{
 		TableName: aws.String(p.name),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -87,7 +93,7 @@ func (p *Pages) Delete(addr string) error {
 }
 
 // Fetch gets the page attribute from the item with the specified address.
-func (p *Pages) Fetch(addr string) (*Item, error) {
+func (p *Page) Fetch(addr string) (*PageItem, error) {
 	result, err := p.client.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(p.name),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -100,12 +106,10 @@ func (p *Pages) Fetch(addr string) (*Item, error) {
 		return nil, err
 	}
 	if len(result.Item) == 0 {
-		return nil, database.ItemNotFoundError(
-			errors.New("page not found for given key"),
-		)
+		return nil, nil
 	}
 
-	item := &Item{}
+	item := &PageItem{}
 	err = dynamodbattribute.UnmarshalMap(result.Item, item)
 	if err != nil {
 		return nil, err

@@ -4,12 +4,15 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/api/internal/database"
-	"github.com/g-harel/targetblank/api/internal/database/pages"
 	"github.com/g-harel/targetblank/api/internal/function"
+	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var client = database.New()
+var pages tables.IPage
+
+func init() {
+	pages = tables.NewPage()
+}
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -22,7 +25,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	err := pages.New(client).Delete(addr)
+	err := pages.Delete(addr)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
