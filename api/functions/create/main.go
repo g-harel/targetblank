@@ -13,7 +13,11 @@ import (
 	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var pages = tables.NewPage()
+var pages tables.IPage
+
+func init() {
+	pages = tables.NewPage()
+}
 
 var defaultPage = "version 1\n==="
 

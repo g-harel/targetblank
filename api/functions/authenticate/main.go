@@ -10,7 +10,11 @@ import (
 	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var pages = tables.NewPage()
+var pages tables.IPage
+
+func init() {
+	pages = tables.NewPage()
+}
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
