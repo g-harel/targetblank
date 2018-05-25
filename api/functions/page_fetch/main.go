@@ -31,7 +31,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	if !item.Published {
 		_, funcErr = req.ValidateToken(addr)
-		if err != nil {
+		if funcErr != nil {
 			return funcErr
 		}
 	}
