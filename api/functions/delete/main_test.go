@@ -15,40 +15,79 @@ func init() {
 }
 
 func TestHandler(t *testing.T) {
-	t.Run("It should remove the item with the given address from the table", func(t *testing.T) {
+	t.Run("It should require an address param", func(t *testing.T) {
+		err := handler(&function.Request{
+			PathParameters: map[string]string{},
+		}, &function.Response{})
+		if err == nil {
+			t.Fatalf("Missing address produce error")
+		}
+		if err.Code() != http.StatusInternalServerError {
+			t.Fatalf(
+				"Incorrect error code, expected %v but got %v: %v",
+				http.StatusInternalServerError, err.Code(), err,
+			)
+		}
+	})
+
+	t.Run("It should require a validation token", func(t *testing.T) {
+		err := handler(&function.Request{
+			PathParameters: map[string]string{
+				"addr": "123456",
+			},
+			Headers: map[string]string{
+				"Token": "bad token",
+			},
+		}, &function.Response{})
+		if err == nil {
+			t.Fatalf("Bad token should produce error")
+		}
+		if err.Code() != http.StatusBadRequest {
+			t.Fatalf(
+				"Incorrect status code for bad token, expected %v but got %v: %v",
+				http.StatusBadRequest, err.Code(), err,
+			)
+		}
+
+		err = handler(&function.Request{
+			PathParameters: map[string]string{
+				"addr": "123456",
+			},
+			Headers: map[string]string{},
+		}, &function.Response{})
+		if err == nil {
+			t.Fatalf("Missing token should produce error")
+		}
+		if err.Code() != http.StatusBadRequest {
+			t.Fatalf(
+				"Incorrect status code for missing token, expected %v but got %v: %v",
+				http.StatusBadRequest, err.Code(), err,
+			)
+		}
+	})
+
+	t.Run("It should remove the page with the given address from the data store", func(t *testing.T) {
 		item := &tables.PageItem{}
 		err := pages.Create(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		item, err = pages.Fetch(item.Key)
-		if err != nil {
-			t.Fatalf("Unexpected error when fetching item: %v", err)
-		}
-		if item == nil {
-			t.Fatal("Fetched item is empty")
-		}
-
 		token, funcErr := function.MakeToken(false, item.Key)
 		if funcErr != nil {
-			t.Fatalf("Unexpected function error when creating token: %v", funcErr)
+			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
 
-		res := &function.Response{
-			StatusCode: http.StatusOK,
-		}
-		handler(&function.Request{
+		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
 				"addr": item.Key,
 			},
 			Headers: map[string]string{
 				"Token": token,
 			},
-		}, res)
-
-		if res.StatusCode != http.StatusOK {
-			t.Fatalf("Delete operation failed, incorrect status code %v", res.StatusCode)
+		}, &function.Response{})
+		if funcErr != nil {
+			t.Fatalf("Handler failed")
 		}
 
 		item, err = pages.Fetch(item.Key)
