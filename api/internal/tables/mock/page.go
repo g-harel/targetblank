@@ -19,15 +19,15 @@ func NewPage() tables.IPage {
 
 // Create adds a PageItem to the mocked Page table.
 func (p *Page) Create(item *tables.PageItem) error {
-	println("mocked create")
-	item.Key = rand.String(6)
+	if item.Key == "" {
+		item.Key = rand.String(6)
+	}
 	p.items = append(p.items, item)
 	return nil
 }
 
 // Change modifies a PageItem in the mocked Page table.
 func (p *Page) Change(addr string, i *tables.PageItem) error {
-	println("mocked change")
 	for _, item := range p.items {
 		if item.Key == addr {
 			if i.Email != "" {
@@ -53,7 +53,6 @@ func (p *Page) Change(addr string, i *tables.PageItem) error {
 
 // Delete removes a PageItem from the mocked Page table.
 func (p *Page) Delete(addr string) error {
-	println("mocked delete")
 	for i, item := range p.items {
 		if item.Key == addr {
 			p.items = append(p.items[:i], p.items[i+1:]...)
@@ -64,7 +63,6 @@ func (p *Page) Delete(addr string) error {
 
 // Fetch returns a PageItem from the mocked Page table.
 func (p *Page) Fetch(addr string) (*tables.PageItem, error) {
-	println("mocked fetch")
 	for _, item := range p.items {
 		if item.Key == addr {
 			return item, nil

@@ -32,7 +32,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		}
 
 		if !hash.Check(req.Body, item.Password) {
-			return function.Err(http.StatusForbidden, errors.New("password mismatch"))
+			return function.Err(http.StatusBadRequest, errors.New("password mismatch"))
 		}
 	} else {
 		restricted, funcErr := req.ValidateToken(addr)
@@ -49,8 +49,8 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	req.Body = token
-	req.Headers["Content-Type"] = "text/plain"
+	res.Body = token
+	res.Headers["Content-Type"] = "text/plain"
 
 	return nil
 }

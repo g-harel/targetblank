@@ -12,6 +12,11 @@ type Error struct {
 	code int
 }
 
+// Code returns the error's http status code.
+func (e *Error) Code() int {
+	return e.code
+}
+
 // CustomErr creates a new 400 status function error.
 func CustomErr(err error) *Error {
 	fmt.Println("ERROR:", err) // TODO proper logging
