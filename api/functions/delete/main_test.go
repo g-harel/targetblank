@@ -15,7 +15,7 @@ func init() {
 }
 
 func TestHandler(t *testing.T) {
-	t.Run("It should require an address param", func(t *testing.T) {
+	t.Run("should require an address param", func(t *testing.T) {
 		err := handler(&function.Request{
 			PathParameters: map[string]string{},
 		}, &function.Response{})
@@ -30,7 +30,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("It should require a validation token", func(t *testing.T) {
+	t.Run("should require a validation token", func(t *testing.T) {
 		err := handler(&function.Request{
 			PathParameters: map[string]string{
 				"addr": "123456",
@@ -66,7 +66,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("It should remove the page with the given address from the data store", func(t *testing.T) {
+	t.Run("should remove the page with the given address from the data store", func(t *testing.T) {
 		item := &tables.PageItem{}
 		err := pages.Create(item)
 		if err != nil {

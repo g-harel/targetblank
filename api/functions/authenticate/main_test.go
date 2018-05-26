@@ -17,7 +17,7 @@ func init() {
 }
 
 func TestHandler(t *testing.T) {
-	t.Run("It should require an address param", func(t *testing.T) {
+	t.Run("should require an address param", func(t *testing.T) {
 		err := handler(&function.Request{
 			PathParameters: map[string]string{},
 		}, &function.Response{})
@@ -32,7 +32,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("It should create a token for valid passwords", func(t *testing.T) {
+	t.Run("should create a token for valid passwords", func(t *testing.T) {
 		p := "password123"
 		h, err := hash.New(p)
 		if err != nil {
@@ -63,7 +63,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("It should not create a token for invalid authentication", func(t *testing.T) {
+	t.Run("should not create a token for invalid authentication", func(t *testing.T) {
 		addr := rand.String(6)
 
 		p := "password123"
