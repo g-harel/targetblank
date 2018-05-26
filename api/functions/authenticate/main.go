@@ -22,26 +22,16 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	if req.Body != "" {
-		item, err := pages.Fetch(addr)
-		if err != nil {
-			return function.Err(http.StatusInternalServerError, err)
-		}
-		if item == nil {
-			return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
-		}
+	item, err := pages.Fetch(addr)
+	if err != nil {
+		return function.Err(http.StatusInternalServerError, err)
+	}
+	if item == nil {
+		return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
+	}
 
-		if !hash.Check(req.Body, item.Password) {
-			return function.Err(http.StatusBadRequest, errors.New("password mismatch"))
-		}
-	} else {
-		restricted, funcErr := req.ValidateToken(addr)
-		if funcErr != nil {
-			return funcErr
-		}
-		if restricted {
-			return function.CustomErr(errors.New("cannot refresh restricted token"))
-		}
+	if !hash.Check(req.Body, item.Password) {
+		return function.Err(http.StatusBadRequest, errors.New("password mismatch"))
 	}
 
 	token, funcErr := function.MakeToken(false, addr)

@@ -32,61 +32,6 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("It should create a new token from an existing one", func(t *testing.T) {
-		addr := rand.String(6)
-
-		token, funcErr := function.MakeToken(false, addr)
-		if funcErr != nil {
-			t.Fatalf("Unexpected error when creating token: %v", funcErr)
-		}
-
-		res := &function.Response{Headers: map[string]string{}}
-		funcErr = handler(&function.Request{
-			PathParameters: map[string]string{
-				"addr": addr,
-			},
-			Headers: map[string]string{
-				"Token": token,
-			},
-		}, res)
-		if funcErr != nil {
-			t.Fatalf("Handler failed")
-		}
-
-		if res.Body == "" {
-			t.Fatal("Response does not contain token")
-		}
-	})
-
-	t.Run("It should not create a new token from a restricted one", func(t *testing.T) {
-		addr := rand.String(6)
-
-		token, funcErr := function.MakeToken(true, addr)
-		if funcErr != nil {
-			t.Fatalf("Unexpected error when creating token: %v", funcErr)
-		}
-
-		res := &function.Response{Headers: map[string]string{}}
-		funcErr = handler(&function.Request{
-			PathParameters: map[string]string{
-				"addr": addr,
-			},
-			Headers: map[string]string{
-				"Token": token,
-			},
-		}, res)
-		if funcErr == nil {
-			t.Fatalf("Should produce an error if the token is restrcted")
-		}
-
-		if funcErr.Code() != http.StatusBadRequest {
-			t.Fatalf(
-				"Incorrect error code, expected %v but got %v: %v",
-				http.StatusBadRequest, funcErr.Code(), funcErr,
-			)
-		}
-	})
-
 	t.Run("It should create a token for valid passwords", func(t *testing.T) {
 		p := "password123"
 		h, err := hash.New(p)
@@ -148,24 +93,6 @@ func TestHandler(t *testing.T) {
 		if funcErr.Code() != http.StatusBadRequest {
 			t.Fatalf(
 				"Incorrect status code for password error, expected %v but got %v: %v",
-				http.StatusBadRequest, funcErr.Code(), funcErr,
-			)
-		}
-
-		funcErr = handler(&function.Request{
-			PathParameters: map[string]string{
-				"addr": addr,
-			},
-			Headers: map[string]string{
-				"Token": "bad token",
-			},
-		}, &function.Response{Headers: map[string]string{}})
-		if funcErr == nil {
-			t.Fatalf("Should produce an error if the token is invalid")
-		}
-		if funcErr.Code() != http.StatusBadRequest {
-			t.Fatalf(
-				"Incorrect status code for token error, expected %v but got %v: %v",
 				http.StatusBadRequest, funcErr.Code(), funcErr,
 			)
 		}

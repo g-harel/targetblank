@@ -10,7 +10,7 @@ import (
 )
 
 var headerName = "Token"
-var longTTL = time.Hour * 24
+var longTTL = time.Hour * 18
 var shortTTL = time.Minute * 5
 
 type tokenPayload struct {
