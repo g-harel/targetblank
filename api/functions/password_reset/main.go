@@ -27,16 +27,13 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	pass := rand.String(16)
-	item := &tables.PageItem{
-		TempPass: true,
-		TempPassHasBeenSetForUpdateExpression: true,
-	}
-
-	var err error
-	item.Password, err = hash.New(pass)
+	h, err := hash.New(rand.String(16))
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
+	}
+
+	item := &tables.PageItem{
+		Password: h,
 	}
 
 	err = pages.Change(addr, item)

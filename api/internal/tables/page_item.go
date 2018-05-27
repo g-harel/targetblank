@@ -13,12 +13,10 @@ type PageItem struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Published bool   `json:"published"`
-	TempPass  bool   `json:"temp_pass"`
 	Page      string `json:"page"`
 
-	// Flags used when using Item object as a source of updates.
+	// Flag used when Item object is a source for updates.
 	PublishedHasBeenSetForUpdateExpression bool `json:"-"`
-	TempPassHasBeenSetForUpdateExpression  bool `json:"-"`
 }
 
 func (i *PageItem) toCreateMap() map[string]*dynamodb.AttributeValue {
@@ -34,9 +32,6 @@ func (i *PageItem) toCreateMap() map[string]*dynamodb.AttributeValue {
 		},
 		"published": {
 			BOOL: aws.Bool(i.Published),
-		},
-		"temp_pass": {
-			BOOL: aws.Bool(i.TempPass),
 		},
 		"page": {
 			S: aws.String(i.Page),
@@ -69,13 +64,6 @@ func (i *PageItem) toUpdateExpression() (string, map[string]*dynamodb.AttributeV
 			BOOL: aws.Bool(i.Published),
 		}
 		expression += "published = :published,"
-	}
-
-	if i.TempPassHasBeenSetForUpdateExpression {
-		values[":temp_pass"] = &dynamodb.AttributeValue{
-			BOOL: aws.Bool(i.TempPass),
-		}
-		expression += "temp_pass = :temp_pass,"
 	}
 
 	if i.Page != "" {

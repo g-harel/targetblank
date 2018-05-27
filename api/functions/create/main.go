@@ -50,7 +50,6 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 	item.Password = pass
-	item.TempPass = true
 
 	page, parseErr := page.NewFromSpec(defaultPage)
 	if parseErr != nil {

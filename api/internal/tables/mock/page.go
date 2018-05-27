@@ -39,9 +39,6 @@ func (p *Page) Change(addr string, i *tables.PageItem) error {
 			if i.PublishedHasBeenSetForUpdateExpression {
 				item.Published = i.Published
 			}
-			if i.TempPassHasBeenSetForUpdateExpression {
-				item.TempPass = i.TempPass
-			}
 			if i.Page != "" {
 				item.Page = i.Page
 			}

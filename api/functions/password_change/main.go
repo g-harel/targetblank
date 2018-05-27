@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/api/internal/function"
@@ -26,20 +27,19 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if funcErr != nil {
 		return funcErr
 	}
+	pass := strings.TrimSpace(req.Body)
 
-	item := &tables.PageItem{
-		Password: req.Body,
-		TempPass: false,
-		TempPassHasBeenSetForUpdateExpression: true,
-	}
-
-	err := kind.Of(item.Password).Is(kind.PASSWORD)
+	err := kind.Of(pass).Is(kind.PASSWORD)
 	if err != nil {
 		return function.CustomErr(err)
 	}
-	item.Password, err = hash.New(item.Password)
+	h, err := hash.New(pass)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
+	}
+
+	item := &tables.PageItem{
+		Password: h,
 	}
 
 	err = pages.Change(addr, item)

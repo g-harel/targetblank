@@ -35,7 +35,6 @@ nosql schema {
     addr: string (6 alphanumeric chars),
     password: string (hashed),
     email: string (hashed),
-    temp_pass: bool,
     published: bool,
     page: string
 }
