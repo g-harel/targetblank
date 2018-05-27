@@ -24,12 +24,12 @@ func TestParse(t *testing.T) {
 
 		p := New()
 		p.Add(Rule{
-			Pattern: regexp.MustCompile("a"),
+			Pattern: regexp.MustCompile(`a`),
 			Handler: func(ctx *Context) {
 				ctx.LineParsed()
 			},
 		}, Rule{
-			Pattern: regexp.MustCompile("b"),
+			Pattern: regexp.MustCompile(`b`),
 			Handler: func(ctx *Context) {
 				ctx.Error(message)
 			},
@@ -61,7 +61,7 @@ func TestParse(t *testing.T) {
 
 		p := New()
 		p.Add(Rule{
-			Pattern: regexp.MustCompile(".*"),
+			Pattern: regexp.MustCompile(`.*`),
 			Handler: func(ctx *Context) {
 				count++
 				ctx.LineParsed()
@@ -83,7 +83,7 @@ func TestParse(t *testing.T) {
 
 		p := New()
 		p.Add(Rule{
-			Pattern: regexp.MustCompile("^(?P<g1>\\w+)-(?P<g2>\\w+)$"),
+			Pattern: regexp.MustCompile(`^(?P<g1>\w+)-(?P<g2>\w+)$`),
 			Handler: func(ctx *Context) {
 				out = append(out, ctx.Param("g1")+"-"+ctx.Param("g2"))
 				ctx.LineParsed()
@@ -104,7 +104,7 @@ func TestParse(t *testing.T) {
 
 		p := New()
 		p.Add(Rule{
-			Pattern:  regexp.MustCompile("abc"),
+			Pattern:  regexp.MustCompile(`abc`),
 			Required: true,
 			Handler: func(ctx *Context) {
 				ctx.LineParsed()
@@ -121,7 +121,7 @@ func TestParse(t *testing.T) {
 
 		p := New()
 		p.Add(Rule{
-			Pattern:  regexp.MustCompile(".*"),
+			Pattern:  regexp.MustCompile(`.*`),
 			Required: true,
 			Handler: func(ctx *Context) {
 				ctx.LineParsed()

@@ -30,7 +30,7 @@ func TestString(t *testing.T) {
 	})
 
 	t.Run("should produce only letters and numbers", func(t *testing.T) {
-		p := regexp.MustCompile("[0-9a-zA-Z]+")
+		p := regexp.MustCompile(`[0-9a-zA-Z]+`)
 
 		for i := 0; i < 32; i++ {
 			v := String(16)

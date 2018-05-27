@@ -15,7 +15,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	v1HeaderMetadataRule := parser.Rule{
 		Name:     "header-metadata",
 		Disabled: true,
-		Pattern:  regexp.MustCompile("^(?P<key>[A-Za-z0-9_-]+)\\s*=\\s*(?P<value>.*)$"),
+		Pattern:  regexp.MustCompile(`^(?P<key>[A-Za-z0-9_-]+)\s*=\s*(?P<value>.*)$`),
 		Handler: func(ctx *parser.Context) {
 			p.Meta[ctx.Param("key")] = ctx.Param("value")
 			ctx.LineParsed()
@@ -37,7 +37,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	v1GroupRule := parser.Rule{
 		Name:     "group",
 		Disabled: true,
-		Pattern:  regexp.MustCompile("^---$"),
+		Pattern:  regexp.MustCompile(`^---$`),
 		Handler: func(ctx *parser.Context) {
 			p.AddGroup()
 			ctx.EnableOther(v1GroupMetadataRule.Name)
@@ -50,7 +50,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	v1LabelRule := parser.Rule{
 		Name:     "label",
 		Disabled: true,
-		Pattern:  regexp.MustCompile("^(?P<indent>\\s*)(?P<label>[^\\s\\[].+?)?(?:\\[(?P<link>.*)\\])?$"),
+		Pattern:  regexp.MustCompile(`^(?P<indent>\s*)(?P<label>[^\s\[].+?)?(?:\[(?P<link>.*)\])?$`),
 		Handler: func(ctx *parser.Context) {
 			indent := ctx.Param("indent")
 			label := ctx.Param("label")
@@ -78,7 +78,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	v1HeaderRule := parser.Rule{
 		Name:     "header",
 		Required: true,
-		Pattern:  regexp.MustCompile("^===$"),
+		Pattern:  regexp.MustCompile(`^===$`),
 		Handler: func(ctx *parser.Context) {
 			ctx.DisableSelf()
 			ctx.DisableOther(v1HeaderMetadataRule.Name)
@@ -92,7 +92,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	// emptyRule removes lines that are entirely whitespace.
 	emptyRule := parser.Rule{
 		Name:    "empty",
-		Pattern: regexp.MustCompile("^\\s*$"),
+		Pattern: regexp.MustCompile(`^\s*$`),
 		Handler: func(ctx *parser.Context) {
 			ctx.LineParsed()
 		},
@@ -101,7 +101,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	// whitespaceRule removes empty whitespace at the end of lines.
 	whitespaceRule := parser.Rule{
 		Name:    "whitespace",
-		Pattern: regexp.MustCompile("^(?P<content>.+?)\\s+$"),
+		Pattern: regexp.MustCompile(`^(?P<content>.+?)\s+$`),
 		Handler: func(ctx *parser.Context) {
 			ctx.ReplaceLine(ctx.Param("content"))
 		},
@@ -110,7 +110,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	// commentRule removes comments.
 	commentRule := parser.Rule{
 		Name:    "comment",
-		Pattern: regexp.MustCompile("^(?P<content>[^#]*)(#.*)$"),
+		Pattern: regexp.MustCompile(`^(?P<content>[^#]*)(#.*)$`),
 		Handler: func(ctx *parser.Context) {
 			ctx.ReplaceLine(ctx.Param("content"))
 		},
@@ -121,7 +121,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 	versionRule := parser.Rule{
 		Name:     "version",
 		Required: true,
-		Pattern:  regexp.MustCompile("^version (?P<number>\\d+)$"),
+		Pattern:  regexp.MustCompile(`^version (?P<number>\d+)$`),
 		Handler: func(ctx *parser.Context) {
 			version := ctx.Param("number")
 			if version == "1" {

@@ -6,7 +6,7 @@ import (
 )
 
 // Matches strings that look like urls.
-var urlPattern = regexp.MustCompile("^\\S+((\\.|:)\\S+)+(\\/\\S*)*$")
+var urlPattern = regexp.MustCompile(`^\S+((\.|:)\S+)+(\/\S*)*$`)
 
 // Item contains information about a single label/link and any potential children.
 type Item struct {

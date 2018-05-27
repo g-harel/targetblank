@@ -21,11 +21,11 @@ type pattern struct {
 
 var validationKinds = map[kind]*pattern{
 	EMAIL: &pattern{
-		pattern: regexp.MustCompile("^\\S+@\\S+\\.\\S+$"),
+		pattern: regexp.MustCompile(`^\S+@\S+\.\S+$`),
 		message: "value does not match an email address (address@domain.tld)",
 	},
 	PASSWORD: &pattern{
-		pattern: regexp.MustCompile("^.{8,}$"),
+		pattern: regexp.MustCompile(`^.{8,}$`),
 		message: "password is shorter than eight characters",
 	},
 }

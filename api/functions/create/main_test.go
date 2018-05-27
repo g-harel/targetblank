@@ -4,12 +4,14 @@ import (
 	"net/http"
 	"testing"
 
+	mockEmail "github.com/g-harel/targetblank/api/internal/email/mock"
 	"github.com/g-harel/targetblank/api/internal/function"
-	"github.com/g-harel/targetblank/api/internal/tables/mock"
+	mockTables "github.com/g-harel/targetblank/api/internal/tables/mock"
 )
 
 func init() {
-	pages = mock.NewPage()
+	pages = mockTables.NewPage()
+	sender = mockEmail.NewSender()
 }
 
 func TestHandler(t *testing.T) {

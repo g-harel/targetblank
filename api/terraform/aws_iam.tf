@@ -36,3 +36,22 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
 }
 EOF
 }
+
+resource "aws_iam_role_policy" "lambda_ses" {
+  name = "ses-policy"
+  role = "${aws_iam_role.lambda.id}"
+
+  policy = <<EOF
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Action": "ses:*",
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": ""
+        }
+    ]
+}
+EOF
+}
