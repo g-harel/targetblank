@@ -47,7 +47,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		res := &function.Response{Headers: map[string]string{}}
+		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
 				"addr": item.Key,
@@ -86,7 +86,7 @@ func TestHandler(t *testing.T) {
 				"addr": addr,
 			},
 			Body: "bad password",
-		}, &function.Response{Headers: map[string]string{}})
+		}, &function.Response{})
 		if funcErr == nil {
 			t.Fatalf("Should produce an error if the password is invalid")
 		}

@@ -33,7 +33,7 @@ func init() {
 var defaultPage = "version 1\n==="
 
 func handler(req *function.Request, res *function.Response) *function.Error {
-	e := req.Body
+	e := strings.TrimSpace(req.Body)
 
 	err := kind.Of(e).Is(kind.EMAIL)
 	if err != nil {
@@ -87,6 +87,9 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 			fmt.Errorf("Error sending email: %v", err),
 		)
 	}
+
+	res.Body = item.Key
+	res.ContentType("text/plain")
 
 	return nil
 }

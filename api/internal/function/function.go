@@ -21,6 +21,14 @@ func (r *Request) Param(n string) (string, *Error) {
 // Response replaces the api gateway response event.
 type Response events.APIGatewayProxyResponse
 
+// ContentType adds the content-type header to the request.
+func (r *Response) ContentType(t string) {
+	if r.Headers == nil {
+		r.Headers = map[string]string{}
+	}
+	r.Headers["Content-Type"] = t
+}
+
 // Handler is a custom type representing a lambda handler.
 type Handler func(*Request, *Response) *Error
 
@@ -39,7 +47,7 @@ func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 		funcErr := h(&request, response)
 		if funcErr != nil {
 			response.StatusCode = funcErr.code
-			response.Headers["Content-Type"] = "text/plain"
+			response.ContentType("text/plain")
 			response.Body = funcErr.Error()
 		}
 

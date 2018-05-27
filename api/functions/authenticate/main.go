@@ -40,7 +40,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	}
 
 	res.Body = token
-	res.Headers["Content-Type"] = "text/plain"
+	res.ContentType("text/plain")
 
 	return nil
 }

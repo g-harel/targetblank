@@ -27,10 +27,13 @@ func (s *Sender) Send(to, sub, body string) error {
 	return nil
 }
 
-// LastSent returns the last sent email.
-func LastSent() *Email {
-	if len(sent) < 1 {
-		return nil
+// LastSentTo returns the last sent email.
+func LastSentTo(a string) *Email {
+	for i := range sent {
+		e := sent[len(sent)-i-1]
+		if e.To == a {
+			return e
+		}
 	}
-	return sent[len(sent)-1]
+	return nil
 }
