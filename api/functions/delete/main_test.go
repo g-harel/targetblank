@@ -87,7 +87,7 @@ func TestHandler(t *testing.T) {
 			},
 		}, &function.Response{})
 		if funcErr != nil {
-			t.Fatalf("Handler failed")
+			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
 		item, err = pages.Fetch(item.Key)

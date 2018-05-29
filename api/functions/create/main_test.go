@@ -54,7 +54,7 @@ func TestHandler(t *testing.T) {
 			Body: email,
 		}, res)
 		if funcErr != nil {
-			t.Fatalf("Unexpected error when creating page: %v", funcErr)
+			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}
 
 		item, err := pages.Fetch(res.Body)
@@ -83,7 +83,7 @@ func TestHandler(t *testing.T) {
 			Body: email,
 		}, res)
 		if funcErr != nil {
-			t.Fatalf("Unexpected error when creating page: %v", funcErr)
+			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}
 
 		e := mockEmail.LastSentTo(email)

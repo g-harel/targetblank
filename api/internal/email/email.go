@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
-const sender = "\"targetblank\" <noreply@targetblank.org>"
+const from = "\"targetblank\" <noreply@targetblank.org>"
 
 // ISender abstracts the send action into an interface.
 type ISender interface {
@@ -18,15 +18,15 @@ type Client struct {
 	ses *ses.SES
 }
 
-// New creates a new email client.
-func New() ISender {
+// NewSender creates a new email client.
+func NewSender() ISender {
 	return &Client{ses.New(session.New(aws.NewConfig().WithRegion("us-east-1")))}
 }
 
 // Send sends an email to a single recipient using the given content.
 func (c *Client) Send(to, sub, body string) error {
 	input := &ses.SendEmailInput{
-		Source: aws.String(sender),
+		Source: aws.String(from),
 		Destination: &ses.Destination{
 			ToAddresses: []*string{
 				aws.String(to),

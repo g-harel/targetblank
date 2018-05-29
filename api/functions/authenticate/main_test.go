@@ -55,7 +55,7 @@ func TestHandler(t *testing.T) {
 			Body: p,
 		}, res)
 		if funcErr != nil {
-			t.Fatalf("Handler failed")
+			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
 		if res.Body == "" {

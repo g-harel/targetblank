@@ -27,7 +27,7 @@ var sender email.ISender
 
 func init() {
 	pages = tables.NewPage()
-	sender = email.New()
+	sender = email.NewSender()
 }
 
 var defaultPage = "version 1\n==="

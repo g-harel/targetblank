@@ -23,7 +23,7 @@ notes
 endpoints (/api/v1..)
 - authenticate per homepage (POST   /auth/:address        password)
 - change homepage password  (PUT    /auth/:address [auth] password)
-- reset homepage password   (DELETE /auth/:address [auth] email   )
+- reset homepage password   (DELETE /auth/:address        email   )
 - create new homepage       (POST   /page                 email   )
 - validate homepage spec    (POST   /page/validate        spec    )
 - fetch homepage            (GET    /page/:address [auth]         )
@@ -46,10 +46,5 @@ links
 - https://gist.github.com/prwhite/8168133
 - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
 - https://scene-si.org/2018/05/08/protecting-api-access-with-jwt/
-
-todo
-- make interface for database/pages package
-- make database/pages injectable into function tests
-- test lambda functions without network
 
 -->

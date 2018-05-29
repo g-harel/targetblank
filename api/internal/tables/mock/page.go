@@ -22,6 +22,7 @@ func (p *Page) Create(item *tables.PageItem) error {
 	if item.Key == "" {
 		item.Key = rand.String(6)
 	}
+	item.Password = rand.String(32)
 	p.items = append(p.items, item)
 	return nil
 }
