@@ -15,7 +15,7 @@ import (
 	"github.com/g-harel/targetblank/api/internal/tables"
 )
 
-var messageSubject = "Your new homepage is ready!"
+var messageSubject = "Your homepage password has been reset!"
 var messageContent = `
 	addr: {{addr}}
 	token: {{token}}

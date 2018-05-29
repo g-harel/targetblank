@@ -5,12 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/g-harel/targetblank/api/internal/hash"
-	"github.com/g-harel/targetblank/api/internal/tables"
-
 	mockEmail "github.com/g-harel/targetblank/api/internal/email/mock"
 	"github.com/g-harel/targetblank/api/internal/function"
+	"github.com/g-harel/targetblank/api/internal/hash"
 	"github.com/g-harel/targetblank/api/internal/rand"
+	"github.com/g-harel/targetblank/api/internal/tables"
 	mockTables "github.com/g-harel/targetblank/api/internal/tables/mock"
 )
 

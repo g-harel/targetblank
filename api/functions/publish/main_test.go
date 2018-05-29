@@ -5,12 +5,13 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/api/internal/function"
+	"github.com/g-harel/targetblank/api/internal/rand"
 	"github.com/g-harel/targetblank/api/internal/tables"
-	"github.com/g-harel/targetblank/api/internal/tables/mock"
+	mockTables "github.com/g-harel/targetblank/api/internal/tables/mock"
 )
 
 func init() {
-	pages = mock.NewPage()
+	pages = mockTables.NewPage()
 }
 
 func TestHandler(t *testing.T) {
@@ -65,14 +66,18 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("should remove the page with the given address from the data store", func(t *testing.T) {
-		item := &tables.PageItem{}
+	t.Run("should make the item's published status true", func(t *testing.T) {
+		addr := rand.String(6)
+
+		item := &tables.PageItem{
+			Key: addr,
+		}
 		err := pages.Create(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, item.Key)
+		token, funcErr := function.MakeToken(false, addr)
 		if funcErr != nil {
 			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
@@ -89,12 +94,14 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = pages.Fetch(item.Key)
+		item, err = pages.Fetch(addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
-		if item != nil {
-			t.Fatal("Item should not exist after being deleted")
+
+		if item.Published != true {
+			t.Fatal("Fetched item has incorrect published status")
 		}
 	})
+
 }

@@ -4,11 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/g-harel/targetblank/api/internal/rand"
-	"github.com/g-harel/targetblank/api/internal/tables"
-
 	"github.com/g-harel/targetblank/api/internal/function"
 	"github.com/g-harel/targetblank/api/internal/hash"
+	"github.com/g-harel/targetblank/api/internal/rand"
+	"github.com/g-harel/targetblank/api/internal/tables"
 	"github.com/g-harel/targetblank/api/internal/tables/mock"
 )
 

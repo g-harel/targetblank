@@ -4,9 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/g-harel/targetblank/api/internal/tables"
-
 	"github.com/g-harel/targetblank/api/internal/function"
+	"github.com/g-harel/targetblank/api/internal/tables"
 	"github.com/g-harel/targetblank/api/internal/tables/mock"
 )
 
