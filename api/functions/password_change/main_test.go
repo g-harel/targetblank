@@ -101,6 +101,9 @@ func TestHandler(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
+		if item == nil {
+			t.Fatal("Item does not exist")
+		}
 
 		if !hash.Check(pass, item.Password) {
 			t.Fatal("Fetched item's password does not match")
