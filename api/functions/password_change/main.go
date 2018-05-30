@@ -27,6 +27,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if funcErr != nil {
 		return funcErr
 	}
+
 	pass := strings.TrimSpace(req.Body)
 
 	err := kind.Of(pass).Is(kind.PASSWORD)
