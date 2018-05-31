@@ -9,7 +9,7 @@ import (
 	"io"
 )
 
-var key = []byte("super good secret key that needs to be 32 characters long")[:32]
+var key = []byte("super good secret key that needs to be 32 characters long")[:32] // TODO
 
 // Seal creates a new token from the address.
 func Seal(payload []byte) (string, error) {

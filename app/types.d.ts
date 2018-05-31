@@ -1,14 +1,36 @@
+interface IPageItem {
+    label: string;
+    link: string;
+    items: IPageItem[];
+}
+
+interface IPageGroup {
+    meta: {
+        [key: string]: string;
+    };
+    items: IPageItem[];
+}
+
+interface IPageData {
+    version: string;
+    spec: string;
+    meta: {
+        [key: string]: string;
+    };
+    groups: IPageGroup[];
+}
+
 declare module "okwolo/lite" {
-    export type State = Exclude<any, undefined>;
+    export interface App<S> {
+        (...any): void
 
-    export interface App {
-        (any): void
+        setState(state: S): void
+        setState(updater: (state: S) => S): void
 
-        setState(state: State): void
-        setState(updater: (state: State) => State): void
+        getState(): S
 
-        getState(): State
+        use(blob: string, ...any): void
     }
 
-    export default function(target?: any, global?: any): App
+    export default function<S>(target?: any, global?: any): App<S>
 }

@@ -5,9 +5,12 @@
     "lint": "tslint app/**/*.ts"
   },
   "dependencies": {
-    "okwolo": "^3.4.0"
+    "okwolo": "^3.4.0",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
+    "@types/request-promise-native": "^1.0.14",
     "node-sass": "^4.9.0",
     "opn-cli": "^3.1.0",
     "parcel-bundler": "^1.8.1",

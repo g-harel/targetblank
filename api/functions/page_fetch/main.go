@@ -37,6 +37,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	}
 
 	res.Body = item.Page
+
 	return nil
 }
 
