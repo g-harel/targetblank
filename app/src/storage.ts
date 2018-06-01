@@ -1,25 +1,23 @@
-import {fetchPage} from "./api";
-
 const key = "targetblank-store";
 
-interface IStore {
+export interface IStore {
     [address: string]: {
         token: string,
         data: IPageData,
     };
 }
 
-const readStore = (): IStore => {
+export const read = (): IStore => {
     return JSON.parse(localStorage.getItem(key));
 };
 
-const saveStore = (s: IStore) => {
+export const save = (s: IStore) => {
     localStorage.setItem(key, JSON.stringify(s));
     return s;
 };
 
-const updateStore = async (u: (s: IStore) => IStore) => {
-    const s = await u(readStore());
-    saveStore(s);
+export const update = async (u: (s: IStore) => IStore) => {
+    const s = await u(read());
+    save(s);
     return s;
 };
