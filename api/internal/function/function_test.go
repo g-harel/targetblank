@@ -84,13 +84,10 @@ func TestNew(t *testing.T) {
 		New(h)(events.APIGatewayProxyRequest{})
 	})
 
-	t.Run("should set default response to empty json", func(t *testing.T) {
+	t.Run("should allow cross origin", func(t *testing.T) {
 		var h Handler = func(req *Request, res *Response) *Error {
-			if res.Headers["Content-Type"] != "application/json" {
+			if res.Headers["Access-Control-Allow-Origin"] != "*" {
 				t.Fatal("Expected default content type to be json")
-			}
-			if res.Body != "{}" {
-				t.Fatal("Expected default response body to be empty object")
 			}
 			return nil
 		}
