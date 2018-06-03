@@ -39,11 +39,11 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.CustomErr(err)
 	}
-	h, err := hash.New(e)
+	email, err := hash.New(e)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &tables.PageItem{Email: h}
+	item := &tables.PageItem{Email: email}
 
 	pass, err := hash.New(rand.String(16))
 	if err != nil {

@@ -23,6 +23,7 @@ resource "aws_lambda_function" "create" {
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "create"
   runtime          = "go1.x"
+  memory_size      = 320
 }
 
 resource "aws_lambda_permission" "create" {
