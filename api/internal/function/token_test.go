@@ -3,7 +3,13 @@ package function
 import (
 	"encoding/base64"
 	"testing"
+	"time"
 )
+
+func init() {
+	longTTL = time.Millisecond * 3
+	shortTTL = time.Millisecond
+}
 
 func TestMakeToken(t *testing.T) {
 	t.Run("should not produce the same token for the same input", func(t *testing.T) {
@@ -11,12 +17,12 @@ func TestMakeToken(t *testing.T) {
 
 		tkn1, err := MakeToken(false, secret)
 		if err != nil {
-			t.Fatalf("Error creating token: %v", err)
+			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
 		tkn2, err := MakeToken(false, secret)
 		if err != nil {
-			t.Fatalf("Error creating token: %v", err)
+			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
 		if tkn1 == tkn2 {
@@ -34,7 +40,7 @@ func TestMakeToken(t *testing.T) {
 		for _, secret := range secrets {
 			tkn, funcErr := MakeToken(false, secret)
 			if funcErr != nil {
-				t.Fatalf("Error creating token: %v", funcErr)
+				t.Fatalf("Unexpected error creating token: %v", funcErr)
 			}
 
 			_, err := base64.URLEncoding.DecodeString(tkn)
@@ -59,7 +65,7 @@ func TestValidateToken(t *testing.T) {
 
 		tkn, err := MakeToken(false, secret)
 		if err != nil {
-			t.Fatalf("Error creating token: %v", err)
+			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 		_, err = ValidateToken(tkn, secret)
 		if err != nil {
@@ -68,7 +74,7 @@ func TestValidateToken(t *testing.T) {
 
 		tkn, err = MakeToken(false, secret)
 		if err != nil {
-			t.Fatalf("Error creating token: %v", err)
+			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 		_, err = ValidateToken(tkn, "wrong secret")
 		if err == nil {
@@ -81,11 +87,11 @@ func TestValidateToken(t *testing.T) {
 
 		tkn, err := MakeToken(false, secret)
 		if err != nil {
-			t.Fatalf("Error creating token: %v", err)
+			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 		r, err := ValidateToken(tkn, secret)
 		if err != nil {
-			t.Fatalf("Error reading token: %v", err)
+			t.Fatalf("Unexpected error reading token: %v", err)
 		}
 		if r {
 			t.Fatalf("Incorrect token status: %v", err)
@@ -93,16 +99,56 @@ func TestValidateToken(t *testing.T) {
 
 		tkn, err = MakeToken(true, secret)
 		if err != nil {
-			t.Fatalf("Error creating token: %v", err)
+			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 		r, err = ValidateToken(tkn, secret)
 		if err != nil {
-			t.Fatalf("Error reading token: %v", err)
+			t.Fatalf("Unexpected error reading token: %v", err)
 		}
 		if !r {
 			t.Fatalf("Incorrect token status: %v", err)
 		}
 	})
 
-	// TODO test token timeout
+	t.Run("should reject expired tokens", func(t *testing.T) {
+		secret := "secret"
+
+		tkn, err := MakeToken(false, secret)
+		if err != nil {
+			t.Fatalf("Unexpected error creating token: %v", err)
+		}
+
+		_, err = ValidateToken(tkn, secret)
+		if err != nil {
+			t.Fatalf("Unexpected error reading token: %v", err)
+		}
+
+		time.Sleep(longTTL)
+
+		_, err = ValidateToken(tkn, secret)
+		if err == nil {
+			t.Fatalf("Expected expired token to be rejected")
+		}
+	})
+
+	t.Run("should use short expiry for restricted tokens", func(t *testing.T) {
+		secret := "secret"
+
+		tkn, err := MakeToken(true, secret)
+		if err != nil {
+			t.Fatalf("Unexpected error creating token: %v", err)
+		}
+
+		_, err = ValidateToken(tkn, secret)
+		if err != nil {
+			t.Fatalf("Unexpected error reading token: %v", err)
+		}
+
+		time.Sleep(shortTTL)
+
+		_, err = ValidateToken(tkn, secret)
+		if err == nil {
+			t.Fatalf("Expected expired token to be rejected")
+		}
+	})
 }

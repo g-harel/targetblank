@@ -11,7 +11,7 @@ import (
 
 var headerName = "Token"
 var longTTL = time.Hour * 18
-var shortTTL = time.Minute * 5
+var shortTTL = time.Minute * 10
 
 type tokenPayload struct {
 	ExpireAt   int64  `json:"a"`
@@ -23,13 +23,13 @@ type tokenPayload struct {
 func MakeToken(restricted bool, secret string) (string, *Error) {
 	expire := time.Now()
 	if restricted {
-		expire.Add(shortTTL)
+		expire = expire.Add(shortTTL)
 	} else {
-		expire.Add(longTTL)
+		expire = expire.Add(longTTL)
 	}
 
 	payload, err := json.Marshal(&tokenPayload{
-		ExpireAt:   expire.Unix(),
+		ExpireAt:   expire.UnixNano(),
 		Restricted: restricted,
 		Secret:     secret,
 	})
@@ -63,7 +63,7 @@ func (r *Request) ValidateToken(secret string) (restricted bool, e *Error) {
 		return false, Err(http.StatusInternalServerError, err)
 	}
 
-	if p.ExpireAt < time.Now().Unix() {
+	if p.ExpireAt < time.Now().UnixNano() {
 		return false, Err(http.StatusBadRequest, errors.New("expired token"))
 	}
 	if p.Secret != secret {
