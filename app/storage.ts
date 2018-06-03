@@ -1,3 +1,5 @@
+import {IPageData} from "targetblank";
+
 const key = "targetblank-store";
 
 export interface IStore {
@@ -16,7 +18,7 @@ export const save = (s: IStore) => {
     return s;
 };
 
-export const update = async (u: (s: IStore) => IStore) => {
+export const update = async (u: (s: IStore) => Promise<IStore>) => {
     const s = await u(read());
     save(s);
     return s;

@@ -1,4 +1,5 @@
 import request from "request-promise-native";
+import {IPageData} from "targetblank";
 
 const endpoint = "https://api.targetblank.org";
 

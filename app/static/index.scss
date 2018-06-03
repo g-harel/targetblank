@@ -1,0 +1,14 @@
+html {
+    font-size: 1.2rem;
+    color: #333;
+
+    * {
+        font: 1rem 'Source Sans Pro', sans-serif;
+    }
+}
+
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    margin: 0;
+}

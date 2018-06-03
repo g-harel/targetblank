@@ -1,0 +1,18 @@
+.home {
+    .header {
+        border-bottom: 1px solid #eee;
+        font: 800 1.6rem 'Lora', serif;
+        padding: 6px 20px 10px;
+        user-select: none;
+
+        .icon * {
+            color: sienna;
+            margin: 0 10px;
+        }
+    }
+
+    .signup {
+        display: inline-block;
+        margin: 0 auto;
+    }
+}

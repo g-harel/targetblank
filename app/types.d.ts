@@ -1,23 +1,25 @@
-interface IPageItem {
-    label: string;
-    link: string;
-    items: IPageItem[];
-}
+declare module "targetblank" {
+    export interface IPageItem {
+        label: string;
+        link: string;
+        items: IPageItem[];
+    }
 
-interface IPageGroup {
-    meta: {
-        [key: string]: string;
-    };
-    items: IPageItem[];
-}
+    export interface IPageGroup {
+        meta: {
+            [key: string]: string;
+        };
+        items: IPageItem[];
+    }
 
-interface IPageData {
-    version: string;
-    spec: string;
-    meta: {
-        [key: string]: string;
-    };
-    groups: IPageGroup[];
+    export interface IPageData {
+        version: string;
+        spec: string;
+        meta: {
+            [key: string]: string;
+        };
+        groups: IPageGroup[];
+    }
 }
 
 declare module "okwolo/lite" {
@@ -30,7 +32,7 @@ declare module "okwolo/lite" {
 
         getState(): S
 
-        use(blob: string, ...any): void
+        use(blob: "target", target: HTMLElement): void
     }
 
     export type BlankElement = boolean | null;
@@ -44,13 +46,14 @@ declare module "okwolo/lite" {
     } & any[]
 
     export type ComponentElement<P extends object = {}, A extends object = {}> = {
-        0: (params: P) => (arg: A | undefined) => Element;
+        0: Component<P, A>;
         1?: P;
         2?: Element[];
     } & any[]
 
-    export type Element = BlankElement | TextElement | TagElement | ComponentElement
+    export type Component<P extends object = {}, A extends object = {}> = (params: P) => (arg: A | undefined) => Element
 
+    export type Element = BlankElement | TextElement | TagElement | ComponentElement
 
     export default function<S>(target?: HTMLElement, global?: Window): App<S>
 }

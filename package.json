@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "parcel build --no-source-maps -d .build app/index.html",
-    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist app/index.html",
+    "build": "parcel build --no-source-maps -d .build app/static/index.html",
+    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist app/static/index.html",
     "lint": "tslint app/**/*.ts"
   },
   "dependencies": {
