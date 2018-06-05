@@ -14,5 +14,14 @@
     .signup {
         display: inline-block;
         margin: 0 auto;
+        width: 100vw;
+
+        .input {
+            margin: 0 auto;
+        }
+
+        .title {
+            font: 800 1.6rem 'Lora', serif;
+        }
     }
 }

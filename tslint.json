@@ -8,6 +8,7 @@
         "object-curly-spacing": [true, "never"],
         "quotemark": [true, "double"],
         "ter-arrow-parens": [true, "always"],
-        "ter-indent": false
+        "ter-indent": false,
+        "align": false
     }
 }

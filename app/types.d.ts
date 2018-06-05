@@ -51,7 +51,7 @@ declare module "okwolo/lite" {
         2?: Element[];
     } & any[]
 
-    export type Component<P extends object = {}, A extends object = {}> = (params: P) => (arg: A | undefined) => Element
+    export type Component<P extends object = {}, A extends object = {}> = (params: P, update: (A) => void) => (arg: A | undefined) => Element
 
     export type Element = BlankElement | TextElement | TagElement | ComponentElement
 

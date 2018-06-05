@@ -1,9 +1,9 @@
 import "../static/page.home.scss";
 
-import {Component} from "okwolo/lite";
+import {Component, ComponentElement} from "okwolo/lite";
 
 import {api} from "../api";
-import {input} from "../components/input";
+import {input, props as inputProps} from "../components/input";
 
 export const home: Component = () => {
     setTimeout(() => requestAnimationFrame(() => {
@@ -22,8 +22,10 @@ export const home: Component = () => {
                 "targetblank",
             ]],
             ["div.signup", {}, [
-                [input, {
+                <ComponentElement<inputProps>>[input, {
                     placeholder: "john@example.com",
+                    validator: /^\S+@\S+\.\S+$/g,
+                    message: "Must be an email address.",
                 }],
             ]],
         ]]
