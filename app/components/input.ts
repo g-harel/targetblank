@@ -4,57 +4,81 @@ import {Component} from "okwolo/lite";
 
 export type props = {
     title?: string,
-    callback?: (boolean) => void;
+    callback?: (string) => void;
     validator: RegExp,
     message: string,
     placeholder: string,
 };
 
-export type args = {
-    error: string;
-};
-
-export const input: Component<props, args> = (props, update) => {
+export const input: Component<props> = (props, update) => {
     let timeout;
 
-    const oninput = (event) => {
-        const {value} = event.target;
+    let error = "";
+    let valid = false;
+    let value = "";
 
+    const oninput = (event) => {
+        // reset any pending error message
         clearTimeout(timeout);
 
-        if (value.length === 0) {
-            return update({error: ""});
+        value = event.target.value.trim();
+        valid = !!value.match(props.validator);
+
+        // immediately show new valid state
+        update();
+
+        // empty value does not show error (but is not valid)
+        if (valid || value.length === 0) {
+            error = "";
+            update();
+            return;
         }
 
-        const valid = value.match(props.validator);
-
-        if (props.callback) {
-            props.callback(valid);
-        }
-
-        const error = valid ? "" : props.message;
+        // error message is delayed
         timeout = setTimeout(() => {
-            update({error});
-        }, 500);
+            error = props.message;
+            update();
+        }, 750);
     };
 
-    return (args = {error: ""}) => (
-        ["div.input", {}, [
+    const onsubmit = (e) => {
+        e.preventDefault();
+
+        if (!valid) {
+            return;
+        }
+
+        props.callback(value);
+
+        // resetting internal state
+        error = "";
+        valid = false;
+        value = "";
+
+        update();
+    };
+
+    return () => (
+        ["form.input", {onsubmit}, [
             props.title ? ["span.title", {}, [
                 props.title,
             ]] : "",
             ["input", {
+                value,
                 oninput,
                 type: "text",
                 placeholder: " " + props.placeholder,
             }],
-            ["div.icon", {
-                style: "color: #cfcfcf;",
+            ["button", {
+                className: {
+                    enabled: valid,
+                },
+                type: "submit",
             }, [
                 ["i.far.fa-xs.fa-arrow-right"],
             ]],
             ["div.error", {}, [
-                args.error,
+                error,
             ]],
         ]]
     );
