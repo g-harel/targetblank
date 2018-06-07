@@ -10,12 +10,12 @@
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
-    "@types/request-promise-native": "^1.0.14",
+    "@types/request-promise-native": "^1.0.15",
     "node-sass": "^4.9.0",
     "opn-cli": "^3.1.0",
     "parcel-bundler": "^1.8.1",
     "tslint": "^5.10.0",
     "tslint-config-airbnb": "^5.9.2",
-    "typescript": "^2.8.3"
+    "typescript": "^2.9.1"
   }
 }

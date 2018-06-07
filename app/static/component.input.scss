@@ -6,21 +6,42 @@
         &:-ms-input-placeholder      {@content}
     }
 
+    $width: 16rem;
+
     display: inline-block;
+    width: $width + 1rem;
+    overflow-x: hidden;
+
+    &.loading {
+        filter: grayscale(100%);
+        pointer-events: none;
+
+        *:not(button) {
+            opacity: 0.5;
+        }
+
+        button {
+            cursor: default;
+            color: #555;
+        }
+    }
 
     .title {
-        margin: 10px 12px 0;
+        margin: 0.5rem 0.6rem 0;
         font-weight: bold;
-        font-size: 1.3em;
+        font-size: 1.3rem;
         display: block;
+        width: $width;
     }
 
     input[type="text"],
     input[type="email"] {
-        padding: 5px 36px 5px 8px;
+        padding: 0.25rem 1.8rem 0.25rem 0.5rem;
         border: 1px solid #ddd;
-        margin: 6px 10px 0;
+        margin: 0.3rem 0.5rem 0;
         border-radius: 2px;
+        height: 1.85rem;
+        width: $width;
         outline: 0;
 
         @include placeholder {
@@ -58,12 +79,13 @@
         }
         // ---
 
-        transform: translateX(-42px);
+        transform: translateX(-0.35rem) translateY(-1.95rem);
+        padding: 0.65rem 0.7rem 0.65rem;
         display: inline-block;
-        padding: 13px 10px 12px;
         pointer-events: none;
         cursor: default;
         color: #cfcfcf;
+        float: right;
 
         &.enabled {
             pointer-events: all;
@@ -73,9 +95,10 @@
     }
 
     .error {
-        margin: 0 12px 5px;
-        font-size: 0.75em;
+        margin: 0.2rem 1rem;
+        font-size: 0.75rem;
         color: tomato;
-        height: 1.15em;
+        height: 1.15rem;
+        width: $width;
     }
 }

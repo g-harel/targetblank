@@ -4,7 +4,7 @@ import {Component} from "okwolo/lite";
 
 export type props = {
     title?: string,
-    callback?: (string) => void;
+    callback?: (string) => Promise<string>;
     validator: RegExp,
     message: string,
     placeholder: string,
@@ -13,7 +13,8 @@ export type props = {
 export const input: Component<props> = (props, update) => {
     let timeout;
 
-    let error = "";
+    let error = "sad";
+    let loading = false;
     let valid = false;
     let value = "";
 
@@ -34,24 +35,28 @@ export const input: Component<props> = (props, update) => {
             return;
         }
 
-        // error message is delayed
+        // delay error message
         timeout = setTimeout(() => {
             error = props.message;
             update();
         }, 750);
     };
 
-    const onsubmit = (e) => {
+    const onsubmit = async (e) => {
         e.preventDefault();
 
         if (!valid) {
             return;
         }
 
-        props.callback(value);
+        loading = true;
+        update();
 
-        // resetting internal state
-        error = "";
+        // show callback's error
+        error = await props.callback(value) || "";
+
+        // reset internal state
+        loading = false;
         valid = false;
         value = "";
 
@@ -59,7 +64,12 @@ export const input: Component<props> = (props, update) => {
     };
 
     return () => (
-        ["form.input", {onsubmit}, [
+        ["form.input", {
+            onsubmit,
+            className: {
+                loading,
+            },
+        }, [
             props.title ? ["span.title", {}, [
                 props.title,
             ]] : "",
@@ -75,7 +85,9 @@ export const input: Component<props> = (props, update) => {
                 },
                 type: "submit",
             }, [
-                ["i.far.fa-xs.fa-arrow-right"],
+                loading
+                    ? ["i.far.fa-xs.fa-spinner-third.fa-spin"]
+                    : ["i.far.fa-xs.fa-arrow-right"],
             ]],
             ["div.error", {}, [
                 error,

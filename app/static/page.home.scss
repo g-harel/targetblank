@@ -2,26 +2,51 @@
     .header {
         border-bottom: 1px solid #ddd;
         font: 800 1.6rem 'Lora', serif;
-        padding: 6px 20px 10px;
+        padding: 0.3rem 1rem 0.5rem;
         user-select: none;
+        height: 2.9rem;
 
-        .icon * {
+        i {
             color: sienna;
             margin: 0 10px;
         }
     }
 
-    .signup {
-        display: inline-block;
-        margin: 0 auto;
+    .mask {
+        height: calc(100vh - 2.9rem);
+        overflow-x: hidden;
         width: 100vw;
 
-        .input {
-            margin: 0 auto;
-        }
+        .screens {
+            width: 200vw;
 
-        .title {
-            font: 800 1.6rem 'Lora', serif;
+            &.scrolled {
+                .screen {
+                    transform: translateX(-100%);
+
+                    &.signup {
+                        opacity: 0;
+                    }
+                }
+            }
+
+            .screen {
+                transition: all 0.7s ease;
+                display: inline-block;
+                vertical-align: top;
+                height: 100%;
+                width: 100vw;
+
+                &.signup {
+                    form {
+                        margin: 0 auto;
+                    }
+
+                    .title {
+                        font: 800 1.6rem 'Lora', serif;
+                    }
+                }
+            }
         }
     }
 }
