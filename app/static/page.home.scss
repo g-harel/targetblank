@@ -1,10 +1,17 @@
 .home {
+    $header-height: 2.9rem;
+    $footer-height: 2.8rem;
+
     .header {
         border-bottom: 1px solid #ddd;
         font: 800 1.6rem 'Lora', serif;
         padding: 0.3rem 1rem 0.5rem;
+        height: $header-height;
         user-select: none;
-        height: 2.9rem;
+
+        @media (max-width: 768px) {
+            text-align: center;
+        }
 
         i {
             color: sienna;
@@ -13,7 +20,7 @@
     }
 
     .mask {
-        height: calc(100vh - 2.9rem);
+        height: calc(100vh - #{$header-height + $footer-height + 0.1rem});
         overflow-x: hidden;
         width: 100vw;
 
@@ -34,18 +41,31 @@
                 transition: all 0.7s ease;
                 display: inline-block;
                 vertical-align: top;
+                text-align: center;
                 height: 100%;
                 width: 100vw;
 
-                &.signup {
-                    form {
-                        margin: 0 auto;
-                    }
-
-                    .title {
-                        font: 800 1.6rem 'Lora', serif;
-                    }
+                &.signup form {
+                    text-align: left;
+                    margin-top: 25vh;
                 }
+            }
+        }
+    }
+
+    .footer {
+        height: $footer-height;
+        text-align: center;
+        overflow: hidden;
+        width: 100vw;
+
+        i {
+            transition: all 0.2s ease;
+            font-size: 1.6rem;
+            color: #eee;
+
+            &:hover {
+                color: #ddd;
             }
         }
     }

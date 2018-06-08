@@ -13,7 +13,7 @@ export type props = {
 export const input: Component<props> = (props, update) => {
     let timeout;
 
-    let error = "sad";
+    let error = "";
     let loading = false;
     let valid = false;
     let value = "";
