@@ -8,9 +8,10 @@
 
     $width: 16rem;
 
-    display: inline-block;
     width: $width + 1rem;
     overflow-x: hidden;
+    text-align: left;
+    margin: 0 auto;
 
     &.loading {
         filter: grayscale(100%);

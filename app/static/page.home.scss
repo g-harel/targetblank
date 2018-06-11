@@ -1,6 +1,8 @@
 .home {
     $header-height: 2.9rem;
     $footer-height: 2.8rem;
+    $screen-width: 20rem;
+    overflow-x: hidden;
 
     .header {
         border-bottom: 1px solid #ddd;
@@ -19,35 +21,51 @@
         }
     }
 
-    .mask {
+    .screens {
         height: calc(100vh - #{$header-height + $footer-height + 0.1rem});
-        overflow-x: hidden;
-        width: 100vw;
+        margin-left: calc(50vw - #{$screen-width / 2});
+        width: 1000vw;
 
-        .screens {
-            width: 200vw;
+        &.scrolled {
+            .screen {
+                transform: translateX(-100%);
 
-            &.scrolled {
-                .screen {
-                    transform: translateX(-100%);
+                &.signup {
+                    opacity: 0;
+                }
+                &.confirmation {
+                    opacity: 1;
 
-                    &.signup {
-                        opacity: 0;
+                    .title i {
+                        transition-delay: 0.25s;
+                        opacity: 1;
                     }
                 }
             }
+        }
 
-            .screen {
-                transition: all 0.7s ease;
-                display: inline-block;
-                vertical-align: top;
-                text-align: center;
-                height: 100%;
-                width: 100vw;
+        .screen {
+            transition: all 0.7s ease;
+            display: inline-block;
+            width: $screen-width;
+            vertical-align: top;
+            text-align: center;
+            padding-top: 20vh;
+            height: 99%;
 
-                &.signup form {
-                    text-align: left;
-                    margin-top: 25vh;
+            &.confirmation {
+                opacity: 0;
+
+                .title {
+                    font-weight: bold;
+                    font-size: 1.3rem;
+
+                    i {
+                        transition: all 1s ease;
+                        color: yellowgreen;
+                        margin: 0 8px;
+                        opacity: 0;
+                    }
                 }
             }
         }

@@ -11,12 +11,12 @@ export type props = {
 };
 
 export const input: Component<props> = (props, update) => {
-    let timeout;
-
     let error = "";
     let loading = false;
     let valid = false;
     let value = "";
+
+    let timeout;
 
     const oninput = (event) => {
         // reset any pending error message
