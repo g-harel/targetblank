@@ -20,6 +20,10 @@ const providers: {
         domains: ["gmail"],
         url: "https://mail.google.com",
     },
+    icloud: {
+        domains: ["icloud"],
+        url: "https://mail.icould.com",
+    },
     yahoo: {
         domains: ["yahoo"],
         url: "https://mail.yahoo.com",
@@ -27,10 +31,6 @@ const providers: {
     outlook: {
         domains: ["live", "outlook", "hotmail", "msn"],
         url: "https://outlook.live.com",
-    },
-    icloud: {
-        domains: ["icloud"],
-        url: "https://mail.icould.com",
     },
 };
 
@@ -63,6 +63,7 @@ const focusOnInput = () => {
 
 export const home: Component = (p, update) => {
     let email: email = null;
+    let scrolled = false;
 
     const callback = async (addr: string) => {
         try {
@@ -72,12 +73,8 @@ export const home: Component = (p, update) => {
             return "Something went wrong";
         }
 
+        scrolled = true;
         email = makeEmail(addr);
-        update();
-    };
-
-    const onclick = () => {
-        email = email ? null : makeEmail("test@agmail.com");
         update();
     };
 
@@ -85,11 +82,11 @@ export const home: Component = (p, update) => {
 
     return () => (
         ["div.home", {}, [
-            ["div.header", {onclick}, [
-                ["i.far.fa-circle.fa-xs"],
+            ["div.header", {}, [
+                ["i.far.fa-xs.fa-circle"],
                 "targetblank",
             ]],
-            ["div.screens", {className: {scrolled: !!email}}, [
+            ["div.screens", {className: {scrolled}}, [
                 ["div.screen.signup", {}, [
                     <CE<inputP>>[input, {
                         callback,
@@ -105,27 +102,21 @@ export const home: Component = (p, update) => {
                         "Confirmation Sent",
                     ]],
                     email && ["div.email", {}, [
-                        ["div.address", {}, [
+                        ["a.address", {
+                            href: email.link,
+                            target: "_blank",
+                            className: {inert: !email.link},
+                        }, [
                             email.addr,
+                            email.link && ["i.fas.fa-xs.fa-external-link-alt"],
                         ]],
-                        ["div.link", {}, [
-                            email.link ? (
-                                ["a", {href: email.link}, [
-                                    "visit your inbox",
+                        !email.link && ["div.providers", {},
+                            Object.keys(providers).map((p) => (
+                                ["a", {href: providers[p].url}, [
+                                    p,
                                 ]]
-                            ) : (
-                                ["div.providers", {},
-                                    Object.keys(providers).map((p) => {
-                                        const {url} = providers[p];
-                                        return (
-                                            ["a", {href: url}, [
-                                                p,
-                                            ]]
-                                        );
-                                    }),
-                                ]
-                            ),
-                        ]],
+                            )),
+                        ],
                     ]],
                 ]],
             ]],
