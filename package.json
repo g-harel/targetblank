@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "parcel build --no-source-maps -d .build app/static/index.html",
+    "build": "ts-node build.ts app/static/index.html .build",
     "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist app/static/index.html",
     "lint": "tslint app/**/*.ts"
   },
@@ -14,6 +14,7 @@
     "node-sass": "^4.9.0",
     "opn-cli": "^3.1.0",
     "parcel-bundler": "^1.8.1",
+    "ts-node": "^6.1.0",
     "tslint": "^5.10.0",
     "tslint-config-airbnb": "^5.9.2",
     "typescript": "^2.9.1"
