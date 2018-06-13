@@ -98,7 +98,7 @@ export const home: Component = (p, update) => {
                 ]],
                 ["div.screen.confirmation", {}, [
                     ["span.title", {}, [
-                        ["i.far.fa-check-circle"],
+                        ["i.far.fa-lg.fa-check-circle"],
                         "Confirmation Sent",
                     ]],
                     email && ["div.email", {}, [

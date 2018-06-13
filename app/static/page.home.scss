@@ -16,8 +16,8 @@
         }
 
         i {
+            margin: 0 0.5rem;
             color: sienna;
-            margin: 0 10px;
         }
     }
 
@@ -45,26 +45,26 @@
         }
 
         .screen {
+            padding-top: calc(25vh - #{$header-height});
             transition: all 0.7s ease;
             display: inline-block;
             width: $screen-width;
             vertical-align: top;
             text-align: center;
-            padding-top: 20vh;
             height: 99%;
 
             &.confirmation {
                 opacity: 0;
 
                 .title {
-                    padding-right: 20px;
                     font-weight: bold;
                     font-size: 1.3rem;
 
                     i {
                         transition: all 1s ease;
                         color: yellowgreen;
-                        margin: 0 8px;
+                        margin: 0.6rem 0;
+                        display: block;
                         opacity: 0;
                     }
                 }
@@ -74,19 +74,19 @@
                 }
 
                 .address {
-                    margin: 10px 0 20px;
+                    margin: 0.5rem 0 1rem;
                     display: inline-block;
                     color: #aaa;
 
                     &.inert {
                         pointer-events: none;
-                        margin-top: 6px;
+                        margin-top: 0.3rem;
                         cursor: text;
                     }
 
                     i {
                         transform: translateY(-1px);
-                        padding-left: 5px;
+                        padding-left: 0.25rem;
                         font-size: 0.6rem;
                         opacity: 0.9;
                     }
@@ -94,13 +94,13 @@
 
 
                 .providers {
-                    padding-top: 16px;
+                    padding-top: 0.8rem;
 
                     a {
                         border-left: 1px solid #eee;
                         transition: all 0.5s ease;
                         display: inline-block;
-                        padding: 0 10px;
+                        padding: 0 0.5rem;
                         max-width: 25%;
                         color: #ccc;
 
