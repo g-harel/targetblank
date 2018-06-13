@@ -1,6 +1,9 @@
 package email
 
 import (
+	"bytes"
+	"html/template"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ses"
@@ -49,4 +52,17 @@ func (c *Client) Send(to, sub, body string) error {
 	_, err := c.ses.SendEmail(input)
 
 	return err
+}
+
+// Template is a helper around go's templating package.
+func Template(t string, data interface{}) (string, error) {
+	tt, err := template.New("body").Parse(t)
+	if err != nil {
+		return "", err
+	}
+
+	body := bytes.Buffer{}
+	tt.Execute(&body, data)
+
+	return body.String(), nil
 }

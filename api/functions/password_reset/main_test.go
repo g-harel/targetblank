@@ -113,13 +113,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			Body: email,
 			PathParameters: map[string]string{
 				"addr": item.Key,
 			},
-		}, res)
+		}, &function.Response{})
 		if funcErr != nil {
 			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}

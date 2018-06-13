@@ -17,10 +17,19 @@ import (
 )
 
 var messageSubject = "Your new homepage is ready!"
-var messageContent = `
-	addr: {{addr}}
-	token: {{token}}
-`
+
+type messageContent struct {
+	Addr  string
+	Token string
+}
+
+var messageTemplate = `
+	<html>
+		<body>
+			<h3>Follow the link to confirm you're the owner.</h3>
+			<span>https://targetblank.org/{{.Addr}}/{{.Token}}</span>
+		</body>
+	</html>`
 
 var pages tables.IPage
 var sender email.ISender
@@ -39,11 +48,11 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.CustomErr(err)
 	}
-	email, err := hash.New(e)
+	h, err := hash.New(e)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &tables.PageItem{Email: email}
+	item := &tables.PageItem{Email: h}
 
 	pass, err := hash.New(rand.String(16))
 	if err != nil {
@@ -73,11 +82,13 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	body := strings.TrimSpace(messageContent)
-	body = strings.Replace(body, "\n\t", "\n", -1)
-
-	body = strings.Replace(body, "{{addr}}", item.Key, -1)
-	body = strings.Replace(body, "{{token}}", token, -1)
+	body, err := email.Template(messageTemplate, &messageContent{
+		Addr:  item.Key,
+		Token: token,
+	})
+	if err != nil {
+		return function.Err(http.StatusInternalServerError, err)
+	}
 
 	err = sender.Send(e, messageSubject, body)
 	if err != nil {

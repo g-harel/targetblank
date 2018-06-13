@@ -16,10 +16,19 @@ import (
 )
 
 var messageSubject = "Your homepage password has been reset!"
-var messageContent = `
-	addr: {{addr}}
-	token: {{token}}
-`
+
+type messageContent struct {
+	Addr  string
+	Token string
+}
+
+var messageTemplate = `
+	<html>
+		<body>
+			<h3>Follow the link to confirm you're the owner.</h3>
+			<span>https://targetblank.org/{{.Addr}}/{{.Token}}</span>
+		</body>
+	</html>`
 
 var pages tables.IPage
 var sender email.ISender
@@ -43,9 +52,9 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
 	}
 
-	email := strings.TrimSpace(req.Body)
+	e := strings.TrimSpace(req.Body)
 
-	ok := hash.Check(email, item.Email)
+	ok := hash.Check(e, item.Email)
 	if !ok {
 		return function.Err(http.StatusBadRequest, errors.New("email does not match hashed value"))
 	}
@@ -67,13 +76,15 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	body := strings.TrimSpace(messageContent)
-	body = strings.Replace(body, "\n\t", "\n", -1)
+	body, err := email.Template(messageTemplate, &messageContent{
+		Addr:  item.Key,
+		Token: token,
+	})
+	if err != nil {
+		return function.Err(http.StatusInternalServerError, err)
+	}
 
-	body = strings.Replace(body, "{{addr}}", item.Key, -1)
-	body = strings.Replace(body, "{{token}}", token, -1)
-
-	err = sender.Send(email, messageSubject, body)
+	err = sender.Send(e, messageSubject, body)
 	if err != nil {
 		return function.Err(
 			http.StatusInternalServerError,
