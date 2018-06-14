@@ -1,7 +1,6 @@
 package function
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -32,7 +31,7 @@ func Err(status int, err error) *Error {
 		fmt.Println("ERROR:", err)
 	}
 	return &Error{
-		error: errors.New(http.StatusText(status)),
+		error: err, // errors.New(http.StatusText(status)),
 		code:  status,
 	}
 }

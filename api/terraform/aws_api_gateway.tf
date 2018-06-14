@@ -41,10 +41,62 @@ resource "aws_api_gateway_resource" "auth" {
   path_part   = "auth"
 }
 
+resource "aws_api_gateway_method" "auth_options" {
+  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id   = "${aws_api_gateway_resource.auth.id}"
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "auth_options" {
+  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id = "${aws_api_gateway_resource.auth.id}"
+  http_method = "${aws_api_gateway_method.auth_options.http_method}"
+  status_code = "200"
+
+  response_models {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  depends_on = ["aws_api_gateway_method.auth_options"]
+}
+
 resource "aws_api_gateway_resource" "page" {
   rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
   parent_id   = "${aws_api_gateway_rest_api.rest_api.root_resource_id}"
   path_part   = "page"
+}
+
+resource "aws_api_gateway_method" "page_options" {
+  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id   = "${aws_api_gateway_resource.page.id}"
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "page_options" {
+  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id = "${aws_api_gateway_resource.page.id}"
+  http_method = "${aws_api_gateway_method.page_options.http_method}"
+  status_code = "200"
+
+  response_models {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  depends_on = ["aws_api_gateway_method.page_options"]
 }
 
 #
@@ -55,16 +107,94 @@ resource "aws_api_gateway_resource" "auth_addr" {
   path_part   = "{addr}"
 }
 
+resource "aws_api_gateway_method" "auth_addr_options" {
+  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id   = "${aws_api_gateway_resource.auth_addr.id}"
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "auth_addr_options" {
+  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id = "${aws_api_gateway_resource.auth_addr.id}"
+  http_method = "${aws_api_gateway_method.auth_addr_options.http_method}"
+  status_code = "200"
+
+  response_models {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  depends_on = ["aws_api_gateway_method.auth_addr_options"]
+}
+
 resource "aws_api_gateway_resource" "page_addr" {
   rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
   parent_id   = "${aws_api_gateway_resource.page.id}"
   path_part   = "{addr}"
 }
 
+resource "aws_api_gateway_method" "page_addr_options" {
+  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id   = "${aws_api_gateway_resource.page_addr.id}"
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "page_addr_options" {
+  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id = "${aws_api_gateway_resource.page_addr.id}"
+  http_method = "${aws_api_gateway_method.page_addr_options.http_method}"
+  status_code = "200"
+
+  response_models {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  depends_on = ["aws_api_gateway_method.page_addr_options"]
+}
+
 resource "aws_api_gateway_resource" "page_validate" {
   rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
   parent_id   = "${aws_api_gateway_resource.page.id}"
   path_part   = "validate"
+}
+
+resource "aws_api_gateway_method" "page_validate_options" {
+  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id   = "${aws_api_gateway_resource.page_validate.id}"
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "page_validate_options" {
+  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id = "${aws_api_gateway_resource.page_validate.id}"
+  http_method = "${aws_api_gateway_method.page_validate_options.http_method}"
+  status_code = "200"
+
+  response_models {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+
+  depends_on = ["aws_api_gateway_method.page_validate_options"]
 }
 
 #
