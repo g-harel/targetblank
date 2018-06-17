@@ -9,7 +9,7 @@ import (
 	"github.com/g-harel/targetblank/api/internal/token"
 )
 
-var headerName = "Token"
+var headerName = "token"
 var longTTL = time.Hour * 18
 var shortTTL = time.Minute * 10
 

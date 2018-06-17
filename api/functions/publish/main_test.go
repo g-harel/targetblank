@@ -36,7 +36,7 @@ func TestHandler(t *testing.T) {
 				"addr": "123456",
 			},
 			Headers: map[string]string{
-				"Token": "bad token",
+				"token": "bad token",
 			},
 		}, &function.Response{})
 		if err == nil {
@@ -87,7 +87,7 @@ func TestHandler(t *testing.T) {
 				"addr": item.Key,
 			},
 			Headers: map[string]string{
-				"Token": token,
+				"token": token,
 			},
 		}, &function.Response{})
 		if funcErr != nil {

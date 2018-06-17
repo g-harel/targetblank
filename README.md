@@ -40,11 +40,17 @@ nosql schema {
 }
 
 links
+- https://undraw.co/illustrations
 - http://www.alexedwards.net/blog/serverless-api-with-go-and-aws-lambda
 - https://github.com/nzoschke/gofaas
 - https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0
 - https://gist.github.com/prwhite/8168133
 - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
 - https://scene-si.org/2018/05/08/protecting-api-access-with-jwt/
+
+
+todo
+- rename functions package
+- token secrets
 
 -->
