@@ -1,8 +1,11 @@
 package function
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/g-harel/targetblank/api/internal/token"
 )
 
 // Error adds a status code to the error type.
@@ -25,13 +28,15 @@ func CustomErr(err error) *Error {
 	}
 }
 
-// Err creates a new function error with the default status text.
+// Err creates a new function error with an encrypted message.
 func Err(status int, err error) *Error {
 	if err != nil { // TODO proper logging
 		fmt.Println("ERROR:", err)
 	}
+	// empty message in case of error during encryption
+	msg, _ := token.Seal([]byte(err.Error()))
 	return &Error{
-		error: err, // errors.New(http.StatusText(status)),
+		error: errors.New(msg),
 		code:  status,
 	}
 }
