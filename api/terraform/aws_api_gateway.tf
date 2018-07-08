@@ -41,60 +41,14 @@ resource "aws_api_gateway_resource" "auth" {
   path_part   = "auth"
 }
 
-resource "aws_api_gateway_method" "auth_options" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.auth.id}"
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
+module "cors_auth" {
+  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+  version = "0.1.0"
 
-resource "aws_api_gateway_method_response" "auth_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.auth.id}"
-  http_method = "${aws_api_gateway_method.auth_options.http_method}"
-  status_code = "200"
+  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
+  api_resource_id = "${aws_api_gateway_resource.auth.id}"
 
-  response_models {
-    "application/json" = "Empty"
-  }
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-  }
-
-  depends_on = ["aws_api_gateway_method.auth_options"]
-}
-
-resource "aws_api_gateway_integration" "auth_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.auth.id}"
-  http_method = "${aws_api_gateway_method.auth_options.http_method}"
-  type        = "MOCK"
-
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates {
-    "application/json" = "{ 'statusCode': 200 }"
-  }
-
-  depends_on = ["aws_api_gateway_method.auth_options"]
-}
-
-resource "aws_api_gateway_integration_response" "auth_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.auth.id}"
-  http_method = "${aws_api_gateway_method.auth_options.http_method}"
-  status_code = "${aws_api_gateway_method_response.auth_options.status_code}"
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'*'"
-    "method.response.header.Access-Control-Allow-Methods" = "'*'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
-  depends_on = ["aws_api_gateway_method_response.auth_options"]
+  allowed_headers = ["token"]
 }
 
 #
@@ -105,60 +59,14 @@ resource "aws_api_gateway_resource" "page" {
   path_part   = "page"
 }
 
-resource "aws_api_gateway_method" "page_options" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.page.id}"
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
+module "cors_page" {
+  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+  version = "0.1.0"
 
-resource "aws_api_gateway_method_response" "page_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page.id}"
-  http_method = "${aws_api_gateway_method.page_options.http_method}"
-  status_code = "200"
+  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
+  api_resource_id = "${aws_api_gateway_resource.page.id}"
 
-  response_models {
-    "application/json" = "Empty"
-  }
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-  }
-
-  depends_on = ["aws_api_gateway_method.page_options"]
-}
-
-resource "aws_api_gateway_integration" "page_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page.id}"
-  http_method = "${aws_api_gateway_method.page_options.http_method}"
-  type        = "MOCK"
-
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates {
-    "application/json" = "{ 'statusCode': 200 }"
-  }
-
-  depends_on = ["aws_api_gateway_method.page_options"]
-}
-
-resource "aws_api_gateway_integration_response" "page_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page.id}"
-  http_method = "${aws_api_gateway_method.page_options.http_method}"
-  status_code = "${aws_api_gateway_method_response.page_options.status_code}"
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'*'"
-    "method.response.header.Access-Control-Allow-Methods" = "'*'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
-  depends_on = ["aws_api_gateway_method_response.page_options"]
+  allowed_headers = ["token"]
 }
 
 #
@@ -169,60 +77,14 @@ resource "aws_api_gateway_resource" "auth_addr" {
   path_part   = "{addr}"
 }
 
-resource "aws_api_gateway_method" "auth_addr_options" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.auth_addr.id}"
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
+module "cors_auth_addr" {
+  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+  version = "0.1.0"
 
-resource "aws_api_gateway_method_response" "auth_addr_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.auth_addr.id}"
-  http_method = "${aws_api_gateway_method.auth_addr_options.http_method}"
-  status_code = "200"
+  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
+  api_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
 
-  response_models {
-    "application/json" = "Empty"
-  }
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-  }
-
-  depends_on = ["aws_api_gateway_method.auth_addr_options"]
-}
-
-resource "aws_api_gateway_integration" "auth_addr_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.auth_addr.id}"
-  http_method = "${aws_api_gateway_method.auth_addr_options.http_method}"
-  type        = "MOCK"
-
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates {
-    "application/json" = "{ 'statusCode': 200 }"
-  }
-
-  depends_on = ["aws_api_gateway_method.auth_addr_options"]
-}
-
-resource "aws_api_gateway_integration_response" "auth_addr_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.auth_addr.id}"
-  http_method = "${aws_api_gateway_method.auth_addr_options.http_method}"
-  status_code = "${aws_api_gateway_method_response.auth_addr_options.status_code}"
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'*'"
-    "method.response.header.Access-Control-Allow-Methods" = "'*'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
-  depends_on = ["aws_api_gateway_method_response.auth_addr_options"]
+  allowed_headers = ["token"]
 }
 
 #
@@ -233,60 +95,14 @@ resource "aws_api_gateway_resource" "page_addr" {
   path_part   = "{addr}"
 }
 
-resource "aws_api_gateway_method" "page_addr_options" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.page_addr.id}"
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
+module "cors_page_addr" {
+  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+  version = "0.1.0"
 
-resource "aws_api_gateway_method_response" "page_addr_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page_addr.id}"
-  http_method = "${aws_api_gateway_method.page_addr_options.http_method}"
-  status_code = "200"
+  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
+  api_resource_id = "${aws_api_gateway_resource.page_addr.id}"
 
-  response_models {
-    "application/json" = "Empty"
-  }
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-  }
-
-  depends_on = ["aws_api_gateway_method.page_addr_options"]
-}
-
-resource "aws_api_gateway_integration" "page_addr_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page_addr.id}"
-  http_method = "${aws_api_gateway_method.page_addr_options.http_method}"
-  type        = "MOCK"
-
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates {
-    "application/json" = "{ 'statusCode': 200 }"
-  }
-
-  depends_on = ["aws_api_gateway_method.page_addr_options"]
-}
-
-resource "aws_api_gateway_integration_response" "page_addr_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page_addr.id}"
-  http_method = "${aws_api_gateway_method.page_addr_options.http_method}"
-  status_code = "${aws_api_gateway_method_response.page_addr_options.status_code}"
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'*'"
-    "method.response.header.Access-Control-Allow-Methods" = "'*'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
-  depends_on = ["aws_api_gateway_method_response.page_addr_options"]
+  allowed_headers = ["token"]
 }
 
 #
@@ -297,60 +113,14 @@ resource "aws_api_gateway_resource" "page_validate" {
   path_part   = "validate"
 }
 
-resource "aws_api_gateway_method" "page_validate_options" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.page_validate.id}"
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
+module "cors_page_validate" {
+  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+  version = "0.1.0"
 
-resource "aws_api_gateway_method_response" "page_validate_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page_validate.id}"
-  http_method = "${aws_api_gateway_method.page_validate_options.http_method}"
-  status_code = "200"
+  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
+  api_resource_id = "${aws_api_gateway_resource.page_validate.id}"
 
-  response_models {
-    "application/json" = "Empty"
-  }
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true
-    "method.response.header.Access-Control-Allow-Origin"  = true
-    "method.response.header.Access-Control-Allow-Methods" = true
-  }
-
-  depends_on = ["aws_api_gateway_method.page_validate_options"]
-}
-
-resource "aws_api_gateway_integration" "page_validate_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page_validate.id}"
-  http_method = "${aws_api_gateway_method.page_validate_options.http_method}"
-  type        = "MOCK"
-
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates {
-    "application/json" = "{ 'statusCode': 200 }"
-  }
-
-  depends_on = ["aws_api_gateway_method.page_validate_options"]
-}
-
-resource "aws_api_gateway_integration_response" "page_validate_options" {
-  rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id = "${aws_api_gateway_resource.page_validate.id}"
-  http_method = "${aws_api_gateway_method.page_validate_options.http_method}"
-  status_code = "${aws_api_gateway_method_response.page_validate_options.status_code}"
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'*'"
-    "method.response.header.Access-Control-Allow-Methods" = "'*'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
-  depends_on = ["aws_api_gateway_method_response.page_validate_options"]
+  allowed_headers = ["token"]
 }
 
 #

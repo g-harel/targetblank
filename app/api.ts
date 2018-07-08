@@ -1,7 +1,28 @@
 import request from "request-promise-native";
-import {IPageData} from "targetblank";
 
 const endpoint = "https://api.targetblank.org";
+
+export interface IPageItem {
+    label: string;
+    link: string;
+    items: IPageItem[];
+}
+
+export interface IPageGroup {
+    meta: {
+        [key: string]: string;
+    };
+    items: IPageItem[];
+}
+
+export interface IPageData {
+    version: string;
+    spec: string;
+    meta: {
+        [key: string]: string;
+    };
+    groups: IPageGroup[];
+}
 
 export interface IAPI {
     page: {
@@ -31,45 +52,36 @@ export const api: IAPI = {
         delete: async (addr, token) => request({
             method: "DELETE",
             uri: `${endpoint}/page/${addr}`,
-            headers: {
-                Token: token,
-            },
+            headers: {token},
         }),
         edit: async (addr, token, spec) => request({
             method: "PUT",
             uri: `${endpoint}/page/${addr}`,
-            headers: {
-                Token: token,
-            },
+            headers: {token},
             body: spec,
             json: true,
         }),
-        fetch: async (token, addr) => request({
+        fetch: async (addr, token) => request({
+            method: "GET",
             uri: `${endpoint}/page/${addr}`,
-            headers: {
-                Token: token,
-            },
+            headers: {token},
             json: true,
         }),
         publish: async (addr, token) => request({
             method: "PATCH",
             uri: `${endpoint}/page/${addr}`,
-            headers: {
-                Token: token,
-            },
+            headers: {token},
         }),
         validate: async (spec) => request({
             method: "POST",
-            uri: `${endpoint}/page//validate`,
+            uri: `${endpoint}/page/validate`,
             body: spec,
         }),
         password: {
             change: async (addr, token, pass) => request({
                 method: "PUT",
                 uri: `${endpoint}/auth/${addr}`,
-                headers: {
-                    Token: token,
-                },
+                headers: {token},
                 body: pass,
             }),
             reset: async (addr, email) => request({

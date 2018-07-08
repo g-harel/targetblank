@@ -41,6 +41,7 @@ nosql schema {
 
 links
 - https://undraw.co/illustrations
+- https://gauger.io/fonticon/
 - http://www.alexedwards.net/blog/serverless-api-with-go-and-aws-lambda
 - https://github.com/nzoschke/gofaas
 - https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0

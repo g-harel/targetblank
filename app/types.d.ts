@@ -1,25 +1,4 @@
 declare module "targetblank" {
-    export interface IPageItem {
-        label: string;
-        link: string;
-        items: IPageItem[];
-    }
-
-    export interface IPageGroup {
-        meta: {
-            [key: string]: string;
-        };
-        items: IPageItem[];
-    }
-
-    export interface IPageData {
-        version: string;
-        spec: string;
-        meta: {
-            [key: string]: string;
-        };
-        groups: IPageGroup[];
-    }
 }
 
 declare module "okwolo/lite" {
@@ -45,7 +24,7 @@ declare module "okwolo/lite" {
         2?: Element[];
     } & any[]
 
-    export type ComponentElement<P extends object = {},> = {
+    export type ComponentElement<P extends object = {}> = {
         0: Component<P>;
         1?: P;
         2?: Element[];

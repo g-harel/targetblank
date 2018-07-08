@@ -26,7 +26,7 @@ func decryptError(e string) {
 	if err != nil {
 		fatal("error", err)
 	}
-	fmt.Println(msg)
+	fmt.Println(string(msg))
 }
 
 func main() {
