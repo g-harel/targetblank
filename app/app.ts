@@ -3,7 +3,7 @@ import okwolo from "okwolo/lite";
 import "./static/index.scss";
 
 import {home} from "./pages/home";
-import {homepage, IProps as IHomepageProps} from "./pages/homepage";
+import {homepage} from "./pages/page";
 
 const app = okwolo();
 
@@ -14,7 +14,7 @@ app("/", () => () => (
 ));
 
 app(/^\/(\w{6})(?:\/(\S+?))?\/?$/g, (params) => () => (
-    [homepage, <IHomepageProps>{
+    [homepage, {
         addr: params[0],
         token: params[1],
     }]

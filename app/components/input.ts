@@ -1,16 +1,15 @@
 import "../static/component.input.scss";
 
-import {Component} from "okwolo/lite";
-
 export type props = {
     title?: string,
+    type?: string,
     callback?: (string) => Promise<string>;
     validator: RegExp,
     message: string,
     placeholder: string,
 };
 
-export const input: Component<props> = (props, update) => {
+export const input = (props: props, update) => {
     let error = "";
     let loading = false;
     let valid = false;
@@ -76,7 +75,7 @@ export const input: Component<props> = (props, update) => {
             ["input", {
                 value,
                 oninput,
-                type: "text",
+                type: props.type || "text",
                 placeholder: " " + props.placeholder,
             }],
             ["button", {

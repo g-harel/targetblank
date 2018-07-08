@@ -1,7 +1,5 @@
 import "../static/page.home.scss";
 
-import {Component, ComponentElement as CE} from "okwolo/lite";
-
 import {api} from "../api";
 import {input, props as inputP} from "../components/input";
 
@@ -34,7 +32,7 @@ const providers: {
     },
 };
 
-const makeEmail = (addr: string): email => {
+const calcEmail = (addr: string): email => {
     const match = /.*@([^\.]+).*/g.exec(addr);
     if (match === null) {
         return {addr, link: null};
@@ -61,7 +59,7 @@ const focusOnInput = () => {
     }));
 };
 
-export const home: Component = (p, update) => {
+export const home = (p, update) => {
     let email: email = null;
     let scrolled = false;
 
@@ -74,7 +72,7 @@ export const home: Component = (p, update) => {
         }
 
         scrolled = true;
-        email = makeEmail(addr);
+        email = calcEmail(addr);
         update();
     };
 
@@ -88,7 +86,7 @@ export const home: Component = (p, update) => {
             ]],
             ["div.screens", {className: {scrolled}}, [
                 ["div.screen.signup", {}, [
-                    <CE<inputP>>[input, {
+                    [input, {
                         callback,
                         title: "Create a homepage",
                         placeholder: "john@example.com",

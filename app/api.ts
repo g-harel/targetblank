@@ -24,6 +24,11 @@ export interface IPageData {
     groups: IPageGroup[];
 }
 
+export interface IError {
+    statusCode: number;
+    message: string;
+}
+
 export interface IAPI {
     page: {
         create(email: string): Promise<string>;
