@@ -50,15 +50,6 @@ const calcEmail = (addr: string): email => {
     return {addr, link};
 };
 
-const focusOnInput = () => {
-    setTimeout(() => requestAnimationFrame(() => {
-        const input: HTMLElement = document.querySelector("form.input input");
-        if (input) {
-            input.focus();
-        }
-    }));
-};
-
 export const home = (p, update) => {
     let email: email = null;
     let scrolled = false;
@@ -76,8 +67,6 @@ export const home = (p, update) => {
         update();
     };
 
-    focusOnInput();
-
     return () => (
         ["div.home", {}, [
             ["div.header", {}, [
@@ -92,6 +81,7 @@ export const home = (p, update) => {
                         placeholder: "john@example.com",
                         validator: /^\S+@\S+\.\S{2,}$/g,
                         message: "That doesn't look like an email address",
+                        focus: true,
                     }],
                 ]],
                 ["div.screen.confirmation", {}, [

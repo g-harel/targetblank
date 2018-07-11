@@ -7,6 +7,16 @@ export type props = {
     validator: RegExp,
     message: string,
     placeholder: string,
+    focus: boolean,
+};
+
+const focusOnInput = () => {
+    setTimeout(() => requestAnimationFrame(() => {
+        const input: HTMLElement = document.querySelector("form.input input");
+        if (input) {
+            input.focus();
+        }
+    }));
 };
 
 export const input = (props: props, update) => {
@@ -14,6 +24,10 @@ export const input = (props: props, update) => {
     let loading = false;
     let valid = false;
     let value = "";
+
+    if (props.focus) {
+        focusOnInput();
+    }
 
     let timeout;
 
@@ -60,6 +74,8 @@ export const input = (props: props, update) => {
         value = "";
 
         update();
+
+        focusOnInput();
     };
 
     return () => (
