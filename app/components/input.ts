@@ -1,14 +1,14 @@
 import "../static/component.input.scss";
 
-export type props = {
-    title?: string,
-    type?: string,
+export interface IInputProps {
+    title?: string;
+    type?: string;
     callback?: (string) => Promise<string>;
-    validator: RegExp,
-    message: string,
-    placeholder: string,
-    focus: boolean,
-};
+    validator: RegExp;
+    message: string;
+    placeholder: string;
+    focus: boolean;
+}
 
 const focusOnInput = () => {
     setTimeout(() => requestAnimationFrame(() => {
@@ -19,7 +19,7 @@ const focusOnInput = () => {
     }));
 };
 
-export const input = (props: props, update) => {
+export const input = (props: IInputProps, update) => {
     let error = "";
     let loading = false;
     let valid = false;

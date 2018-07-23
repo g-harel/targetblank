@@ -1,7 +1,7 @@
-import "../static/page.home.scss";
+import "../static/page.landing.scss";
 
 import {api} from "../api";
-import {input, props as inputP} from "../components/input";
+import {input, IInputProps} from "../components/input";
 
 type email = null | {
     addr: string;
@@ -50,7 +50,7 @@ const calcEmail = (addr: string): email => {
     return {addr, link};
 };
 
-export const home = (p, update) => {
+export const landing = (p: {}, update) => {
     let email: email = null;
     let scrolled = false;
 
@@ -68,7 +68,7 @@ export const home = (p, update) => {
     };
 
     return () => (
-        ["div.home", {}, [
+        ["div.landing", {}, [
             ["div.header", {}, [
                 ["i.far.fa-xs.fa-circle"],
                 "targetblank",
@@ -82,7 +82,7 @@ export const home = (p, update) => {
                         validator: /^\S+@\S+\.\S{2,}$/g,
                         message: "That doesn't look like an email address",
                         focus: true,
-                    }],
+                    } as IInputProps],
                 ]],
                 ["div.screen.confirmation", {}, [
                     ["span.title", {}, [
