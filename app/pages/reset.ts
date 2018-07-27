@@ -1,15 +1,20 @@
-import "../static/page.password.scss";
+import "../static/page.reset.scss";
 
 import {api} from "../api";
 import {app} from "../app";
-import {password as passwordComponent, IPasswordProps as IP} from "../components/password";
+import {read, save} from "../storage";
+import {password, IPasswordProps} from "../components/password";
 
-export interface IPasswordProps {
+export interface IResetProps {
     addr: string;
-    token: string;
+    token?: string;
 }
 
-export const password = ({addr, token}: IPasswordProps) => () => {
+export const reset = ({addr, token}: IResetProps) => () => {
+    if (!token) {
+        token = read(addr).token;
+    }
+
     const callback = async (pass: string) => {
         try {
             await api.page.password.change(addr, token, pass);
@@ -22,10 +27,10 @@ export const password = ({addr, token}: IPasswordProps) => () => {
 
     return (
         ["div.password", {}, [
-            [passwordComponent, {
+            [password, {
                 callback,
                 title: "Set your password",
-            } as IP],
+            } as IPasswordProps],
         ]]
     );
 };

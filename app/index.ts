@@ -3,7 +3,8 @@ import "./static/index.scss";
 import {app} from "./app";
 import {landing} from "./pages/landing";
 import {homepage, IHomepageProps} from "./pages/homepage";
-import {password, IPasswordProps} from "./pages/password";
+import {reset, IResetProps} from "./pages/reset";
+import {login, ILoginProps} from "./pages/login";
 
 app.use("target", document.body);
 
@@ -19,11 +20,17 @@ app(/^\/(\w{6})\/?$/g, (params) => () => (
     } as IHomepageProps]
 ));
 
-app(/^\/(\w{6})\/(\S+?)?\/?$/g, (params) => () => (
-    [password, {
+app(/^\/(\w{6})\/login\/?$/g, (params) => () => (
+    [login, {
+        addr: params[0],
+    } as ILoginProps]
+));
+
+app(/^\/(\w{6})\/reset(?:\/(\S+))?\/?/g, (params) => () => (
+    [reset, {
         addr: params[0],
         token: params[1],
-    } as IPasswordProps]
+    } as IResetProps]
 ));
 
 app("**", () => () => (
