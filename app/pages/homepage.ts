@@ -27,40 +27,19 @@ export const homepage = ({addr}, update) => {
         })
         .catch((e) => {
             error = e;
+            console.log(e);
             update();
         });
 
-    const submitPass = async (pass: string) => {
-        try {
-            token = await api.page.token.create(addr, pass);
-            save(addr, {token});
-            update();
-        } catch (e) {
-            console.log(e);
-            return "Something went wrong";
-        }
-    };
-
     return () => {
-        if (error !== null) {
-            if (error.statusCode % 400 < 100) {
-                return wrap(
-                    [password, {
-                        callback: submitPass,
-                        title: "Sign in",
-                    } as IPasswordProps],
-                );
-            }
-            return wrap("an error has occured");
-        }
-
-        if (data === null) {
+        if (data === null && error === null) {
             return wrap("loading");
         }
 
         return wrap(
             ["pre", {}, [
-                JSON.stringify(data, null, 2),
+                error ? "couldn't load" : null,
+                data && JSON.stringify(data, null, 2),
             ]],
         );
     };

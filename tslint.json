@@ -9,6 +9,7 @@
         "quotemark": [true, "double"],
         "ter-arrow-parens": [true, "always"],
         "ter-indent": false,
-        "align": false
+        "align": false,
+        "no-parameter-reassignment": false,
     }
 }
