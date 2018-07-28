@@ -15,6 +15,10 @@ export const reset = ({addr, token}: IResetProps) => () => {
         token = read(addr).token;
     }
 
+    if (!token) {
+        app.redirect("/" + addr + "/login");
+    }
+
     const callback = async (pass: string) => {
         try {
             await api.page.password.change(addr, token, pass);

@@ -70,7 +70,7 @@ export const landing = (p: {}, update) => {
     return () => (
         ["div.landing", {}, [
             ["div.header", {}, [
-                ["i.far.fa-xs.fa-circle"],
+                ["i.far.fa-xs.fa-link"],
                 "targetblank",
             ]],
             ["div.screens", {className: {scrolled}}, [

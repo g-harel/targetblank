@@ -1,7 +1,6 @@
-import "../static/page.landing.scss";
+import "../static/page.homepage.scss";
 
 import {api, IError} from "../api";
-import {password, IPasswordProps} from "../components/password";
 import {read, save} from "../storage";
 
 export interface IHomepageProps {
@@ -16,12 +15,14 @@ const wrap = (element: any) => (
 
 export const homepage = ({addr}, update) => {
     let error: IError | null = null;
+    let loaded = false;
 
     let {data, token} = read(addr);
 
     api.page.fetch(addr, token)
         .then((d) => {
             data = d;
+            loaded = true;
             save(addr, {data});
             update();
         })
@@ -31,16 +32,29 @@ export const homepage = ({addr}, update) => {
             update();
         });
 
-    return () => {
-        if (data === null && error === null) {
-            return wrap("loading");
-        }
-
-        return wrap(
-            ["pre", {}, [
-                error ? "couldn't load" : null,
-                data && JSON.stringify(data, null, 2),
-            ]],
-        );
-    };
+    return () => (
+        ["div.homepage", {}, [
+            error ? "couldn't load" : null,
+            console.log(data) || null,
+            !loaded && (
+                ["div.loading", {}, [
+                    ["i.fa.fa-circle"],
+                ]]
+            ),
+            !!data && (
+                ["div.groups", {},
+                    data.groups.map((group) => (
+                        ["div.group", {}, [
+                            group.meta.title || null,
+                            ["div.items", {},
+                                group.items.map((item) => (
+                                    ["pre", {}, [JSON.stringify(item)]]
+                                )),
+                            ],
+                        ]]
+                    ))
+                ]
+            ),
+        ]]
+    );
 };
