@@ -26,7 +26,7 @@ var messageTemplate = `
 	<html>
 		<body>
 			<h3>Follow the link to confirm you're the owner.</h3>
-			<span>https://targetblank.org/{{.Addr}}/{{.Token}}</span>
+			<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
 		</body>
 	</html>`
 

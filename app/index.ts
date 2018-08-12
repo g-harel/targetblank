@@ -1,6 +1,7 @@
 import "./static/index.scss";
 
 import {app} from "./app";
+import {page} from "./client/page";
 import {landing} from "./pages/landing";
 import {homepage, IHomepageProps} from "./pages/homepage";
 import {reset, IResetProps} from "./pages/reset";
@@ -10,29 +11,12 @@ app.use("target", document.body);
 
 app.setState({});
 
-app("/", () => () => (
-    [landing]
-));
+page("")(landing);
 
-app(/^\/(\w{6})\/?$/g, (params) => () => (
-    [homepage, {
-        addr: params[0],
-    } as IHomepageProps]
-));
+page<IHomepageProps>("{{addr}}", "addr")(homepage);
 
-app(/^\/(\w{6})\/login\/?$/g, (params) => () => (
-    [login, {
-        addr: params[0],
-    } as ILoginProps]
-));
+page<ILoginProps>("{{addr}}/login", "addr")(login);
 
-app(/^\/(\w{6})\/reset(?:\/(\S+))?\/?/g, (params) => () => (
-    [reset, {
-        addr: params[0],
-        token: params[1],
-    } as IResetProps]
-));
+page<IResetProps>("{{addr}}/reset{{token?}}", "addr", "token")(reset);
 
-app("**", () => () => (
-    "404"
-));
+page("{{**}}")(() => () => "404");

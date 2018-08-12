@@ -1,8 +1,8 @@
 import "../static/page.reset.scss";
 
-import {api} from "../api";
+import {api} from "../client/api";
 import {app} from "../app";
-import {read, save} from "../storage";
+import {read} from "../client/storage";
 import {password, IPasswordProps} from "../components/password";
 
 export interface IResetProps {

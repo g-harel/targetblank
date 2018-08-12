@@ -1,8 +1,8 @@
 import "../static/page.login.scss";
 
-import {api} from "../api";
+import {api} from "../client/api";
 import {app} from "../app";
-import {save} from "../storage";
+import {save} from "../client/storage";
 import {password, IPasswordProps} from "../components/password";
 
 export interface ILoginProps {

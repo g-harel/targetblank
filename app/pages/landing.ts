@@ -1,6 +1,6 @@
 import "../static/page.landing.scss";
 
-import {api} from "../api";
+import {api} from "../client/api";
 import {input, IInputProps} from "../components/input";
 
 type email = null | {
