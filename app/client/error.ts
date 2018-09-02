@@ -4,6 +4,7 @@ let errList: string[] = [];
 let updator: null | Function = null;
 
 export const show = (...errs: string[]) => {
+    errs.forEach((err) => console.error(err));
     errList.push(...errs);
     update();
 }

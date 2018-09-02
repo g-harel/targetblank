@@ -22,40 +22,95 @@ export interface IClient {
     };
 }
 
-const missingToken = (addr: string) => show(`Missing access token for address ${addr}`);
+class TokenError extends Error {
+    constructor(addr: string) {
+        super(`Missing access token for address ${addr}`);
+    }
+}
 
-export const client: IClient = {
-    page: {
-        create: async (email, fn) => {
+const catchAll = <T>(value: T): T => {
+    if (typeof value === "function") {
+        const replacement = async (...a: any[]) => {
             try {
-                const res = await api.page.create(email);
-                fn(res);
+                return await value(...a);
             } catch (e) {
                 show(e.toString());
             }
+        };
+        return replacement as any as T;
+    }
+    if (typeof value !== "object") {
+        return value;
+    }
+    const copy = {};
+    Object.keys(value).forEach((key) => {
+        copy[key] = catchAll(value[key]);
+    });
+    return copy as T;
+}
+
+export const client: IClient = catchAll({
+    page: {
+        create: async (email, fn) => {
+            const res = await api.page.create(email);
+            fn(res);
         },
         delete: async (addr, fn) => {
             const {token} = read(addr);
             if (token === null) {
-                return missingToken(addr);
+                throw new TokenError(addr);
             }
-            try {
-                await api.page.delete(addr, token);
+            await api.page.delete(addr, token);
+            fn(undefined);
+        },
+        edit: async (addr, spec, fn) => {
+            const {token} = read(addr);
+            if (token === null) {
+                throw new TokenError(addr);
+            }
+            const data = await api.page.edit(addr, token, spec);
+            save(addr, {data});
+            fn(data);
+        },
+        fetch: async (addr, fn) => {
+            const {token} = read(addr);
+            const data = await api.page.fetch(addr, token || undefined);
+            save(addr, {data});
+            fn(data);
+
+        },
+        publish: async (addr, fn) => {
+            const {token} = read(addr);
+            if (token === null) {
+                throw new TokenError(addr);
+            }
+            await api.page.publish(addr, token);
+            fn(undefined);
+        },
+        validate: async (spec, fn) => {
+            await api.page.validate(spec);
+            fn(undefined);
+        },
+        password: {
+            change: async (addr, pass, fn) => {
+                const {token} = read(addr);
+                if (token === null) {
+                    throw new TokenError(addr);
+                }
+                await api.page.password.change(addr, token, pass);
                 fn(undefined);
-            } catch (e) {
-                show(e.toString());
-            }
+            },
+            reset: async (addr, email, fn) => {
+                await api.page.password.reset(addr, email);
+                fn(undefined);
+            },
         },
         token: {
             create: async (addr, pass, fn) => {
-                try {
-                    const token = await api.page.token.create(addr, pass);
-                    save(addr, {token});
-                    fn(token);
-                } catch (e) {
-                    show(e.toString());
-                }
+                const token = await api.page.token.create(addr, pass);
+                save(addr, {token});
+                fn(token);
             },
         }
     }
-};
+});
