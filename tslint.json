@@ -10,6 +10,6 @@
         "ter-arrow-parens": [true, "always"],
         "ter-indent": false,
         "align": false,
-        "no-parameter-reassignment": false,
+        "no-parameter-reassignment": false
     }
 }

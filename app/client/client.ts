@@ -1,5 +1,5 @@
 import {api, IPageData} from "./api";
-import {read, save} from "./storage";
+import {read, write} from "./storage";
 import {show} from "./error";
 
 type callback<T> = (result: T) => void;
@@ -47,7 +47,7 @@ const catchAll = <T>(value: T): T => {
         copy[key] = catchAll(value[key]);
     });
     return copy as T;
-}
+};
 
 export const client: IClient = catchAll({
     page: {
@@ -69,13 +69,16 @@ export const client: IClient = catchAll({
                 throw new TokenError(addr);
             }
             const data = await api.page.edit(addr, token, spec);
-            save(addr, {data});
+            write(addr, {data});
             fn(data);
         },
         fetch: async (addr, fn) => {
-            const {token} = read(addr);
+            const {data: staleData, token} = read(addr);
+            if (staleData !== null) {
+                fn(staleData);
+            }
             const data = await api.page.fetch(addr, token || undefined);
-            save(addr, {data});
+            write(addr, {data});
             fn(data);
 
         },
@@ -108,9 +111,9 @@ export const client: IClient = catchAll({
         token: {
             create: async (addr, pass, fn) => {
                 const token = await api.page.token.create(addr, pass);
-                save(addr, {token});
+                write(addr, {token});
                 fn(token);
             },
-        }
-    }
-});
+        },
+    },
+} as IClient);

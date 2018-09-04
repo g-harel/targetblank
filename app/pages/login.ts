@@ -2,7 +2,7 @@ import "../static/page.login.scss";
 
 import {api} from "../client/api";
 import {app} from "../app";
-import {save} from "../client/storage";
+import {write} from "../client/storage";
 import {password, IPasswordProps} from "../components/password";
 
 export interface ILoginProps {
@@ -13,8 +13,8 @@ export const login = ({addr}: ILoginProps) => () => {
     const callback = async (pass: string) => {
         try {
             const token = await api.page.token.create(addr, pass);
-            save(addr, {token});
-            app.redirect("/" + addr)
+            write(addr, {token});
+            app.redirect("/" + addr);
         } catch (e) {
             console.log(e);
             return "Something went wrong";

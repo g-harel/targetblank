@@ -19,6 +19,6 @@ export const errors = ({errors, hide}: IErrorProps) => () => (
             ["div.error", {}, [
                 err,
             ]]
-        ))
+        )),
     ]]
 );

@@ -53,5 +53,8 @@ links
 todo
 - rename functions package
 - token secrets
+- float up fetching errors to client caller (only 4xx ?)
+- npm test with travis
+- replace usages of client/api
 
 -->

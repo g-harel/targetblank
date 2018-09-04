@@ -1,7 +1,7 @@
 import "../static/page.homepage.scss";
 
 import {api, IError} from "../client/api";
-import {read, save} from "../client/storage";
+import {read, write} from "../client/storage";
 
 export interface IHomepageProps {
     addr: string;
@@ -10,12 +10,14 @@ export interface IHomepageProps {
 export const homepage = ({addr}, update) => {
     let error: IError | null = null;
 
-    let {data, token} = read(addr);
+    const stored = read(addr);
+    const {token} = stored;
+    let {data} = stored;
 
     api.page.fetch(addr, token)
         .then((d) => {
             data = d;
-            save(addr, {data});
+            write(addr, {data});
             update();
         })
         .catch((e) => {
@@ -38,7 +40,7 @@ export const homepage = ({addr}, update) => {
                                 )),
                             ],
                         ]]
-                    ))
+                    )),
                 ]
             ),
         ]]

@@ -1,29 +1,27 @@
 import {IPageData} from "./api";
 
-const key = "targetblank-store";
-
 type stored = {
     token: string | null,
     data: IPageData | null,
 };
 
-export interface IStore {
-    [address: string]: stored;
-}
-
-const empty = () => ({token: null, data: null});
-
-if (!localStorage.getItem(key)) {
-    localStorage.setItem(key, "{}");
-}
-
-export const read = (addr: string): stored => {
-    const data = JSON.parse(localStorage.getItem(key)) as IStore;
-    return data[addr] || empty();
+// Generates local storage key for given address.
+const key = (addr: string) => {
+    return "addr:" + addr;
 };
 
-export const save = (addr: string, s: Partial<stored>) => {
-    const data = JSON.parse(localStorage.getItem(key)) as IStore;
-    data[addr] = Object.assign(data[addr] || empty(), s);
-    localStorage.setItem(key, JSON.stringify(data));
+// Generates a zeroed-out stored value.
+const empty = () => ({token: null, data: null});
+
+// Read page data from local storage.
+export const read = (addr: string): stored => {
+    const data: stored | null = JSON.parse(localStorage.getItem(key(addr)));
+    return data || empty();
+};
+
+// Update stored data from local storage.
+export const write = (addr: string, values: Partial<stored>) => {
+    const data: stored = JSON.parse(localStorage.getItem(key(addr))) || empty();
+    Object.assign(data || empty(), values);
+    localStorage.setItem(key(addr), JSON.stringify(data));
 };
