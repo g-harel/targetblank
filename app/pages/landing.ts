@@ -50,7 +50,7 @@ const calcEmail = (addr: string): email => {
     return {addr, link};
 };
 
-export const landing = (p: {}, update) => {
+export const landing = (props: {}, update) => {
     let email: email = null;
     let scrolled = false;
 

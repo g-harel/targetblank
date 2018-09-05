@@ -2,39 +2,45 @@ import {api, IPageData} from "./api";
 import {read, write} from "./storage";
 import {show} from "./error";
 
-type callback<T> = (result: T) => void;
+export {IPageData} from "./api";
+
+type operation<T = any, S extends any[] = any[]> = (
+    callback: (result: T) => void,
+    errorHandler: (message: string) => void | null,
+    ...args: S
+) => void;
 
 export interface IClient {
     page: {
-        create(email: string, fn: callback<string>);
-        delete(addr: string, fn: callback<undefined>);
-        edit(addr: string, spec: string, fn: callback<IPageData>);
-        fetch(addr: string, fn: callback<IPageData>);
-        publish(addr: string, fn: callback<undefined>);
-        validate(spec: string, fn: callback<undefined>);
+        create: operation<string, [string]>;
+        delete: operation<undefined, [string]>;
+        edit: operation<IPageData, [string, string]>;
+        fetch: operation<IPageData, [string]>;
+        publish: operation<undefined, [string]>;
+        validate: operation<undefined, [string]>;
         password: {
-            change(addr: string, pass: string, fn: callback<undefined>);
-            reset(addr: string, email: string, fn: callback<undefined>);
+            change: operation<undefined, [string, string]>;
+            reset: operation<undefined, [string, string]>;
         };
         token: {
-            create(addr: string, pass: string, fn: callback<string>);
+            create: operation<string, [string, string]>;
         };
     };
 }
 
-class TokenError extends Error {
-    constructor(addr: string) {
-        super(`Missing access token for address ${addr}`);
-    }
-}
+const missingTokenMessage = (name: string, addr: string): string => {
+    return `Missing access token for operation "${name}" on address "${addr}"`;
+};
 
+// Wrap all the client's operations to handle errors.
 const catchAll = <T>(value: T): T => {
     if (typeof value === "function") {
-        const replacement = async (...a: any[]) => {
+        const op = value as any as operation;
+        const replacement: operation = async (cb, handler = show, ...args) => {
             try {
-                return await value(...a);
+                await op(cb, handler, ...args);
             } catch (e) {
-                show(e.toString());
+                handler(e.toString());
             }
         };
         return replacement as any as T;
@@ -51,68 +57,68 @@ const catchAll = <T>(value: T): T => {
 
 export const client: IClient = catchAll({
     page: {
-        create: async (email, fn) => {
+        create: async (callback, _, email) => {
             const res = await api.page.create(email);
-            fn(res);
+            callback(res);
         },
-        delete: async (addr, fn) => {
+        delete: async (callback, errorHandler, addr) => {
             const {token} = read(addr);
             if (token === null) {
-                throw new TokenError(addr);
+                return errorHandler(missingTokenMessage("delete", addr));
             }
             await api.page.delete(addr, token);
-            fn(undefined);
+            callback(undefined);
         },
-        edit: async (addr, spec, fn) => {
+        edit: async (callback, errorHandler, addr, spec) => {
             const {token} = read(addr);
             if (token === null) {
-                throw new TokenError(addr);
+                return errorHandler(missingTokenMessage("edit", addr));
             }
             const data = await api.page.edit(addr, token, spec);
             write(addr, {data});
-            fn(data);
+            callback(data);
         },
-        fetch: async (addr, fn) => {
+        fetch: async (callback, _, addr) => {
             const {data: staleData, token} = read(addr);
             if (staleData !== null) {
-                fn(staleData);
+                callback(staleData);
             }
             const data = await api.page.fetch(addr, token || undefined);
             write(addr, {data});
-            fn(data);
+            callback(data);
 
         },
-        publish: async (addr, fn) => {
+        publish: async (callback, errorHandler, addr) => {
             const {token} = read(addr);
             if (token === null) {
-                throw new TokenError(addr);
+                return errorHandler(missingTokenMessage("publish", addr));
             }
             await api.page.publish(addr, token);
-            fn(undefined);
+            callback(undefined);
         },
-        validate: async (spec, fn) => {
+        validate: async (callback, _, spec) => {
             await api.page.validate(spec);
-            fn(undefined);
+            callback(undefined);
         },
         password: {
-            change: async (addr, pass, fn) => {
+            change: async (callback, errorHandler, addr, pass) => {
                 const {token} = read(addr);
                 if (token === null) {
-                    throw new TokenError(addr);
+                    return errorHandler(missingTokenMessage("change password", addr));
                 }
                 await api.page.password.change(addr, token, pass);
-                fn(undefined);
+                callback(undefined);
             },
-            reset: async (addr, email, fn) => {
+            reset: async (callback, _, addr, email) => {
                 await api.page.password.reset(addr, email);
-                fn(undefined);
+                callback(undefined);
             },
         },
         token: {
-            create: async (addr, pass, fn) => {
+            create: async (callback, _, addr, pass) => {
                 const token = await api.page.token.create(addr, pass);
                 write(addr, {token});
-                fn(token);
+                callback(token);
             },
         },
     },

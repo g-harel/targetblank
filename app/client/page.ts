@@ -8,7 +8,7 @@ const replaceToken = (str: string, name: string, value: string): string => {
 
 export const page = <T>(
     path: string,
-    ...paramList: string[],
+    ...paramList: string[]
 ) => (
     component: (params: T, update: any) => any,
 ) => {

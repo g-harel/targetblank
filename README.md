@@ -51,10 +51,10 @@ links
 
 
 todo
-- rename functions package
-- token secrets
-- float up fetching errors to client caller (only 4xx ?)
-- npm test with travis
-- replace usages of client/api
+- api ~ rename functions package
+- api ~ replace token secrets
+- app ~ treat 5xx errors differently
+- app ~ npm test with travis
+- app ~ replace usages of client/api
 
 -->

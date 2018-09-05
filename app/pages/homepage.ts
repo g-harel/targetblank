@@ -1,35 +1,22 @@
 import "../static/page.homepage.scss";
 
-import {api, IError} from "../client/api";
-import {read, write} from "../client/storage";
+import {client, IPageData} from "../client/client";
 
 export interface IHomepageProps {
     addr: string;
 }
 
 export const homepage = ({addr}, update) => {
-    let error: IError | null = null;
+    client.page.fetch(
+        (data) => update(data, undefined),
+        (err) => update(undefined, err),
+        addr,
+    );
 
-    const stored = read(addr);
-    const {token} = stored;
-    let {data} = stored;
-
-    api.page.fetch(addr, token)
-        .then((d) => {
-            data = d;
-            write(addr, {data});
-            update();
-        })
-        .catch((e) => {
-            error = e;
-            console.log(e);
-            update();
-        });
-
-    return () => (
+    return (data?: IPageData, err?: string) => (
         ["div.homepage", {}, [
-            error ? "couldn't load" : null,
-            !!data && (
+            err ? "couldn't load" : null,
+            !data ? null : (
                 ["div.groups", {},
                     data.groups.map((group) => (
                         ["div.group", {}, [
