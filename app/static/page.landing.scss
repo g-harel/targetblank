@@ -7,17 +7,12 @@
     .header {
         border-bottom: 1px solid #ddd;
         font: 800 1.6rem 'Lora', serif;
-        padding: 0.3rem 1rem 0.5rem;
+        padding: 0.3rem 1.4rem 0.5rem;
         height: $header-height;
         user-select: none;
 
         @media (max-width: 768px) {
             text-align: center;
-        }
-
-        i {
-            margin: 0 0.5rem;
-            color: sienna;
         }
     }
 
