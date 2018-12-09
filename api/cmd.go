@@ -9,7 +9,7 @@ import (
 )
 
 func fatal(args ...interface{}) {
-	fmt.Println(args)
+	fmt.Println(args...)
 	os.Exit(1)
 }
 
