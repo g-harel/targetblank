@@ -5,6 +5,14 @@
 
 <!--
 
+https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html
+https://github.com/hashicorp/best-practices/tree/master/terraform
+
+TODO
+- use fetch
+- dev env
+- refactor folder structure
+
 requirements
 - text template specs for links, labels, categories, etc.
 - optional search bar with a few search providers

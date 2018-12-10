@@ -1,6 +1,7 @@
 import "../static/page.landing.scss";
 
 import {api} from "../client/api";
+import {css} from "../styles";
 import {input, IInputProps} from "../components/input";
 
 type email = null | {
@@ -50,6 +51,10 @@ const calcEmail = (addr: string): email => {
     return {addr, link};
 };
 
+const red = css({
+    color: "red",
+});
+
 export const landing = (props: {}, update) => {
     let email: email = null;
     let scrolled = false;
@@ -70,7 +75,8 @@ export const landing = (props: {}, update) => {
     return () => (
         ["div.landing", {}, [
             ["div.header", {}, [
-                "targetblank",
+                "target",
+                [`span .${red}`, {}, ["blank"]],
             ]],
             ["div.screens", {className: {scrolled}}, [
                 ["div.screen.signup", {}, [
