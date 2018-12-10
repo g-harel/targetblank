@@ -1,7 +1,7 @@
 import "../static/page.landing.scss";
 
 import {api} from "../client/api";
-import {css} from "../styles";
+import {styled} from "../styled";
 import {input, IInputProps} from "../components/input";
 
 type email = null | {
@@ -51,8 +51,9 @@ const calcEmail = (addr: string): email => {
     return {addr, link};
 };
 
-const red = css({
-    color: "red",
+const titleHighlight = styled("span")({
+    color: "grey" || "#ffbd00",
+    font: "inherit",
 });
 
 export const landing = (props: {}, update) => {
@@ -76,7 +77,7 @@ export const landing = (props: {}, update) => {
         ["div.landing", {}, [
             ["div.header", {}, [
                 "target",
-                [`span .${red}`, {}, ["blank"]],
+                [titleHighlight, {}, ["blank"]],
             ]],
             ["div.screens", {className: {scrolled}}, [
                 ["div.screen.signup", {}, [

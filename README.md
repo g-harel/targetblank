@@ -9,9 +9,11 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
+- jsx with okwlolo/h pragma
 - use fetch
 - dev env
 - refactor folder structure
+- npm test in travis
 
 requirements
 - text template specs for links, labels, categories, etc.
