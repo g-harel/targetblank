@@ -1,11 +1,12 @@
 import {Input, Props as InputProps} from ".";
+import {Component} from "../../library/types";
 
 export interface Props {
     title: string;
     callback: InputProps["callback"];
 }
 
-export const Password = ({title, callback}: Props) => () => (
+export const Password: Component<Props> = ({title, callback}) => () => (
     <Input
         title={title}
         callback={callback}

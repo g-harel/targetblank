@@ -1,4 +1,5 @@
 import {styled} from "../../library/styled";
+import {Component} from "../../library/types";
 
 // most common email providers and their web interface url
 const providers: Record<string, string> = {
@@ -91,7 +92,7 @@ export interface Props {
     visible?: boolean;
 }
 
-export const Confirmation = (props: Props) => {
+export const Confirmation: Component<Props> = (props) => {
     const {email, visible} = props;
 
     // attempt to find the web interface link from the email's domain

@@ -1,4 +1,5 @@
 import {Errors} from "../../components/errors";
+import {Component} from "../../library/types";
 
 let errList: string[] = [];
 let updator: null | Function = null;
@@ -20,7 +21,7 @@ const update = () => {
     }
 };
 
-export const ErrorComponent = (_, u) => {
+export const ErrorComponent: Component = (_, u) => {
     updator = u;
     return () => (
         <Errors hide={hide} errors={errList} />

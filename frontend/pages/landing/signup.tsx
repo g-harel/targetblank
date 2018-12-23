@@ -1,5 +1,5 @@
 import {styled} from "../../library/styled";
-
+import {Component} from "../../library/types";
 import {Input, Props as InputProps} from "../../components/input";
 
 const Wrapper = styled("div")({
@@ -15,7 +15,7 @@ export interface Props {
     visible?: boolean;
 }
 
-export const Signup = (props: Props) => () => (
+export const Signup: Component<Props> = (props) => () => (
     <Wrapper className={{visible: props.visible}}>
         <Input
             callback={props.callback}

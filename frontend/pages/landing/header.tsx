@@ -1,5 +1,6 @@
 import {styled} from "../../library/styled";
 import {breakpoint} from "../../library/styles/breakpoint";
+import {Component} from "../../library/types";
 
 export const headerHeight = 2.9;
 
@@ -15,7 +16,7 @@ const Wrapper = styled("div")({
     },
 });
 
-export const Header = () => () => (
+export const Header: Component = () => () => (
     <Wrapper>
         targetblank
     </Wrapper>

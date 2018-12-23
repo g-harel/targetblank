@@ -1,4 +1,5 @@
 import {styled} from "../../library/styled";
+import {Component} from "../../library/types";
 
 export const footerHeight = 2.8;
 
@@ -19,7 +20,7 @@ const Icon = styled("i")({
     },
 });
 
-export const Footer = () => () => (
+export const Footer: Component = () => () => (
     <Wrapper>
         <a href="https://github.com/g-harel/targetblank">
             <Icon className="fab fa-github" />

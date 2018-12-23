@@ -1,6 +1,7 @@
 import {styled} from "../../library/styled";
 import {placeholder} from "../../library/styles/placeholder";
 import {reset} from "../../library/styles/button";
+import {Component} from "../../library/types";
 
 const width = 16;
 
@@ -97,7 +98,7 @@ const focusOnInput = () => {
     }));
 };
 
-export const Input = (props: Props, update) => {
+export const Input: Component<Props> = (props, update) => {
     let error = "";
     let loading = false;
     let valid = false;

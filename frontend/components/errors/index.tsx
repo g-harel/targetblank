@@ -1,5 +1,6 @@
 import {styled} from "../../library/styled";
 import {breakpoint} from "../../library/styles/breakpoint";
+import {Component} from "../../library/types";
 
 const Wrapper = styled("div")({
     backgroundColor: "#f88",
@@ -53,7 +54,7 @@ export interface Props {
     hide: () => void;
 }
 
-export const Errors = ({errors, hide}: Props) => () => (
+export const Errors: Component<Props> = ({errors, hide}) => () => (
     <Wrapper className={{
         hidden: !errors.length,
     }}>

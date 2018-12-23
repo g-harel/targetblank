@@ -10,19 +10,24 @@ const Group = styled("div")({});
 
 const Items = styled("div")({});
 
-export const Homepage: PageComponent = ({addr}, update) => {
+interface Data {
+    page?: IPageData;
+    err?: string;
+}
+
+export const Homepage: PageComponent<Data> = ({addr}, update) => {
     client.page.fetch(
-        (data) => update(data, undefined),
-        (err) => update(undefined, err),
+        (page) => update({page}),
+        (err) => update({err}),
         addr,
     );
 
-    return (data?: IPageData, err?: string) => (
+    return (data) => (
         <Wrapper>
-            {!!err && "couldn't load"}
-            {!!data && (
+            {!!data.err && "couldn't load"}
+            {!!data.page && (
                 <Groups>
-                    {data.groups.map((group) => (
+                    {data.page.groups.map((group) => (
                         <Group>
                             {group.meta.title || null}
                             <Items>
