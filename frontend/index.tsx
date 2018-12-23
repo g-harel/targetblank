@@ -1,17 +1,16 @@
+// okwolo's h function is attached to the global object
 import h from "okwolo/src/h";
+(window as any).h = h;
 
 import "./global.scss";
 
-import {app} from "./app";
+import {app} from "./library/app";
 import {Page} from "./components/page";
 import {Landing} from "./pages/landing";
 import {Homepage} from "./pages/homepage";
 import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
 import {Missing} from "./pages/missing";
-
-// okwolo's h function is attached to the global object
-(window as any).h = h;
 
 app.use("target", document.body);
 

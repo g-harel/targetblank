@@ -1,6 +1,6 @@
-import {client, IPageData} from "../client/client";
-import {PageComponent} from "../components/page";
-import {styled} from "../styled";
+import {client, IPageData} from "../../library/client/client";
+import {PageComponent} from "../../components/page";
+import {styled} from "../../library/styled";
 
 const Wrapper = styled("div")({});
 
@@ -19,8 +19,8 @@ export const Homepage: PageComponent = ({addr}, update) => {
 
     return (data?: IPageData, err?: string) => (
         <Wrapper>
-            {err && "couldn't load"}
-            {data && (
+            {!!err && "couldn't load"}
+            {!!data && (
                 <Groups>
                     {data.groups.map((group) => (
                         <Group>

@@ -1,9 +1,9 @@
-import {api} from "../client/api";
-import {app} from "../app";
-import {read} from "../client/storage";
-import {Password} from "../components/input/password";
-import {PageComponent} from "../components/page";
-import {styled} from "../styled";
+import {api} from "../../library/client/api";
+import {app} from "../../library/app";
+import {read} from "../../library/client/storage";
+import {Password} from "../../components/input/password";
+import {PageComponent} from "../../components/page";
+import {styled} from "../../library/styled";
 
 const Wrapper = styled("div")({
     paddingTop: "20vh",

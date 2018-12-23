@@ -1,4 +1,4 @@
-import {ErrorComponent} from "../../client/error";
+import {ErrorComponent} from "../../library/client/error";
 import {Missing} from "../../pages/missing";
 
 export interface PageProps {

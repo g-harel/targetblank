@@ -1,4 +1,4 @@
-import {Errors} from "../components/errors";
+import {Errors} from "../../components/errors";
 
 let errList: string[] = [];
 let updator: null | Function = null;

@@ -1,3 +1,5 @@
+// TODO only export component type with generics for props/update args
+
 declare module "okwolo/lite" {
     export interface App<S> {
         (f: () => (state: S) => Element): void

@@ -1,4 +1,4 @@
-import {styled} from "../styled";
+import {styled} from "../../library/styled";
 
 const Wrapper = styled("div")({
     backgroundColor: "#f88",
