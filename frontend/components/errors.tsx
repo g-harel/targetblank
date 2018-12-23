@@ -16,11 +16,10 @@ export const Errors = ({errors, hide}: Props) => () => (
                 dismiss
             </div>
         </div>
-        {[1].map(() => "test")}
-        {/* ...errors.map((err) => (
+        {...errors.map((err) => (
             <div className="error">
                 {err}
             </div>
-        )) */}
+        ))}
     </div>
 );

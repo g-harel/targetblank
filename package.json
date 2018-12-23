@@ -1,15 +1,15 @@
 {
   "scripts": {
-    "build": "ts-node build.ts app/static/index.html .build",
-    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist app/static/index.html",
-    "lint": "tslint app/**/*.ts"
+    "build": "ts-node build.ts frontend/static/index.html .build",
+    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist frontend/static/index.html",
+    "lint": "tslint frontend/**/*.ts"
   },
   "dependencies": {
     "@types/jss": "^9.5.7",
     "color": "^3.1.0",
     "jss": "^9.8.7",
     "jss-preset-default": "^4.5.0",
-    "okwolo": "^3.4.1",
+    "okwolo": "^3.4.2",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
   },

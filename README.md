@@ -9,10 +9,13 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- use rickety
-- run server locally in dev mode
 - refactor folder structure
+- run server locally in dev mode
+- use rickety
 - npm tests in travis
+- rename functions package
+- app ~ treat 5xx errors differently
+- replace token secrets (eventually)
 
 requirements
 - text template specs for links, labels, categories, etc.
@@ -58,13 +61,5 @@ links
 - https://gist.github.com/prwhite/8168133
 - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
 - https://scene-si.org/2018/05/08/protecting-api-access-with-jwt/
-
-
-todo
-- api ~ rename functions package
-- api ~ replace token secrets
-- app ~ treat 5xx errors differently
-- app ~ npm test with travis
-- app ~ replace usages of client/api
 
 -->
