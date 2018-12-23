@@ -1,4 +1,4 @@
-import {errors, IErrorProps} from "../components/errors";
+import {Errors} from "../components/errors";
 
 let errList: string[] = [];
 let updator: null | Function = null;
@@ -20,12 +20,9 @@ const update = () => {
     }
 };
 
-export const component = (_, u) => {
+export const ErrorComponent = (_, u) => {
     updator = u;
     return () => (
-        [errors, {
-            hide,
-            errors: errList,
-        } as IErrorProps]
+        <Errors hide={hide} errors={errList} />
     );
 };

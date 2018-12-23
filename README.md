@@ -9,11 +9,10 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- jsx with okwlolo/h pragma
-- use fetch
-- dev env
+- use rickety
+- run server locally in dev mode
 - refactor folder structure
-- npm test in travis
+- npm tests in travis
 
 requirements
 - text template specs for links, labels, categories, etc.
@@ -25,6 +24,7 @@ requirements
 - homepages can be made public at their existing url
 - credentials stored
 - collapsible labels
+- open all tabs button
 
 notes
 - frontend spa served from s3 + cloudfront

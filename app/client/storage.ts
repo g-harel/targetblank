@@ -7,7 +7,7 @@ type stored = {
 
 // Generates local storage key for given address.
 const key = (addr: string) => {
-    return "addr:" + addr;
+    return `addr:${addr}`;
 };
 
 // Generates a zeroed-out stored value.

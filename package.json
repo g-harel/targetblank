@@ -15,6 +15,9 @@
   },
   "devDependencies": {
     "@types/request-promise-native": "^1.0.15",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
     "node-sass": "^4.10.0",
     "opn-cli": "^3.1.0",
     "parcel-bundler": "^1.8.1",

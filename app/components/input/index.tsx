@@ -1,6 +1,6 @@
-import "../static/component.input.scss";
+import "../../static/component.input.scss";
 
-export interface IInputProps {
+export interface Props {
     title?: string;
     type?: string;
     callback?: (string) => Promise<string>;
@@ -19,7 +19,7 @@ const focusOnInput = () => {
     }));
 };
 
-export const input = (props: IInputProps, update) => {
+export const Input = (props: Props, update) => {
     let error = "";
     let loading = false;
     let valid = false;
@@ -79,34 +79,31 @@ export const input = (props: IInputProps, update) => {
     };
 
     return () => (
-        ["form.input", {
-            onsubmit,
-            className: {
-                loading,
-            },
-        }, [
-            props.title ? ["span.title", {}, [
-                props.title,
-            ]] : "",
-            ["input", {
-                value,
-                oninput,
-                type: props.type || "text",
-                placeholder: " " + props.placeholder,
-            }],
-            ["button", {
-                className: {
-                    enabled: valid,
-                },
-                type: "submit",
-            }, [
-                loading
-                    ? ["i.far.fa-xs.fa-spinner-third.fa-spin"]
-                    : ["i.far.fa-xs.fa-arrow-right"],
-            ]],
-            ["div.error", {}, [
-                error,
-            ]],
-        ]]
+        <form
+            className={{loading, input: true}}
+            onsubmit={onsubmit}
+        >
+            {props.title ? (
+                <span className="title">
+                    {props.title}
+                </span>
+            ) : ""}
+            <input
+                type={props.type || "text"}
+                value={value}
+                oninput={oninput}
+                placeholder={` ${props.placeholder}`}
+            />
+            <button type="submit" className={{enabled: valid}}>
+                {loading ? (
+                    <i className="far fa-xs fa-spinner-third fa-spin" />
+                ) : (
+                    <i className="far fa-xs fa-arrow-right" />
+                )}
+            </button>
+            <div className="error">
+                {error}
+            </div>
+        </form>
     );
 };

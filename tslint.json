@@ -11,6 +11,7 @@
         "ter-indent": false,
         "align": false,
         "no-parameter-reassignment": false,
+        "variable-name": false,
         "trailing-comma": [
             true,
             {
