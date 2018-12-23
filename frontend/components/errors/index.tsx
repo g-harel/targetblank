@@ -1,4 +1,5 @@
 import {styled} from "../../library/styled";
+import {breakpoint} from "../../library/styles/breakpoint";
 
 const Wrapper = styled("div")({
     backgroundColor: "#f88",
@@ -15,7 +16,7 @@ const Wrapper = styled("div")({
         display: "none",
     },
 
-    "@media (max-width: 768px)": {
+    [breakpoint.sm]: {
         borderLeft: "none",
         borderRigth: "none",
         right: "0",

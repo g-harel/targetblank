@@ -1,4 +1,5 @@
 import {styled} from "../../library/styled";
+import {breakpoint} from "../../library/styles/breakpoint";
 
 export const headerHeight = 2.9;
 
@@ -9,7 +10,7 @@ const Wrapper = styled("div")({
     padding: "0.3rem 1.4rem 0.5rem",
     userSelect: "none",
 
-    "@media (max-width: 768px)": {
+    [breakpoint.sm]: {
         textAlign: "center",
     },
 });
