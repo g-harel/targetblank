@@ -1,4 +1,51 @@
-import "../static/component.errors.scss";
+import {styled} from "../styled";
+
+const Wrapper = styled("div")({
+    backgroundColor: "#f88",
+    border: "1px solid #800",
+    borderBottom: "none",
+    borderRadius: "2px 2px 0 0",
+    bottom: "0",
+    color: "#a00",
+    position: "fixed",
+    right: "100px",
+    width: "400px",
+
+    "&.hidden": {
+        display: "none",
+    },
+
+    "@media (max-width: 768px)": {
+        borderLeft: "none",
+        borderRigth: "none",
+        right: "0",
+        width: "100%",
+    },
+});
+
+const Title = styled("div")({
+    borderBottom: "1px solid #a00",
+    fontWeight: "bold",
+    letterSpacing: "1px",
+    padding: "6px 12px",
+});
+
+const Dismiss = styled("div")({
+    cursor: "pointer",
+    float: "right",
+    fontSize: "0.8em",
+    fontWeight: "normal",
+    padding: "5px",
+    transform: "translate(2px, -2px)",
+    userSelect: "none",
+});
+
+const Error = styled("div")({
+    fontFamily: "'Inconsolata', monospace",
+    fontSize: "0.8em",
+    padding: "0 12px",
+    margin: "12px 0",
+});
 
 export interface Props {
     errors: string[];
@@ -6,20 +53,19 @@ export interface Props {
 }
 
 export const Errors = ({errors, hide}: Props) => () => (
-    <div className={{
-        errors: true,
+    <Wrapper className={{
         hidden: !errors.length,
     }}>
-        <div className="title">
+        <Title>
             error
-            <div className="dismiss" onclick={hide}>
+            <Dismiss onclick={hide}>
                 dismiss
-            </div>
-        </div>
+            </Dismiss>
+        </Title>
         {...errors.map((err) => (
-            <div className="error">
+            <Error>
                 {err}
-            </div>
+            </Error>
         ))}
-    </div>
+    </Wrapper>
 );

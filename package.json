@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "ts-node build.ts frontend/static/index.html .build",
-    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist frontend/static/index.html",
+    "build": "ts-node build.ts frontend/index.html .build",
+    "dev": " opn http://localhost:1324 && parcel -p 1324 -d .dist frontend/index.html",
     "lint": "tslint frontend/**/*.ts"
   },
   "dependencies": {

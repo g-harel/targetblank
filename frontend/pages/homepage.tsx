@@ -1,7 +1,14 @@
-import "../static/page.homepage.scss";
-
 import {client, IPageData} from "../client/client";
 import {PageComponent} from "../components/page";
+import {styled} from "../styled";
+
+const Wrapper = styled("div")({});
+
+const Groups = styled("div")({});
+
+const Group = styled("div")({});
+
+const Items = styled("div")({});
 
 export const Homepage: PageComponent = ({addr}, update) => {
     client.page.fetch(
@@ -11,24 +18,24 @@ export const Homepage: PageComponent = ({addr}, update) => {
     );
 
     return (data?: IPageData, err?: string) => (
-        <div className="homepage">
+        <Wrapper>
             {err && "couldn't load"}
             {data && (
-                <div className="groups">
+                <Groups>
                     {data.groups.map((group) => (
-                        <div className="group">
+                        <Group>
                             {group.meta.title || null}
-                            <div className="items">
+                            <Items>
                                 {group.items.map((item) => (
                                     <pre>
                                         {JSON.stringify(item)}
                                     </pre>
                                 ))}
-                            </div>
-                        </div>
+                            </Items>
+                        </Group>
                     ))}
-                </div>
+                </Groups>
             )}
-        </div>
+        </Wrapper>
     );
 };

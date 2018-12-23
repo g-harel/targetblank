@@ -6,15 +6,13 @@ export interface Props {
 }
 
 export const Password = ({title, callback}: Props) => () => (
-    <div className="password-input">
-        <Input
-            title={title}
-            callback={callback}
-            type="password"
-            validator={/.{8,32/ig}
-            message="Password is too short"
-            placeholder="password123"
-            focus={true}
-        />
-    </div>
+    <Input
+        title={title}
+        callback={callback}
+        type="password"
+        validator={/.{8,32/ig}
+        message="Password is too short"
+        placeholder="password123"
+        focus={true}
+    />
 );

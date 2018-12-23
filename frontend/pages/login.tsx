@@ -5,6 +5,11 @@ import {app} from "../app";
 import {write} from "../client/storage";
 import {Password} from "../components/input/password";
 import {PageComponent} from "../components/page";
+import {styled} from "../styled";
+
+const Wrapper = styled("div")({
+    paddingTop: "20vh",
+});
 
 export const Login: PageComponent = ({addr}) => () => {
     const callback = async (pass: string) => {
@@ -19,11 +24,11 @@ export const Login: PageComponent = ({addr}) => () => {
     };
 
     return (
-        <div className="login">
+        <Wrapper>
             <Password
                 callback={callback}
                 title="Sign in"
             />
-        </div>
+        </Wrapper>
     );
 };

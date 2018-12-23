@@ -1,10 +1,13 @@
-import "../static/page.reset.scss";
-
 import {api} from "../client/api";
 import {app} from "../app";
 import {read} from "../client/storage";
 import {Password} from "../components/input/password";
 import {PageComponent} from "../components/page";
+import {styled} from "../styled";
+
+const Wrapper = styled("div")({
+    paddingTop: "20vh",
+});
 
 export const Reset: PageComponent = ({addr, token}) => () => {
     if (!token) {
@@ -26,8 +29,8 @@ export const Reset: PageComponent = ({addr, token}) => () => {
     };
 
     return (
-        <div className="password">
+        <Wrapper>
             <Password title="Set your password" callback={callback} />
-        </div>
+        </Wrapper>
     );
 };
