@@ -3,22 +3,12 @@
         "tslint-config-airbnb"
     ],
     "rules": {
-        "import-name": false,
+        "import-name": [true, {"standard": "okwolo"}],
         "indent": [true, "spaces", 4],
         "object-curly-spacing": [true, "never"],
         "quotemark": [true, "double"],
         "ter-arrow-parens": [true, "always"],
-        "ter-indent": false,
-        "align": false,
-        "no-parameter-reassignment": false,
-        "variable-name": false,
-        "trailing-comma": [
-            true,
-            {
-                "multiline": "always",
-                "singleline": "never",
-                "esSpecCompliant": true
-            }
-        ]
+        "ter-indent": [true, 4],
+        "variable-name": [true, "allow-pascal-case"]
     }
 }

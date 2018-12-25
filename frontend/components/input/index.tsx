@@ -128,10 +128,13 @@ export const Input: Component<Props> = (props, update) => {
         }
 
         // delay error message
-        timeout = setTimeout(() => {
-            error = props.message;
-            update();
-        }, 750);
+        timeout = setTimeout(
+            () => {
+                error = props.message;
+                update();
+            },
+            750,
+        );
     };
 
     const onsubmit = async (e) => {

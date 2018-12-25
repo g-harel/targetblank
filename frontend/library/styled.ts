@@ -1,8 +1,8 @@
 import {create} from "jss";
 import {Style} from "jss/css";
-import preset from "jss-preset-default";
+import jssPresetDefault from "jss-preset-default";
 
-const jss = create(preset());
+const jss = create(jssPresetDefault());
 
 export const styled = (tag: string) => (s: Style | Record<string, Style>) => {
     const name = "s";

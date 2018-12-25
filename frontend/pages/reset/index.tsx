@@ -9,10 +9,8 @@ const Wrapper = styled("div")({
     paddingTop: "20vh",
 });
 
-export const Reset: PageComponent = ({addr, token}) => () => {
-    if (!token) {
-        token = read(addr).token;
-    }
+export const Reset: PageComponent = ({addr, token: t}) => () => {
+    const token = t || read(addr).token;
 
     if (!token) {
         app.redirect(`/${addr}/login`);

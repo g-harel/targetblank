@@ -1,4 +1,4 @@
-import request from "request-promise-native";
+import requestPromiseNative from "request-promise-native";
 
 const endpoint = "https://api.targetblank.org";
 
@@ -49,54 +49,54 @@ export interface IAPI {
 
 export const api: IAPI = {
     page: {
-        create: async (email) => request({
+        create: async (email) => requestPromiseNative({
             method: "POST",
             uri: `${endpoint}/page`,
             body: email,
         }),
-        delete: async (addr, token) => request({
+        delete: async (addr, token) => requestPromiseNative({
             method: "DELETE",
             uri: `${endpoint}/page/${addr}`,
             headers: {token},
         }),
-        edit: async (addr, token, spec) => request({
+        edit: async (addr, token, spec) => requestPromiseNative({
             method: "PUT",
             uri: `${endpoint}/page/${addr}`,
             headers: {token},
             body: spec,
             json: true,
         }),
-        fetch: async (addr, token) => request({
+        fetch: async (addr, token) => requestPromiseNative({
             method: "GET",
             uri: `${endpoint}/page/${addr}`,
             headers: {token},
             json: true,
         }),
-        publish: async (addr, token) => request({
+        publish: async (addr, token) => requestPromiseNative({
             method: "PATCH",
             uri: `${endpoint}/page/${addr}`,
             headers: {token},
         }),
-        validate: async (spec) => request({
+        validate: async (spec) => requestPromiseNative({
             method: "POST",
             uri: `${endpoint}/page/validate`,
             body: spec,
         }),
         password: {
-            change: async (addr, token, pass) => request({
+            change: async (addr, token, pass) => requestPromiseNative({
                 method: "PUT",
                 uri: `${endpoint}/auth/${addr}`,
                 headers: {token},
                 body: pass,
             }),
-            reset: async (addr, email) => request({
+            reset: async (addr, email) => requestPromiseNative({
                 method: "DELETE",
                 uri: `${endpoint}/auth/${addr}`,
                 body: email,
             }),
         },
         token: {
-            create: async (addr, pass) => request({
+            create: async (addr, pass) => requestPromiseNative({
                 method: "POST",
                 uri: `${endpoint}/auth/${addr}`,
                 body: pass,

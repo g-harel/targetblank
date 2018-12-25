@@ -33,7 +33,7 @@ const Screen = styled("div")({
 });
 
 export const Landing: PageComponent = (props, update) => {
-    let email = "test@me.com";
+    let email = "";
 
     const callback = async (addr: string) => {
         try {
