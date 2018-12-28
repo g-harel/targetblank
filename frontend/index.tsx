@@ -1,4 +1,4 @@
-// okwolo's h function is attached to the global object
+// The h function provided by okwolo is attached to the global object.
 import h from "okwolo/src/h";
 (window as any).h = h;
 

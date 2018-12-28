@@ -16,7 +16,7 @@ type ISender interface {
 	Send(to, sub, body string) error
 }
 
-// Client represents an email client
+// Client represents an email client.
 type Client struct {
 	ses *ses.SES
 }

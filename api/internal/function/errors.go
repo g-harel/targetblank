@@ -33,7 +33,7 @@ func Err(status int, err error) *Error {
 	if err != nil { // TODO proper logging
 		fmt.Println("ERROR:", err)
 	}
-	// empty message in case of error during encryption
+	// Message will be empty if encryption returns an error.
 	msg, _ := token.Seal([]byte(err.Error()))
 	return &Error{
 		error: errors.New(msg),

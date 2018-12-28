@@ -9,7 +9,6 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- standardize comments
 - refactor folder structure
 - run server locally in dev mode
 - use rickety

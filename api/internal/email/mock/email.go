@@ -6,7 +6,7 @@ import (
 
 var sent []*Email
 
-// Email represents a sent email
+// Email represents a sent email.
 type Email struct {
 	To   string
 	Sub  string

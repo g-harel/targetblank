@@ -1,4 +1,4 @@
 import okwolo from "okwolo/standard";
 
-// app instance singleton
+// Single app instance is exported and accessible from anywhere.
 export const app = okwolo();

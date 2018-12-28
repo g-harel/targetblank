@@ -1,7 +1,7 @@
 import {styled} from "../../library/styled";
 import {Component} from "../../library/types";
 
-// most common email providers and their web interface url
+// Most common email providers and their web interface url.
 const providers: Record<string, string> = {
     gmail: "https://mail.google.com",
     icloud: "https://mail.icloud.com",
@@ -9,7 +9,7 @@ const providers: Record<string, string> = {
     outlook: "https://outlook.live.com",
 };
 
-// recognized email domains and associated provider
+// Recognized email domains and associated provider.
 const domains: Record<string, string> = {
     gmail: "gmail",
     icloud: "icloud",
@@ -95,7 +95,7 @@ export interface Props {
 export const Confirmation: Component<Props> = (props) => {
     const {email, visible} = props;
 
-    // attempt to find the web interface link from the email's domain
+    // Attempt to find the web interface link from the email's domain.
     let link: string | null = null;
     const match = /.*@([^\.]+).*/g.exec(email);
     if (match !== null) {

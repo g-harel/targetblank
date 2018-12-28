@@ -21,6 +21,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 			ctx.LineParsed()
 		},
 	}
+
 	// v1GroupMetadataRule matches with header metadata values.
 	v1GroupMetadataRule := parser.Rule{
 		Name:     "group-metadata",

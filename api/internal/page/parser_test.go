@@ -28,7 +28,7 @@ func samePage(t *testing.T, target *Page, s ...string) {
 	}
 	rl := strings.Split(string(rb), "\n")
 
-	// safe array access
+	// Helper for safe array access.
 	getLine := func(n int, l []string) string {
 		if n < 0 || len(l) <= n {
 			return ""
@@ -36,15 +36,16 @@ func samePage(t *testing.T, target *Page, s ...string) {
 		return l[n]
 	}
 
-	// loop through the longest number of lines
+	// Loop through the maximum number of lines.
 	for i := 0; i < len(tl) || i < len(rl); i++ {
 		ts := getLine(i, tl)
 		rs := getLine(i, rl)
 		if rs != ts {
-			// formatting the diff to indicate the problematic line
+			// The diff is formatted to indicate the problematic line.
 			ts = ">>" + (ts + "  ")[2:]
 			rs = ">>" + (rs + "  ")[2:]
-			// only showing two lines around the problematic line
+
+			// Two lines around the difference are also shown.
 			t.Fatalf("Target and result Pages do not match around line %v:\nEXPECTED: \n%v\nACTUAL: \n%v\n",
 				i,
 				strings.Join([]string{

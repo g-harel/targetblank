@@ -111,23 +111,23 @@ export const Input: Component<Props> = (props, update) => {
     let timeout;
 
     const oninput = (event) => {
-        // reset any pending error message
+        // Reset any pending error message.
         clearTimeout(timeout);
 
         value = event.target.value.trim();
         valid = !!value.match(props.validator);
 
-        // immediately show new valid state
+        // Immediately show new valid state.
         update();
 
-        // empty value does not show error (but is not valid)
+        // Empty value does not show error (but is not valid).
         if (valid || value.length === 0) {
             error = "";
             update();
             return;
         }
 
-        // delay error message
+        // Delay error message until typing stops.
         timeout = setTimeout(
             () => {
                 error = props.message;
@@ -147,10 +147,10 @@ export const Input: Component<Props> = (props, update) => {
         loading = true;
         update();
 
-        // show callback's error
+        // Callback's error is displayed.
         error = await props.callback(value) || "";
 
-        // reset internal state
+        // Reset internal state after submit.
         loading = false;
         valid = false;
         value = "";
