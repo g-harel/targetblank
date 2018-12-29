@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "build": "parcel build frontend/index.html -d .build --no-content-hash",
-    "dev": "parcel -p 1324 -d .dist frontend/index.html",
-    "lint": "tslint frontend/**/*.ts"
+    "build": "parcel build website/index.html -d .build --no-content-hash --no-source-maps",
+    "dev": "parcel -p 1324 -d .dist website/index.html",
+    "lint": "tslint website/**/*.ts"
   },
   "dependencies": {
     "jss": "^9.8.7",

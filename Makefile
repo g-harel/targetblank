@@ -3,7 +3,7 @@ NPM=npm
 ZIP=zip
 
 BUILD_DIR=.build
-FUNCS_DIR=api/functions
+FUNCS_DIR=functions
 
 COVERAGE_FILE=.coverage
 

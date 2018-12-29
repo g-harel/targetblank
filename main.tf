@@ -25,14 +25,14 @@ resource "aws_route53_zone" "primary" {
   name = "targetblank.org"
 }
 
-module "app" {
-  source = "./app/terraform"
+module "website" {
+  source = "./terraform/website"
 
   primary_zone_id = "${aws_route53_zone.primary.zone_id}"
 }
 
 module "api" {
-  source = "./api/terraform"
+  source = "./terraform/functions"
 
   primary_zone_id = "${aws_route53_zone.primary.zone_id}"
 }
