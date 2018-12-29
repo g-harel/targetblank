@@ -90,12 +90,14 @@ export interface Props {
 }
 
 const focusOnInput = () => {
-    setTimeout(() => requestAnimationFrame(() => {
-        const input: HTMLElement = document.querySelector("form input");
-        if (input) {
-            input.focus();
-        }
-    }));
+    setTimeout(() =>
+        requestAnimationFrame(() => {
+            const input: HTMLElement = document.querySelector("form input");
+            if (input) {
+                input.focus();
+            }
+        }),
+    );
 };
 
 export const Input: Component<Props> = (props, update) => {
@@ -128,13 +130,10 @@ export const Input: Component<Props> = (props, update) => {
         }
 
         // Delay error message until typing stops.
-        timeout = setTimeout(
-            () => {
-                error = props.message;
-                update();
-            },
-            750,
-        );
+        timeout = setTimeout(() => {
+            error = props.message;
+            update();
+        }, 750);
     };
 
     const onsubmit = async (e) => {
@@ -148,7 +147,7 @@ export const Input: Component<Props> = (props, update) => {
         update();
 
         // Callback's error is displayed.
-        error = await props.callback(value) || "";
+        error = (await props.callback(value)) || "";
 
         // Reset internal state after submit.
         loading = false;
@@ -161,15 +160,8 @@ export const Input: Component<Props> = (props, update) => {
     };
 
     return () => (
-        <Form
-            className={{loading}}
-            onsubmit={onsubmit}
-        >
-            {!!props.title && (
-                <Title>
-                    {props.title}
-                </Title>
-            )}
+        <Form className={{loading}} onsubmit={onsubmit}>
+            {!!props.title && <Title>{props.title}</Title>}
             <StyledInput
                 type={props.type || "text"}
                 value={value}
@@ -183,9 +175,7 @@ export const Input: Component<Props> = (props, update) => {
                     <i className="far fa-xs fa-arrow-right" />
                 )}
             </Button>
-            <Error>
-                {error}
-            </Error>
+            <Error>{error}</Error>
         </Form>
     );
 };

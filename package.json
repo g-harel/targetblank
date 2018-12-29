@@ -2,7 +2,9 @@
   "scripts": {
     "build": "parcel build website/index.html -d .build --no-content-hash --no-source-maps",
     "dev": "parcel -p 1324 -d .dist website/index.html",
-    "lint": "tslint website/**/*.ts"
+    "test": "run-s fmt lint",
+    "lint": "tslint website/**/*.ts --fix",
+    "fmt": "prettier --list-different --write --ignore-path .gitignore \"**/*.{js,ts,tsx}\""
   },
   "dependencies": {
     "jss": "^9.8.7",
@@ -18,9 +20,17 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "node-sass": "^4.11.0",
+    "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.11.0",
+    "prettier": "^1.15.3",
     "tslint": "^5.12.0",
     "tslint-config-airbnb": "^5.9.2",
     "typescript": "^2.9.2"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "bracketSpacing": false,
+    "arrowParens": "always"
   }
 }

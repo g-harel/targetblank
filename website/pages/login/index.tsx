@@ -23,10 +23,7 @@ export const Login: PageComponent = ({addr}) => () => {
 
     return (
         <Wrapper>
-            <Password
-                callback={callback}
-                title="Sign in"
-            />
+            <Password callback={callback} title="Sign in" />
         </Wrapper>
     );
 };

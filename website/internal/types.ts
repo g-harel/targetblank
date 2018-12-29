@@ -14,7 +14,13 @@ export type ComponentElement<P extends object = {}> = {
     2?: Element[];
 } & any[];
 
-export type Component<P extends object = {}, D = undefined> =
-    (params: P, update: (data?: D) => void) => (data?: D) => Element;
+export type Component<P extends object = {}, D = undefined> = (
+    params: P,
+    update: (data?: D) => void,
+) => (data?: D) => Element;
 
-export type Element = BlankElement | TextElement | TagElement | ComponentElement;
+export type Element =
+    | BlankElement
+    | TextElement
+    | TagElement
+    | ComponentElement;

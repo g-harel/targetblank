@@ -33,7 +33,7 @@ export interface IAPI {
     page: {
         create(email: string): Promise<string>;
         delete(addr: string, token: string): Promise<void>;
-        edit(addr: string, token: string, spec:string): Promise<IPageData>;
+        edit(addr: string, token: string, spec: string): Promise<IPageData>;
         fetch(addr: string, token?: string): Promise<IPageData>;
         publish(addr: string, token: string): Promise<void>;
         validate(spec: string): Promise<void>;
@@ -49,58 +49,67 @@ export interface IAPI {
 
 export const api: IAPI = {
     page: {
-        create: async (email) => requestPromiseNative({
-            method: "POST",
-            uri: `${endpoint}/page`,
-            body: email,
-        }),
-        delete: async (addr, token) => requestPromiseNative({
-            method: "DELETE",
-            uri: `${endpoint}/page/${addr}`,
-            headers: {token},
-        }),
-        edit: async (addr, token, spec) => requestPromiseNative({
-            method: "PUT",
-            uri: `${endpoint}/page/${addr}`,
-            headers: {token},
-            body: spec,
-            json: true,
-        }),
-        fetch: async (addr, token) => requestPromiseNative({
-            method: "GET",
-            uri: `${endpoint}/page/${addr}`,
-            headers: {token},
-            json: true,
-        }),
-        publish: async (addr, token) => requestPromiseNative({
-            method: "PATCH",
-            uri: `${endpoint}/page/${addr}`,
-            headers: {token},
-        }),
-        validate: async (spec) => requestPromiseNative({
-            method: "POST",
-            uri: `${endpoint}/page/validate`,
-            body: spec,
-        }),
-        password: {
-            change: async (addr, token, pass) => requestPromiseNative({
-                method: "PUT",
-                uri: `${endpoint}/auth/${addr}`,
-                headers: {token},
-                body: pass,
-            }),
-            reset: async (addr, email) => requestPromiseNative({
-                method: "DELETE",
-                uri: `${endpoint}/auth/${addr}`,
+        create: async (email) =>
+            requestPromiseNative({
+                method: "POST",
+                uri: `${endpoint}/page`,
                 body: email,
             }),
+        delete: async (addr, token) =>
+            requestPromiseNative({
+                method: "DELETE",
+                uri: `${endpoint}/page/${addr}`,
+                headers: {token},
+            }),
+        edit: async (addr, token, spec) =>
+            requestPromiseNative({
+                method: "PUT",
+                uri: `${endpoint}/page/${addr}`,
+                headers: {token},
+                body: spec,
+                json: true,
+            }),
+        fetch: async (addr, token) =>
+            requestPromiseNative({
+                method: "GET",
+                uri: `${endpoint}/page/${addr}`,
+                headers: {token},
+                json: true,
+            }),
+        publish: async (addr, token) =>
+            requestPromiseNative({
+                method: "PATCH",
+                uri: `${endpoint}/page/${addr}`,
+                headers: {token},
+            }),
+        validate: async (spec) =>
+            requestPromiseNative({
+                method: "POST",
+                uri: `${endpoint}/page/validate`,
+                body: spec,
+            }),
+        password: {
+            change: async (addr, token, pass) =>
+                requestPromiseNative({
+                    method: "PUT",
+                    uri: `${endpoint}/auth/${addr}`,
+                    headers: {token},
+                    body: pass,
+                }),
+            reset: async (addr, email) =>
+                requestPromiseNative({
+                    method: "DELETE",
+                    uri: `${endpoint}/auth/${addr}`,
+                    body: email,
+                }),
         },
         token: {
-            create: async (addr, pass) => requestPromiseNative({
-                method: "POST",
-                uri: `${endpoint}/auth/${addr}`,
-                body: pass,
-            }),
+            create: async (addr, pass) =>
+                requestPromiseNative({
+                    method: "POST",
+                    uri: `${endpoint}/auth/${addr}`,
+                    body: pass,
+                }),
         },
     },
 };

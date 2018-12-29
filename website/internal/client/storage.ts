@@ -1,8 +1,8 @@
 import {IPageData} from "./api";
 
 type stored = {
-    token: string | null,
-    data: IPageData | null,
+    token: string | null;
+    data: IPageData | null;
 };
 
 // Generates local storage key for given address.

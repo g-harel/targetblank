@@ -16,32 +16,14 @@ app.use("target", document.body);
 
 app.setState({});
 
-app("/", (params) => () => (
-    <Page
-        {...params}
-        component={Landing}
-    />
-));
+app("/", (params) => () => <Page {...params} component={Landing} />);
 
-app("/:addr", (params) => () => (
-    <Page
-        {...params}
-        component={Homepage}
-    />
-));
+app("/:addr", (params) => () => <Page {...params} component={Homepage} />);
 
-app("/:addr/login", (params) => () => (
-    <Page
-        {...params}
-        component={Login}
-    />
-));
+app("/:addr/login", (params) => () => <Page {...params} component={Login} />);
 
 app("/:addr/reset/:token", (params) => () => (
-    <Page
-        {...params}
-        component={Reset}
-    />
+    <Page {...params} component={Reset} />
 ));
 
 app("**", () => () => <Missing />);

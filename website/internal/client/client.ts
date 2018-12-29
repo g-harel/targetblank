@@ -35,7 +35,7 @@ const missingTokenMessage = (name: string, addr: string): string => {
 // Wrap all the client's operations to handle errors.
 const catchAll = <T>(value: T): T => {
     if (typeof value === "function") {
-        const op = value as any as operation;
+        const op = (value as any) as operation;
         const replacement: operation = async (cb, handler = show, ...args) => {
             try {
                 await op(cb, handler, ...args);
@@ -43,7 +43,7 @@ const catchAll = <T>(value: T): T => {
                 handler(e.toString());
             }
         };
-        return replacement as any as T;
+        return (replacement as any) as T;
     }
     if (typeof value !== "object") {
         return value;
@@ -86,7 +86,6 @@ export const client: IClient = catchAll({
             const data = await api.page.fetch(addr, token || undefined);
             write(addr, {data});
             callback(data);
-
         },
         publish: async (callback, errorHandler, addr) => {
             const {token} = read(addr);
@@ -104,7 +103,9 @@ export const client: IClient = catchAll({
             change: async (callback, errorHandler, addr, pass) => {
                 const {token} = read(addr);
                 if (token === null) {
-                    return errorHandler(missingTokenMessage("change password", addr));
+                    return errorHandler(
+                        missingTokenMessage("change password", addr),
+                    );
                 }
                 await api.page.password.change(addr, token, pass);
                 callback(undefined);

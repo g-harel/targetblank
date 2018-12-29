@@ -26,10 +26,7 @@ export const Page: Component<Props> = (props) => () => {
     const Component: PageComponent = props.component;
     return (
         <div className="page">
-            <Component
-                addr={props.addr}
-                token={props.token}
-            />
+            <Component addr={props.addr} token={props.token} />
             <ErrorComponent />
         </div>
     );

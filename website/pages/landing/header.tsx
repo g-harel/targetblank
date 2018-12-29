@@ -16,8 +16,4 @@ const Wrapper = styled("div")({
     },
 });
 
-export const Header: Component = () => () => (
-    <Wrapper>
-        targetblank
-    </Wrapper>
-);
+export const Header: Component = () => () => <Wrapper>targetblank</Wrapper>;

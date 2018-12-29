@@ -23,7 +23,5 @@ const update = () => {
 
 export const ErrorComponent: Component = (_, u) => {
     updator = u;
-    return () => (
-        <Errors hide={hide} errors={errList} />
-    );
+    return () => <Errors hide={hide} errors={errList} />;
 };

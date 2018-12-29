@@ -55,19 +55,15 @@ export interface Props {
 }
 
 export const Errors: Component<Props> = ({errors, hide}) => () => (
-    <Wrapper className={{
-        hidden: !errors.length,
-    }}>
+    <Wrapper
+        className={{
+            hidden: !errors.length,
+        }}
+    >
         <Title>
             error
-            <Dismiss onclick={hide}>
-                dismiss
-            </Dismiss>
+            <Dismiss onclick={hide}>dismiss</Dismiss>
         </Title>
-        {...errors.map((err) => (
-            <Error>
-                {err}
-            </Error>
-        ))}
+        {...errors.map((err) => <Error>{err}</Error>)}
     </Wrapper>
 );

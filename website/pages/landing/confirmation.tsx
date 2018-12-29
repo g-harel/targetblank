@@ -106,10 +106,9 @@ export const Confirmation: Component<Props> = (props) => {
     return () => (
         <Wrapper className={{visible}}>
             <Title>
-                <TitleIcon className={[
-                    "far fa-lg fa-check-circle",
-                    {visible},
-                ]} />
+                <TitleIcon
+                    className={["far fa-lg fa-check-circle", {visible}]}
+                />
                 Confirmation Sent
             </Title>
             <div>

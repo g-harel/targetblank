@@ -16,11 +16,7 @@ interface Data {
 }
 
 export const Homepage: PageComponent<Data> = ({addr}, update) => {
-    client.page.fetch(
-        (page) => update({page}),
-        (err) => update({err}),
-        addr,
-    );
+    client.page.fetch((page) => update({page}), (err) => update({err}), addr);
 
     return (data) => (
         <Wrapper>
@@ -32,9 +28,7 @@ export const Homepage: PageComponent<Data> = ({addr}, update) => {
                             {group.meta.title || null}
                             <Items>
                                 {group.items.map((item) => (
-                                    <pre>
-                                        {JSON.stringify(item)}
-                                    </pre>
+                                    <pre>{JSON.stringify(item)}</pre>
                                 ))}
                             </Items>
                         </Group>
