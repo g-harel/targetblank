@@ -10,7 +10,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - refactor folder structure
-- run server locally in dev mode
 - use rickety
 - npm tests in travis
 - rename functions package

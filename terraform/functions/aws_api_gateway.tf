@@ -46,13 +46,10 @@ resource "aws_api_gateway_resource" "auth" {
 }
 
 module "cors_auth" {
-  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-  version = "0.1.0"
+  source  = "../modules/cors"
 
-  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
-  api_resource_id = "${aws_api_gateway_resource.auth.id}"
-
-  allow_headers = ["token"]
+  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
+  gateway_resource_id = "${aws_api_gateway_resource.auth.id}"
 }
 
 #
@@ -64,13 +61,10 @@ resource "aws_api_gateway_resource" "page" {
 }
 
 module "cors_page" {
-  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-  version = "0.1.0"
+  source  = "../modules/cors"
 
-  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
-  api_resource_id = "${aws_api_gateway_resource.page.id}"
-
-  allow_headers = ["token"]
+  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
+  gateway_resource_id = "${aws_api_gateway_resource.page.id}"
 }
 
 #
@@ -82,13 +76,10 @@ resource "aws_api_gateway_resource" "auth_addr" {
 }
 
 module "cors_auth_addr" {
-  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-  version = "0.1.0"
+  source  = "../modules/cors"
 
-  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
-  api_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
-
-  allow_headers = ["token"]
+  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
+  gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
 }
 
 #
@@ -100,13 +91,10 @@ resource "aws_api_gateway_resource" "page_addr" {
 }
 
 module "cors_page_addr" {
-  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-  version = "0.1.0"
+  source  = "../modules/cors"
 
-  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
-  api_resource_id = "${aws_api_gateway_resource.page_addr.id}"
-
-  allow_headers = ["token"]
+  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
+  gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
 }
 
 #
@@ -118,13 +106,10 @@ resource "aws_api_gateway_resource" "page_validate" {
 }
 
 module "cors_page_validate" {
-  source  = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-  version = "0.1.0"
+  source  = "../modules/cors"
 
-  api_id          = "${aws_api_gateway_rest_api.rest_api.id}"
-  api_resource_id = "${aws_api_gateway_resource.page_validate.id}"
-
-  allow_headers = ["token"]
+  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
+  gateway_resource_id = "${aws_api_gateway_resource.page_validate.id}"
 }
 
 #
