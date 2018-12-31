@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "public_bucket" {
   "Version":"2012-10-17",
   "Statement":[
     {
-      "Sid":"AddPerm",
+      "Sid":"PublicRead",
       "Effect":"Allow",
       "Principal": "*",
       "Action":["s3:GetObject"],
@@ -30,11 +30,11 @@ resource "aws_s3_bucket_object" "root" {
 }
 
 resource "aws_s3_bucket_object" "files" {
-  count        = "${length(var.source_files)}"
+  count        = "${length(var.files)}"
   bucket       = "${aws_s3_bucket.public_bucket.bucket}"
-  key          = "${element(var.source_files, count.index)}"
-  source       = "${var.source_dir}/${element(var.source_files, count.index)}"
-  etag         = "${md5(file("${var.source_dir}/${element(var.source_files, count.index)}"))}"
+  key          = "${element(var.files, count.index)}"
+  source       = "${var.source_dir}/${element(var.files, count.index)}"
+  etag         = "${md5(file("${var.source_dir}/${element(var.files, count.index)}"))}"
 }
 
 resource "aws_cloudfront_distribution" "public_bucket" {
@@ -89,7 +89,7 @@ resource "aws_cloudfront_distribution" "public_bucket" {
 }
 
 resource "aws_route53_record" "cloudfront_alias" {
-  zone_id = "${var.primary_zone_id}"
+  zone_id = "${var.zone_id}"
   name    = "${var.alias_name}"
   type    = "A"
 
