@@ -1,4 +1,4 @@
-import {api} from "../../internal/client/api";
+import {client} from "../../internal/client";
 import {app} from "../../internal/app";
 import {read} from "../../internal/client/storage";
 import {Password} from "../../components/input/password";
@@ -16,19 +16,24 @@ export const Reset: PageComponent = ({addr, token: t}) => () => {
         app.redirect(`/${addr}/login`);
     }
 
-    const callback = async (pass: string) => {
-        try {
-            await api.page.password.change(addr, token, pass);
-            app.redirect(`/${addr}`);
-        } catch (e) {
-            console.log(e);
-            return "Something went wrong";
-        }
+    const submit = async (pass: string) => {
+        return new Promise((resolve) => {
+            const callback = () => {
+                resolve("");
+                app.redirect(`/${addr}`);
+            };
+
+            const err = (msg) => {
+                resolve(msg);
+            };
+
+            client.page.password.change(callback, err, addr, pass);
+        });
     };
 
     return (
         <Wrapper>
-            <Password title="Set your password" callback={callback} />
+            <Password title="Set your password" callback={submit} />
         </Wrapper>
     );
 };

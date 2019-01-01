@@ -1,6 +1,5 @@
 import {PageTokenAPI, PagePasswordAPI, PageAPI} from "./api";
 import {read, write} from "./storage";
-import {show} from "./error";
 import {IPageData} from "./types";
 
 export {IPageData} from "./types";

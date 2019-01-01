@@ -1,4 +1,4 @@
-import {api} from "../../internal/client/api";
+import {client} from "../../internal/client";
 import {styled} from "../../internal/styled";
 import {Signup} from "./signup";
 import {PageComponent} from "../../components/page";
@@ -35,16 +35,16 @@ const Screen = styled("div")({
 export const Landing: PageComponent = (props, update) => {
     let email = "";
 
-    const callback = async (addr: string) => {
-        try {
-            await api.page.create(addr);
-        } catch (e) {
-            console.log(e);
-            return "Something went wrong";
-        }
+    const submit = (newEmail: string) => {
+        return new Promise<string>((resolve) => {
+            const callback = () => {
+                email = newEmail;
+                update();
+                resolve("");
+            };
 
-        email = addr;
-        update();
+            client.page.create(callback, newEmail);
+        });
     };
 
     return () => (
@@ -52,7 +52,7 @@ export const Landing: PageComponent = (props, update) => {
             <Header />
             <Screens>
                 <Screen className={{scrolled: !!email}}>
-                    <Signup callback={callback} visible={!email} />
+                    <Signup callback={submit} visible={!email} />
                 </Screen>
                 <Screen className={{scrolled: !!email}}>
                     <Confirmation email={email} visible={!!email} />

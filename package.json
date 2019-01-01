@@ -2,7 +2,7 @@
   "scripts": {
     "build": "parcel build website/index.html -d .build --no-content-hash --no-source-maps",
     "dev": "parcel -p 1324 -d .dist website/index.html",
-    "test": "run-s fmt lint",
+    "test": "run-s fmt lint build",
     "lint": "tslint website/**/*.ts --fix",
     "fmt": "prettier --list-different --write --ignore-path .gitignore \"**/*.{js,ts,tsx}\""
   },
