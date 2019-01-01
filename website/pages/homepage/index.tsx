@@ -1,4 +1,4 @@
-import {client, IPageData} from "../../internal/client/client";
+import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
 

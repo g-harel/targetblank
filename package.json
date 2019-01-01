@@ -9,9 +9,7 @@
   "dependencies": {
     "jss": "^9.8.7",
     "jss-preset-default": "^4.5.0",
-    "okwolo": "^3.4.2",
-    "request": "^2.87.0",
-    "request-promise-native": "^1.0.5"
+    "okwolo": "^3.4.2"
   },
   "devDependencies": {
     "@types/jss": "^9.5.7",

@@ -1,113 +1,97 @@
-import requestPromiseNative from "request-promise-native";
+import {IPageData} from "./types";
 
-const endpoint = "https://api.targetblank.org";
+const hostname = "https://api.targetblank.org";
 
-export interface IPageItem {
-    label: string;
-    link: string;
-    items: IPageItem[];
+interface IRequest {
+    method: string;
+    path: string;
+    headers?: Record<string, string>;
+    body?: any;
+    json?: boolean;
 }
 
-export interface IPageGroup {
-    meta: {
-        [key: string]: string;
-    };
-    items: IPageItem[];
-}
+// Helper to send the request using browser's fetch api.
+// Also conditionally translates to and from json and appends hostname.
+const send = async (req: IRequest) => {
+    req.headers = req.headers || {};
+    req.body = req.body || "";
+    req.json = req.json || false;
 
-export interface IPageData {
-    version: string;
-    spec: string;
-    meta: {
-        [key: string]: string;
-    };
-    groups: IPageGroup[];
-}
+    if (req.json) {
+        req.body = JSON.stringify(req.body);
+        req.headers["Content-Type"] = "application/json";
+    }
 
-export interface IError {
-    statusCode: number;
-    message: string;
-}
+    const res = await fetch(hostname + req.path, {
+        method: req.method,
+        headers: req.headers,
+        body: req.body,
+    });
 
-export interface IAPI {
+    return req.json ? res.json() : res.text();
+};
+
+export const api = {
     page: {
-        create(email: string): Promise<string>;
-        delete(addr: string, token: string): Promise<void>;
-        edit(addr: string, token: string, spec: string): Promise<IPageData>;
-        fetch(addr: string, token?: string): Promise<IPageData>;
-        publish(addr: string, token: string): Promise<void>;
-        validate(spec: string): Promise<void>;
-        password: {
-            change(addr: string, token: string, pass: string): Promise<void>;
-            reset(addr: string, email: string): Promise<void>;
-        };
-        token: {
-            create(addr: string, pass: string): Promise<string>;
-        };
-    };
-}
-
-export const api: IAPI = {
-    page: {
-        create: async (email) =>
-            requestPromiseNative({
+        create: async (email: string): Promise<string> =>
+            send({
                 method: "POST",
-                uri: `${endpoint}/page`,
+                path: `/page`,
                 body: email,
             }),
-        delete: async (addr, token) =>
-            requestPromiseNative({
+        delete: async (addr: string, token: string): Promise<void> =>
+            send({
                 method: "DELETE",
-                uri: `${endpoint}/page/${addr}`,
+                path: `/page/${addr}`,
                 headers: {token},
             }),
-        edit: async (addr, token, spec) =>
-            requestPromiseNative({
+        edit: async (addr: string, token: string, spec: string): Promise<IPageData> =>
+            send({
                 method: "PUT",
-                uri: `${endpoint}/page/${addr}`,
+                path: `/page/${addr}`,
                 headers: {token},
                 body: spec,
                 json: true,
             }),
-        fetch: async (addr, token) =>
-            requestPromiseNative({
+        fetch: async (addr: string, token: string): Promise<IPageData> =>
+            send({
                 method: "GET",
-                uri: `${endpoint}/page/${addr}`,
+                path: `/page/${addr}`,
                 headers: {token},
                 json: true,
             }),
-        publish: async (addr, token) =>
-            requestPromiseNative({
+        publish: async (addr: string, token: string): Promise<void> =>
+            send({
                 method: "PATCH",
-                uri: `${endpoint}/page/${addr}`,
+                path: `/page/${addr}`,
                 headers: {token},
             }),
-        validate: async (spec) =>
-            requestPromiseNative({
+        validate: async (spec: string): Promise<void> =>
+            send({
                 method: "POST",
-                uri: `${endpoint}/page/validate`,
+                path: `/page/validate`,
                 body: spec,
             }),
         password: {
-            change: async (addr, token, pass) =>
-                requestPromiseNative({
+            change: async (addr: string, token: string, pass: string): Promise<void> =>
+                send({
                     method: "PUT",
-                    uri: `${endpoint}/auth/${addr}`,
+                    path: `/auth/${addr}`,
                     headers: {token},
                     body: pass,
                 }),
-            reset: async (addr, email) =>
-                requestPromiseNative({
+            reset: async (addr: string, email: string): Promise<void> =>
+                send({
                     method: "DELETE",
-                    uri: `${endpoint}/auth/${addr}`,
+                    path: `/auth/${addr}`,
                     body: email,
                 }),
         },
         token: {
-            create: async (addr, pass) =>
-                requestPromiseNative({
+            create: async (addr: string, pass: string): Promise<string> =>
+                send({
                     method: "POST",
-                    uri: `${endpoint}/auth/${addr}`,
+                    path: `/auth/${addr}`,
                     body: pass,
                 }),
         },

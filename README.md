@@ -10,7 +10,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - refactor folder structure
-- use rickety (remove request)
 - rename functions package
 - app ~ treat 5xx errors differently
 - replace token secrets (eventually)

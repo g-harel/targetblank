@@ -1,32 +1,24 @@
-import {api, IPageData} from "./api";
+import {api} from "./api";
 import {read, write} from "./storage";
 import {show} from "./error";
 
-export {IPageData} from "./api";
+export {IPageData} from "./types";
 
-type operation<T = any, S extends any[] = any[]> = (
+type clientFunc<T = any, S extends any[] = any[]> = (
     callback: (result: T) => void,
-    errorHandler: (message: string) => void | null,
+    errorHandler: ((message: string) => void) | null,
     ...args: S
 ) => void;
 
-export interface IClient {
-    page: {
-        create: operation<string, [string]>;
-        delete: operation<undefined, [string]>;
-        edit: operation<IPageData, [string, string]>;
-        fetch: operation<IPageData, [string]>;
-        publish: operation<undefined, [string]>;
-        validate: operation<undefined, [string]>;
-        password: {
-            change: operation<undefined, [string, string]>;
-            reset: operation<undefined, [string, string]>;
-        };
-        token: {
-            create: operation<string, [string, string]>;
-        };
-    };
-}
+// prettier-ignore
+export type Client<T> = {
+    [K in keyof T]:
+        T[K] extends (...args: infer A) => infer R
+            ? (R extends Promise<infer D>
+                ? clientFunc<D, A>
+                : never)
+            : Client<T[K]>;
+};
 
 const missingTokenMessage = (name: string, addr: string): string => {
     return `Missing access token for operation "${name}" on address "${addr}"`;
@@ -35,8 +27,8 @@ const missingTokenMessage = (name: string, addr: string): string => {
 // Wrap all the client's operations to handle errors.
 const catchAll = <T>(value: T): T => {
     if (typeof value === "function") {
-        const op = (value as any) as operation;
-        const replacement: operation = async (cb, handler = show, ...args) => {
+        const op = (value as any) as clientFunc;
+        const replacement: clientFunc = async (cb, handler = show, ...args) => {
             try {
                 await op(cb, handler, ...args);
             } catch (e) {
@@ -55,7 +47,13 @@ const catchAll = <T>(value: T): T => {
     return copy as T;
 };
 
-export const client: IClient = catchAll({
+// const a: Client<typeof api> = {
+//     page: {
+//         create: (cb, eh, a) => {},
+//     },
+// };
+
+export const client: Client<typeof api> = catchAll({
     page: {
         create: async (callback, _, email) => {
             const res = await api.page.create(email);
@@ -123,4 +121,4 @@ export const client: IClient = catchAll({
             },
         },
     },
-} as IClient);
+});
