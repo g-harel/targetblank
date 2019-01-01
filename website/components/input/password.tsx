@@ -11,7 +11,7 @@ export const Password: Component<Props> = ({title, callback}) => () => (
         title={title}
         callback={callback}
         type="password"
-        validator={/.{8,32/gi}
+        validator={/.{8,32}/gi}
         message="Password is too short"
         placeholder="password123"
         focus={true}

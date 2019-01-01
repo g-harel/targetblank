@@ -1,1 +1,1 @@
-export const Missing = <div>404</div>;
+export const Missing = () => () => <div>404</div>;
