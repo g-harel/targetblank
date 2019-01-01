@@ -30,4 +30,5 @@ module "api" {
   source = "./functions"
 
   primary_zone_id = "${aws_route53_zone.primary.zone_id}"
+  role = "${aws_iam_role.lambda.arn}"
 }
