@@ -1,124 +1,92 @@
 import {api} from "./api";
 import {read, write} from "./storage";
 import {show} from "./error";
+import {IPageData} from "./types";
 
 export {IPageData} from "./types";
 
-type clientFunc<T = any, S extends any[] = any[]> = (
-    callback: (result: T) => void,
-    errorHandler: ((message: string) => void) | null,
-    ...args: S
-) => void;
-
-// prettier-ignore
-export type Client<T> = {
-    [K in keyof T]:
-        T[K] extends (...args: infer A) => infer R
-            ? (R extends Promise<infer D>
-                ? clientFunc<D, A>
-                : never)
-            : Client<T[K]>;
-};
+type Callback<T> = (value: T) => void;
+type ErrorHandler = Callback<string> | null;
 
 const missingTokenMessage = (name: string, addr: string): string => {
     return `Missing access token for operation "${name}" on address "${addr}"`;
 };
 
-// Wrap all the client's operations to handle errors.
-const catchAll = <T>(value: T): T => {
-    if (typeof value === "function") {
-        const op = (value as any) as clientFunc;
-        const replacement: clientFunc = async (cb, handler = show, ...args) => {
-            try {
-                await op(cb, handler, ...args);
-            } catch (e) {
-                handler(e.toString());
-            }
-        };
-        return (replacement as any) as T;
-    }
-    if (typeof value !== "object") {
-        return value;
-    }
-    const copy = {};
-    Object.keys(value).forEach((key) => {
-        copy[key] = catchAll(value[key]);
-    });
-    return copy as T;
-};
-
-// const a: Client<typeof api> = {
-//     page: {
-//         create: (cb, eh, a) => {},
-//     },
-// };
-
-export const client: Client<typeof api> = catchAll({
+export const client = {
     page: {
-        create: async (callback, _, email) => {
-            const res = await api.page.create(email);
-            callback(res);
+        create: (cb: Callback<string>, email: string) => {
+            api.page.create(email).then(cb);
         },
-        delete: async (callback, errorHandler, addr) => {
+        delete: (cb: Callback<void>, err: ErrorHandler, addr: string) => {
             const {token} = read(addr);
             if (token === null) {
-                return errorHandler(missingTokenMessage("delete", addr));
+                return err(missingTokenMessage("delete", addr));
             }
-            await api.page.delete(addr, token);
-            callback(undefined);
+            api.page.delete(addr, token).then(cb);
         },
-        edit: async (callback, errorHandler, addr, spec) => {
+        edit: (
+            cb: Callback<IPageData>,
+            err: ErrorHandler,
+            addr: string,
+            spec: string,
+        ) => {
             const {token} = read(addr);
             if (token === null) {
-                return errorHandler(missingTokenMessage("edit", addr));
+                return err(missingTokenMessage("edit", addr));
             }
-            const data = await api.page.edit(addr, token, spec);
-            write(addr, {data});
-            callback(data);
+            api.page
+                .edit(addr, token, spec)
+                .then((data) => {
+                    write(addr, {data});
+                    return data;
+                })
+                .then(cb);
         },
-        fetch: async (callback, _, addr) => {
+        fetch: (cb: Callback<IPageData>, addr: string) => {
             const {data: staleData, token} = read(addr);
             if (staleData !== null) {
-                callback(staleData);
+                cb(staleData);
             }
-            const data = await api.page.fetch(addr, token || undefined);
-            write(addr, {data});
-            callback(data);
+            api.page
+                .fetch(addr, token || undefined)
+                .then((data) => {
+                    write(addr, {data});
+                    return data;
+                })
+                .then(cb);
         },
-        publish: async (callback, errorHandler, addr) => {
+        publish: (cb: Callback<void>, err: ErrorHandler, addr: string) => {
             const {token} = read(addr);
             if (token === null) {
-                return errorHandler(missingTokenMessage("publish", addr));
+                return err(missingTokenMessage("publish", addr));
             }
-            await api.page.publish(addr, token);
-            callback(undefined);
+            api.page.publish(addr, token).then(cb);
         },
-        validate: async (callback, _, spec) => {
-            await api.page.validate(spec);
-            callback(undefined);
+        validate: (cb: Callback<void>, spec: string) => {
+            api.page.validate(spec).then(cb);
         },
         password: {
-            change: async (callback, errorHandler, addr, pass) => {
+            change: (cb: Callback<void>, err: ErrorHandler, addr, pass) => {
                 const {token} = read(addr);
                 if (token === null) {
-                    return errorHandler(
-                        missingTokenMessage("change password", addr),
-                    );
+                    return err(missingTokenMessage("change password", addr));
                 }
-                await api.page.password.change(addr, token, pass);
-                callback(undefined);
+                api.page.password.change(addr, token, pass).then(cb);
             },
-            reset: async (callback, _, addr, email) => {
-                await api.page.password.reset(addr, email);
-                callback(undefined);
+            reset: (cb: Callback<void>, addr, email) => {
+                api.page.password.reset(addr, email).then(cb);
             },
         },
         token: {
-            create: async (callback, _, addr, pass) => {
-                const token = await api.page.token.create(addr, pass);
-                write(addr, {token});
-                callback(token);
+            create: (cb: Callback<string>, addr: string, pass: string) => {
+                api.page.token
+                    .create(addr, pass)
+                    .then((token) => {
+                        write(addr, {token});
+                        return token;
+                    })
+                    .then(cb);
             },
         },
     },
-});
+};

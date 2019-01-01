@@ -16,7 +16,7 @@ interface Data {
 }
 
 export const Homepage: PageComponent<Data> = ({addr}, update) => {
-    client.page.fetch((page) => update({page}), (err) => update({err}), addr);
+    client.page.fetch((page) => update({page}), addr);
 
     return (data) => (
         <Wrapper>
