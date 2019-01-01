@@ -1,16 +1,19 @@
 language: go
 
-go:
-  - 1.x
-
 before_install:
+  - nvm install 10
+
+install:
   - go get -t -v ./...
+  - npm install
 
 script:
   - go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+  - npm test
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -cF go
+  - bash <(curl -s https://codecov.io/bash) -cF javascript
 
 notifications:
   email: false

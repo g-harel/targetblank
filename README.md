@@ -11,7 +11,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - refactor folder structure
 - use rickety
-- npm tests in travis
 - rename functions package
 - app ~ treat 5xx errors differently
 - replace token secrets (eventually)
