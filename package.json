@@ -9,7 +9,7 @@
   "dependencies": {
     "jss": "^9.8.7",
     "jss-preset-default": "^4.5.0",
-    "okwolo": "^3.4.2"
+    "okwolo": "^3.4.3"
   },
   "devDependencies": {
     "@types/jss": "^9.5.7",
@@ -24,7 +24,7 @@
     "sass": "^1.15.2",
     "tslint": "^5.12.0",
     "tslint-config-airbnb": "^5.9.2",
-    "typescript": "^2.9.2"
+    "typescript": "^3.2.2"
   },
   "prettier": {
     "tabWidth": 4,

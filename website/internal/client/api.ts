@@ -12,32 +12,53 @@ interface IRequest {
 
 // Helper to send the request using browser's fetch api.
 // Conditionally translates to and from json.
-// Appends api's hostname.
+// Appends the correct host to the request path.
 // Rejects after a timeout period.
-const send = async (req: IRequest) => {
-    req.headers = req.headers || {};
-    req.body = req.body || "";
-    req.json = req.json || false;
+// Rejects if the status code is in the error range.
+const send = (req: IRequest) => {
+    return new Promise<any>(async (resolve, reject) => {
+        req.headers = req.headers || {};
+        req.body = req.body || "";
+        req.json = req.json || false;
 
-    if (req.json) {
-        req.body = JSON.stringify(req.body);
-        req.headers["Content-Type"] = "application/json";
-    }
+        if (req.method === "GET" || req.method === "HEAD") {
+            req.body = undefined;
+        }
 
-    const res = await Promise.race([
-        new Promise<never>((_, reject) => {
-            setTimeout(() => {
-                reject("Timeout");
-            }, 5 * 1000);
-        }),
-        await fetch(hostname + req.path, {
+        if (req.json) {
+            req.body = JSON.stringify(req.body);
+            req.headers["Content-Type"] = "application/json";
+        }
+
+        // Time out request after interval.
+        // All other resolve/rejects will have no effect.
+        setTimeout(() => reject("Timed out"), 5 * 1000);
+
+        const res = await fetch(hostname + req.path, {
             method: req.method,
             headers: req.headers,
             body: req.body,
-        }),
-    ]);
+        });
 
-    return req.json ? res.json() : res.text();
+        // Message is forwarded to user-space only when status code is 400.
+        if (res.status === 400) {
+            return res.text().then(reject);
+        }
+
+        // Any other status code in the error range will have been encrypted.
+        if (res.status > 400) {
+            return res.text().then((message) => {
+                console.error(`Status Code Error\n${message}`);
+                reject("Something went wrong");
+            });
+        }
+
+        if (req.json) {
+            res.json().then(resolve);
+        } else {
+            res.text().then(resolve);
+        }
+    });
 };
 
 export class PageAPI {

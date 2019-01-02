@@ -10,6 +10,7 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - refactor folder structure
+- standardize error codes/messages
 - rename functions package
 - display uncaught network errors
 - app ~ treat 5xx errors differently

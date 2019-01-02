@@ -19,7 +19,7 @@ const Wrapper = styled("div")({
 
     [breakpoint.sm]: {
         borderLeft: "none",
-        borderRigth: "none",
+        borderRight: "none",
         right: "0",
         width: "100%",
     },

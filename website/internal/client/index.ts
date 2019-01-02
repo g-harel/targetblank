@@ -7,8 +7,9 @@ export {IPageData} from "./types";
 type Callback<T> = (value: T) => void;
 type ErrorHandler = Callback<string> | null;
 
-const missingTokenMessage = (name: string, addr: string): string => {
-    return `Missing access token for operation "${name}" on address "${addr}"`;
+const missingToken = (name: string, addr: string): string => {
+    console.error(`Missing access token for "${name}" on address "${addr}"`);
+    return "Unauthorized";
 };
 
 const writeToken = (addr: string) => (token: string) => {
@@ -33,16 +34,22 @@ class PageClient {
         this.token = new PageTokenClient(new PageTokenAPI());
     }
 
-    create(cb: Callback<string>, email: string) {
-        this.api.create(email).then(cb);
+    create(cb: Callback<string>, err: ErrorHandler, email: string) {
+        this.api
+            .create(email)
+            .then(cb)
+            .catch(err);
     }
 
     delete(cb: Callback<void>, err: ErrorHandler, addr: string) {
         const {token} = read(addr);
         if (token === null) {
-            return err(missingTokenMessage("delete", addr));
+            return err(missingToken("delete", addr));
         }
-        this.api.delete(addr, token).then(cb);
+        this.api
+            .delete(addr, token)
+            .then(cb)
+            .catch(err);
     }
 
     edit(
@@ -53,33 +60,41 @@ class PageClient {
     ) {
         const {token} = read(addr);
         if (token === null) {
-            return err(missingTokenMessage("edit", addr));
+            return err(missingToken("edit", addr));
         }
         this.api
             .edit(addr, token, spec)
             .then(writeData(addr))
-            .then(cb);
+            .then(cb)
+            .catch(err);
     }
 
-    fetch(cb: Callback<IPageData>, addr: string) {
+    fetch(cb: Callback<IPageData>, err: ErrorHandler, addr: string) {
         const {data: cachedData, token} = read(addr);
         if (cachedData !== null) cb(cachedData);
         this.api
             .fetch(addr, token || undefined)
             .then(writeData(addr))
-            .then(cb);
+            .then(cb)
+            .catch(err);
     }
 
     publish(cb: Callback<void>, err: ErrorHandler, addr: string) {
         const {token} = read(addr);
         if (token === null) {
-            return err(missingTokenMessage("publish", addr));
+            return err(missingToken("publish", addr));
         }
-        this.api.publish(addr, token).then(cb);
+        this.api
+            .publish(addr, token)
+            .then(cb)
+            .catch(err);
     }
 
-    validate(cb: Callback<void>, spec: string) {
-        this.api.validate(spec).then(cb);
+    validate(cb: Callback<void>, err: ErrorHandler, spec: string) {
+        this.api
+            .validate(spec)
+            .then(cb)
+            .catch(err);
     }
 }
 
@@ -93,13 +108,19 @@ class PagePasswordClient {
     change(cb: Callback<void>, err: ErrorHandler, addr, pass) {
         const {token} = read(addr);
         if (token === null) {
-            return err(missingTokenMessage("change password", addr));
+            return err(missingToken("change password", addr));
         }
-        this.api.change(addr, token, pass).then(cb);
+        this.api
+            .change(addr, token, pass)
+            .then(cb)
+            .catch(err);
     }
 
-    reset(cb: Callback<void>, addr: string, email: string) {
-        this.api.reset(addr, email).then(cb);
+    reset(cb: Callback<void>, err: ErrorHandler, addr: string, email: string) {
+        this.api
+            .reset(addr, email)
+            .then(cb)
+            .catch(err);
     }
 }
 
@@ -110,11 +131,17 @@ class PageTokenClient {
         this.api = api;
     }
 
-    create(cb: Callback<string>, addr: string, pass: string) {
+    create(
+        cb: Callback<string>,
+        err: ErrorHandler,
+        addr: string,
+        pass: string,
+    ) {
         this.api
             .create(addr, pass)
             .then(writeToken(addr))
-            .then(cb);
+            .then(cb)
+            .catch(err);
     }
 }
 
