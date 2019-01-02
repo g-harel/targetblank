@@ -12,23 +12,26 @@ resource "aws_acm_certificate" "ssl_cert" {
   subject_alternative_names = ["*.${local.domain_name}"]
 }
 
-
 module "website" {
   source = "./modules/public-bucket"
 
-  zone_id = "${aws_route53_zone.primary.zone_id}"
-  alias_name = "${local.domain_name}"
-  cert_arn = "${aws_acm_certificate.ssl_cert.arn}"
+  zone_id     = "${aws_route53_zone.primary.zone_id}"
+  alias_name  = "${local.domain_name}"
+  cert_arn    = "${aws_acm_certificate.ssl_cert.arn}"
   bucket_name = "targetblank-static-website"
 
-  source_dir = ".build"
-  root_file = "index.html"
-  files = ["website.f69400ca.css", "website.f69400ca.js"]
+  source_dir    = ".build"
+  root_document = "index.html"
+
+  files = {
+    "website.f69400ca.css" = "text/css"
+    "website.f69400ca.js"  = "application/javascript"
+  }
 }
 
 module "api" {
   source = "./functions"
 
   primary_zone_id = "${aws_route53_zone.primary.zone_id}"
-  role = "${aws_iam_role.lambda.arn}"
+  role            = "${aws_iam_role.lambda.arn}"
 }

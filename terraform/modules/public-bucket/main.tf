@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "public_bucket" {
   acl    = "public-read"
 
   website {
-    index_document = "${var.root_file}"
+    index_document = "${var.root_document}"
   }
 
   policy = <<EOF
@@ -24,17 +24,19 @@ EOF
 
 resource "aws_s3_bucket_object" "root" {
   bucket       = "${aws_s3_bucket.public_bucket.bucket}"
-  key          = "${var.root_file}"
-  source       = "${var.source_dir}/${var.root_file}"
-  etag         = "${md5(file("${var.source_dir}/${var.root_file}"))}"
+  key          = "${var.root_document}"
+  source       = "${var.source_dir}/${var.root_document}"
+  content_type = "text/html"
+  etag         = "${md5(file("${var.source_dir}/${var.root_document}"))}"
 }
 
 resource "aws_s3_bucket_object" "files" {
   count        = "${length(var.files)}"
   bucket       = "${aws_s3_bucket.public_bucket.bucket}"
-  key          = "${element(var.files, count.index)}"
-  source       = "${var.source_dir}/${element(var.files, count.index)}"
-  etag         = "${md5(file("${var.source_dir}/${element(var.files, count.index)}"))}"
+  key          = "${element(keys(var.files), count.index)}"
+  source       = "${var.source_dir}/${element(keys(var.files), count.index)}"
+  content_type = "${lookup(var.files, element(keys(var.files), count.index), "text/plain")}"
+  etag         = "${md5(file("${var.source_dir}/${element(keys(var.files), count.index)}"))}"
 }
 
 resource "aws_cloudfront_distribution" "public_bucket" {
