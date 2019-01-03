@@ -63,7 +63,7 @@ func NewFromSpec(s string) (*Page, *parser.Error) {
 			}
 			depth := len(indent) / 4
 
-			err := p.AddItem(depth, newItem(link, label))
+			err := p.Enter(depth, link, label)
 			if err != nil {
 				ctx.Error(err.Error())
 				return

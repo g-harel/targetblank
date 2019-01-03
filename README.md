@@ -13,8 +13,10 @@ TODO
     - move page addr generation out of db pkg
     - combine some packages from internal
     - remove hardcoded strings (region)
-    - rename page items/groups to be more descriptive
+    - rename addr (page key) to something else (clashes with email address)
 - standardize error codes/messages
+- random blob under logo on landing
+- change branding color to purple
 - rename functions package
 - display uncaught network errors
 - app ~ treat 5xx errors differently

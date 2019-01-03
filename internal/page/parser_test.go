@@ -183,11 +183,11 @@ func TestParser(t *testing.T) {
 		t.Run("should correctly identify item's link and label", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
-			p.AddItem(0, newItem("link", "label"))
-			p.AddItem(0, newItem("", "label"))
-			p.AddItem(0, newItem("link", ""))
-			p.AddItem(0, newItem("", "la[bel"))
-			p.AddItem(0, newItem("link.link", ""))
+			p.Enter(0, "link", "label")
+			p.Enter(0, "", "label")
+			p.Enter(0, "link", "")
+			p.Enter(0, "", "la[bel")
+			p.Enter(0, "link.link", "")
 			samePage(t, p,
 				"version 1",
 				"===",
@@ -202,9 +202,9 @@ func TestParser(t *testing.T) {
 		t.Run("should assign items to correct groups", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
-			p.AddItem(0, newItem("", "group1"))
-			p.AddGroup().AddItem(0, newItem("", "group2"))
-			p.AddGroup().AddItem(0, newItem("", "group3"))
+			p.Enter(0, "", "group1")
+			p.AddGroup().Enter(0, "", "group2")
+			p.AddGroup().Enter(0, "", "group3")
 			samePage(t, p,
 				"version 1",
 				"===",
@@ -247,8 +247,8 @@ func TestParser(t *testing.T) {
 			p.AddGroupMeta("key1", "value1")
 			p.AddGroup()
 			p.AddGroupMeta("key2", "value2")
-			p.AddItem(0, newItem("link", "test"))
-			p.AddItem(0, newItem("", "key3=value3"))
+			p.Enter(0, "link", "test")
+			p.Enter(0, "", "key3=value3")
 			samePage(t, p,
 				"version 1",
 				"===",
@@ -285,17 +285,17 @@ func TestParser(t *testing.T) {
 		t.Run("should correctly parse complex item hierarchies", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
-			p.AddItem(0, newItem("", "label"))
-			p.AddItem(1, newItem("", "label"))
-			p.AddItem(2, newItem("", "label"))
-			p.AddItem(3, newItem("", "label"))
-			p.AddItem(4, newItem("", "label"))
-			p.AddItem(2, newItem("", "label"))
-			p.AddItem(2, newItem("", "label"))
-			p.AddItem(3, newItem("", "label"))
-			p.AddItem(4, newItem("", "label"))
-			p.AddItem(4, newItem("", "label"))
-			p.AddItem(0, newItem("", "label"))
+			p.Enter(0, "", "label")
+			p.Enter(1, "", "label")
+			p.Enter(2, "", "label")
+			p.Enter(3, "", "label")
+			p.Enter(4, "", "label")
+			p.Enter(2, "", "label")
+			p.Enter(2, "", "label")
+			p.Enter(3, "", "label")
+			p.Enter(4, "", "label")
+			p.Enter(4, "", "label")
+			p.Enter(0, "", "label")
 			samePage(t, p,
 				"version 1",
 				"===",
@@ -319,18 +319,18 @@ func TestParser(t *testing.T) {
 			p.Meta["key"] = "value"
 			p.Meta["search"] = "google"
 			p.AddGroupMeta("key", "value")
-			p.AddItem(0, newItem("http://ee.co/1", "label_1"))
-			p.AddItem(0, newItem("http://ee.co/2", "label 2"))
-			p.AddItem(1, newItem("", "label3"))
-			p.AddItem(2, newItem("http://ee.co/4", "label4"))
-			p.AddItem(1, newItem("http://ee.co/5", "label-5"))
+			p.Enter(0, "http://ee.co/1", "label_1")
+			p.Enter(0, "http://ee.co/2", "label 2")
+			p.Enter(1, "", "label3")
+			p.Enter(2, "http://ee.co/4", "label4")
+			p.Enter(1, "http://ee.co/5", "label-5")
 			p.AddGroup()
 			p.AddGroupMeta("name", "tasks")
-			p.AddItem(0, newItem("", "label6"))
-			p.AddItem(1, newItem("", "label7"))
-			p.AddItem(1, newItem("", "localhost:80/test"))
-			p.AddItem(1, newItem("http://ee.co/10", ""))
-			p.AddItem(1, newItem("", "label10"))
+			p.Enter(0, "", "label6")
+			p.Enter(1, "", "label7")
+			p.Enter(1, "", "localhost:80/test")
+			p.Enter(1, "http://ee.co/10", "")
+			p.Enter(1, "", "label10")
 			samePage(t, p,
 				"# single-line comments can be added anywhere",
 				"version 1                       # version before any content",

@@ -2,10 +2,83 @@ package page
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 	"testing"
 )
+
+func TestNewEntry(t *testing.T) {
+	expectLink := func(t *testing.T, i *Entry, expected string) {
+		if i.Link != expected {
+			t.Errorf("Incorrect link value (expected: \"%v\", received: \"%v\")", expected, i.Link)
+		}
+	}
+
+	expectLabel := func(t *testing.T, i *Entry, expected string) {
+		if i.Label != expected {
+			t.Errorf("Incorrect label value (expected: \"%v\", received: \"%v\")", expected, i.Label)
+		}
+	}
+
+	t.Run("should use the provided link and label", func(t *testing.T) {
+		link := "link"
+		label := "label"
+		i := newEntry(link, label)
+
+		expectLink(t, i, link)
+		expectLabel(t, i, label)
+	})
+
+	t.Run("should use the provided link as label if label is missing", func(t *testing.T) {
+		link := "link"
+		i := newEntry(link, "")
+
+		expectLabel(t, i, link)
+	})
+
+	t.Run("should trim whitespace from both link and label", func(t *testing.T) {
+		link := " link "
+		label := " label "
+		i := newEntry(link, label)
+
+		expectLink(t, i, strings.TrimSpace(link))
+		expectLabel(t, i, strings.TrimSpace(label))
+	})
+
+	t.Run("should create Items that do not contain null values when serialized", func(t *testing.T) {
+		i := newEntry("", "")
+		b, _ := json.Marshal(i)
+		s := string(b)
+
+		if strings.Index(s, "null") >= 0 {
+			t.Errorf("Serialized Item contains a null value: \"%v\"", s)
+		}
+	})
+
+	t.Run("should use label as link if it resembles a url", func(t *testing.T) {
+		expectURL := func(isURL bool, label string) {
+			i := newEntry("", label)
+			if isURL {
+				if i.Link != label {
+					t.Errorf("Label should have been used as link: \"%v\"", label)
+				}
+			} else {
+				if i.Link == label {
+					t.Errorf("Label should not have been used as link: \"%v\"", label)
+				}
+			}
+		}
+
+		expectURL(true, "https://example.com/test")
+		expectURL(true, "www.example.com")
+		expectURL(true, "example.com?q=test")
+		expectURL(true, "localhost:8080")
+		expectURL(false, "example: Example")
+		expectURL(false, "ExampleExample")
+		expectURL(false, "Example example example")
+	})
+}
 
 func TestNew(t *testing.T) {
 	t.Run("should create Pages with an existing group", func(t *testing.T) {
@@ -52,22 +125,22 @@ func TestPageAddGroupMeta(t *testing.T) {
 	})
 }
 
-func TestPageAddItem(t *testing.T) {
+func TestPageEnter(t *testing.T) {
 	t.Run("should add the item to the last group when depth is zero", func(t *testing.T) {
 		for i := 0; i < 3; i++ {
 			p := New()
-			item := newItem("link", "label")
+			label := fmt.Sprintf("%d", i)
 
 			for j := 0; j < i; j++ {
 				p.AddGroup()
 			}
 
-			err := p.AddItem(0, item)
+			err := p.Enter(0, "link", label)
 			if err != nil {
 				t.Fatalf("Unexpected error: %s", err)
 			}
 
-			if p.Groups[len(p.Groups)-1].Items[0] != item {
+			if p.Groups[len(p.Groups)-1].Entries[0].Label != label {
 				t.Errorf("Item was not added to the correct group")
 			}
 		}
@@ -75,7 +148,7 @@ func TestPageAddItem(t *testing.T) {
 
 	t.Run("should not allow negative depths", func(t *testing.T) {
 		p := New()
-		err := p.AddItem(-1, newItem("", ""))
+		err := p.Enter(-1, "", "")
 		if err == nil {
 			t.Fatalf("Expected invalid depth error")
 		}
@@ -86,12 +159,12 @@ func TestPageAddItem(t *testing.T) {
 
 	t.Run("should not allow depths to be skipped", func(t *testing.T) {
 		p := New()
-		err := p.AddItem(0, newItem("", ""))
+		err := p.Enter(0, "", "")
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
 		}
 
-		err = p.AddItem(2, newItem("", ""))
+		err = p.Enter(2, "", "")
 		if err == nil {
 			t.Fatalf("Expected invalid depth error")
 		}
@@ -117,21 +190,21 @@ func TestPageAddItem(t *testing.T) {
 			}
 
 			l := label(address)
-			err := p.AddItem(depth, newItem(l, ""))
+			err := p.Enter(depth, l, "")
 			if err != nil {
 				t.Fatalf("Unexpected error when adding Item{depth:%v,label:\"%v\"}: %v", depth, l, err)
 			}
 
-			curr := p.Groups[len(p.Groups)-1].Items[address[0]]
+			current := p.Groups[len(p.Groups)-1].Entries[address[0]]
 			for _, i := range address[1:] {
-				if curr.Items == nil || len(curr.Items) <= i {
+				if current.Children == nil || len(current.Children) <= i {
 					t.Fatalf("Item was not added at specified address: %v", l)
 				}
-				curr = curr.Items[i]
+				current = current.Children[i]
 			}
 
-			if curr.Label != l {
-				t.Fatalf("Incorrect item found at specified address (expected \"%v\", found: \"%v\")", l, curr.Label)
+			if current.Label != l {
+				t.Fatalf("Incorrect item found at specified address (expected \"%v\", found: \"%v\")", l, current.Label)
 			}
 		}
 
