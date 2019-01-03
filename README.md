@@ -13,6 +13,7 @@ TODO
     - move page addr generation out of db pkg
     - combine some packages from internal
     - remove hardcoded strings (region)
+    - rename page items/groups to be more descriptive
 - standardize error codes/messages
 - rename functions package
 - display uncaught network errors
