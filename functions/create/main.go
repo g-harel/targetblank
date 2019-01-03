@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/email"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/hash"
-	"github.com/g-harel/targetblank/internal/kind"
 	"github.com/g-harel/targetblank/internal/page"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
@@ -44,9 +44,12 @@ var defaultPage = "version 1\n==="
 func handler(req *function.Request, res *function.Response) *function.Error {
 	e := strings.TrimSpace(req.Body)
 
-	err := kind.Of(e).Is(kind.EMAIL)
+	match, err := regexp.MatchString(`^\S+@\S+\.\S+$`, e)
 	if err != nil {
-		return function.CustomErr(err)
+		return function.Err(http.StatusInternalServerError, err)
+	}
+	if !match {
+		return function.CustomErr(fmt.Errorf("invalid email address"))
 	}
 	h, err := hash.New(e)
 	if err != nil {

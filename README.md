@@ -9,7 +9,9 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- refactor folder structure
+- refactor
+    - remove hardcoded strings (region)
+    - move email templates to internal/email package
 - standardize error codes/messages
 - rename functions package
 - display uncaught network errors
