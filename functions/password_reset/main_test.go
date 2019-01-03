@@ -55,7 +55,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("should change the item's password", func(t *testing.T) {
+	t.Run("should not change the item's password", func(t *testing.T) {
 		email := "vKWA4GsS@example.com"
 
 		h, err := crypto.Hash(email)
@@ -91,8 +91,8 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Item does not exist")
 		}
 
-		if item.Password == pass {
-			t.Fatalf("Item's password was not changed \"%v\"", pass)
+		if item.Password != pass {
+			t.Fatalf("Item's password was changed \"%v\"", pass)
 		}
 	})
 

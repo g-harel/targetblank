@@ -41,13 +41,6 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusBadRequest, errors.New("email does not match hashed value"))
 	}
 
-	err = pages.Change(addr, &tables.PageItem{
-		Password: "invalid password",
-	})
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
-	}
-
 	token, funcErr := function.MakeToken(true, addr)
 	if funcErr != nil {
 		return funcErr
