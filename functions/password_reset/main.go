@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/mailer"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
@@ -37,12 +37,12 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	email := strings.TrimSpace(req.Body)
 
-	ok := hash.Check(email, item.Email)
+	ok := crypto.HashCheck(email, item.Email)
 	if !ok {
 		return function.Err(http.StatusBadRequest, errors.New("email does not match hashed value"))
 	}
 
-	h, err := hash.New(rand.String(16))
+	h, err := crypto.Hash(rand.String(16))
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

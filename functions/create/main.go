@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/mailer"
 	"github.com/g-harel/targetblank/internal/page"
 	"github.com/g-harel/targetblank/internal/rand"
@@ -35,13 +35,13 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if !match {
 		return function.CustomErr(fmt.Errorf("invalid email address"))
 	}
-	emailHash, err := hash.New(email)
+	emailHash, err := crypto.Hash(email)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 	item := &tables.PageItem{Email: emailHash}
 
-	pass, err := hash.New(rand.String(16))
+	pass, err := crypto.Hash(rand.String(16))
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

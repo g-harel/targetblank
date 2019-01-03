@@ -11,7 +11,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - refactor
     - remove hardcoded strings (region)
-    - move email templates to internal/email package
 - standardize error codes/messages
 - rename functions package
 - display uncaught network errors

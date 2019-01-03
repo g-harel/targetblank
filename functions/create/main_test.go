@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
 	"github.com/g-harel/targetblank/internal/rand"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
@@ -65,7 +65,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Item was not created")
 		}
 
-		ok := hash.Check(email, item.Email)
+		ok := crypto.HashCheck(email, item.Email)
 		if !ok {
 			t.Fatal("Item's email hash does not match given one")
 		}

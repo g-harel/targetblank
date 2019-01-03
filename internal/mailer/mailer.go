@@ -9,8 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
-const from = "\"targetblank\" <noreply@targetblank.org>"
-
 var client *ses.SES
 
 func init() {
@@ -32,7 +30,7 @@ func Send(to, sub, body string, data interface{}) error {
 	}
 
 	_, err = client.SendEmail(&ses.SendEmailInput{
-		Source: aws.String(from),
+		Source: aws.String("\"targetblank\" <noreply@targetblank.org>"),
 		Destination: &ses.Destination{
 			ToAddresses: []*string{
 				aws.String(to),

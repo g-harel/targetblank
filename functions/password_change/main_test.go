@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
@@ -105,7 +105,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Item does not exist")
 		}
 
-		if !hash.Check(pass, item.Password) {
+		if !crypto.HashCheck(pass, item.Password) {
 			t.Fatal("Fetched item's password does not match")
 		}
 	})

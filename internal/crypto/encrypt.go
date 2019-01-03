@@ -1,4 +1,4 @@
-package token
+package crypto
 
 import (
 	"crypto/aes"
@@ -11,8 +11,8 @@ import (
 
 var key = []byte("super good secret key that needs to be 32 characters long")[:32] // TODO
 
-// Seal creates a new token from the address.
-func Seal(payload []byte) (string, error) {
+// Encrypt encrypts the input bytes into a base64 encoded string.
+func Encrypt(payload []byte) (string, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return "", err
@@ -34,8 +34,8 @@ func Seal(payload []byte) (string, error) {
 	return base64.URLEncoding.EncodeToString(ciphertext), nil
 }
 
-// Open checks that the token is legitimate and reads its payload.
-func Open(token string) ([]byte, error) {
+// Decrypt attempts to decrypt the input string.
+func Decrypt(token string) ([]byte, error) {
 	ciphertext, err := base64.URLEncoding.DecodeString(token)
 	if err != nil {
 		return []byte{}, err

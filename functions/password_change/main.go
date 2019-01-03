@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/tables"
 )
 
@@ -33,7 +33,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if len(pass) < 8 {
 		return function.CustomErr(errors.New("password is too short"))
 	}
-	h, err := hash.New(pass)
+	h, err := crypto.Hash(pass)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

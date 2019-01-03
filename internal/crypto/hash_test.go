@@ -1,19 +1,19 @@
-package hash
+package crypto
 
 import (
 	"testing"
 )
 
-func TestNew(t *testing.T) {
+func TestHash(t *testing.T) {
 	t.Run("should not produce the same hash for the same input", func(t *testing.T) {
 		value := "test value"
 
-		hash1, err := New(value)
+		hash1, err := Hash(value)
 		if err != nil {
 			t.Fatalf("Error creating hash: %v", err)
 		}
 
-		hash2, err := New(value)
+		hash2, err := Hash(value)
 		if err != nil {
 			t.Fatalf("Error creating hash: %v", err)
 		}
@@ -24,7 +24,7 @@ func TestNew(t *testing.T) {
 	})
 }
 
-func TestCheck(t *testing.T) {
+func TestHashCheck(t *testing.T) {
 	t.Run("should correctly match hashed values", func(t *testing.T) {
 		strings := []string{
 			"test value",
@@ -33,12 +33,12 @@ func TestCheck(t *testing.T) {
 		}
 
 		for _, s := range strings {
-			hash, err := New(s)
+			hash, err := Hash(s)
 			if err != nil {
 				t.Fatalf("Error hashing string: %v", err)
 			}
 
-			match := Check(s, hash)
+			match := HashCheck(s, hash)
 			if !match {
 				t.Fatal("Matching hash/value pair was not successfully checked")
 			}
@@ -52,13 +52,13 @@ func TestCheck(t *testing.T) {
 			"test value 3",
 		}
 
-		hash, err := New("vest talue")
+		hash, err := Hash("vest talue")
 		if err != nil {
 			t.Fatalf("Error hashing string: %v", err)
 		}
 
 		for _, s := range strings {
-			match := Check(s, hash)
+			match := HashCheck(s, hash)
 			if match {
 				t.Fatal("Incorrect hash/value pair was not rejected")
 			}

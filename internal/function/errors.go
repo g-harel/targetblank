@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/g-harel/targetblank/internal/token"
+	"github.com/g-harel/targetblank/internal/crypto"
 )
 
 // Error adds a status code to the error type.
@@ -34,7 +34,7 @@ func Err(status int, err error) *Error {
 		fmt.Println("ERROR:", err)
 	}
 	// Message will be empty if encryption returns an error.
-	msg, _ := token.Seal([]byte(err.Error()))
+	msg, _ := crypto.Encrypt([]byte(err.Error()))
 	return &Error{
 		error: errors.New(msg),
 		code:  status,

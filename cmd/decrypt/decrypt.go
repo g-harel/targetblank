@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/g-harel/targetblank/internal/token"
+	"github.com/g-harel/targetblank/internal/crypto"
 )
 
 func main() {
@@ -14,7 +14,7 @@ func main() {
 		panic("missing ciphertext")
 	}
 
-	msg, err := token.Open(args[0])
+	msg, err := crypto.Decrypt(args[0])
 	if err != nil {
 		panic(err)
 	}

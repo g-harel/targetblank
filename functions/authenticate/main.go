@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/tables"
 )
 
@@ -30,7 +30,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
 	}
 
-	if !hash.Check(req.Body, item.Password) {
+	if !crypto.HashCheck(req.Body, item.Password) {
 		return function.Err(http.StatusBadRequest, errors.New("password mismatch"))
 	}
 

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/g-harel/targetblank/internal/token"
+	"github.com/g-harel/targetblank/internal/crypto"
 )
 
 var headerName = "token"
@@ -37,7 +37,7 @@ func MakeToken(restricted bool, secret string) (string, *Error) {
 		return "", Err(http.StatusInternalServerError, err)
 	}
 
-	t, err := token.Seal(payload)
+	t, err := crypto.Encrypt(payload)
 	if err != nil {
 		return "", Err(http.StatusInternalServerError, err)
 	}
@@ -52,7 +52,7 @@ func (r *Request) ValidateToken(secret string) (restricted bool, e *Error) {
 		return false, CustomErr(errors.New("missing authentication token"))
 	}
 
-	payload, err := token.Open(t)
+	payload, err := crypto.Decrypt(t)
 	if err != nil {
 		return false, Err(http.StatusBadRequest, err)
 	}

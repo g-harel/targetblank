@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
@@ -59,7 +59,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should change the item's password", func(t *testing.T) {
 		email := rand.String(8) + "@example.com"
 
-		h, err := hash.New(email)
+		h, err := crypto.Hash(email)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
@@ -100,7 +100,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should send a confirmation email", func(t *testing.T) {
 		email := rand.String(8) + "@example.com"
 
-		h, err := hash.New(email)
+		h, err := crypto.Hash(email)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}

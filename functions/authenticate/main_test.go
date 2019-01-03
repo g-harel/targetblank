@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/hash"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	"github.com/g-harel/targetblank/internal/tables/mock"
@@ -33,7 +33,7 @@ func TestHandler(t *testing.T) {
 
 	t.Run("should create a token for valid passwords", func(t *testing.T) {
 		p := "password123"
-		h, err := hash.New(p)
+		h, err := crypto.Hash(p)
 		if err != nil {
 			t.Fatal("Unexpected error when hashing password")
 		}
@@ -66,7 +66,7 @@ func TestHandler(t *testing.T) {
 		addr := rand.String(6)
 
 		p := "password123"
-		h, err := hash.New(p)
+		h, err := crypto.Hash(p)
 		if err != nil {
 			t.Fatal("Unexpected error when hashing password")
 		}
