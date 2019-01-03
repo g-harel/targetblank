@@ -8,7 +8,6 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
-	"github.com/g-harel/targetblank/internal/rand"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
 )
 
@@ -47,7 +46,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should create a new page and respond with its key", func(t *testing.T) {
-		email := rand.String(8) + "@example.com"
+		email := "s8yljnzo@example.com"
 
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
@@ -76,7 +75,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should send a confirmation email", func(t *testing.T) {
-		email := rand.String(8) + "@example.com"
+		email := "QdJA8638@example.com"
 
 		res := &function.Response{}
 		funcErr := handler(&function.Request{

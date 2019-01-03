@@ -8,7 +8,6 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
 )
@@ -35,7 +34,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should check that the item's email matches", func(t *testing.T) {
-		email := rand.String(8) + "@example.com"
+		email := "oP8a0M2G@example.com"
 
 		item := &tables.PageItem{
 			Email: email,
@@ -57,7 +56,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should change the item's password", func(t *testing.T) {
-		email := rand.String(8) + "@example.com"
+		email := "vKWA4GsS@example.com"
 
 		h, err := crypto.Hash(email)
 		if err != nil {
@@ -98,7 +97,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should send a confirmation email", func(t *testing.T) {
-		email := rand.String(8) + "@example.com"
+		email := "EDzhUzR8@example.com"
 
 		h, err := crypto.Hash(email)
 		if err != nil {

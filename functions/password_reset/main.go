@@ -10,7 +10,6 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/mailer"
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 )
 
@@ -42,13 +41,8 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusBadRequest, errors.New("email does not match hashed value"))
 	}
 
-	h, err := crypto.Hash(rand.String(16))
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
-	}
-
 	err = pages.Change(addr, &tables.PageItem{
-		Password: h,
+		Password: "invalid password",
 	})
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)

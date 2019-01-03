@@ -2,10 +2,13 @@ package mock
 
 import (
 	"errors"
+	"fmt"
 
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 )
+
+// Unofficial count of created pages to generate unique addresses.
+var count = 0
 
 // Page is a mocked tables.Page object.
 type Page struct {
@@ -20,10 +23,11 @@ func NewPage() tables.IPage {
 // Create adds a PageItem to the mocked Page table.
 func (p *Page) Create(item *tables.PageItem) error {
 	if item.Key == "" {
-		item.Key = rand.String(6)
+		count++
+		item.Key = fmt.Sprintf("%08d", count)
 	}
 	if item.Password == "" {
-		item.Password = rand.String(32)
+		item.Password = "tG6lUPO0OFxYFRgKaB2Cfts1UGdQX93w"
 	}
 	p.items = append(p.items, item)
 	return nil

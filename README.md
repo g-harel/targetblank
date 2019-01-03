@@ -10,6 +10,8 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - refactor
+    - move page addr generation out of db pkg
+    - combine some packages from internal
     - remove hardcoded strings (region)
 - standardize error codes/messages
 - rename functions package

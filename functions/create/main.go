@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,7 +13,6 @@ import (
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/mailer"
 	"github.com/g-harel/targetblank/internal/page"
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 )
 
@@ -41,11 +41,17 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	}
 	item := &tables.PageItem{Email: emailHash}
 
-	pass, err := crypto.Hash(rand.String(16))
+	pass := make([]byte, 16)
+	_, err = rand.Read(pass)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item.Password = pass
+
+	passHash, err := crypto.Hash(string(pass))
+	if err != nil {
+		return function.Err(http.StatusInternalServerError, err)
+	}
+	item.Password = passHash
 
 	page, parseErr := page.NewFromSpec(defaultPage)
 	if parseErr != nil {

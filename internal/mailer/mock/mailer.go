@@ -35,7 +35,7 @@ func Send(to, sub, body string, data interface{}) error {
 	return nil
 }
 
-// LastSentTo returns the last sent email.
+// LastSentTo returns the last sent email to the given address.
 func LastSentTo(a string) *Email {
 	for i := range sent {
 		e := sent[len(sent)-i-1]

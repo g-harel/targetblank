@@ -1,13 +1,31 @@
 package tables
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/g-harel/targetblank/internal/rand"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+// GenPageID generates a pseudo random page id.
+func genPageID() string {
+	// List of unambiguous characters (minus "Il0O").
+	var alphabet = []rune("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ")
+
+	b := make([]rune, 6)
+	for i := range b {
+		b[i] = alphabet[rand.Intn(len(alphabet))]
+	}
+	return string(b)
+}
 
 // IPage represents the actions that can be done on a page table.
 type IPage interface {
@@ -39,8 +57,9 @@ func (p *Page) Create(item *PageItem) error {
 		ConditionExpression: aws.String("attribute_not_exists(addr)"),
 	}
 
+	// Loop while the new page id conflicts with an existing one.
 	for {
-		item.Key = rand.String(6)
+		item.Key = genPageID()
 		input.Item = item.toCreateMap()
 
 		_, err := p.client.PutItem(input)

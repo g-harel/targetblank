@@ -6,7 +6,6 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	"github.com/g-harel/targetblank/internal/tables/mock"
 )
@@ -63,7 +62,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should not create a token for invalid authentication", func(t *testing.T) {
-		addr := rand.String(6)
+		addr := "9k5Vhs"
 
 		p := "password123"
 		h, err := crypto.Hash(p)

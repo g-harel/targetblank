@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
 )
@@ -67,7 +66,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should make the item's published status true", func(t *testing.T) {
-		addr := rand.String(6)
+		addr := "PDftc9"
 
 		item := &tables.PageItem{
 			Key: addr,

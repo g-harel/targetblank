@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
 )
@@ -32,7 +31,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should check that the item's email matches", func(t *testing.T) {
-		email := rand.String(8) + "@example.com"
+		email := "j8THwv6f@example.com"
 
 		item := &tables.PageItem{
 			Email: email,
@@ -54,7 +53,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should change the item's page", func(t *testing.T) {
-		label := rand.String(16)
+		label := "uMmETQtzy85kPOjU"
 
 		item := &tables.PageItem{}
 		err := pages.Create(item)
