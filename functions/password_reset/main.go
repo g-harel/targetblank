@@ -6,36 +6,19 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/g-harel/targetblank/internal/email"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/hash"
+	"github.com/g-harel/targetblank/internal/mailer"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 )
 
-var messageSubject = "Your homepage password has been reset!"
-
-type messageContent struct {
-	Addr  string
-	Token string
-}
-
-var messageTemplate = `
-	<html>
-		<body>
-			<h3>Follow the link to confirm you're the owner.</h3>
-			<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
-		</body>
-	</html>`
-
 var pages tables.IPage
-var sender email.ISender
+var mailerSend = mailer.Send
 
 func init() {
 	pages = tables.NewPage()
-	sender = email.NewSender()
 }
 
 func handler(req *function.Request, res *function.Response) *function.Error {
@@ -52,9 +35,9 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
 	}
 
-	e := strings.TrimSpace(req.Body)
+	email := strings.TrimSpace(req.Body)
 
-	ok := hash.Check(e, item.Email)
+	ok := hash.Check(email, item.Email)
 	if !ok {
 		return function.Err(http.StatusBadRequest, errors.New("email does not match hashed value"))
 	}
@@ -76,15 +59,23 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	body, err := email.Template(messageTemplate, &messageContent{
-		Addr:  item.Key,
-		Token: token,
-	})
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
-	}
-
-	err = sender.Send(e, messageSubject, body)
+	err = mailerSend(
+		email,
+		"Your homepage password has been reset!",
+		`<html>
+			<body>
+				<h3>Follow the link to confirm you're the owner.</h3>
+				<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
+			</body>
+		</html>`,
+		&struct {
+			Addr  string
+			Token string
+		}{
+			Addr:  item.Key,
+			Token: token,
+		},
+	)
 	if err != nil {
 		return function.Err(
 			http.StatusInternalServerError,

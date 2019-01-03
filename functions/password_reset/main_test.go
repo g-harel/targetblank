@@ -5,17 +5,17 @@ import (
 	"strings"
 	"testing"
 
-	mockEmail "github.com/g-harel/targetblank/internal/email/mock"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/hash"
+	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
 )
 
 func init() {
+	mailerSend = mockMailer.Send
 	pages = mockTables.NewPage()
-	sender = mockEmail.NewSender()
 }
 
 func TestHandler(t *testing.T) {
@@ -123,7 +123,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}
 
-		e := mockEmail.LastSentTo(email)
+		e := mockMailer.LastSentTo(email)
 		if e == nil {
 			t.Fatal("No confirmation email was sent")
 		}

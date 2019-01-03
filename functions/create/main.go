@@ -8,54 +8,38 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/internal/email"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/hash"
+	"github.com/g-harel/targetblank/internal/mailer"
 	"github.com/g-harel/targetblank/internal/page"
 	"github.com/g-harel/targetblank/internal/rand"
 	"github.com/g-harel/targetblank/internal/tables"
 )
 
-var messageSubject = "Your new homepage is ready!"
-
-type messageContent struct {
-	Addr  string
-	Token string
-}
-
-var messageTemplate = `
-	<html>
-		<body>
-			<h3>Follow the link to confirm you're the owner.</h3>
-			<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
-		</body>
-	</html>`
-
 var pages tables.IPage
-var sender email.ISender
+var mailerSend = mailer.Send
 
 func init() {
 	pages = tables.NewPage()
-	sender = email.NewSender()
 }
 
 var defaultPage = "version 1\n==="
 
 func handler(req *function.Request, res *function.Response) *function.Error {
-	e := strings.TrimSpace(req.Body)
+	email := strings.TrimSpace(req.Body)
 
-	match, err := regexp.MatchString(`^\S+@\S+\.\S+$`, e)
+	match, err := regexp.MatchString(`^\S+@\S+\.\S+$`, email)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 	if !match {
 		return function.CustomErr(fmt.Errorf("invalid email address"))
 	}
-	h, err := hash.New(e)
+	emailHash, err := hash.New(email)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &tables.PageItem{Email: h}
+	item := &tables.PageItem{Email: emailHash}
 
 	pass, err := hash.New(rand.String(16))
 	if err != nil {
@@ -67,11 +51,11 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if parseErr != nil {
 		return function.Err(http.StatusInternalServerError, parseErr)
 	}
-	marshalledPageB, err := json.Marshal(page)
+	marshalledPage, err := json.Marshal(page)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item.Page = string(marshalledPageB)
+	item.Page = string(marshalledPage)
 
 	item.Published = false
 
@@ -85,15 +69,23 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	body, err := email.Template(messageTemplate, &messageContent{
-		Addr:  item.Key,
-		Token: token,
-	})
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
-	}
-
-	err = sender.Send(e, messageSubject, body)
+	err = mailerSend(
+		email,
+		"Your new homepage is ready!",
+		`<html>
+			<body>
+				<h3>Follow the link to confirm you're the owner.</h3>
+				<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
+			</body>
+		</html>`,
+		&struct {
+			Addr  string
+			Token string
+		}{
+			Addr:  item.Key,
+			Token: token,
+		},
+	)
 	if err != nil {
 		return function.Err(
 			http.StatusInternalServerError,
