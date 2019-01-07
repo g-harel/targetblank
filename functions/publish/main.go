@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/storage"
+	"github.com/g-harel/targetblank/services/storage"
 )
 
 var storagePageUpdatePublished = storage.PageUpdatePublished

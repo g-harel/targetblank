@@ -7,8 +7,8 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
-	mockStorage "github.com/g-harel/targetblank/storage/mock"
+	mockMailer "github.com/g-harel/targetblank/services/mailer/mock"
+	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
 
 func init() {

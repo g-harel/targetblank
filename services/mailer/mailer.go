@@ -5,15 +5,8 @@ import (
 	"html/template"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ses"
 )
-
-var client *ses.SES
-
-func init() {
-	client = ses.New(session.New(aws.NewConfig().WithRegion("us-east-1")))
-}
 
 // Send sends an email to a single recipient using the given values.
 // The body string is rendered as a template using the provided data.

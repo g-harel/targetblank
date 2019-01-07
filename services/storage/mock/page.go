@@ -3,7 +3,7 @@ package mock
 import (
 	"fmt"
 
-	"github.com/g-harel/targetblank/storage"
+	"github.com/g-harel/targetblank/services/storage"
 )
 
 var pages = []*storage.Page{}

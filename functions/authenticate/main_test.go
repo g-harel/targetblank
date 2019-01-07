@@ -6,8 +6,8 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/storage"
-	mockStorage "github.com/g-harel/targetblank/storage/mock"
+	"github.com/g-harel/targetblank/services/storage"
+	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
 
 func init() {
