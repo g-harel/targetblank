@@ -5,13 +5,13 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
+	"github.com/g-harel/targetblank/storage"
 )
 
-var pages tables.IPage
+var pages storage.IPage
 
 func init() {
-	pages = tables.NewPage()
+	pages = storage.NewPage()
 }
 
 func handler(req *function.Request, res *function.Response) *function.Error {
@@ -25,8 +25,8 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	err := pages.Change(addr, &tables.PageItem{
-		Published: true,
+	err := pages.Change(addr, &storage.PageItem{
+		Published:                              true,
 		PublishedHasBeenSetForUpdateExpression: true,
 	})
 	if err != nil {

@@ -8,12 +8,12 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
-	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
 	mailerSend = mockMailer.Send
-	pages = mockTables.NewPage()
+	pages = mockStorage.NewPage()
 }
 
 func TestHandler(t *testing.T) {

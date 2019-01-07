@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
-	"github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	"github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
@@ -66,7 +66,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should remove the page with the given address from the data store", func(t *testing.T) {
-		item := &tables.PageItem{}
+		item := &storage.PageItem{}
 		err := pages.Create(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)

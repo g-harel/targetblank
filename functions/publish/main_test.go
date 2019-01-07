@@ -5,12 +5,12 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
-	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
-	pages = mockTables.NewPage()
+	pages = mockStorage.NewPage()
 }
 
 func TestHandler(t *testing.T) {
@@ -68,7 +68,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should make the item's published status true", func(t *testing.T) {
 		addr := "PDftc9"
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Key: addr,
 		}
 		err := pages.Create(item)

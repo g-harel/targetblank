@@ -6,12 +6,12 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
-	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
-	pages = mockTables.NewPage()
+	pages = mockStorage.NewPage()
 }
 
 func TestHandler(t *testing.T) {
@@ -33,7 +33,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should check that the item's email matches", func(t *testing.T) {
 		email := "j8THwv6f@example.com"
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Email: email,
 		}
 		err := pages.Create(item)
@@ -55,7 +55,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should change the item's page", func(t *testing.T) {
 		label := "uMmETQtzy85kPOjU"
 
-		item := &tables.PageItem{}
+		item := &storage.PageItem{}
 		err := pages.Create(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
@@ -93,7 +93,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should reject invalid page specs", func(t *testing.T) {
-		item := &tables.PageItem{}
+		item := &storage.PageItem{}
 		err := pages.Create(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)

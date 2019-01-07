@@ -10,14 +10,14 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/mailer"
-	"github.com/g-harel/targetblank/internal/tables"
+	"github.com/g-harel/targetblank/storage"
 )
 
-var pages tables.IPage
+var pages storage.IPage
 var mailerSend = mailer.Send
 
 func init() {
-	pages = tables.NewPage()
+	pages = storage.NewPage()
 }
 
 func handler(req *function.Request, res *function.Response) *function.Error {

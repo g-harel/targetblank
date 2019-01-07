@@ -8,13 +8,13 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	mockMailer "github.com/g-harel/targetblank/internal/mailer/mock"
-	"github.com/g-harel/targetblank/internal/tables"
-	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
 	mailerSend = mockMailer.Send
-	pages = mockTables.NewPage()
+	pages = mockStorage.NewPage()
 }
 
 func TestHandler(t *testing.T) {
@@ -36,7 +36,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should check that the item's email matches", func(t *testing.T) {
 		email := "oP8a0M2G@example.com"
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Email: email,
 		}
 		err := pages.Create(item)
@@ -63,7 +63,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Email: h,
 		}
 		err = pages.Create(item)
@@ -104,7 +104,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Email: h,
 		}
 		err = pages.Create(item)

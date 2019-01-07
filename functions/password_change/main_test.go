@@ -6,12 +6,12 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
-	mockTables "github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
-	pages = mockTables.NewPage()
+	pages = mockStorage.NewPage()
 }
 
 func TestHandler(t *testing.T) {
@@ -70,7 +70,7 @@ func TestHandler(t *testing.T) {
 		addr := "XMBofk"
 		pass := "Uw9zJYVaSVxRkcac"
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Key: addr,
 		}
 		err := pages.Create(item)

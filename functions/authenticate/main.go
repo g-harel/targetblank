@@ -7,13 +7,13 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
+	"github.com/g-harel/targetblank/storage"
 )
 
-var pages tables.IPage
+var pages storage.IPage
 
 func init() {
-	pages = tables.NewPage()
+	pages = storage.NewPage()
 }
 
 func handler(req *function.Request, res *function.Response) *function.Error {

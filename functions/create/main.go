@@ -13,14 +13,14 @@ import (
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/mailer"
 	"github.com/g-harel/targetblank/internal/page"
-	"github.com/g-harel/targetblank/internal/tables"
+	"github.com/g-harel/targetblank/storage"
 )
 
-var pages tables.IPage
+var pages storage.IPage
 var mailerSend = mailer.Send
 
 func init() {
-	pages = tables.NewPage()
+	pages = storage.NewPage()
 }
 
 var defaultPage = "version 1\n==="
@@ -39,7 +39,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &tables.PageItem{Email: emailHash}
+	item := &storage.PageItem{Email: emailHash}
 
 	pass := make([]byte, 16)
 	_, err = rand.Read(pass)

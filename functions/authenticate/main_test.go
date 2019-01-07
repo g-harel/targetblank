@@ -6,8 +6,8 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
-	"github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	"github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
@@ -37,7 +37,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Unexpected error when hashing password")
 		}
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Password: h,
 		}
 		err = pages.Create(item)
@@ -70,7 +70,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Unexpected error when hashing password")
 		}
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Key:      addr,
 			Password: h,
 		}

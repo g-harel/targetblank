@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/tables"
-	"github.com/g-harel/targetblank/internal/tables/mock"
+	"github.com/g-harel/targetblank/storage"
+	"github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
@@ -32,7 +32,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should fetch pages with the given address and token", func(t *testing.T) {
 		page := "test page"
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Page:      page,
 			Published: false,
 		}
@@ -70,7 +70,7 @@ func TestHandler(t *testing.T) {
 	t.Run("should fetch published pages without a token", func(t *testing.T) {
 		page := "test page"
 
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Page:      page,
 			Published: true,
 		}
@@ -98,7 +98,7 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should not fetch pages without a token", func(t *testing.T) {
-		item := &tables.PageItem{
+		item := &storage.PageItem{
 			Published: false,
 		}
 		err := pages.Create(item)
