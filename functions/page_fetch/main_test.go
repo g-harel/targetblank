@@ -41,7 +41,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, item.Key)
+		token, funcErr := function.MakeToken(false, item.Addr)
 		if funcErr != nil {
 			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
@@ -49,7 +49,7 @@ func TestHandler(t *testing.T) {
 		res := &function.Response{}
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,
@@ -82,7 +82,7 @@ func TestHandler(t *testing.T) {
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 		}, res)
 		if funcErr != nil {
@@ -109,7 +109,7 @@ func TestHandler(t *testing.T) {
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Headers: map[string]string{
 				"token": "bad token",
@@ -128,7 +128,7 @@ func TestHandler(t *testing.T) {
 		res = &function.Response{}
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Headers: map[string]string{},
 		}, res)

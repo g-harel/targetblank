@@ -71,7 +71,7 @@ func TestHandler(t *testing.T) {
 		pass := "Uw9zJYVaSVxRkcac"
 
 		item := &storage.Page{
-			Key: addr,
+			Addr: addr,
 		}
 		_, err := mockStorage.PageCreate(item)
 		if err != nil {
@@ -85,7 +85,7 @@ func TestHandler(t *testing.T) {
 
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,

@@ -45,7 +45,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("should create a new page and respond with its key", func(t *testing.T) {
+	t.Run("should create a new page and respond with its address", func(t *testing.T) {
 		email := "s8yljnzo@example.com"
 
 		res := &function.Response{}

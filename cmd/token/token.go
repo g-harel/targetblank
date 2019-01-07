@@ -11,7 +11,7 @@ func main() {
 	args := os.Args[1:]
 
 	if len(args) < 1 {
-		panic("missing token address")
+		panic("missing token value")
 	}
 
 	t, err := function.MakeToken(false, args[0])

@@ -48,7 +48,7 @@ func TestHandler(t *testing.T) {
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Body: p,
 		}, res)
@@ -71,7 +71,7 @@ func TestHandler(t *testing.T) {
 		}
 
 		item := &storage.Page{
-			Key:      addr,
+			Addr:     addr,
 			Password: h,
 		}
 		_, err = mockStorage.PageCreate(item)

@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -8,9 +10,10 @@ import (
 )
 
 const PAGE_TABLE = "targetblank-tables"
+const PAGE_KEY = "addr"
 
 type Page struct {
-	Key       string `json:"addr"`
+	Addr      string `json:"addr"` // PAGE_KEY
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Published bool   `json:"published"`
@@ -25,7 +28,7 @@ func PageCreate(p *Page) (conflict bool, err error) {
 
 	_, err = client.PutItem(&dynamodb.PutItemInput{
 		TableName:           aws.String(PAGE_TABLE),
-		ConditionExpression: aws.String("attribute_not_exists(addr)"),
+		ConditionExpression: aws.String(fmt.Sprintf("attribute_not_exists(%v)", PAGE_KEY)),
 		Item:                item,
 	})
 	if err != nil {
@@ -42,7 +45,7 @@ func PageRead(addr string) (*Page, error) {
 	result, err := client.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(PAGE_TABLE),
 		Key: map[string]*dynamodb.AttributeValue{
-			"addr": {
+			PAGE_KEY: {
 				S: aws.String(addr),
 			},
 		},
@@ -66,9 +69,9 @@ func PageRead(addr string) (*Page, error) {
 func pageUpdate(addr, expr string, values map[string]*dynamodb.AttributeValue) error {
 	_, err := client.UpdateItem(&dynamodb.UpdateItemInput{
 		TableName:           aws.String(PAGE_TABLE),
-		ConditionExpression: aws.String("attribute_exists(addr)"),
+		ConditionExpression: aws.String(fmt.Sprintf("attribute_exists(%v)", PAGE_KEY)),
 		Key: map[string]*dynamodb.AttributeValue{
-			"addr": &dynamodb.AttributeValue{
+			PAGE_KEY: &dynamodb.AttributeValue{
 				S: aws.String(addr),
 			},
 		},
@@ -110,7 +113,7 @@ func PageDelete(addr string) error {
 	_, err := client.DeleteItem(&dynamodb.DeleteItemInput{
 		TableName: aws.String(PAGE_TABLE),
 		Key: map[string]*dynamodb.AttributeValue{
-			"addr": {
+			PAGE_KEY: {
 				S: aws.String(addr),
 			},
 		},

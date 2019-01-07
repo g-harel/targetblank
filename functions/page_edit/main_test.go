@@ -44,7 +44,7 @@ func TestHandler(t *testing.T) {
 		funcErr := handler(&function.Request{
 			Body: "test@example.com",
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 		}, &function.Response{})
 		if funcErr == nil {
@@ -61,7 +61,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, item.Key)
+		token, funcErr := function.MakeToken(false, item.Addr)
 		if funcErr != nil {
 			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
@@ -69,7 +69,7 @@ func TestHandler(t *testing.T) {
 		funcErr = handler(&function.Request{
 			Body: "version 1\n===\n" + label,
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,
@@ -79,7 +79,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = mockStorage.PageRead(item.Key)
+		item, err = mockStorage.PageRead(item.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
@@ -99,7 +99,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, item.Key)
+		token, funcErr := function.MakeToken(false, item.Addr)
 		if funcErr != nil {
 			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
@@ -107,7 +107,7 @@ func TestHandler(t *testing.T) {
 		funcErr = handler(&function.Request{
 			Body: "invalid spec",
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,

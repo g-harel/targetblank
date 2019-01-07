@@ -47,7 +47,7 @@ func TestHandler(t *testing.T) {
 		funcErr := handler(&function.Request{
 			Body: "test@example.com",
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 		}, &function.Response{})
 		if funcErr == nil {
@@ -76,14 +76,14 @@ func TestHandler(t *testing.T) {
 		funcErr := handler(&function.Request{
 			Body: email,
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 		}, &function.Response{})
 		if funcErr != nil {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = mockStorage.PageRead(item.Key)
+		item, err = mockStorage.PageRead(item.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
@@ -115,7 +115,7 @@ func TestHandler(t *testing.T) {
 		funcErr := handler(&function.Request{
 			Body: email,
 			PathParameters: map[string]string{
-				"addr": item.Key,
+				"addr": item.Addr,
 			},
 		}, &function.Response{})
 		if funcErr != nil {
@@ -127,7 +127,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("No confirmation email was sent")
 		}
 
-		if strings.Index(e.Body, item.Key) < 0 {
+		if strings.Index(e.Body, item.Addr) < 0 {
 			t.Fatal("Confirmation email does not contain page's address")
 		}
 	})

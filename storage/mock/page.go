@@ -9,8 +9,8 @@ import (
 var pages = []*storage.Page{}
 
 func PageCreate(p *storage.Page) (bool, error) {
-	if p.Key == "" {
-		p.Key = fmt.Sprintf("%06d", len(pages))
+	if p.Addr == "" {
+		p.Addr = fmt.Sprintf("%06d", len(pages))
 	}
 	if p.Password == "" {
 		p.Password = "tG6lUPO0OFxYFRgKaB2Cfts1UGdQX93w"
@@ -21,7 +21,7 @@ func PageCreate(p *storage.Page) (bool, error) {
 
 func PageRead(addr string) (*storage.Page, error) {
 	for _, p := range pages {
-		if p.Key == addr {
+		if p.Addr == addr {
 			return p, nil
 		}
 	}
@@ -48,7 +48,7 @@ func PageUpdateData(addr, data string) error {
 
 func PageDelete(addr string) error {
 	for i, p := range pages {
-		if p.Key == addr {
+		if p.Addr == addr {
 			pages = append(pages[:i], pages[i+1:]...)
 		}
 	}

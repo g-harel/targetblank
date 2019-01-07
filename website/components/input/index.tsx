@@ -44,7 +44,7 @@ const StyledInput = styled("input")({
     width: `${width}rem`,
 
     "&:focus": {
-        border: "1px solid sienna",
+        border: "1px solid mediumslateblue",
     },
 
     ...placeholder({
@@ -67,7 +67,7 @@ const Button = styled("button")({
     "&.enabled": {
         pointerEvents: "all",
         cursor: "pointer",
-        color: "sienna",
+        color: "mediumslateblue",
     },
 });
 

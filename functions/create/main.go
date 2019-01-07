@@ -17,14 +17,26 @@ import (
 	"github.com/g-harel/targetblank/storage"
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 var mailerSend = mailer.Send
 var storagePageCreate = storage.PageCreate
 
 var defaultPage = "version 1\n==="
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+// Generates a pseudorandom page id.
+func genPageID() string {
+	// List of unambiguous characters (minus "Il0O").
+	var alphabet = []rune("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ")
+
+	b := make([]rune, 6)
+	for i := range b {
+		b[i] = alphabet[rand.Intn(len(alphabet))]
+	}
+	return string(b)
+}
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	email := strings.TrimSpace(req.Body)
@@ -66,9 +78,9 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	item.Published = false
 
-	// Loop until an available key is found.
+	// Loop until an available address is found.
 	for {
-		item.Key = genPageID()
+		item.Addr = genPageID()
 		conflict, err := storagePageCreate(item)
 		if err != nil {
 			return function.Err(http.StatusInternalServerError, err)
@@ -78,7 +90,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		}
 	}
 
-	token, funcErr := function.MakeToken(true, item.Key)
+	token, funcErr := function.MakeToken(true, item.Addr)
 	if funcErr != nil {
 		return funcErr
 	}
@@ -96,7 +108,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 			Addr  string
 			Token string
 		}{
-			Addr:  item.Key,
+			Addr:  item.Addr,
 			Token: token,
 		},
 	)
@@ -107,7 +119,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		)
 	}
 
-	res.Body = item.Key
+	res.Body = item.Addr
 	res.ContentType("text/plain")
 
 	return nil
@@ -115,16 +127,4 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 func main() {
 	lambda.Start(function.New(handler))
-}
-
-// GenPageID generates a pseudo random page id.
-func genPageID() string {
-	// List of unambiguous characters (minus "Il0O").
-	var alphabet = []rune("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ")
-
-	b := make([]rune, 6)
-	for i := range b {
-		b[i] = alphabet[rand.Intn(len(alphabet))]
-	}
-	return string(b)
 }

@@ -27,7 +27,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 	if item == nil {
-		return function.Err(http.StatusBadRequest, errors.New("page not found for given key"))
+		return function.Err(http.StatusBadRequest, errors.New("page not found for given address"))
 	}
 
 	email := strings.TrimSpace(req.Body)
@@ -55,7 +55,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 			Addr  string
 			Token string
 		}{
-			Addr:  item.Key,
+			Addr:  item.Addr,
 			Token: token,
 		},
 	)
