@@ -6,11 +6,11 @@ import (
 
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/storage"
-	"github.com/g-harel/targetblank/storage/mock"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
-	pages = mock.NewPage()
+	storagePageRead = mockStorage.PageRead
 }
 
 func TestHandler(t *testing.T) {
@@ -32,11 +32,11 @@ func TestHandler(t *testing.T) {
 	t.Run("should fetch pages with the given address and token", func(t *testing.T) {
 		page := "test page"
 
-		item := &storage.PageItem{
-			Page:      page,
+		item := &storage.Page{
+			Data:      page,
 			Published: false,
 		}
-		err := pages.Create(item)
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -70,11 +70,11 @@ func TestHandler(t *testing.T) {
 	t.Run("should fetch published pages without a token", func(t *testing.T) {
 		page := "test page"
 
-		item := &storage.PageItem{
-			Page:      page,
+		item := &storage.Page{
+			Data:      page,
 			Published: true,
 		}
-		err := pages.Create(item)
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -98,10 +98,10 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should not fetch pages without a token", func(t *testing.T) {
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Published: false,
 		}
-		err := pages.Create(item)
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}

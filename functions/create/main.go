@@ -1,12 +1,13 @@
 package main
 
 import (
-	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
@@ -16,12 +17,12 @@ import (
 	"github.com/g-harel/targetblank/storage"
 )
 
-var pages storage.IPage
-var mailerSend = mailer.Send
-
 func init() {
-	pages = storage.NewPage()
+	rand.Seed(time.Now().UnixNano())
 }
+
+var mailerSend = mailer.Send
+var storagePageCreate = storage.PageCreate
 
 var defaultPage = "version 1\n==="
 
@@ -39,7 +40,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &storage.PageItem{Email: emailHash}
+	item := &storage.Page{Email: emailHash}
 
 	pass := make([]byte, 16)
 	_, err = rand.Read(pass)
@@ -61,13 +62,20 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item.Page = string(marshalledPage)
+	item.Data = string(marshalledPage)
 
 	item.Published = false
 
-	err = pages.Create(item)
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+	// Loop until an available key is found.
+	for {
+		item.Key = genPageID()
+		conflict, err := storagePageCreate(item)
+		if err != nil {
+			return function.Err(http.StatusInternalServerError, err)
+		}
+		if !conflict {
+			break
+		}
 	}
 
 	token, funcErr := function.MakeToken(true, item.Key)
@@ -107,4 +115,16 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 func main() {
 	lambda.Start(function.New(handler))
+}
+
+// GenPageID generates a pseudo random page id.
+func genPageID() string {
+	// List of unambiguous characters (minus "Il0O").
+	var alphabet = []rune("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ")
+
+	b := make([]rune, 6)
+	for i := range b {
+		b[i] = alphabet[rand.Intn(len(alphabet))]
+	}
+	return string(b)
 }

@@ -11,11 +11,7 @@ import (
 	"github.com/g-harel/targetblank/storage"
 )
 
-var pages storage.IPage
-
-func init() {
-	pages = storage.NewPage()
-}
+var storagePageUpdatePassword = storage.PageUpdatePassword
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -38,11 +34,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
-	item := &storage.PageItem{
-		Password: h,
-	}
-
-	err = pages.Change(addr, item)
+	err = storagePageUpdatePassword(addr, h)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

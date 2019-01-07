@@ -8,11 +8,7 @@ import (
 	"github.com/g-harel/targetblank/storage"
 )
 
-var pages storage.IPage
-
-func init() {
-	pages = storage.NewPage()
-}
+var storagePageDelete = storage.PageDelete
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -25,7 +21,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	err := pages.Delete(addr)
+	err := storagePageDelete(addr)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

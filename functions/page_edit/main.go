@@ -10,11 +10,7 @@ import (
 	"github.com/g-harel/targetblank/storage"
 )
 
-var pages storage.IPage
-
-func init() {
-	pages = storage.NewPage()
-}
+var storagePageUpdateData = storage.PageUpdateData
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -36,16 +32,13 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &storage.PageItem{
-		Page: string(bytes),
-	}
 
-	err = pages.Change(addr, item)
+	err = storagePageUpdateData(addr, string(bytes))
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
-	res.Body = item.Page
+	res.Body = string(bytes)
 
 	return nil
 }

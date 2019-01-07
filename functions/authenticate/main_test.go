@@ -7,11 +7,11 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/storage"
-	"github.com/g-harel/targetblank/storage/mock"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
-	pages = mock.NewPage()
+	storagePageRead = mockStorage.PageRead
 }
 
 func TestHandler(t *testing.T) {
@@ -37,10 +37,10 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Unexpected error when hashing password")
 		}
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Password: h,
 		}
-		err = pages.Create(item)
+		_, err = mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -70,11 +70,11 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Unexpected error when hashing password")
 		}
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Key:      addr,
 			Password: h,
 		}
-		err = pages.Create(item)
+		_, err = mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}

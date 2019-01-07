@@ -6,11 +6,11 @@ import (
 
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/storage"
-	"github.com/g-harel/targetblank/storage/mock"
+	mockStorage "github.com/g-harel/targetblank/storage/mock"
 )
 
 func init() {
-	pages = mock.NewPage()
+	storagePageDelete = mockStorage.PageDelete
 }
 
 func TestHandler(t *testing.T) {
@@ -66,8 +66,8 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should remove the page with the given address from the data store", func(t *testing.T) {
-		item := &storage.PageItem{}
-		err := pages.Create(item)
+		item := &storage.Page{}
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -89,7 +89,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = pages.Fetch(item.Key)
+		item, err = mockStorage.PageRead(item.Key)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}

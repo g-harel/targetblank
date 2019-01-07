@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	pages = mockStorage.NewPage()
+	storagePageUpdateData = mockStorage.PageUpdateData
 }
 
 func TestHandler(t *testing.T) {
@@ -33,10 +33,10 @@ func TestHandler(t *testing.T) {
 	t.Run("should check that the item's email matches", func(t *testing.T) {
 		email := "j8THwv6f@example.com"
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Email: email,
 		}
-		err := pages.Create(item)
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -55,8 +55,8 @@ func TestHandler(t *testing.T) {
 	t.Run("should change the item's page", func(t *testing.T) {
 		label := "uMmETQtzy85kPOjU"
 
-		item := &storage.PageItem{}
-		err := pages.Create(item)
+		item := &storage.Page{}
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -79,7 +79,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = pages.Fetch(item.Key)
+		item, err = mockStorage.PageRead(item.Key)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
@@ -87,14 +87,14 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Item does not exist")
 		}
 
-		if strings.Index(item.Page, label) < 0 {
+		if strings.Index(item.Data, label) < 0 {
 			t.Fatal("Item's page was not changed")
 		}
 	})
 
 	t.Run("should reject invalid page specs", func(t *testing.T) {
-		item := &storage.PageItem{}
-		err := pages.Create(item)
+		item := &storage.Page{}
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}

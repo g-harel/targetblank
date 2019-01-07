@@ -1,76 +1,56 @@
 package mock
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/g-harel/targetblank/storage"
 )
 
-// Unofficial count of created pages to generate unique addresses.
-var count = 0
+var pages = []*storage.Page{}
 
-// Page is a mocked storage.Page object.
-type Page struct {
-	items []*storage.PageItem
-}
-
-// NewPage creates a new mocked storage.Page.
-func NewPage() storage.IPage {
-	return &Page{}
-}
-
-// Create adds a PageItem to the mocked Page table.
-func (p *Page) Create(item *storage.PageItem) error {
-	if item.Key == "" {
-		count++
-		item.Key = fmt.Sprintf("%08d", count)
+func PageCreate(p *storage.Page) (bool, error) {
+	if p.Key == "" {
+		p.Key = fmt.Sprintf("%06d", len(pages))
 	}
-	if item.Password == "" {
-		item.Password = "tG6lUPO0OFxYFRgKaB2Cfts1UGdQX93w"
+	if p.Password == "" {
+		p.Password = "tG6lUPO0OFxYFRgKaB2Cfts1UGdQX93w"
 	}
-	p.items = append(p.items, item)
-	return nil
+	pages = append(pages, p)
+	return false, nil
 }
 
-// Change modifies a PageItem in the mocked Page table.
-func (p *Page) Change(addr string, i *storage.PageItem) error {
-	for _, item := range p.items {
-		if item.Key == addr {
-			if i.Email != "" {
-				item.Email = i.Email
-			}
-			if i.Password != "" {
-				item.Password = i.Password
-			}
-			if i.PublishedHasBeenSetForUpdateExpression {
-				item.Published = i.Published
-			}
-			if i.Page != "" {
-				item.Page = i.Page
-			}
-			return nil
-		}
-	}
-	return errors.New("item doesn't exist")
-}
-
-// Delete removes a PageItem from the mocked Page table.
-func (p *Page) Delete(addr string) error {
-	for i, item := range p.items {
-		if item.Key == addr {
-			p.items = append(p.items[:i], p.items[i+1:]...)
-		}
-	}
-	return nil
-}
-
-// Fetch returns a PageItem from the mocked Page table.
-func (p *Page) Fetch(addr string) (*storage.PageItem, error) {
-	for _, item := range p.items {
-		if item.Key == addr {
-			return item, nil
+func PageRead(addr string) (*storage.Page, error) {
+	for _, p := range pages {
+		if p.Key == addr {
+			return p, nil
 		}
 	}
 	return nil, nil
+}
+
+func PageUpdatePassword(addr, pass string) error {
+	p, _ := PageRead(addr)
+	p.Password = pass
+	return nil
+}
+
+func PageUpdatePublished(addr string, published bool) error {
+	p, _ := PageRead(addr)
+	p.Published = published
+	return nil
+}
+
+func PageUpdateData(addr, data string) error {
+	p, _ := PageRead(addr)
+	p.Data = data
+	return nil
+}
+
+func PageDelete(addr string) error {
+	for i, p := range pages {
+		if p.Key == addr {
+			pages = append(pages[:i], pages[i+1:]...)
+		}
+	}
+	return nil
 }

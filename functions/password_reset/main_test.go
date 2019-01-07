@@ -14,7 +14,7 @@ import (
 
 func init() {
 	mailerSend = mockMailer.Send
-	pages = mockStorage.NewPage()
+	storagePageRead = mockStorage.PageRead
 }
 
 func TestHandler(t *testing.T) {
@@ -36,10 +36,10 @@ func TestHandler(t *testing.T) {
 	t.Run("should check that the item's email matches", func(t *testing.T) {
 		email := "oP8a0M2G@example.com"
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Email: email,
 		}
-		err := pages.Create(item)
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -63,10 +63,10 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Email: h,
 		}
-		err = pages.Create(item)
+		_, err = mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -83,7 +83,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = pages.Fetch(item.Key)
+		item, err = mockStorage.PageRead(item.Key)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
@@ -104,10 +104,10 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Email: h,
 		}
-		err = pages.Create(item)
+		_, err = mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}

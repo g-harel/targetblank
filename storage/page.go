@@ -1,120 +1,46 @@
 package storage
 
 import (
-	"math/rand"
-	"time"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
+const PAGE_TABLE = "targetblank-tables"
 
-// GenPageID generates a pseudo random page id.
-func genPageID() string {
-	// List of unambiguous characters (minus "Il0O").
-	var alphabet = []rune("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ")
-
-	b := make([]rune, 6)
-	for i := range b {
-		b[i] = alphabet[rand.Intn(len(alphabet))]
-	}
-	return string(b)
-}
-
-// IPage represents the actions that can be done on a page table.
-type IPage interface {
-	Create(*PageItem) error
-	Change(string, *PageItem) error
-	Delete(string) error
-	Fetch(string) (*PageItem, error)
-}
-
-// Page represents the table of page items.
 type Page struct {
-	name   string
-	client *dynamodb.DynamoDB
+	Key       string `json:"addr"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Published bool   `json:"published"`
+	Data      string `json:"data"`
 }
 
-// NewPage creates a new Pages object.
-func NewPage() IPage {
-	return &Page{
-		name:   "targetblank-pages",
-		client: dynamodb.New(session.New(), aws.NewConfig().WithRegion("us-east-1")),
+func PageCreate(p *Page) (conflict bool, err error) {
+	item, err := dynamodbattribute.MarshalMap(p)
+	if err != nil {
+		return false, err
 	}
-}
 
-// Create adds a new page item.
-// Final key is added to the referenced Item object.
-func (p *Page) Create(item *PageItem) error {
-	input := &dynamodb.PutItemInput{
-		TableName:           aws.String(p.name),
+	_, err = client.PutItem(&dynamodb.PutItemInput{
+		TableName:           aws.String(PAGE_TABLE),
 		ConditionExpression: aws.String("attribute_not_exists(addr)"),
-	}
-
-	// Loop while the new page id conflicts with an existing one.
-	for {
-		item.Key = genPageID()
-		input.Item = item.toCreateMap()
-
-		_, err := p.client.PutItem(input)
-		if err == nil {
-			break
-		}
-
+		Item:                item,
+	})
+	if err != nil {
 		if awsErr, ok := err.(awserr.Error); ok {
-			if awsErr.Code() == dynamodb.ErrCodeConditionalCheckFailedException {
-				continue
-			}
+			conflict = awsErr.Code() == dynamodb.ErrCodeConditionalCheckFailedException
 		}
-		return err
+		return conflict, err
 	}
 
-	return nil
+	return false, nil
 }
 
-// Change modifies an item's values.
-func (p *Page) Change(addr string, i *PageItem) error {
-	expression, values := i.toUpdateExpression()
-
-	_, err := p.client.UpdateItem(&dynamodb.UpdateItemInput{
-		TableName:           aws.String(p.name),
-		ConditionExpression: aws.String("attribute_exists(addr)"),
-		Key: map[string]*dynamodb.AttributeValue{
-			"addr": &dynamodb.AttributeValue{
-				S: aws.String(addr),
-			},
-		},
-		ExpressionAttributeValues: values,
-		UpdateExpression:          aws.String(expression),
-	})
-
-	return err
-}
-
-// Delete removes an item from the table.
-func (p *Page) Delete(addr string) error {
-	_, err := p.client.DeleteItem(&dynamodb.DeleteItemInput{
-		TableName: aws.String(p.name),
-		Key: map[string]*dynamodb.AttributeValue{
-			"addr": {
-				S: aws.String(addr),
-			},
-		},
-	})
-
-	return err
-}
-
-// Fetch gets the page attribute from the item with the specified address.
-func (p *Page) Fetch(addr string) (*PageItem, error) {
-	result, err := p.client.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String(p.name),
+func PageRead(addr string) (*Page, error) {
+	result, err := client.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(PAGE_TABLE),
 		Key: map[string]*dynamodb.AttributeValue{
 			"addr": {
 				S: aws.String(addr),
@@ -128,11 +54,67 @@ func (p *Page) Fetch(addr string) (*PageItem, error) {
 		return nil, nil
 	}
 
-	item := &PageItem{}
+	item := &Page{}
 	err = dynamodbattribute.UnmarshalMap(result.Item, item)
 	if err != nil {
 		return nil, err
 	}
 
 	return item, nil
+}
+
+func pageUpdate(addr, expr string, values map[string]*dynamodb.AttributeValue) error {
+	_, err := client.UpdateItem(&dynamodb.UpdateItemInput{
+		TableName:           aws.String(PAGE_TABLE),
+		ConditionExpression: aws.String("attribute_exists(addr)"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"addr": &dynamodb.AttributeValue{
+				S: aws.String(addr),
+			},
+		},
+		UpdateExpression:          aws.String(expr),
+		ExpressionAttributeValues: values,
+	})
+
+	return err
+}
+
+func PageUpdatePassword(addr, pass string) error {
+	return pageUpdate(addr,
+		"SET password = :password",
+		map[string]*dynamodb.AttributeValue{
+			":password": {S: aws.String(pass)},
+		},
+	)
+}
+
+func PageUpdatePublished(addr string, published bool) error {
+	return pageUpdate(addr,
+		"SET published = :published",
+		map[string]*dynamodb.AttributeValue{
+			":published": {BOOL: aws.Bool(published)},
+		},
+	)
+}
+
+func PageUpdateData(addr string, data string) error {
+	return pageUpdate(addr,
+		"SET data = :data",
+		map[string]*dynamodb.AttributeValue{
+			":data": {S: aws.String(data)},
+		},
+	)
+}
+
+func PageDelete(addr string) error {
+	_, err := client.DeleteItem(&dynamodb.DeleteItemInput{
+		TableName: aws.String(PAGE_TABLE),
+		Key: map[string]*dynamodb.AttributeValue{
+			"addr": {
+				S: aws.String(addr),
+			},
+		},
+	})
+
+	return err
 }

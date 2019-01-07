@@ -13,7 +13,7 @@ import (
 
 func init() {
 	mailerSend = mockMailer.Send
-	pages = mockStorage.NewPage()
+	storagePageCreate = mockStorage.PageCreate
 }
 
 func TestHandler(t *testing.T) {
@@ -56,7 +56,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}
 
-		item, err := pages.Fetch(res.Body)
+		item, err := mockStorage.PageRead(res.Body)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching new page item: %v", err)
 		}

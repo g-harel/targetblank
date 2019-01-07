@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	pages = mockStorage.NewPage()
+	storagePageUpdatePassword = mockStorage.PageUpdatePassword
 }
 
 func TestHandler(t *testing.T) {
@@ -70,10 +70,10 @@ func TestHandler(t *testing.T) {
 		addr := "XMBofk"
 		pass := "Uw9zJYVaSVxRkcac"
 
-		item := &storage.PageItem{
+		item := &storage.Page{
 			Key: addr,
 		}
-		err := pages.Create(item)
+		_, err := mockStorage.PageCreate(item)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new item: %v", err)
 		}
@@ -96,7 +96,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = pages.Fetch(addr)
+		item, err = mockStorage.PageRead(addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when fetching item: %v", err)
 		}
