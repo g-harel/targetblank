@@ -126,7 +126,7 @@ func TestPageAddGroupMeta(t *testing.T) {
 }
 
 func TestPageEnter(t *testing.T) {
-	t.Run("should add the item to the last group when depth is zero", func(t *testing.T) {
+	t.Run("should add the page to the last group when depth is zero", func(t *testing.T) {
 		for i := 0; i < 3; i++ {
 			p := New()
 			label := fmt.Sprintf("%d", i)
@@ -173,7 +173,7 @@ func TestPageEnter(t *testing.T) {
 		}
 	})
 
-	t.Run("should correctly append items", func(t *testing.T) {
+	t.Run("should correctly append pages", func(t *testing.T) {
 		p := New()
 
 		label := func(a []int) string {
@@ -204,7 +204,7 @@ func TestPageEnter(t *testing.T) {
 			}
 
 			if current.Label != l {
-				t.Fatalf("Incorrect item found at specified address (expected \"%v\", found: \"%v\")", l, current.Label)
+				t.Fatalf("Incorrect page found at specified address (expected \"%v\", found: \"%v\")", l, current.Label)
 			}
 		}
 

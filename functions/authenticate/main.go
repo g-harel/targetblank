@@ -18,15 +18,15 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	item, err := storagePageRead(addr)
+	page, err := storagePageRead(addr)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	if item == nil {
+	if page == nil {
 		return function.Err(http.StatusBadRequest, errors.New("page not found for given address"))
 	}
 
-	if !crypto.HashCheck(req.Body, item.Password) {
+	if !crypto.HashCheck(req.Body, page.Password) {
 		return function.Err(http.StatusBadRequest, errors.New("password mismatch"))
 	}
 

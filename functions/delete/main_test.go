@@ -66,20 +66,20 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should remove the page with the given address from the data store", func(t *testing.T) {
-		item := &storage.Page{}
-		_, err := mockStorage.PageCreate(item)
+		page := &storage.Page{}
+		_, err := mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, item.Addr)
+		token, funcErr := function.MakeToken(false, page.Addr)
 		if funcErr != nil {
 			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
 
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,
@@ -89,11 +89,11 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = mockStorage.PageRead(item.Addr)
+		page, err = mockStorage.PageRead(page.Addr)
 		if err != nil {
-			t.Fatalf("Unexpected error when fetching item: %v", err)
+			t.Fatalf("Unexpected error when fetching page: %v", err)
 		}
-		if item != nil {
+		if page != nil {
 			t.Fatal("Item should not exist after being deleted")
 		}
 	})

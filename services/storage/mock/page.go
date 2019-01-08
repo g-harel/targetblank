@@ -13,7 +13,7 @@ func PageCreate(p *storage.Page) (bool, error) {
 		p.Addr = fmt.Sprintf("%06d", len(pages))
 	}
 	if p.Password == "" {
-		p.Password = "tG6lUPO0OFxYFRgKaB2Cfts1UGdQX93w"
+		p.Password = fmt.Sprintf("password-%06d", len(pages))
 	}
 	pages = append(pages, p)
 	return false, nil

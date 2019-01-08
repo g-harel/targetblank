@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/ses"
 )
 
+const SENDER = "\"targetblank\" <noreply@targetblank.org>"
+
 // Send sends an email to a single recipient using the given values.
 // The body string is rendered as a template using the provided data.
 func Send(to, sub, body string, data interface{}) error {
@@ -23,7 +25,7 @@ func Send(to, sub, body string, data interface{}) error {
 	}
 
 	_, err = client.SendEmail(&ses.SendEmailInput{
-		Source: aws.String("\"targetblank\" <noreply@targetblank.org>"),
+		Source: aws.String(SENDER),
 		Destination: &ses.Destination{
 			ToAddresses: []*string{
 				aws.String(to),

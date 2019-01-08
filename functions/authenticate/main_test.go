@@ -31,26 +31,26 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should create a token for valid passwords", func(t *testing.T) {
-		p := "password123"
-		h, err := crypto.Hash(p)
+		pass := "password123"
+		h, err := crypto.Hash(pass)
 		if err != nil {
 			t.Fatal("Unexpected error when hashing password")
 		}
 
-		item := &storage.Page{
+		page := &storage.Page{
 			Password: h,
 		}
-		_, err = mockStorage.PageCreate(item)
+		_, err = mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
-			Body: p,
+			Body: pass,
 		}, res)
 		if funcErr != nil {
 			t.Fatalf("Handler failed: %v", funcErr)
@@ -64,26 +64,26 @@ func TestHandler(t *testing.T) {
 	t.Run("should not create a token for invalid authentication", func(t *testing.T) {
 		addr := "9k5Vhs"
 
-		p := "password123"
-		h, err := crypto.Hash(p)
+		pass := "password123"
+		h, err := crypto.Hash(pass)
 		if err != nil {
 			t.Fatal("Unexpected error when hashing password")
 		}
 
-		item := &storage.Page{
+		page := &storage.Page{
 			Addr:     addr,
 			Password: h,
 		}
-		_, err = mockStorage.PageCreate(item)
+		_, err = mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
 				"addr": addr,
 			},
-			Body: "bad password",
+			Body: "incorrect password",
 		}, &function.Response{})
 		if funcErr == nil {
 			t.Fatalf("Should produce an error if the password is invalid")

@@ -180,7 +180,7 @@ func TestParser(t *testing.T) {
 			)
 		})
 
-		t.Run("should correctly identify item's link and label", func(t *testing.T) {
+		t.Run("should correctly identify entry's link and label", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
 			p.Enter(0, "link", "label")
@@ -199,7 +199,7 @@ func TestParser(t *testing.T) {
 			)
 		})
 
-		t.Run("should assign items to correct groups", func(t *testing.T) {
+		t.Run("should assign entries to correct groups", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
 			p.Enter(0, "", "group1")
@@ -241,7 +241,7 @@ func TestParser(t *testing.T) {
 			)
 		})
 
-		t.Run("should not accept group metadata after the first item", func(t *testing.T) {
+		t.Run("should not accept group metadata after the first entry", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
 			p.AddGroupMeta("key1", "value1")
@@ -282,7 +282,7 @@ func TestParser(t *testing.T) {
 			)
 		})
 
-		t.Run("should correctly parse complex item hierarchies", func(t *testing.T) {
+		t.Run("should correctly parse complex entry hierarchies", func(t *testing.T) {
 			p := New()
 			p.Version = "1"
 			p.Enter(0, "", "label")

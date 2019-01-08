@@ -33,21 +33,21 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("should check that the item's email matches", func(t *testing.T) {
+	t.Run("should check that the page's email matches", func(t *testing.T) {
 		email := "oP8a0M2G@example.com"
 
-		item := &storage.Page{
+		page := &storage.Page{
 			Email: email,
 		}
-		_, err := mockStorage.PageCreate(item)
+		_, err := mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		funcErr := handler(&function.Request{
 			Body: "test@example.com",
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 		}, &function.Response{})
 		if funcErr == nil {
@@ -55,7 +55,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("should not change the item's password", func(t *testing.T) {
+	t.Run("should not change the page's password", func(t *testing.T) {
 		email := "vKWA4GsS@example.com"
 
 		h, err := crypto.Hash(email)
@@ -63,35 +63,35 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
 
-		item := &storage.Page{
+		page := &storage.Page{
 			Email: h,
 		}
-		_, err = mockStorage.PageCreate(item)
+		_, err = mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		pass := item.Password
+		pass := page.Password
 
 		funcErr := handler(&function.Request{
 			Body: email,
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 		}, &function.Response{})
 		if funcErr != nil {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = mockStorage.PageRead(item.Addr)
+		page, err = mockStorage.PageRead(page.Addr)
 		if err != nil {
-			t.Fatalf("Unexpected error when fetching item: %v", err)
+			t.Fatalf("Unexpected error when fetching page: %v", err)
 		}
-		if item == nil {
+		if page == nil {
 			t.Fatal("Item does not exist")
 		}
 
-		if item.Password != pass {
+		if page.Password != pass {
 			t.Fatalf("Item's password was changed \"%v\"", pass)
 		}
 	})
@@ -104,18 +104,18 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating email hash: %v", err)
 		}
 
-		item := &storage.Page{
+		page := &storage.Page{
 			Email: h,
 		}
-		_, err = mockStorage.PageCreate(item)
+		_, err = mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		funcErr := handler(&function.Request{
 			Body: email,
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 		}, &function.Response{})
 		if funcErr != nil {
@@ -127,7 +127,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("No confirmation email was sent")
 		}
 
-		if strings.Index(e.Body, item.Addr) < 0 {
+		if strings.Index(e.Body, page.Addr) < 0 {
 			t.Fatal("Confirmation email does not contain page's address")
 		}
 	})

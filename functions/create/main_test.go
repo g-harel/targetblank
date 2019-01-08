@@ -56,21 +56,21 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}
 
-		item, err := mockStorage.PageRead(res.Body)
+		page, err := mockStorage.PageRead(res.Body)
 		if err != nil {
-			t.Fatalf("Unexpected error when fetching new page item: %v", err)
+			t.Fatalf("Unexpected error when fetching new page page: %v", err)
 		}
-		if item == nil {
+		if page == nil {
 			t.Fatal("Item was not created")
 		}
 
-		ok := crypto.HashCheck(email, item.Email)
+		ok := crypto.HashCheck(email, page.Email)
 		if !ok {
 			t.Fatal("Item's email hash does not match given one")
 		}
 
-		if item.Published {
-			t.Fatal("New items should not be public by default")
+		if page.Published {
+			t.Fatal("New pages should not be public by default")
 		}
 	})
 

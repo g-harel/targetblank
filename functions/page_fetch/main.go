@@ -17,22 +17,22 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	item, err := storagePageRead(addr)
+	page, err := storagePageRead(addr)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	if item == nil {
+	if page == nil {
 		return function.Err(http.StatusBadRequest, errors.New("page not found for given address"))
 	}
 
-	if !item.Published {
+	if !page.Published {
 		_, funcErr = req.ValidateToken(addr)
 		if funcErr != nil {
 			return funcErr
 		}
 	}
 
-	res.Body = item.Data
+	res.Body = page.Data
 
 	return nil
 }

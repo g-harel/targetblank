@@ -76,7 +76,7 @@ func (p *Page) AddGroupMeta(key, value string) *Page {
 	return p
 }
 
-// Enter adds a new item to the page relative.
+// Enter adds a new entry relative to the most recent one.
 func (p *Page) Enter(depth int, link, label string) error {
 	if depth < 0 {
 		return fmt.Errorf("invalid depth")

@@ -21,7 +21,7 @@ type Page struct {
 }
 
 func PageCreate(p *Page) (conflict bool, err error) {
-	item, err := dynamodbattribute.MarshalMap(p)
+	page, err := dynamodbattribute.MarshalMap(p)
 	if err != nil {
 		return false, err
 	}
@@ -29,7 +29,7 @@ func PageCreate(p *Page) (conflict bool, err error) {
 	_, err = client.PutItem(&dynamodb.PutItemInput{
 		TableName:           aws.String(PAGE_TABLE),
 		ConditionExpression: aws.String(fmt.Sprintf("attribute_not_exists(%v)", PAGE_KEY)),
-		Item:                item,
+		Item:                page,
 	})
 	if err != nil {
 		if awsErr, ok := err.(awserr.Error); ok {
@@ -57,13 +57,13 @@ func PageRead(addr string) (*Page, error) {
 		return nil, nil
 	}
 
-	item := &Page{}
-	err = dynamodbattribute.UnmarshalMap(result.Item, item)
+	page := &Page{}
+	err = dynamodbattribute.UnmarshalMap(result.Item, page)
 	if err != nil {
 		return nil, err
 	}
 
-	return item, nil
+	return page, nil
 }
 
 func pageUpdate(addr, expr string, values map[string]*dynamodb.AttributeValue) error {

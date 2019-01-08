@@ -12,8 +12,9 @@ TODO
 - refactor
     - combine some packages from internal
     - remove hardcoded strings (region)
-    - rename page item to page and page to page data
+    - rename page data to (content?, spec?)
     - error message wrappers to add context
+    - go vet fixes
 - standardize error codes/messages
 - random blob under logo on landing
 - change branding color to purple

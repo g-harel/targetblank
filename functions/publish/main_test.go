@@ -65,15 +65,15 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("should make the item's published status true", func(t *testing.T) {
+	t.Run("should make the page's published status true", func(t *testing.T) {
 		addr := "PDftc9"
 
-		item := &storage.Page{
+		page := &storage.Page{
 			Addr: addr,
 		}
-		_, err := mockStorage.PageCreate(item)
+		_, err := mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		token, funcErr := function.MakeToken(false, addr)
@@ -83,7 +83,7 @@ func TestHandler(t *testing.T) {
 
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,
@@ -93,16 +93,16 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		item, err = mockStorage.PageRead(addr)
+		page, err = mockStorage.PageRead(addr)
 		if err != nil {
-			t.Fatalf("Unexpected error when fetching item: %v", err)
+			t.Fatalf("Unexpected error when fetching page: %v", err)
 		}
-		if item == nil {
+		if page == nil {
 			t.Fatal("Item does not exist")
 		}
 
-		if item.Published != true {
-			t.Fatal("Fetched item has incorrect published status")
+		if page.Published != true {
+			t.Fatal("Fetched page has incorrect published status")
 		}
 	})
 

@@ -12,7 +12,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/page"
+	todoPage "github.com/g-harel/targetblank/internal/page"
 	"github.com/g-harel/targetblank/services/mailer"
 	"github.com/g-harel/targetblank/services/storage"
 )
@@ -52,7 +52,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item := &storage.Page{Email: emailHash}
+	page := &storage.Page{Email: emailHash}
 
 	pass := make([]byte, 16)
 	_, err = rand.Read(pass)
@@ -64,24 +64,24 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item.Password = passHash
+	page.Password = passHash
 
-	page, parseErr := page.NewFromSpec(defaultPage)
+	pageData, parseErr := todoPage.NewFromSpec(defaultPage)
 	if parseErr != nil {
 		return function.Err(http.StatusInternalServerError, parseErr)
 	}
-	marshalledPage, err := json.Marshal(page)
+	marshalledPage, err := json.Marshal(pageData)
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}
-	item.Data = string(marshalledPage)
+	page.Data = string(marshalledPage)
 
-	item.Published = false
+	page.Published = false
 
 	// Loop until an available address is found.
 	for {
-		item.Addr = genPageID()
-		conflict, err := storagePageCreate(item)
+		page.Addr = genPageID()
+		conflict, err := storagePageCreate(page)
 		if err != nil {
 			return function.Err(http.StatusInternalServerError, err)
 		}
@@ -90,7 +90,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		}
 	}
 
-	token, funcErr := function.MakeToken(true, item.Addr)
+	token, funcErr := function.MakeToken(true, page.Addr)
 	if funcErr != nil {
 		return funcErr
 	}
@@ -108,7 +108,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 			Addr  string
 			Token string
 		}{
-			Addr:  item.Addr,
+			Addr:  page.Addr,
 			Token: token,
 		},
 	)
@@ -119,7 +119,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		)
 	}
 
-	res.Body = item.Addr
+	res.Body = page.Addr
 	res.ContentType("text/plain")
 
 	return nil

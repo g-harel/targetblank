@@ -30,18 +30,18 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should fetch pages with the given address and token", func(t *testing.T) {
-		page := "test page"
+		data := "test page"
 
-		item := &storage.Page{
-			Data:      page,
+		page := &storage.Page{
+			Data:      data,
 			Published: false,
 		}
-		_, err := mockStorage.PageCreate(item)
+		_, err := mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, item.Addr)
+		token, funcErr := function.MakeToken(false, page.Addr)
 		if funcErr != nil {
 			t.Fatalf("Unexpected error when creating token: %v", funcErr)
 		}
@@ -49,7 +49,7 @@ func TestHandler(t *testing.T) {
 		res := &function.Response{}
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,
@@ -59,7 +59,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		if res.Body != page {
+		if res.Body != data {
 			t.Fatalf(
 				"Incorrect page content, expected \"%v\" but got \"%v\"",
 				page, res.Body,
@@ -68,28 +68,28 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should fetch published pages without a token", func(t *testing.T) {
-		page := "test page"
+		data := "test page"
 
-		item := &storage.Page{
-			Data:      page,
+		page := &storage.Page{
+			Data:      data,
 			Published: true,
 		}
-		_, err := mockStorage.PageCreate(item)
+		_, err := mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 		}, res)
 		if funcErr != nil {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		if res.Body != page {
+		if res.Body != data {
 			t.Fatalf(
 				"Incorrect page content, expected \"%v\" but got \"%v\"",
 				page, res.Body,
@@ -98,18 +98,18 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should not fetch pages without a token", func(t *testing.T) {
-		item := &storage.Page{
+		page := &storage.Page{
 			Published: false,
 		}
-		_, err := mockStorage.PageCreate(item)
+		_, err := mockStorage.PageCreate(page)
 		if err != nil {
-			t.Fatalf("Unexpected error when creating new item: %v", err)
+			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
 		res := &function.Response{}
 		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 			Headers: map[string]string{
 				"token": "bad token",
@@ -128,7 +128,7 @@ func TestHandler(t *testing.T) {
 		res = &function.Response{}
 		funcErr = handler(&function.Request{
 			PathParameters: map[string]string{
-				"addr": item.Addr,
+				"addr": page.Addr,
 			},
 			Headers: map[string]string{},
 		}, res)
