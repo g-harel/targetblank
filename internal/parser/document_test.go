@@ -1,32 +1,43 @@
-package page
+package parser
 
 import (
+	"bytes"
 	"encoding/json"
 	"regexp"
 	"strings"
 	"testing"
 )
 
-// Checks that the passed page and the passed spec are equal when serialized to json.
-func samePage(t *testing.T, target *Page, s ...string) {
+func newDocument() *document {
+	doc := &document{
+		Meta:   map[string]string{},
+		Groups: []*documentEntityGroup{},
+	}
+	doc.AddGroup()
+	return doc
+}
+
+// Checks that the passed document and definition are equal when serialized to json.
+func documentEquals(t *testing.T, target *document, s ...string) {
 	spec := strings.Join(s, "\n")
-	result, perr := NewFromSpec(spec)
-	if perr != nil {
-		t.Fatalf("Unexpected parsing error: %v\n%v", perr, spec)
+	result, parseErr := ParseDocument(spec)
+	if parseErr != nil {
+		t.Fatalf("Unexpected parsing error: %v\n%v", parseErr, spec)
 	}
 
 	target.Spec = spec
 	tb, err := json.MarshalIndent(target, "| ", "  ")
 	if err != nil {
-		t.Fatalf("Unexpected error when marshalling target Page: %v", err)
+		t.Fatalf("Unexpected error when marshalling target document: %v", err)
 	}
 	tl := strings.Split(string(tb), "\n")
 
-	rb, err := json.MarshalIndent(result, "| ", "  ")
+	rb := bytes.NewBuffer([]byte{})
+	json.Indent(rb, []byte(result), "| ", "  ")
 	if err != nil {
-		t.Fatalf("Unexpected error when marshalling result Page: %v", err)
+		t.Fatalf("Unexpected error when marshalling result document: %v", err)
 	}
-	rl := strings.Split(string(rb), "\n")
+	rl := strings.Split(rb.String(), "\n")
 
 	// Helper for safe array access.
 	getLine := func(n int, l []string) string {
@@ -46,7 +57,7 @@ func samePage(t *testing.T, target *Page, s ...string) {
 			rs = ">>" + (rs + "  ")[2:]
 
 			// Two lines around the difference are also shown.
-			t.Fatalf("Target and result Pages do not match around line %v:\nEXPECTED: \n%v\nACTUAL: \n%v\n",
+			t.Fatalf("Target and result documents do not match around line %v:\nEXPECTED: \n%v\nACTUAL: \n%v\n",
 				i,
 				strings.Join([]string{
 					getLine(i-2, tl), getLine(i-1, tl), ts, getLine(i+1, tl), getLine(i+2, tl),
@@ -66,10 +77,10 @@ func produceErr(t *testing.T, line int, pattern string, s ...string) {
 	if err != nil {
 		t.Fatalf("Error compiling expected error pattern /%v/: %v", pattern, err)
 	}
-	_, perr := NewFromSpec(spec)
+	_, parseErr := ParseDocument(spec)
 
-	if perr == nil || perr.Line != line || !p.Match([]byte(perr.Error())) {
-		t.Fatalf("Parsing should have produced an error on line %v matching /%v/ but got: %v", line, pattern, perr)
+	if parseErr == nil || parseErr.Line != line || !p.Match([]byte(parseErr.Error())) {
+		t.Fatalf("Parsing should have produced an error on line %v matching /%v/ but got: %v", line, pattern, parseErr)
 	}
 }
 
@@ -87,18 +98,18 @@ func TestParser(t *testing.T) {
 	})
 
 	t.Run("should correctly parse the version from a minimal spec", func(t *testing.T) {
-		p := New()
-		p.Version = "1"
-		samePage(t, p,
+		doc := newDocument()
+		doc.Version = "1"
+		documentEquals(t, doc,
 			"version 1",
 			"===",
 		)
 	})
 
 	t.Run("should correctly ignore blank lines", func(t *testing.T) {
-		p := New()
-		p.Version = "1"
-		samePage(t, p,
+		doc := newDocument()
+		doc.Version = "1"
+		documentEquals(t, doc,
 			"",
 			"version 1",
 			"",
@@ -108,18 +119,18 @@ func TestParser(t *testing.T) {
 	})
 
 	t.Run("should correctly ignore trailing whitespace", func(t *testing.T) {
-		p := New()
-		p.Version = "1"
-		samePage(t, p,
+		doc := newDocument()
+		doc.Version = "1"
+		documentEquals(t, doc,
 			"version 1 ",
 			"===       ",
 		)
 	})
 
 	t.Run("should correctly ignore comments", func(t *testing.T) {
-		p := New()
-		p.Version = "1"
-		samePage(t, p,
+		doc := newDocument()
+		doc.Version = "1"
+		documentEquals(t, doc,
 			"          # comment",
 			"version 1 # other comment",
 			"===       # other other comment",
@@ -136,21 +147,21 @@ func TestParser(t *testing.T) {
 
 	t.Run("v1", func(t *testing.T) {
 		t.Run("should accept version 1", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 			)
 		})
 
-		t.Run("should correctly add page metadata", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.Meta["key1"] = "value1"
-			p.Meta["key2"] = "value2"
-			p.Meta["kEy_-3"] = "!@ $%^& *()[] +-_= <>?,.; ':|\\`~"
-			samePage(t, p,
+		t.Run("should correctly add documentEquals metadata", func(t *testing.T) {
+			doc := newDocument()
+			doc.Version = "1"
+			doc.Meta["key1"] = "value1"
+			doc.Meta["key2"] = "value2"
+			doc.Meta["kEy_-3"] = "!@ $%^& *()[] +-_= <>?,.; ':|\\`~"
+			documentEquals(t, doc,
 				"version 1",
 				"key1=value1",
 				"key2 = value2",
@@ -159,7 +170,7 @@ func TestParser(t *testing.T) {
 			)
 		})
 
-		t.Run("should not recognize non-alphanumeric characters [^A-Za-z0-9_-] as page meta keys", func(t *testing.T) {
+		t.Run("should not recognize non-alphanumeric characters [^A-Za-z0-9_-] as documentEquals meta keys", func(t *testing.T) {
 			produceErr(t, 2, ".*",
 				"version 1",
 				"!@key=test",
@@ -168,11 +179,11 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should allow for new groups", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.AddGroup()
-			p.AddGroup()
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.AddGroup()
+			doc.AddGroup()
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"---",
@@ -181,14 +192,14 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should correctly identify entry's link and label", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.Enter(0, "link", "label")
-			p.Enter(0, "", "label")
-			p.Enter(0, "link", "")
-			p.Enter(0, "", "la[bel")
-			p.Enter(0, "link.link", "")
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.Enter(0, "link", "label")
+			doc.Enter(0, "", "label")
+			doc.Enter(0, "link", "")
+			doc.Enter(0, "", "la[bel")
+			doc.Enter(0, "link.link", "")
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"label [link]",
@@ -200,12 +211,12 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should assign entries to correct groups", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.Enter(0, "", "group1")
-			p.AddGroup().Enter(0, "", "group2")
-			p.AddGroup().Enter(0, "", "group3")
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.Enter(0, "", "group1")
+			doc.AddGroup().Enter(0, "", "group2")
+			doc.AddGroup().Enter(0, "", "group3")
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"group1",
@@ -217,13 +228,13 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should correctly add group metadata", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.AddGroupMeta("key1", "value1")
-			p.AddGroup()
-			p.AddGroupMeta("key2", "value2")
-			p.AddGroupMeta("kEy_-3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~")
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.AddGroupMeta("key1", "value1")
+			doc.AddGroup()
+			doc.AddGroupMeta("key2", "value2")
+			doc.AddGroupMeta("kEy_-3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~")
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"key1=value1",
@@ -233,7 +244,7 @@ func TestParser(t *testing.T) {
 			)
 		})
 
-		t.Run("should not recognize non-alphanumeric characters [^A-Za-z0-9_-] as page group keys", func(t *testing.T) {
+		t.Run("should not recognize non-alphanumeric characters [^A-Za-z0-9_-] as documentEquals group keys", func(t *testing.T) {
 			produceErr(t, 2, ".*",
 				"version 1",
 				"!@key=test",
@@ -242,14 +253,14 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should not accept group metadata after the first entry", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.AddGroupMeta("key1", "value1")
-			p.AddGroup()
-			p.AddGroupMeta("key2", "value2")
-			p.Enter(0, "link", "test")
-			p.Enter(0, "", "key3=value3")
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.AddGroupMeta("key1", "value1")
+			doc.AddGroup()
+			doc.AddGroupMeta("key2", "value2")
+			doc.Enter(0, "link", "test")
+			doc.Enter(0, "", "key3=value3")
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"key1=value1",
@@ -283,20 +294,20 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should correctly parse complex entry hierarchies", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.Enter(0, "", "label")
-			p.Enter(1, "", "label")
-			p.Enter(2, "", "label")
-			p.Enter(3, "", "label")
-			p.Enter(4, "", "label")
-			p.Enter(2, "", "label")
-			p.Enter(2, "", "label")
-			p.Enter(3, "", "label")
-			p.Enter(4, "", "label")
-			p.Enter(4, "", "label")
-			p.Enter(0, "", "label")
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.Enter(0, "", "label")
+			doc.Enter(1, "", "label")
+			doc.Enter(2, "", "label")
+			doc.Enter(3, "", "label")
+			doc.Enter(4, "", "label")
+			doc.Enter(2, "", "label")
+			doc.Enter(2, "", "label")
+			doc.Enter(3, "", "label")
+			doc.Enter(4, "", "label")
+			doc.Enter(4, "", "label")
+			doc.Enter(0, "", "label")
+			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"label",
@@ -314,24 +325,24 @@ func TestParser(t *testing.T) {
 		})
 
 		t.Run("should correctly parse the original spec", func(t *testing.T) {
-			p := New()
-			p.Version = "1"
-			p.Meta["key"] = "value"
-			p.Meta["search"] = "google"
-			p.AddGroupMeta("key", "value")
-			p.Enter(0, "http://ee.co/1", "label_1")
-			p.Enter(0, "http://ee.co/2", "label 2")
-			p.Enter(1, "", "label3")
-			p.Enter(2, "http://ee.co/4", "label4")
-			p.Enter(1, "http://ee.co/5", "label-5")
-			p.AddGroup()
-			p.AddGroupMeta("name", "tasks")
-			p.Enter(0, "", "label6")
-			p.Enter(1, "", "label7")
-			p.Enter(1, "", "localhost:80/test")
-			p.Enter(1, "http://ee.co/10", "")
-			p.Enter(1, "", "label10")
-			samePage(t, p,
+			doc := newDocument()
+			doc.Version = "1"
+			doc.Meta["key"] = "value"
+			doc.Meta["search"] = "google"
+			doc.AddGroupMeta("key", "value")
+			doc.Enter(0, "http://ee.co/1", "label_1")
+			doc.Enter(0, "http://ee.co/2", "label 2")
+			doc.Enter(1, "", "label3")
+			doc.Enter(2, "http://ee.co/4", "label4")
+			doc.Enter(1, "http://ee.co/5", "label-5")
+			doc.AddGroup()
+			doc.AddGroupMeta("name", "tasks")
+			doc.Enter(0, "", "label6")
+			doc.Enter(1, "", "label7")
+			doc.Enter(1, "", "localhost:80/test")
+			doc.Enter(1, "http://ee.co/10", "")
+			doc.Enter(1, "", "label10")
+			documentEquals(t, doc,
 				"# single-line comments can be added anywhere",
 				"version 1                       # version before any content",
 				"                                # blank lines are ignored",

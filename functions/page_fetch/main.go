@@ -32,7 +32,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		}
 	}
 
-	res.Body = page.Data
+	res.Body = page.Document
 
 	return nil
 }

@@ -6,11 +6,11 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/page"
+	"github.com/g-harel/targetblank/internal/parser"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
-var storagePageUpdateData = storage.PageUpdateData
+var storagePageUpdateDocument = storage.PageUpdateDocument
 
 func handler(req *function.Request, res *function.Response) *function.Error {
 	addr, funcErr := req.Param("addr")
@@ -23,7 +23,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	page, parseErr := page.NewFromSpec(req.Body)
+	page, parseErr := parser.ParseDocument(req.Body)
 	if parseErr != nil {
 		return function.CustomErr(parseErr)
 	}
@@ -33,7 +33,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return function.Err(http.StatusInternalServerError, err)
 	}
 
-	err = storagePageUpdateData(addr, string(bytes))
+	err = storagePageUpdateDocument(addr, string(bytes))
 	if err != nil {
 		return function.Err(http.StatusInternalServerError, err)
 	}

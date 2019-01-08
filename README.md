@@ -10,11 +10,7 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - refactor
-    - combine some packages from internal
-    - remove hardcoded strings (region)
-    - rename page data to (content?, spec?)
     - error message wrappers to add context
-    - go vet fixes
 - standardize error codes/messages
 - random blob under logo on landing
 - change branding color to purple
@@ -37,7 +33,7 @@ requirements
 
 notes
 - frontend spa served from s3 + cloudfront
-- api gatweay + functions backed by dynamodb
+- api gateway + functions backed by dynamodb
 
 endpoints (/api/v1..)
 - authenticate per homepage (POST   /auth/:address        password)

@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	storagePageUpdateData = mockStorage.PageUpdateData
+	storagePageUpdateDocument = mockStorage.PageUpdateDocument
 }
 
 func TestHandler(t *testing.T) {
@@ -87,7 +87,7 @@ func TestHandler(t *testing.T) {
 			t.Fatal("Item does not exist")
 		}
 
-		if strings.Index(page.Data, label) < 0 {
+		if strings.Index(page.Document, label) < 0 {
 			t.Fatal("Item's page was not changed")
 		}
 	})

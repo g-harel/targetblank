@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	todoPage "github.com/g-harel/targetblank/internal/page"
+	"github.com/g-harel/targetblank/internal/parser"
 	"github.com/g-harel/targetblank/services/mailer"
 	"github.com/g-harel/targetblank/services/storage"
 )
@@ -66,15 +65,11 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	}
 	page.Password = passHash
 
-	pageData, parseErr := todoPage.NewFromSpec(defaultPage)
+	doc, parseErr := parser.ParseDocument(defaultPage)
 	if parseErr != nil {
 		return function.Err(http.StatusInternalServerError, parseErr)
 	}
-	marshalledPage, err := json.Marshal(pageData)
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
-	}
-	page.Data = string(marshalledPage)
+	page.Document = doc
 
 	page.Published = false
 

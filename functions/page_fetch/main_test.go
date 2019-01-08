@@ -30,10 +30,10 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should fetch pages with the given address and token", func(t *testing.T) {
-		data := "test page"
+		doc := "test page"
 
 		page := &storage.Page{
-			Data:      data,
+			Document:  doc,
 			Published: false,
 		}
 		_, err := mockStorage.PageCreate(page)
@@ -59,7 +59,7 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		if res.Body != data {
+		if res.Body != doc {
 			t.Fatalf(
 				"Incorrect page content, expected \"%v\" but got \"%v\"",
 				page, res.Body,
@@ -68,10 +68,10 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should fetch published pages without a token", func(t *testing.T) {
-		data := "test page"
+		doc := "test page"
 
 		page := &storage.Page{
-			Data:      data,
+			Document:  doc,
 			Published: true,
 		}
 		_, err := mockStorage.PageCreate(page)
@@ -89,9 +89,9 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
 
-		if res.Body != data {
+		if res.Body != doc {
 			t.Fatalf(
-				"Incorrect page content, expected \"%v\" but got \"%v\"",
+				"Incorrect response content, expected \"%v\" but got \"%v\"",
 				page, res.Body,
 			)
 		}
