@@ -1,7 +1,6 @@
-package parser
+package parse
 
 import (
-	"errors"
 	"regexp"
 	"strings"
 	"testing"
@@ -9,7 +8,7 @@ import (
 
 func TestParse(t *testing.T) {
 	t.Run("Should return a syntax error when no rules match a line", func(t *testing.T) {
-		p := New()
+		p := &parser{}
 		err := p.Parse("test")
 		if err == nil {
 			t.Fatal("Expected lack of matching rules to produce error")
@@ -22,15 +21,15 @@ func TestParse(t *testing.T) {
 	t.Run("Should immediately return context errors and add line number", func(t *testing.T) {
 		message := "test error"
 
-		p := New()
-		p.Add(Rule{
+		p := &parser{}
+		p.Add(rule{
 			Pattern: regexp.MustCompile(`a`),
-			Handler: func(ctx *Context) {
+			Handler: func(ctx *context) {
 				ctx.LineParsed()
 			},
-		}, Rule{
+		}, rule{
 			Pattern: regexp.MustCompile(`b`),
-			Handler: func(ctx *Context) {
+			Handler: func(ctx *context) {
 				ctx.Error(message)
 			},
 		})
@@ -42,7 +41,7 @@ func TestParse(t *testing.T) {
 		if strings.Index(err.Error(), message) == -1 {
 			t.Fatalf("Expected context's error message to be returned: %v", err)
 		}
-		if err.Line != 1 {
+		if strings.Index(err.Error(), "1") == -1 {
 			t.Fatalf("Expected correct line number")
 		}
 
@@ -50,7 +49,7 @@ func TestParse(t *testing.T) {
 		if err == nil {
 			t.Fatal("Expected parsing to produce error")
 		}
-		if err.Line != 3 {
+		if strings.Index(err.Error(), "3") == -1 {
 			t.Fatalf("Expected correct line number")
 		}
 	})
@@ -59,10 +58,10 @@ func TestParse(t *testing.T) {
 		s := "\n\n"
 		count := 0
 
-		p := New()
-		p.Add(Rule{
+		p := &parser{}
+		p.Add(rule{
 			Pattern: regexp.MustCompile(`.*`),
-			Handler: func(ctx *Context) {
+			Handler: func(ctx *context) {
 				count++
 				ctx.LineParsed()
 			},
@@ -81,10 +80,10 @@ func TestParse(t *testing.T) {
 		s := "a-bc\nde-f\nghi-jk"
 		out := []string{}
 
-		p := New()
-		p.Add(Rule{
+		p := &parser{}
+		p.Add(rule{
 			Pattern: regexp.MustCompile(`^(?P<g1>\w+)-(?P<g2>\w+)$`),
-			Handler: func(ctx *Context) {
+			Handler: func(ctx *context) {
 				out = append(out, ctx.Param("g1")+"-"+ctx.Param("g2"))
 				ctx.LineParsed()
 			},
@@ -102,11 +101,11 @@ func TestParse(t *testing.T) {
 	t.Run("should produce an error if a required rule does not match a line", func(t *testing.T) {
 		s := "abc\ndef"
 
-		p := New()
-		p.Add(Rule{
+		p := &parser{}
+		p.Add(rule{
 			Pattern:  regexp.MustCompile(`abc`),
 			Required: true,
-			Handler: func(ctx *Context) {
+			Handler: func(ctx *context) {
 				ctx.LineParsed()
 			},
 		})
@@ -119,11 +118,11 @@ func TestParse(t *testing.T) {
 	t.Run("should produce an error if a required rule is not disabled after parsing", func(t *testing.T) {
 		s := "abc\ndef"
 
-		p := New()
-		p.Add(Rule{
+		p := &parser{}
+		p.Add(rule{
 			Pattern:  regexp.MustCompile(`.*`),
 			Required: true,
-			Handler: func(ctx *Context) {
+			Handler: func(ctx *context) {
 				ctx.LineParsed()
 			},
 		})
@@ -134,16 +133,4 @@ func TestParse(t *testing.T) {
 	})
 
 	// TODO test more context funcs.
-}
-
-func TestError(t *testing.T) {
-	t.Run("Should add line number to error", func(t *testing.T) {
-		err := Error{
-			error: errors.New("error"),
-			Line:  12,
-		}
-		if strings.Index(err.Error(), "12") == -1 {
-			t.Fatalf("Expected line number to be in parser error message: %v", err)
-		}
-	})
 }

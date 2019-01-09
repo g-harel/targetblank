@@ -1,4 +1,4 @@
-package parser
+package parse
 
 import (
 	"encoding/json"
@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// ParseDocument parses a document definition to JSON.
-func ParseDocument(s string) (string, *Error) {
+// Document parses a document definition to JSON.
+func Document(s string) (string, error) {
 	doc := &document{
 		Meta:   make(map[string]string),
 		Groups: []*documentEntityGroup{},
@@ -17,22 +17,22 @@ func ParseDocument(s string) (string, *Error) {
 	doc.AddGroup()
 
 	// v1HeaderMetadataRule matches with header metadata values.
-	v1HeaderMetadataRule := Rule{
+	v1HeaderMetadataRule := rule{
 		Name:     "header-metadata",
 		Disabled: true,
 		Pattern:  regexp.MustCompile(`^(?P<key>[A-Za-z0-9_-]+)\s*=\s*(?P<value>.*)$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			doc.Meta[ctx.Param("key")] = ctx.Param("value")
 			ctx.LineParsed()
 		},
 	}
 
 	// v1GroupMetadataRule matches with header metadata values.
-	v1GroupMetadataRule := Rule{
+	v1GroupMetadataRule := rule{
 		Name:     "group-metadata",
 		Disabled: true,
 		Pattern:  v1HeaderMetadataRule.Pattern,
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			doc.AddGroupMeta(ctx.Param("key"), ctx.Param("value"))
 			ctx.LineParsed()
 		},
@@ -40,11 +40,11 @@ func ParseDocument(s string) (string, *Error) {
 
 	// v1GroupRule matches group delimiters.
 	// These delimiters indicate a new group should be created.
-	v1GroupRule := Rule{
+	v1GroupRule := rule{
 		Name:     "group",
 		Disabled: true,
 		Pattern:  regexp.MustCompile(`^---$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			doc.AddGroup()
 			ctx.EnableOther(v1GroupMetadataRule.Name)
 			ctx.LineParsed()
@@ -53,11 +53,11 @@ func ParseDocument(s string) (string, *Error) {
 
 	// v1EntryRule matches labelled links.
 	// Items are added to the document at the specified depth.
-	v1EntryRule := Rule{
+	v1EntryRule := rule{
 		Name:     "label",
 		Disabled: true,
 		Pattern:  regexp.MustCompile(`^(?P<indent>\s*)(?P<label>[^\s\[].+?)?(?:\[(?P<link>.*)\])?$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			indent := ctx.Param("indent")
 			label := ctx.Param("label")
 			link := ctx.Param("link")
@@ -81,11 +81,11 @@ func ParseDocument(s string) (string, *Error) {
 
 	// v1HeaderRule is a required rule which matches with the header delimiter.
 	// Once the header is found, the remaining rules are added to the
-	v1HeaderRule := Rule{
+	v1HeaderRule := rule{
 		Name:     "header",
 		Required: true,
 		Pattern:  regexp.MustCompile(`^===$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			ctx.DisableSelf()
 			ctx.DisableOther(v1HeaderMetadataRule.Name)
 			ctx.EnableOther(v1GroupMetadataRule.Name)
@@ -96,39 +96,39 @@ func ParseDocument(s string) (string, *Error) {
 	}
 
 	// emptyRule removes lines that are entirely whitespace.
-	emptyRule := Rule{
+	emptyRule := rule{
 		Name:    "empty",
 		Pattern: regexp.MustCompile(`^\s*$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			ctx.LineParsed()
 		},
 	}
 
 	// whitespaceRule removes empty whitespace at the end of lines.
-	whitespaceRule := Rule{
+	whitespaceRule := rule{
 		Name:    "whitespace",
 		Pattern: regexp.MustCompile(`^(?P<content>.+?)\s+$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			ctx.ReplaceLine(ctx.Param("content"))
 		},
 	}
 
 	// commentRule removes comments.
-	commentRule := Rule{
+	commentRule := rule{
 		Name:    "comment",
 		Pattern: regexp.MustCompile(`^(?P<content>[^#]*)(#.*)$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			ctx.ReplaceLine(ctx.Param("content"))
 		},
 	}
 
 	// versionRule is a required rule which matches with a version declaration.
 	// When the version is found, the corresponding rules are added to the
-	versionRule := Rule{
+	versionRule := rule{
 		Name:     "version",
 		Required: true,
 		Pattern:  regexp.MustCompile(`^version (?P<number>\d+)$`),
-		Handler: func(ctx *Context) {
+		Handler: func(ctx *context) {
 			version := ctx.Param("number")
 			if version == "1" {
 				ctx.EnableOther(v1HeaderMetadataRule.Name)
@@ -143,7 +143,7 @@ func ParseDocument(s string) (string, *Error) {
 		},
 	}
 
-	parseErr := New().Add(
+	err := (&parser{}).Add(
 		emptyRule,
 		whitespaceRule,
 		commentRule,
@@ -154,16 +154,13 @@ func ParseDocument(s string) (string, *Error) {
 		v1GroupMetadataRule,
 		v1EntryRule,
 	).Parse(s)
-	if parseErr != nil {
-		return "", parseErr
+	if err != nil {
+		return "", err
 	}
 
 	b, err := json.Marshal(doc)
 	if err != nil {
-		return "", &Error{
-			error: fmt.Errorf("unexpected error"),
-			Line:  0,
-		}
+		return "", fmt.Errorf("marshal parse output: %v", err)
 	}
 
 	return string(b), nil

@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/parser"
+	"github.com/g-harel/targetblank/internal/parse"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
@@ -20,12 +20,12 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	page, parseErr := parser.ParseDocument(req.Body)
-	if parseErr != nil {
-		return function.ClientErr("parsing error: %v", parseErr)
+	page, err := parse.Document(req.Body)
+	if err != nil {
+		return function.ClientErr("parsing error: %v", err)
 	}
 
-	err := storagePageUpdateDocument(addr, page)
+	err = storagePageUpdateDocument(addr, page)
 	if err != nil {
 		return function.InternalErr("update page document: %v", err)
 	}

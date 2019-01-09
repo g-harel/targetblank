@@ -1,4 +1,4 @@
-package parser
+package parse
 
 import (
 	"bytes"
@@ -22,9 +22,9 @@ func newDocument() *document {
 // Checks that the passed document and definition are equal when serialized to json.
 func documentEquals(t *testing.T, target *document, s ...string) {
 	spec := strings.Join(s, "\n")
-	result, parseErr := ParseDocument(spec)
-	if parseErr != nil {
-		t.Fatalf("Unexpected parsing error: %v\n%v", parseErr, spec)
+	result, err := Document(spec)
+	if err != nil {
+		t.Fatalf("Unexpected parsing error: %v\n%v", err, spec)
 	}
 
 	target.Spec = spec
@@ -79,10 +79,10 @@ func produceErr(t *testing.T, line int, pattern string, s ...string) {
 	if err != nil {
 		t.Fatalf("Error compiling expected error pattern /%v/: %v", pattern, err)
 	}
-	_, parseErr := ParseDocument(spec)
+	_, err = Document(spec)
 
-	if parseErr == nil || parseErr.Line != line || !p.Match([]byte(parseErr.Error())) {
-		t.Fatalf("Parsing should have produced an error on line %v matching /%v/ but got: %v", line, pattern, parseErr)
+	if err == nil || strings.Index(err.Error(), strconv.Itoa(line)) == -1 || !p.Match([]byte(err.Error())) {
+		t.Fatalf("Parsing should have produced an error on line %v matching /%v/ but got: %v", line, pattern, err)
 	}
 }
 
@@ -257,7 +257,7 @@ func TestDocumentEnter(t *testing.T) {
 	})
 }
 
-func TestParseDocument(t *testing.T) {
+func TestDocument(t *testing.T) {
 	t.Run("should require version to be declared", func(t *testing.T) {
 		produceErr(t, 2, "version",
 			"",

@@ -3,13 +3,13 @@ package main
 import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/parser"
+	"github.com/g-harel/targetblank/internal/parse"
 )
 
 func handler(req *function.Request, res *function.Response) *function.Error {
-	_, parseErr := parser.ParseDocument(req.Body)
-	if parseErr != nil {
-		return function.ClientErr("parsing error: %v", parseErr)
+	_, err := parse.Document(req.Body)
+	if err != nil {
+		return function.ClientErr("parsing error: %v", err)
 	}
 
 	return nil

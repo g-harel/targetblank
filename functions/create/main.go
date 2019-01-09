@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/function"
-	"github.com/g-harel/targetblank/internal/parser"
+	"github.com/g-harel/targetblank/internal/parse"
 	"github.com/g-harel/targetblank/services/mailer"
 	"github.com/g-harel/targetblank/services/storage"
 )
@@ -63,9 +63,9 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	}
 	page.Password = passHash
 
-	doc, parseErr := parser.ParseDocument(defaultDocument)
-	if parseErr != nil {
-		return function.InternalErr("parse default document: %v", parseErr)
+	doc, err := parse.Document(defaultDocument)
+	if err != nil {
+		return function.InternalErr("parse default document: %v", err)
 	}
 	page.Document = doc
 
