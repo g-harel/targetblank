@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
-	"net/http"
 	"regexp"
 	"strings"
 	"time"
@@ -19,7 +17,7 @@ import (
 var mailerSend = mailer.Send
 var storagePageCreate = storage.PageCreate
 
-var defaultPage = "version 1\n==="
+var defaultDocument = "version 1\n==="
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
@@ -27,7 +25,7 @@ func init() {
 
 // Generates a pseudorandom page id.
 func genPageID() string {
-	// List of unambiguous characters (minus "Il0O").
+	// Alphabet of unambiguous characters (without "Il0O").
 	var alphabet = []rune("123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ")
 
 	b := make([]rune, 6)
@@ -42,32 +40,32 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	match, err := regexp.MatchString(`^\S+@\S+\.\S+$`, email)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("match email pattern: %v", err)
 	}
 	if !match {
-		return function.CustomErr(fmt.Errorf("invalid email address"))
+		return function.ClientErr("invalid email address")
 	}
 	emailHash, err := crypto.Hash(email)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("hash email: %v", err)
 	}
 	page := &storage.Page{Email: emailHash}
 
 	pass := make([]byte, 16)
 	_, err = rand.Read(pass)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("generate random password: %v", err)
 	}
 
 	passHash, err := crypto.Hash(string(pass))
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("hash password: %v", err)
 	}
 	page.Password = passHash
 
-	doc, parseErr := parser.ParseDocument(defaultPage)
+	doc, parseErr := parser.ParseDocument(defaultDocument)
 	if parseErr != nil {
-		return function.Err(http.StatusInternalServerError, parseErr)
+		return function.InternalErr("parse default document: %v", parseErr)
 	}
 	page.Document = doc
 
@@ -78,16 +76,16 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		page.Addr = genPageID()
 		conflict, err := storagePageCreate(page)
 		if err != nil {
-			return function.Err(http.StatusInternalServerError, err)
+			return function.InternalErr("create page: %v", err)
 		}
 		if !conflict {
 			break
 		}
 	}
 
-	token, funcErr := function.MakeToken(true, page.Addr)
-	if funcErr != nil {
-		return funcErr
+	token, err := function.CreateToken(true, page.Addr)
+	if err != nil {
+		return function.InternalErr("create token: %v", err)
 	}
 
 	err = mailerSend(
@@ -108,10 +106,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		},
 	)
 	if err != nil {
-		return function.Err(
-			http.StatusInternalServerError,
-			fmt.Errorf("Error sending email: %v", err),
-		)
+		return function.InternalErr("send email: %v", err)
 	}
 
 	res.Body = page.Addr

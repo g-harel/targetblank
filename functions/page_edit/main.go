@@ -1,9 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"net/http"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/internal/parser"
@@ -18,27 +15,22 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	_, funcErr = req.ValidateToken(addr)
+	funcErr = req.Authenticate(addr)
 	if funcErr != nil {
 		return funcErr
 	}
 
 	page, parseErr := parser.ParseDocument(req.Body)
 	if parseErr != nil {
-		return function.CustomErr(parseErr)
+		return function.ClientErr("parsing error: %v", parseErr)
 	}
 
-	bytes, err := json.Marshal(page)
+	err := storagePageUpdateDocument(addr, page)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("update page document: %v", err)
 	}
 
-	err = storagePageUpdateDocument(addr, string(bytes))
-	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
-	}
-
-	res.Body = string(bytes)
+	res.Body = page
 
 	return nil
 }

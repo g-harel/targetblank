@@ -2,6 +2,8 @@ package function
 
 import (
 	"errors"
+	"io/ioutil"
+	"log"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -27,8 +29,10 @@ func TestRequestParam(t *testing.T) {
 	})
 
 	t.Run("should return an error if the parameter is missing", func(t *testing.T) {
-		name := "param name"
+		name := "param123"
 		req := Request{}
+
+		log.SetOutput(ioutil.Discard)
 
 		_, err := req.Param(name)
 		if err == nil {

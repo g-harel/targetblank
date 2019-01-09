@@ -76,12 +76,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, funcErr := function.MakeToken(false, addr)
-		if funcErr != nil {
-			t.Fatalf("Unexpected error when creating token: %v", funcErr)
+		token, err := function.CreateToken(false, addr)
+		if err != nil {
+			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		funcErr = handler(&function.Request{
+		funcErr := handler(&function.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},

@@ -10,10 +10,13 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - refactor
-    - error message wrappers to add context
+    - better error handling in all functions
+    - error message wrappers to add
+    - make internal/function/token lower level
 - standardize error codes/messages
+- make terraform module to manage functions
+    - add prefix?
 - random blob under logo on landing
-- change branding color to purple
 - rename functions package
 - display uncaught network errors
 - app ~ treat 5xx errors differently

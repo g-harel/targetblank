@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-	"net/http"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,7 +17,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	_, funcErr = req.ValidateToken(addr)
+	funcErr = req.Authenticate(addr)
 	if funcErr != nil {
 		return funcErr
 	}
@@ -27,16 +25,16 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 	pass := strings.TrimSpace(req.Body)
 
 	if len(pass) < 8 {
-		return function.CustomErr(errors.New("password is too short"))
+		return function.ClientErr("password is too short")
 	}
 	h, err := crypto.Hash(pass)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("hash password: %v", err)
 	}
 
 	err = storagePageUpdatePassword(addr, h)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("update page password: %v", err)
 	}
 
 	return nil

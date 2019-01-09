@@ -1,7 +1,6 @@
 package function
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -13,7 +12,7 @@ type Request events.APIGatewayProxyRequest
 // Param reads a path parameter from the request.
 func (r *Request) Param(n string) (string, *Error) {
 	if r.PathParameters == nil || r.PathParameters[n] == "" {
-		return "", Err(http.StatusInternalServerError, fmt.Errorf("Missing required path parameter \"%v\"", n))
+		return "", InternalErr("read path param: %v", n)
 	}
 	return r.PathParameters[n], nil
 }

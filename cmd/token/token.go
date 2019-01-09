@@ -14,7 +14,7 @@ func main() {
 		panic("missing token value")
 	}
 
-	t, err := function.MakeToken(false, args[0])
+	t, err := function.CreateToken(false, args[0])
 	if err != nil {
 		panic(err)
 	}

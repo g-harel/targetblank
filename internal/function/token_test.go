@@ -7,20 +7,20 @@ import (
 )
 
 func init() {
-	longTTL = time.Millisecond * 3
-	shortTTL = time.Millisecond
+	longTTL = time.Millisecond * 16
+	shortTTL = time.Millisecond * 4
 }
 
-func TestMakeToken(t *testing.T) {
+func TestCreateToken(t *testing.T) {
 	t.Run("should not produce the same token for the same input", func(t *testing.T) {
 		secret := "test secret"
 
-		tkn1, err := MakeToken(false, secret)
+		tkn1, err := CreateToken(false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
-		tkn2, err := MakeToken(false, secret)
+		tkn2, err := CreateToken(false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
@@ -38,7 +38,7 @@ func TestMakeToken(t *testing.T) {
 		}
 
 		for _, secret := range secrets {
-			tkn, funcErr := MakeToken(false, secret)
+			tkn, funcErr := CreateToken(false, secret)
 			if funcErr != nil {
 				t.Fatalf("Unexpected error creating token: %v", funcErr)
 			}
@@ -51,103 +51,75 @@ func TestMakeToken(t *testing.T) {
 	})
 }
 
-func TestValidateToken(t *testing.T) {
-	ValidateToken := func(token, secret string) (bool, *Error) {
-		return (&Request{
-			Headers: map[string]string{
-				headerName: token,
-			},
-		}).ValidateToken(secret)
+func TestAuthenticate(t *testing.T) {
+	Authenticate := func(token, secret string) *Error {
+		req := &Request{
+			Headers: map[string]string{},
+		}
+		req.Headers[tokenHeader] = token
+		return req.Authenticate(secret)
 	}
 
 	t.Run("should produce an error if the secret is wrong", func(t *testing.T) {
 		secret := "s3cr3t"
 
-		tkn, err := MakeToken(false, secret)
+		tkn, err := CreateToken(false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
-		_, err = ValidateToken(tkn, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error when validating with a correct secret: %v", err)
+		funcErr := Authenticate(tkn, secret)
+		if funcErr != nil {
+			t.Fatalf("Unexpected error when validating with a correct secret: %v", funcErr)
 		}
 
-		tkn, err = MakeToken(false, secret)
+		tkn, err = CreateToken(false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
-		_, err = ValidateToken(tkn, "wrong secret")
-		if err == nil {
+		funcErr = Authenticate(tkn, "wrong secret")
+		if funcErr == nil {
 			t.Fatal("Expected incorrect secret to produce error")
-		}
-	})
-
-	t.Run("should return the correct restricted status", func(t *testing.T) {
-		secret := "secret"
-
-		tkn, err := MakeToken(false, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error creating token: %v", err)
-		}
-		r, err := ValidateToken(tkn, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error reading token: %v", err)
-		}
-		if r {
-			t.Fatalf("Incorrect token status: %v", err)
-		}
-
-		tkn, err = MakeToken(true, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error creating token: %v", err)
-		}
-		r, err = ValidateToken(tkn, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error reading token: %v", err)
-		}
-		if !r {
-			t.Fatalf("Incorrect token status: %v", err)
 		}
 	})
 
 	t.Run("should reject expired tokens", func(t *testing.T) {
 		secret := "secret"
 
-		tkn, err := MakeToken(false, secret)
+		tkn, err := CreateToken(false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
-		_, err = ValidateToken(tkn, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error reading token: %v", err)
+		funcErr := Authenticate(tkn, secret)
+		if funcErr != nil {
+			t.Fatalf("Unexpected error reading token: %v", funcErr)
 		}
 
 		time.Sleep(longTTL)
 
-		_, err = ValidateToken(tkn, secret)
-		if err == nil {
+		funcErr = Authenticate(tkn, secret)
+		if funcErr == nil {
 			t.Fatalf("Expected expired token to be rejected")
 		}
 	})
 
 	t.Run("should use short expiry for restricted tokens", func(t *testing.T) {
-		secret := "secret"
+		secret := "SeCrEt"
 
-		tkn, err := MakeToken(true, secret)
+		tkn, err := CreateToken(true, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
-		_, err = ValidateToken(tkn, secret)
-		if err != nil {
-			t.Fatalf("Unexpected error reading token: %v", err)
+		funcErr := Authenticate(tkn, secret)
+		if funcErr != nil {
+			t.Fatalf("Unexpected error reading token: %v", funcErr)
 		}
 
 		time.Sleep(shortTTL)
 
-		_, err = ValidateToken(tkn, secret)
-		if err == nil {
+		funcErr = Authenticate(tkn, secret)
+		if funcErr == nil {
 			t.Fatalf("Expected expired token to be rejected")
 		}
 	})

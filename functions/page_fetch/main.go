@@ -1,9 +1,6 @@
 package main
 
 import (
-	"errors"
-	"net/http"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/services/storage"
@@ -19,16 +16,17 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	page, err := storagePageRead(addr)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return function.Err(http.StatusBadRequest, errors.New("page not found for given address"))
+		return function.ClientErr("page not found")
 	}
 
 	if !page.Published {
-		_, funcErr = req.ValidateToken(addr)
+		funcErr = req.Authenticate(addr)
 		if funcErr != nil {
-			return funcErr
+			// Page existence is kept hidden.
+			return function.ClientErr("page not found")
 		}
 	}
 

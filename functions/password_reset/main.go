@@ -1,9 +1,6 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/lambda"
@@ -24,22 +21,22 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	page, err := storagePageRead(addr)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return function.Err(http.StatusBadRequest, errors.New("page not found for given address"))
+		return function.ClientErr("page not found")
 	}
 
 	email := strings.TrimSpace(req.Body)
 
 	ok := crypto.HashCheck(email, page.Email)
 	if !ok {
-		return function.Err(http.StatusBadRequest, errors.New("email does not match hashed value"))
+		return function.ClientErr("page not found")
 	}
 
-	token, funcErr := function.MakeToken(true, addr)
-	if funcErr != nil {
-		return funcErr
+	token, err := function.CreateToken(true, addr)
+	if err != nil {
+		return function.InternalErr("create token: %v", err)
 	}
 
 	err = mailerSend(
@@ -60,10 +57,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		},
 	)
 	if err != nil {
-		return function.Err(
-			http.StatusInternalServerError,
-			fmt.Errorf("Error sending email: %v", err),
-		)
+		return function.InternalErr("send email: %v", err)
 	}
 
 	return nil

@@ -2,73 +2,71 @@ package function
 
 import (
 	"encoding/json"
-	"errors"
-	"net/http"
+	"fmt"
 	"time"
 
 	"github.com/g-harel/targetblank/internal/crypto"
 )
 
-var headerName = "token"
+const tokenHeader = "token"
+
 var longTTL = time.Hour * 18
 var shortTTL = time.Minute * 10
 
 type tokenPayload struct {
-	ExpireAt   int64  `json:"a"`
-	Restricted bool   `json:"b"`
-	Secret     string `json:"c"`
+	ExpireAt int64  `json:"a"`
+	Secret   string `json:"b"`
 }
 
-// MakeToken creates a new authentication token.
-func MakeToken(restricted bool, secret string) (string, *Error) {
+// CreateToken creates a new authentication token.
+func CreateToken(short bool, secret string) (string, error) {
 	expire := time.Now()
-	if restricted {
+	if short {
 		expire = expire.Add(shortTTL)
 	} else {
 		expire = expire.Add(longTTL)
 	}
 
 	payload, err := json.Marshal(&tokenPayload{
-		ExpireAt:   expire.UnixNano(),
-		Restricted: restricted,
-		Secret:     secret,
+		ExpireAt: expire.UnixNano(),
+		Secret:   secret,
 	})
 	if err != nil {
-		return "", Err(http.StatusInternalServerError, err)
+		return "", fmt.Errorf("marshall token: %v", err)
 	}
 
 	t, err := crypto.Encrypt(payload)
 	if err != nil {
-		return "", Err(http.StatusInternalServerError, err)
+		return "", fmt.Errorf("encrypt token: %v", err)
 	}
 
 	return t, nil
 }
 
-// ValidateToken validates the token in the request.
-func (r *Request) ValidateToken(secret string) (restricted bool, e *Error) {
-	t := r.Headers[headerName]
+// Authenticate validates the token in the request.
+func (r *Request) Authenticate(secret string) *Error {
+	t := r.Headers[tokenHeader]
 	if t == "" {
-		return false, CustomErr(errors.New("missing authentication token"))
+		return ClientErr("missing authentication token (no \"%v\" header)", tokenHeader)
 	}
 
 	payload, err := crypto.Decrypt(t)
 	if err != nil {
-		return false, Err(http.StatusBadRequest, err)
+		return ClientErr("invalid authentication token")
 	}
 
 	p := &tokenPayload{}
 	err = json.Unmarshal(payload, p)
 	if err != nil {
-		return false, Err(http.StatusInternalServerError, err)
+		return ClientErr("invalid authentication token")
 	}
 
 	if p.ExpireAt < time.Now().UnixNano() {
-		return false, Err(http.StatusBadRequest, errors.New("expired token"))
+		return ClientErr("expired authentication token")
 	}
 	if p.Secret != secret {
-		return false, Err(http.StatusBadRequest, errors.New("incorrect token secret"))
+		return ClientErr("invalid authentication token")
 	}
 
-	return p.Restricted, nil
+	return nil
 }

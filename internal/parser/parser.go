@@ -170,5 +170,5 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("Error on line %v: %v", e.Line, e.error)
+	return fmt.Sprintf("line %v: %v", e.Line, e.error)
 }

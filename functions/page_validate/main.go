@@ -9,7 +9,7 @@ import (
 func handler(req *function.Request, res *function.Response) *function.Error {
 	_, parseErr := parser.ParseDocument(req.Body)
 	if parseErr != nil {
-		return function.CustomErr(parseErr)
+		return function.ClientErr("parsing error: %v", parseErr)
 	}
 
 	return nil

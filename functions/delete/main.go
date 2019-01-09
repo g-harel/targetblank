@@ -1,8 +1,6 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/function"
 	"github.com/g-harel/targetblank/services/storage"
@@ -16,14 +14,14 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		return funcErr
 	}
 
-	_, funcErr = req.ValidateToken(addr)
+	funcErr = req.Authenticate(addr)
 	if funcErr != nil {
 		return funcErr
 	}
 
 	err := storagePageDelete(addr)
 	if err != nil {
-		return function.Err(http.StatusInternalServerError, err)
+		return function.InternalErr("delete page: %v", err)
 	}
 
 	return nil
