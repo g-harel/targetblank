@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-const pageTable = "targetblank-tables"
+const pageTable = "targetblank-pages"
 const pageKey = "addr"
 
 // Page represents a DynamoDB page item.

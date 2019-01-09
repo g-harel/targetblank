@@ -38,10 +38,11 @@ func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 		response := &Response{
 			StatusCode: http.StatusOK,
 			Headers: map[string]string{
-				"Content-Type":                 "application/json",
-				"Access-Control-Allow-Origin":  "*",
-				"Access-Control-Allow-Headers": "*",
-				"Access-Control-Allow-Methods": "*",
+				"Content-Type":                     "application/json",
+				"Access-Control-Allow-Origin":      "*",
+				"Access-Control-Allow-Headers":     req.Headers["Access-Control-Request-Headers"],
+				"Access-Control-Allow-Methods":     req.HTTPMethod,
+				"Access-Control-Allow-Credentials": "true",
 			},
 			Body: "{}",
 		}

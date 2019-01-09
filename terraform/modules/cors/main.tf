@@ -19,6 +19,7 @@ resource "aws_api_gateway_method_response" "cors" {
     "method.response.header.Access-Control-Allow-Headers" = true
     "method.response.header.Access-Control-Allow-Origin"  = true
     "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Credentials" = true
   }
 
   depends_on = ["aws_api_gateway_method.cors"]
@@ -49,6 +50,7 @@ resource "aws_api_gateway_integration_response" "cors" {
     "method.response.header.Access-Control-Allow-Headers" = "'*'"
     "method.response.header.Access-Control-Allow-Methods" = "'*'"
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Credentials" = "'true'"
   }
 
   depends_on = ["aws_api_gateway_method_response.cors"]

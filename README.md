@@ -12,10 +12,10 @@ TODO
 - refactor
     - better error handling in all functions
     - error message wrappers to add
-    - make internal/function/token lower level
 - standardize error codes/messages
 - make terraform module to manage functions
-    - add prefix?
+    - rename functions?
+    - add prefix/tag?
 - random blob under logo on landing
 - rename functions package
 - display uncaught network errors
