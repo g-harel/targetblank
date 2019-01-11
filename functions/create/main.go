@@ -43,7 +43,7 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		return handlers.InternalErr("match email pattern: %v", err)
 	}
 	if !match {
-		return handlers.ClientErr("invalid email address")
+		return handlers.ClientErr(handlers.ErrInvalidEmail)
 	}
 	emailHash, err := crypto.Hash(email)
 	if err != nil {

@@ -11,7 +11,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - refactor
     - better error handling in all functions
-- standardize error messages
 - make terraform module to manage functions
     - rename functions?
     - add prefix/tag?

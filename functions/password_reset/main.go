@@ -24,14 +24,14 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		return handlers.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handlers.ClientErr("page not found")
+		return handlers.ClientErr(handlers.ErrPageNotFound)
 	}
 
 	email := strings.TrimSpace(req.Body)
 
 	ok := crypto.HashCheck(email, page.Email)
 	if !ok {
-		return handlers.ClientErr("page not found")
+		return handlers.ClientErr(handlers.ErrPageNotFound)
 	}
 
 	token, err := handlers.CreateToken(true, addr)

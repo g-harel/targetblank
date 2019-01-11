@@ -20,11 +20,11 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		return handlers.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handlers.ClientErr("page not found")
+		return handlers.ClientErr(handlers.ErrPageNotFound)
 	}
 
 	if !crypto.HashCheck(req.Body, page.Password) {
-		return handlers.ClientErr("page not found")
+		return handlers.ClientErr(handlers.ErrPageNotFound)
 	}
 
 	token, err := handlers.CreateToken(false, addr)

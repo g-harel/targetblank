@@ -25,7 +25,7 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 	pass := strings.TrimSpace(req.Body)
 
 	if len(pass) < 8 {
-		return handlers.ClientErr("password is too short")
+		return handlers.ClientErr(handlers.ErrInvalidPassword)
 	}
 	h, err := crypto.Hash(pass)
 	if err != nil {

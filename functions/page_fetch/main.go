@@ -19,14 +19,14 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		return handlers.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handlers.ClientErr("page not found")
+		return handlers.ClientErr(handlers.ErrPageNotFound)
 	}
 
 	if !page.Published {
 		funcErr = req.Authenticate(addr)
 		if funcErr != nil {
 			// Page existence is kept hidden.
-			return handlers.ClientErr("page not found")
+			return handlers.ClientErr(handlers.ErrPageNotFound)
 		}
 	}
 

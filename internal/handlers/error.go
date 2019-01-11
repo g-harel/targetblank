@@ -9,6 +9,14 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 )
 
+// Common client error messages.
+const (
+	ErrPageNotFound    = "page not found"
+	ErrInvalidEmail    = "invalid email address"
+	ErrInvalidPassword = "password is too short"
+	ErrGeneric         = "something went wrong"
+)
+
 // Error adds a status code to the error type.
 type Error struct {
 	error
@@ -35,10 +43,10 @@ func InternalErr(format string, a ...interface{}) *Error {
 	log.Printf("ERROR: %v\n", err)
 
 	// Message payload is encrypted using the application secret.
-	// Error message is recoverable for debugging.
+	// Allows the message to be recovered for debugging without exposing internals.
 	msg, err := crypto.Encrypt([]byte(err.Error()))
 	if err != nil {
-		msg = http.StatusText(http.StatusInternalServerError)
+		msg = ErrGeneric
 		log.Printf("ERROR*: %v\n", err)
 	}
 
