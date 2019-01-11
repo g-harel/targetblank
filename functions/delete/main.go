@@ -2,13 +2,13 @@ package main
 
 import (
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
 var storagePageDelete = storage.PageDelete
 
-func handler(req *function.Request, res *function.Response) *function.Error {
+func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 	addr, funcErr := req.Param("addr")
 	if funcErr != nil {
 		return funcErr
@@ -21,12 +21,12 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 
 	err := storagePageDelete(addr)
 	if err != nil {
-		return function.InternalErr("delete page: %v", err)
+		return handlers.InternalErr("delete page: %v", err)
 	}
 
 	return nil
 }
 
 func main() {
-	lambda.Start(function.New(handler))
+	lambda.Start(handlers.New(handler))
 }

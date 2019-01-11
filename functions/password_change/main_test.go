@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -16,9 +16,9 @@ func init() {
 
 func TestHandler(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&function.Request{
+		err := handler(&handlers.Request{
 			PathParameters: map[string]string{},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -31,14 +31,14 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should require a validation token", func(t *testing.T) {
-		err := handler(&function.Request{
+		err := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": "123456",
 			},
 			Headers: map[string]string{
 				"token": "bad token",
 			},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if err == nil {
 			t.Fatalf("Bad token should produce error")
 		}
@@ -49,12 +49,12 @@ func TestHandler(t *testing.T) {
 			)
 		}
 
-		err = handler(&function.Request{
+		err = handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": "123456",
 			},
 			Headers: map[string]string{},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if err == nil {
 			t.Fatalf("Missing token should produce error")
 		}
@@ -78,12 +78,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := function.CreateToken(false, addr)
+		token, err := handlers.CreateToken(false, addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		funcErr := handler(&function.Request{
+		funcErr := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -91,7 +91,7 @@ func TestHandler(t *testing.T) {
 				"token": token,
 			},
 			Body: pass,
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if funcErr != nil {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}

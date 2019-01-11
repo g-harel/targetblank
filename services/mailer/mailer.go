@@ -45,5 +45,6 @@ func Send(to, sub, body string, data interface{}) error {
 			},
 		},
 	})
+
 	return err
 }

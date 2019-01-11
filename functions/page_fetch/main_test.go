@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -15,9 +15,9 @@ func init() {
 
 func TestHandler(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&function.Request{
+		err := handler(&handlers.Request{
 			PathParameters: map[string]string{},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -41,13 +41,13 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := function.CreateToken(false, page.Addr)
+		token, err := handlers.CreateToken(false, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		res := &function.Response{}
-		funcErr := handler(&function.Request{
+		res := &handlers.Response{}
+		funcErr := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -79,8 +79,8 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		res := &function.Response{}
-		funcErr := handler(&function.Request{
+		res := &handlers.Response{}
+		funcErr := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -106,8 +106,8 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		res := &function.Response{}
-		funcErr := handler(&function.Request{
+		res := &handlers.Response{}
+		funcErr := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -125,8 +125,8 @@ func TestHandler(t *testing.T) {
 			)
 		}
 
-		res = &function.Response{}
-		funcErr = handler(&function.Request{
+		res = &handlers.Response{}
+		funcErr = handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},

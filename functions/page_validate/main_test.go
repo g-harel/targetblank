@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 )
 
 func TestHandler(t *testing.T) {
 	t.Run("should not produce an error when given a valid page spec", func(t *testing.T) {
-		res := &function.Response{}
-		funcErr := handler(&function.Request{
+		res := &handlers.Response{}
+		funcErr := handler(&handlers.Request{
 			Body: "# test\nversion 1\n===\ntestlabel",
 		}, res)
 		if funcErr != nil {
@@ -19,9 +19,9 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should respond with status code 400 if page spec is invalid", func(t *testing.T) {
-		funcErr := handler(&function.Request{
+		funcErr := handler(&handlers.Request{
 			Body: "invalid spec",
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if funcErr == nil {
 			t.Fatal("Expected invalid spec to produce error")
 		}

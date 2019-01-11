@@ -2,19 +2,19 @@ package main
 
 import (
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	"github.com/g-harel/targetblank/internal/parse"
 )
 
-func handler(req *function.Request, res *function.Response) *function.Error {
+func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 	_, err := parse.Document(req.Body)
 	if err != nil {
-		return function.ClientErr("parsing error: %v", err)
+		return handlers.ClientErr("parsing error: %v", err)
 	}
 
 	return nil
 }
 
 func main() {
-	lambda.Start(function.New(handler))
+	lambda.Start(handlers.New(handler))
 }

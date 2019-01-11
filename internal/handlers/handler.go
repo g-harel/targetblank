@@ -1,4 +1,4 @@
-package function
+package handlers
 
 import (
 	"net/http"
@@ -38,7 +38,8 @@ func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 		response := &Response{
 			StatusCode: http.StatusOK,
 			Headers: map[string]string{
-				"Content-Type":                     "application/json",
+				"Content-Type": "application/json",
+				// CORS headers.
 				"Access-Control-Allow-Origin":      "*",
 				"Access-Control-Allow-Headers":     req.Headers["Access-Control-Request-Headers"],
 				"Access-Control-Allow-Methods":     req.HTTPMethod,

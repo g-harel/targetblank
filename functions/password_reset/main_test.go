@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	mockMailer "github.com/g-harel/targetblank/services/mailer/mock"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
@@ -19,9 +19,9 @@ func init() {
 
 func TestHandler(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&function.Request{
+		err := handler(&handlers.Request{
 			PathParameters: map[string]string{},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -44,12 +44,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&function.Request{
+		funcErr := handler(&handlers.Request{
 			Body: "test@example.com",
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if funcErr == nil {
 			t.Fatal("Expected handler to reject non-matching email")
 		}
@@ -73,12 +73,12 @@ func TestHandler(t *testing.T) {
 
 		pass := page.Password
 
-		funcErr := handler(&function.Request{
+		funcErr := handler(&handlers.Request{
 			Body: email,
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if funcErr != nil {
 			t.Fatalf("Handler failed: %v", funcErr)
 		}
@@ -112,12 +112,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&function.Request{
+		funcErr := handler(&handlers.Request{
 			Body: email,
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if funcErr != nil {
 			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}

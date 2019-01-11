@@ -11,16 +11,15 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - refactor
     - better error handling in all functions
-    - error message wrappers to add
-- standardize error codes/messages
+- standardize error messages
 - make terraform module to manage functions
     - rename functions?
     - add prefix/tag?
 - random blob under logo on landing
-- rename functions package
 - display uncaught network errors
 - app ~ treat 5xx errors differently
 - replace token secrets (eventually)
+- offline page for playing around ("/localhost")
 
 requirements
 - text template specs for links, labels, categories, etc.

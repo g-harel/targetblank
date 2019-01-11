@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -16,9 +16,9 @@ func init() {
 
 func TestHandler(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&function.Request{
+		err := handler(&handlers.Request{
 			PathParameters: map[string]string{},
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -45,8 +45,8 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		res := &function.Response{}
-		funcErr := handler(&function.Request{
+		res := &handlers.Response{}
+		funcErr := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -79,12 +79,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&function.Request{
+		funcErr := handler(&handlers.Request{
 			PathParameters: map[string]string{
 				"addr": addr,
 			},
 			Body: "incorrect password",
-		}, &function.Response{})
+		}, &handlers.Response{})
 		if funcErr == nil {
 			t.Fatalf("Should produce an error if the password is invalid")
 		}

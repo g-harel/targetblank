@@ -8,7 +8,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/function"
+	"github.com/g-harel/targetblank/internal/handlers"
 	"github.com/g-harel/targetblank/internal/parse"
 	"github.com/g-harel/targetblank/services/mailer"
 	"github.com/g-harel/targetblank/services/storage"
@@ -35,37 +35,37 @@ func genPageID() string {
 	return string(b)
 }
 
-func handler(req *function.Request, res *function.Response) *function.Error {
+func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 	email := strings.TrimSpace(req.Body)
 
 	match, err := regexp.MatchString(`^\S+@\S+\.\S+$`, email)
 	if err != nil {
-		return function.InternalErr("match email pattern: %v", err)
+		return handlers.InternalErr("match email pattern: %v", err)
 	}
 	if !match {
-		return function.ClientErr("invalid email address")
+		return handlers.ClientErr("invalid email address")
 	}
 	emailHash, err := crypto.Hash(email)
 	if err != nil {
-		return function.InternalErr("hash email: %v", err)
+		return handlers.InternalErr("hash email: %v", err)
 	}
 	page := &storage.Page{Email: emailHash}
 
 	pass := make([]byte, 16)
 	_, err = rand.Read(pass)
 	if err != nil {
-		return function.InternalErr("generate random password: %v", err)
+		return handlers.InternalErr("generate random password: %v", err)
 	}
 
 	passHash, err := crypto.Hash(string(pass))
 	if err != nil {
-		return function.InternalErr("hash password: %v", err)
+		return handlers.InternalErr("hash password: %v", err)
 	}
 	page.Password = passHash
 
 	doc, err := parse.Document(defaultDocument)
 	if err != nil {
-		return function.InternalErr("parse default document: %v", err)
+		return handlers.InternalErr("parse default document: %v", err)
 	}
 	page.Document = doc
 
@@ -76,16 +76,16 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		page.Addr = genPageID()
 		conflict, err := storagePageCreate(page)
 		if err != nil {
-			return function.InternalErr("create page: %v", err)
+			return handlers.InternalErr("create page: %v", err)
 		}
 		if !conflict {
 			break
 		}
 	}
 
-	token, err := function.CreateToken(true, page.Addr)
+	token, err := handlers.CreateToken(true, page.Addr)
 	if err != nil {
-		return function.InternalErr("create token: %v", err)
+		return handlers.InternalErr("create token: %v", err)
 	}
 
 	err = mailerSend(
@@ -106,7 +106,7 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 		},
 	)
 	if err != nil {
-		return function.InternalErr("send email: %v", err)
+		return handlers.InternalErr("send email: %v", err)
 	}
 
 	res.Body = page.Addr
@@ -116,5 +116,5 @@ func handler(req *function.Request, res *function.Response) *function.Error {
 }
 
 func main() {
-	lambda.Start(function.New(handler))
+	lambda.Start(handlers.New(handler))
 }
