@@ -2,13 +2,14 @@ package main
 
 import (
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
 var storagePageUpdatePublished = storage.PageUpdatePublished
 
-func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
+// Publish makes the page readable without credentials.
+func Publish(req *handler.Request, res *handler.Response) *handler.Error {
 	addr, funcErr := req.Param("addr")
 	if funcErr != nil {
 		return funcErr
@@ -21,12 +22,12 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 
 	err := storagePageUpdatePublished(addr, true)
 	if err != nil {
-		return handlers.InternalErr("update page published: %v", err)
+		return handler.InternalErr("update page published: %v", err)
 	}
 
 	return nil
 }
 
 func main() {
-	lambda.Start(handlers.New(handler))
+	lambda.Start(handler.New(Publish))
 }

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -13,11 +13,11 @@ func init() {
 	storagePageUpdatePublished = mockStorage.PageUpdatePublished
 }
 
-func TestHandler(t *testing.T) {
+func TestPublish(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&handlers.Request{
+		err := Publish(&handler.Request{
 			PathParameters: map[string]string{},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -30,14 +30,14 @@ func TestHandler(t *testing.T) {
 	})
 
 	t.Run("should require a validation token", func(t *testing.T) {
-		err := handler(&handlers.Request{
+		err := Publish(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": "123456",
 			},
 			Headers: map[string]string{
 				"token": "bad token",
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Bad token should produce error")
 		}
@@ -48,12 +48,12 @@ func TestHandler(t *testing.T) {
 			)
 		}
 
-		err = handler(&handlers.Request{
+		err = Publish(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": "123456",
 			},
 			Headers: map[string]string{},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Missing token should produce error")
 		}
@@ -76,21 +76,21 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handlers.CreateToken(false, addr)
+		token, err := handler.CreateToken(false, addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Publish(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
 			Headers: map[string]string{
 				"token": token,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr != nil {
-			t.Fatalf("Handler failed: %v", funcErr)
+			t.Fatalf("Publish failed: %v", funcErr)
 		}
 
 		page, err = mockStorage.PageRead(addr)

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 )
 
 func main() {
@@ -14,7 +14,7 @@ func main() {
 		panic("missing token value")
 	}
 
-	t, err := handlers.CreateToken(false, args[0])
+	t, err := handler.CreateToken(false, args[0])
 	if err != nil {
 		panic(err)
 	}

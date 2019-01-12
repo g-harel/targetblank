@@ -2,14 +2,15 @@ package main
 
 import (
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/internal/parse"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
 var storagePageUpdateDocument = storage.PageUpdateDocument
 
-func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
+// Update overrides the page document.
+func Update(req *handler.Request, res *handler.Response) *handler.Error {
 	addr, funcErr := req.Param("addr")
 	if funcErr != nil {
 		return funcErr
@@ -22,12 +23,12 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 
 	page, err := parse.Document(req.Body)
 	if err != nil {
-		return handlers.ClientErr("parsing error: %v", err)
+		return handler.ClientErr("parsing error: %v", err)
 	}
 
 	err = storagePageUpdateDocument(addr, page)
 	if err != nil {
-		return handlers.InternalErr("update page document: %v", err)
+		return handler.InternalErr("update page document: %v", err)
 	}
 
 	res.Body = page
@@ -36,5 +37,5 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 }
 
 func main() {
-	lambda.Start(handlers.New(handler))
+	lambda.Start(handler.New(Update))
 }

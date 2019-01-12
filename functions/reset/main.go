@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/mailer"
 	"github.com/g-harel/targetblank/services/storage"
 )
@@ -13,7 +13,9 @@ import (
 var mailerSend = mailer.Send
 var storagePageRead = storage.PageRead
 
-func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
+// Reset sends a temporary password reset link to the page owner.
+// Email is only sent if the supplied address is correct.
+func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 	addr, funcErr := req.Param("addr")
 	if funcErr != nil {
 		return funcErr
@@ -21,22 +23,22 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 
 	page, err := storagePageRead(addr)
 	if err != nil {
-		return handlers.InternalErr("read page: %v", err)
+		return handler.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handlers.ClientErr(handlers.ErrPageNotFound)
+		return handler.ClientErr(handler.ErrPageNotFound)
 	}
 
 	email := strings.TrimSpace(req.Body)
 
 	ok := crypto.HashCheck(email, page.Email)
 	if !ok {
-		return handlers.ClientErr(handlers.ErrPageNotFound)
+		return handler.ClientErr(handler.ErrPageNotFound)
 	}
 
-	token, err := handlers.CreateToken(true, addr)
+	token, err := handler.CreateToken(true, addr)
 	if err != nil {
-		return handlers.InternalErr("create token: %v", err)
+		return handler.InternalErr("create token: %v", err)
 	}
 
 	err = mailerSend(
@@ -57,12 +59,12 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		},
 	)
 	if err != nil {
-		return handlers.InternalErr("send email: %v", err)
+		return handler.InternalErr("send email: %v", err)
 	}
 
 	return nil
 }
 
 func main() {
-	lambda.Start(handlers.New(handler))
+	lambda.Start(handler.New(Reset))
 }

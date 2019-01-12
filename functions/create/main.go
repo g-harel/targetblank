@@ -8,7 +8,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/internal/parse"
 	"github.com/g-harel/targetblank/services/mailer"
 	"github.com/g-harel/targetblank/services/storage"
@@ -35,37 +35,39 @@ func genPageID() string {
 	return string(b)
 }
 
-func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
+// Create creates a new page for the given email address.
+// An email is then sent to the owner with a temporary link.
+func Create(req *handler.Request, res *handler.Response) *handler.Error {
 	email := strings.TrimSpace(req.Body)
 
 	match, err := regexp.MatchString(`^\S+@\S+\.\S+$`, email)
 	if err != nil {
-		return handlers.InternalErr("match email pattern: %v", err)
+		return handler.InternalErr("match email pattern: %v", err)
 	}
 	if !match {
-		return handlers.ClientErr(handlers.ErrInvalidEmail)
+		return handler.ClientErr(handler.ErrInvalidEmail)
 	}
 	emailHash, err := crypto.Hash(email)
 	if err != nil {
-		return handlers.InternalErr("hash email: %v", err)
+		return handler.InternalErr("hash email: %v", err)
 	}
 	page := &storage.Page{Email: emailHash}
 
 	pass := make([]byte, 16)
 	_, err = rand.Read(pass)
 	if err != nil {
-		return handlers.InternalErr("generate random password: %v", err)
+		return handler.InternalErr("generate random password: %v", err)
 	}
 
 	passHash, err := crypto.Hash(string(pass))
 	if err != nil {
-		return handlers.InternalErr("hash password: %v", err)
+		return handler.InternalErr("hash password: %v", err)
 	}
 	page.Password = passHash
 
 	doc, err := parse.Document(defaultDocument)
 	if err != nil {
-		return handlers.InternalErr("parse default document: %v", err)
+		return handler.InternalErr("parse default document: %v", err)
 	}
 	page.Document = doc
 
@@ -76,16 +78,16 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		page.Addr = genPageID()
 		conflict, err := storagePageCreate(page)
 		if err != nil {
-			return handlers.InternalErr("create page: %v", err)
+			return handler.InternalErr("create page: %v", err)
 		}
 		if !conflict {
 			break
 		}
 	}
 
-	token, err := handlers.CreateToken(true, page.Addr)
+	token, err := handler.CreateToken(true, page.Addr)
 	if err != nil {
-		return handlers.InternalErr("create token: %v", err)
+		return handler.InternalErr("create token: %v", err)
 	}
 
 	err = mailerSend(
@@ -106,7 +108,7 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 		},
 	)
 	if err != nil {
-		return handlers.InternalErr("send email: %v", err)
+		return handler.InternalErr("send email: %v", err)
 	}
 
 	res.Body = page.Addr
@@ -116,5 +118,5 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 }
 
 func main() {
-	lambda.Start(handlers.New(handler))
+	lambda.Start(handler.New(Create))
 }

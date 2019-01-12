@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -13,11 +13,11 @@ func init() {
 	storagePageRead = mockStorage.PageRead
 }
 
-func TestHandler(t *testing.T) {
+func TestRead(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&handlers.Request{
+		err := Read(&handler.Request{
 			PathParameters: map[string]string{},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -41,13 +41,13 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handlers.CreateToken(false, page.Addr)
+		token, err := handler.CreateToken(false, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		res := &handlers.Response{}
-		funcErr := handler(&handlers.Request{
+		res := &handler.Response{}
+		funcErr := Read(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -56,7 +56,7 @@ func TestHandler(t *testing.T) {
 			},
 		}, res)
 		if funcErr != nil {
-			t.Fatalf("Handler failed: %v", funcErr)
+			t.Fatalf("Read failed: %v", funcErr)
 		}
 
 		if res.Body != doc {
@@ -79,14 +79,14 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		res := &handlers.Response{}
-		funcErr := handler(&handlers.Request{
+		res := &handler.Response{}
+		funcErr := Read(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
 		}, res)
 		if funcErr != nil {
-			t.Fatalf("Handler failed: %v", funcErr)
+			t.Fatalf("Read failed: %v", funcErr)
 		}
 
 		if res.Body != doc {
@@ -106,8 +106,8 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		res := &handlers.Response{}
-		funcErr := handler(&handlers.Request{
+		res := &handler.Response{}
+		funcErr := Read(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -125,8 +125,8 @@ func TestHandler(t *testing.T) {
 			)
 		}
 
-		res = &handlers.Response{}
-		funcErr = handler(&handlers.Request{
+		res = &handler.Response{}
+		funcErr = Read(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},

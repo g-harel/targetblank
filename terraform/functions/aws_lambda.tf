@@ -59,10 +59,10 @@ resource "aws_lambda_permission" "delete" {
 
 resource "aws_lambda_function" "page_edit" {
   function_name    = "page_edit"
-  filename         = ".build/page_edit.zip"
-  source_code_hash = "${base64sha256(file(".build/page_edit.zip"))}"
+  filename         = ".build/update.zip"
+  source_code_hash = "${base64sha256(file(".build/update.zip"))}"
   role             = "${var.role}"
-  handler          = "page_edit"
+  handler          = "update"
   runtime          = "go1.x"
 }
 
@@ -77,10 +77,10 @@ resource "aws_lambda_permission" "page_edit" {
 
 resource "aws_lambda_function" "page_fetch" {
   function_name    = "page_fetch"
-  filename         = ".build/page_fetch.zip"
-  source_code_hash = "${base64sha256(file(".build/page_fetch.zip"))}"
+  filename         = ".build/read.zip"
+  source_code_hash = "${base64sha256(file(".build/read.zip"))}"
   role             = "${var.role}"
-  handler          = "page_fetch"
+  handler          = "read"
   runtime          = "go1.x"
 }
 
@@ -95,10 +95,10 @@ resource "aws_lambda_permission" "page_fetch" {
 
 resource "aws_lambda_function" "page_validate" {
   function_name    = "page_validate"
-  filename         = ".build/page_validate.zip"
-  source_code_hash = "${base64sha256(file(".build/page_validate.zip"))}"
+  filename         = ".build/validate.zip"
+  source_code_hash = "${base64sha256(file(".build/validate.zip"))}"
   role             = "${var.role}"
-  handler          = "page_validate"
+  handler          = "validate"
   runtime          = "go1.x"
 }
 
@@ -113,10 +113,10 @@ resource "aws_lambda_permission" "page_validate" {
 
 resource "aws_lambda_function" "password_change" {
   function_name    = "password_change"
-  filename         = ".build/password_change.zip"
-  source_code_hash = "${base64sha256(file(".build/password_change.zip"))}"
+  filename         = ".build/passwd.zip"
+  source_code_hash = "${base64sha256(file(".build/passwd.zip"))}"
   role             = "${var.role}"
-  handler          = "password_change"
+  handler          = "passwd"
   runtime          = "go1.x"
 }
 
@@ -131,10 +131,10 @@ resource "aws_lambda_permission" "password_change" {
 
 resource "aws_lambda_function" "password_reset" {
   function_name    = "password_reset"
-  filename         = ".build/password_reset.zip"
-  source_code_hash = "${base64sha256(file(".build/password_reset.zip"))}"
+  filename         = ".build/reset.zip"
+  source_code_hash = "${base64sha256(file(".build/reset.zip"))}"
   role             = "${var.role}"
-  handler          = "password_reset"
+  handler          = "reset"
   runtime          = "go1.x"
 }
 

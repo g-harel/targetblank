@@ -3,13 +3,14 @@ package main
 import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
 var storagePageRead = storage.PageRead
 
-func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
+// Authenticate responds with a token when given valid credentials.
+func Authenticate(req *handler.Request, res *handler.Response) *handler.Error {
 	addr, funcErr := req.Param("addr")
 	if funcErr != nil {
 		return funcErr
@@ -17,19 +18,19 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 
 	page, err := storagePageRead(addr)
 	if err != nil {
-		return handlers.InternalErr("read page: %v", err)
+		return handler.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handlers.ClientErr(handlers.ErrPageNotFound)
+		return handler.ClientErr(handler.ErrPageNotFound)
 	}
 
 	if !crypto.HashCheck(req.Body, page.Password) {
-		return handlers.ClientErr(handlers.ErrPageNotFound)
+		return handler.ClientErr(handler.ErrPageNotFound)
 	}
 
-	token, err := handlers.CreateToken(false, addr)
+	token, err := handler.CreateToken(false, addr)
 	if err != nil {
-		return handlers.InternalErr("create token: %v", err)
+		return handler.InternalErr("create token: %v", err)
 	}
 
 	res.Body = token
@@ -39,5 +40,5 @@ func handler(req *handlers.Request, res *handlers.Response) *handlers.Error {
 }
 
 func main() {
-	lambda.Start(handlers.New(handler))
+	lambda.Start(handler.New(Authenticate))
 }

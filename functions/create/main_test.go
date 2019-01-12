@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	mockMailer "github.com/g-harel/targetblank/services/mailer/mock"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -16,13 +16,13 @@ func init() {
 	storagePageCreate = mockStorage.PageCreate
 }
 
-func TestHandler(t *testing.T) {
+func TestCreate(t *testing.T) {
 	t.Run("should expect a valid email address in body", func(t *testing.T) {
-		funcErr := handler(&handlers.Request{
+		funcErr := Create(&handler.Request{
 			Body: "",
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr == nil {
-			t.Fatalf("Handler should reject empty email")
+			t.Fatalf("Create should reject empty email")
 		}
 		if funcErr.Code() != http.StatusBadRequest {
 			t.Fatalf(
@@ -31,11 +31,11 @@ func TestHandler(t *testing.T) {
 			)
 		}
 
-		funcErr = handler(&handlers.Request{
+		funcErr = Create(&handler.Request{
 			Body: "bad email address @example.com",
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr == nil {
-			t.Fatalf("Handler should reject empty email")
+			t.Fatalf("Create should reject empty email")
 		}
 		if funcErr.Code() != http.StatusBadRequest {
 			t.Fatalf(
@@ -48,8 +48,8 @@ func TestHandler(t *testing.T) {
 	t.Run("should create a new page and respond with its address", func(t *testing.T) {
 		email := "s8yljnzo@example.com"
 
-		res := &handlers.Response{}
-		funcErr := handler(&handlers.Request{
+		res := &handler.Response{}
+		funcErr := Create(&handler.Request{
 			Body: email,
 		}, res)
 		if funcErr != nil {
@@ -77,8 +77,8 @@ func TestHandler(t *testing.T) {
 	t.Run("should send a confirmation email", func(t *testing.T) {
 		email := "QdJA8638@example.com"
 
-		res := &handlers.Response{}
-		funcErr := handler(&handlers.Request{
+		res := &handler.Response{}
+		funcErr := Create(&handler.Request{
 			Body: email,
 		}, res)
 		if funcErr != nil {

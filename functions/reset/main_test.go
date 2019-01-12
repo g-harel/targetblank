@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	mockMailer "github.com/g-harel/targetblank/services/mailer/mock"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
@@ -17,11 +17,11 @@ func init() {
 	storagePageRead = mockStorage.PageRead
 }
 
-func TestHandler(t *testing.T) {
+func TestReset(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&handlers.Request{
+		err := Reset(&handler.Request{
 			PathParameters: map[string]string{},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -44,12 +44,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Reset(&handler.Request{
 			Body: "test@example.com",
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr == nil {
 			t.Fatal("Expected handler to reject non-matching email")
 		}
@@ -73,14 +73,14 @@ func TestHandler(t *testing.T) {
 
 		pass := page.Password
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Reset(&handler.Request{
 			Body: email,
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr != nil {
-			t.Fatalf("Handler failed: %v", funcErr)
+			t.Fatalf("Reset failed: %v", funcErr)
 		}
 
 		page, err = mockStorage.PageRead(page.Addr)
@@ -112,12 +112,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Reset(&handler.Request{
 			Body: email,
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr != nil {
 			t.Fatalf("Unexpected handler error: %v", funcErr)
 		}

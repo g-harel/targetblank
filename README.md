@@ -9,10 +9,12 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
+- use crypto/rand in fns/create
 - refactor
+    - explicitly set content type for all fns
     - better error handling in all functions
 - make terraform module to manage functions
-    - rename functions?
+    - sync names with directories
     - add prefix/tag?
 - random blob under logo on landing
 - display uncaught network errors

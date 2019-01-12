@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/crypto"
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -14,11 +14,11 @@ func init() {
 	storagePageRead = mockStorage.PageRead
 }
 
-func TestHandler(t *testing.T) {
+func TestAuthenticate(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&handlers.Request{
+		err := Authenticate(&handler.Request{
 			PathParameters: map[string]string{},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -45,15 +45,15 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		res := &handlers.Response{}
-		funcErr := handler(&handlers.Request{
+		res := &handler.Response{}
+		funcErr := Authenticate(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
 			Body: pass,
 		}, res)
 		if funcErr != nil {
-			t.Fatalf("Handler failed: %v", funcErr)
+			t.Fatalf("Authenticate failed: %v", funcErr)
 		}
 
 		if res.Body == "" {
@@ -79,12 +79,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Authenticate(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": addr,
 			},
 			Body: "incorrect password",
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr == nil {
 			t.Fatalf("Should produce an error if the password is invalid")
 		}

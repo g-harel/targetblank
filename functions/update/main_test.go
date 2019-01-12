@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/g-harel/targetblank/internal/handlers"
+	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
@@ -14,11 +14,11 @@ func init() {
 	storagePageUpdateDocument = mockStorage.PageUpdateDocument
 }
 
-func TestHandler(t *testing.T) {
+func TestUpdate(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
-		err := handler(&handlers.Request{
+		err := Update(&handler.Request{
 			PathParameters: map[string]string{},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
@@ -41,12 +41,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Update(&handler.Request{
 			Body: "test@example.com",
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr == nil {
 			t.Fatal("Expected handler to reject non-matching email")
 		}
@@ -61,12 +61,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handlers.CreateToken(false, page.Addr)
+		token, err := handler.CreateToken(false, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Update(&handler.Request{
 			Body: "version 1\n===\n" + label,
 			PathParameters: map[string]string{
 				"addr": page.Addr,
@@ -74,9 +74,9 @@ func TestHandler(t *testing.T) {
 			Headers: map[string]string{
 				"token": token,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr != nil {
-			t.Fatalf("Handler failed: %v", funcErr)
+			t.Fatalf("Update failed: %v", funcErr)
 		}
 
 		page, err = mockStorage.PageRead(page.Addr)
@@ -99,12 +99,12 @@ func TestHandler(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handlers.CreateToken(false, page.Addr)
+		token, err := handler.CreateToken(false, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
 
-		funcErr := handler(&handlers.Request{
+		funcErr := Update(&handler.Request{
 			Body: "invalid spec",
 			PathParameters: map[string]string{
 				"addr": page.Addr,
@@ -112,7 +112,7 @@ func TestHandler(t *testing.T) {
 			Headers: map[string]string{
 				"token": token,
 			},
-		}, &handlers.Response{})
+		}, &handler.Response{})
 		if funcErr == nil {
 			t.Fatal("Expected invalid spec to produce an error")
 		}
