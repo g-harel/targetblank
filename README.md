@@ -9,7 +9,6 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- use crypto/rand in fns/create
 - refactor
     - explicitly set content type for all fns
     - better error handling in all functions

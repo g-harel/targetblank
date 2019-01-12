@@ -1,10 +1,10 @@
 package main
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"math/big"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/crypto"
@@ -19,10 +19,6 @@ var storagePageCreate = storage.PageCreate
 
 var defaultDocument = "version 1\n==="
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 // Generates a pseudorandom page id.
 func genPageID() string {
 	// Alphabet of unambiguous characters (without "Il0O").
@@ -30,7 +26,11 @@ func genPageID() string {
 
 	b := make([]rune, 6)
 	for i := range b {
-		b[i] = alphabet[rand.Intn(len(alphabet))]
+		pos, err := rand.Int(rand.Reader, big.NewInt(int64(len(alphabet))))
+		if err != nil {
+			panic(err)
+		}
+		b[i] = alphabet[pos.Int64()]
 	}
 	return string(b)
 }
