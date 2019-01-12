@@ -21,17 +21,18 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 		return funcErr
 	}
 
-	page, err := parse.Document(req.Body)
+	doc, err := parse.Document(req.Body)
 	if err != nil {
 		return handler.ClientErr("parsing error: %v", err)
 	}
 
-	err = storagePageUpdateDocument(addr, page)
+	err = storagePageUpdateDocument(addr, doc)
 	if err != nil {
 		return handler.InternalErr("update page document: %v", err)
 	}
 
-	res.Body = page
+	res.Body = doc
+	res.ContentType("application/json")
 
 	return nil
 }

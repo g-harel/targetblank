@@ -35,11 +35,12 @@ type Handler func(*Request, *Response) *Error
 func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	return func(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 		request := Request(req)
+
+		// Default handler response has an empty JSON body and status code of 200.
+		// Also includes CORS headers configured to allow cross domain requests.
 		response := &Response{
 			StatusCode: http.StatusOK,
 			Headers: map[string]string{
-				"Content-Type": "application/json",
-				// CORS headers.
 				"Access-Control-Allow-Origin":      "*",
 				"Access-Control-Allow-Headers":     req.Headers["Access-Control-Request-Headers"],
 				"Access-Control-Allow-Methods":     req.HTTPMethod,
@@ -47,6 +48,7 @@ func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 			},
 			Body: "{}",
 		}
+		response.ContentType("application/json")
 
 		funcErr := h(&request, response)
 		if funcErr != nil {

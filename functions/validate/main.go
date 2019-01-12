@@ -14,6 +14,7 @@ func Validate(req *handler.Request, res *handler.Response) *handler.Error {
 	}
 
 	res.Body = doc
+	res.ContentType("application/json")
 
 	return nil
 }

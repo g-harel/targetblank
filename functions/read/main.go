@@ -33,6 +33,7 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 	}
 
 	res.Body = page.Document
+	res.ContentType("application/json")
 
 	return nil
 }
