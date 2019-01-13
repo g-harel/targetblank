@@ -92,7 +92,7 @@ func TestUpdate(t *testing.T) {
 		}
 	})
 
-	t.Run("should reject invalid page specs", func(t *testing.T) {
+	t.Run("should reject invalid page document", func(t *testing.T) {
 		page := &storage.Page{}
 		_, err := mockStorage.PageCreate(page)
 		if err != nil {
@@ -105,7 +105,7 @@ func TestUpdate(t *testing.T) {
 		}
 
 		funcErr := Update(&handler.Request{
-			Body: "invalid spec",
+			Body: "invalid document",
 			PathParameters: map[string]string{
 				"addr": page.Addr,
 			},
@@ -114,7 +114,7 @@ func TestUpdate(t *testing.T) {
 			},
 		}, &handler.Response{})
 		if funcErr == nil {
-			t.Fatal("Expected invalid spec to produce an error")
+			t.Fatal("Expected invalid document to produce an error")
 		}
 	})
 }

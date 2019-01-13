@@ -13,7 +13,7 @@ export interface IPageGroup {
 
 export interface IPageData {
     version: string;
-    spec: string;
+    raw: string;
     meta: {
         [key: string]: string;
     };

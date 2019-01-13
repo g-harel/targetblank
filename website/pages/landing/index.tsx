@@ -36,14 +36,14 @@ export const Landing: PageComponent = (props, update) => {
     let email = "";
 
     const submit = (newEmail: string) => {
-        return new Promise<string>((resolve) => {
+        return new Promise<string>((resolve, reject) => {
             const callback = () => {
                 email = newEmail;
                 update();
                 resolve("");
             };
 
-            client.page.create(callback, newEmail);
+            client.page.create(callback, reject, newEmail);
         });
     };
 

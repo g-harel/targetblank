@@ -7,7 +7,7 @@ import "./global.scss";
 import {app} from "./internal/app";
 import {Page} from "./components/page";
 import {Landing} from "./pages/landing";
-import {Homepage} from "./pages/homepage";
+import {Document} from "./pages/document";
 import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
 import {Missing} from "./pages/missing";
@@ -18,7 +18,7 @@ app.setState({});
 
 app("/", (params) => () => <Page {...params} component={Landing} />);
 
-app("/:addr", (params) => () => <Page {...params} component={Homepage} />);
+app("/:addr", (params) => () => <Page {...params} component={Document} />);
 
 app("/:addr/login", (params) => () => <Page {...params} component={Login} />);
 

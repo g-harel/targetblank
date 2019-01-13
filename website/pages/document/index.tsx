@@ -15,7 +15,7 @@ interface Data {
     err?: string;
 }
 
-export const Homepage: PageComponent<Data> = ({addr}, update) => {
+export const Document: PageComponent<Data> = ({addr}, update) => {
     client.page.fetch((page) => update({page}), (err) => update({err}), addr);
 
     return (data) => (

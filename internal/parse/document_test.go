@@ -21,13 +21,13 @@ func newDocument() *document {
 
 // Checks that the passed document and definition are equal when serialized to json.
 func documentEquals(t *testing.T, target *document, s ...string) {
-	spec := strings.Join(s, "\n")
-	result, err := Document(spec)
+	raw := strings.Join(s, "\n")
+	doc, err := Document(raw)
 	if err != nil {
-		t.Fatalf("Unexpected parsing error: %v\n%v", err, spec)
+		t.Fatalf("Unexpected parsing error: %v\n%v", err, raw)
 	}
 
-	target.Spec = spec
+	target.Raw = raw
 	tb, err := json.MarshalIndent(target, "| ", "  ")
 	if err != nil {
 		t.Fatalf("Unexpected error when marshalling target document: %v", err)
@@ -35,7 +35,7 @@ func documentEquals(t *testing.T, target *document, s ...string) {
 	tl := strings.Split(string(tb), "\n")
 
 	rb := bytes.NewBuffer([]byte{})
-	json.Indent(rb, []byte(result), "| ", "  ")
+	json.Indent(rb, []byte(doc), "| ", "  ")
 	if err != nil {
 		t.Fatalf("Unexpected error when marshalling result document: %v", err)
 	}
@@ -72,14 +72,14 @@ func documentEquals(t *testing.T, target *document, s ...string) {
 	}
 }
 
-// Checks assertions on expected parsing errors when parsing the passed spec.
+// Checks assertions on expected parsing errors when parsing the passed document.
 func produceErr(t *testing.T, line int, pattern string, s ...string) {
-	spec := strings.Join(s, "\n")
+	raw := strings.Join(s, "\n")
 	p, err := regexp.Compile(pattern)
 	if err != nil {
 		t.Fatalf("Error compiling expected error pattern /%v/: %v", pattern, err)
 	}
-	_, err = Document(spec)
+	_, err = Document(raw)
 
 	if err == nil || strings.Index(err.Error(), strconv.Itoa(line)) == -1 || !p.Match([]byte(err.Error())) {
 		t.Fatalf("Parsing should have produced an error on line %v matching /%v/ but got: %v", line, pattern, err)
@@ -270,7 +270,7 @@ func TestDocument(t *testing.T) {
 		)
 	})
 
-	t.Run("should correctly parse the version from a minimal spec", func(t *testing.T) {
+	t.Run("should correctly parse the version from a minimal document", func(t *testing.T) {
 		doc := newDocument()
 		doc.Version = "1"
 		documentEquals(t, doc,
@@ -497,7 +497,7 @@ func TestDocument(t *testing.T) {
 			)
 		})
 
-		t.Run("should correctly parse the original spec", func(t *testing.T) {
+		t.Run("should correctly parse the original an example document", func(t *testing.T) {
 			doc := newDocument()
 			doc.Version = "1"
 			doc.Meta["key"] = "value"

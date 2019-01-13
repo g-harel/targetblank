@@ -13,7 +13,7 @@ func Document(s string) (string, error) {
 		Meta:   make(map[string]string),
 		Groups: []*documentEntityGroup{},
 	}
-	doc.Spec = s
+	doc.Raw = s
 	doc.AddGroup()
 
 	// v1HeaderMetadataRule matches with header metadata values.
@@ -169,7 +169,7 @@ func Document(s string) (string, error) {
 // Document represents document data and exposes helpers for the parsing rules.
 type document struct {
 	Version string                 `json:"version"`
-	Spec    string                 `json:"spec"`
+	Raw     string                 `json:"raw"`
 	Meta    map[string]string      `json:"meta"`
 	Groups  []*documentEntityGroup `json:"groups"`
 }

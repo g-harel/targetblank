@@ -15,17 +15,17 @@ TODO
 - random blob under logo on landing
 - display uncaught network errors
 - app ~ treat 5xx errors differently
-- replace token secrets (eventually)
 - offline page for playing around ("/localhost")
+- replace application secrets (eventually)
 
 requirements
-- text template specs for links, labels, categories, etc.
+- text-based template for links, labels, categories, etc.
 - optional search bar with a few search providers
 - short url using 6 alphanumeric chars (https://targetblank.org/aB7pPo)
-- submit email and receive a link to a new homepage
+- submit email and receive a link to a new page
 - temp password that can be included in the url
 - email used to get new temp password
-- homepages can be made public at their existing url
+- pages can be made public at their existing url
 - credentials stored
 - collapsible labels
 - open all tabs button
@@ -35,15 +35,15 @@ notes
 - api gateway + functions backed by dynamodb
 
 endpoints (/api/v1..)
-- authenticate per homepage (POST   /auth/:address        password)
-- change homepage password  (PUT    /auth/:address [auth] password)
-- reset homepage password   (DELETE /auth/:address        email   )
-- create new homepage       (POST   /page                 email   )
-- validate homepage spec    (POST   /page/validate        spec    )
-- fetch homepage            (GET    /page/:address [auth]         )
-- edit homepage template    (PUT    /page/:address [auth] data    )
-- delete homepage           (DELETE /page/:address [auth]         )
-- make homepage public      (PATCH  /page/:address [auth]         )
+- authenticate per page  (POST   /auth/:address        password)
+- change page password   (PUT    /auth/:address [auth] password)
+- reset page password    (DELETE /auth/:address        email   )
+- create new page        (POST   /page                 email   )
+- validate page document (POST   /page/validate        doc     )
+- fetch page             (GET    /page/:address [auth]         )
+- edit page document     (PUT    /page/:address [auth] data    )
+- delete page            (DELETE /page/:address [auth]         )
+- make page public       (PATCH  /page/:address [auth]         )
 
 nosql schema {
     addr: string (6 alphanumeric chars),

@@ -43,7 +43,7 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 
 	err = mailerSend(
 		email,
-		"Your homepage password has been reset!",
+		"Your page password has been reset!",
 		`<html>
 			<body>
 				<h3>Follow the link to confirm you're the owner.</h3>

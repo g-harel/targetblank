@@ -56,14 +56,14 @@ class PageClient {
         cb: Callback<IPageData>,
         err: ErrorHandler,
         addr: string,
-        spec: string,
+        doc: string,
     ) {
         const {token} = read(addr);
         if (token === null) {
             return err(missingToken("edit", addr));
         }
         this.api
-            .edit(addr, token, spec)
+            .edit(addr, token, doc)
             .then(writeData(addr))
             .then(cb)
             .catch(err);
@@ -90,9 +90,9 @@ class PageClient {
             .catch(err);
     }
 
-    validate(cb: Callback<void>, err: ErrorHandler, spec: string) {
+    validate(cb: Callback<void>, err: ErrorHandler, doc: string) {
         this.api
-            .validate(spec)
+            .validate(doc)
             .then(cb)
             .catch(err);
     }

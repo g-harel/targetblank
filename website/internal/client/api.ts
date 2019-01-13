@@ -78,12 +78,12 @@ export class PageAPI {
         });
     }
 
-    async edit(addr: string, token: string, spec: string): Promise<IPageData> {
+    async edit(addr: string, token: string, doc: string): Promise<IPageData> {
         return send({
             method: "PUT",
             path: `/page/${addr}`,
             headers: {token},
-            body: spec,
+            body: doc,
             json: true,
         });
     }
@@ -105,11 +105,11 @@ export class PageAPI {
         });
     }
 
-    async validate(spec: string): Promise<void> {
+    async validate(doc: string): Promise<void> {
         return send({
             method: "POST",
             path: "/page/validate",
-            body: spec,
+            body: doc,
         });
     }
 }

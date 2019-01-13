@@ -92,7 +92,7 @@ func Create(req *handler.Request, res *handler.Response) *handler.Error {
 
 	err = mailerSend(
 		email,
-		"Your new homepage is ready!",
+		"Your page is ready!",
 		`<html>
 			<body>
 				<h3>Follow the link to confirm you're the owner.</h3>
