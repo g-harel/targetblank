@@ -17,7 +17,7 @@ export type ComponentElement<P extends object = {}> = {
 export type Component<P extends object = {}, D = undefined> = (
     params: P,
     update: (data?: D) => void,
-) => (data?: D) => Element;
+) => any; // (data?: D) => Element;
 
 export type Element =
     | BlankElement

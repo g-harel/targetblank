@@ -26,4 +26,4 @@ app("/:addr/reset/:token", (params) => () => (
     <Page {...params} component={Reset} />
 ));
 
-app("**", () => () => <Missing />);
+app("**", () => () => <Page component={Missing} />);

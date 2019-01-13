@@ -1,1 +1,3 @@
-export const Missing = () => () => <div>404</div>;
+import {Component} from "../../internal/types";
+
+export const Missing: Component<{}> = () => () => <div>404</div>;
