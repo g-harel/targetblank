@@ -25,6 +25,7 @@ resource "aws_api_gateway_deployment" "deployment" {
   }
 }
 
+  # TODO remove hardcoded
 resource "aws_api_gateway_domain_name" "domain_name" {
   domain_name     = "api.targetblank.org"
   certificate_arn = "arn:aws:acm:us-east-1:159048808775:certificate/a50ef51c-8730-49f6-82b8-b2044223ff8b"
@@ -46,7 +47,7 @@ resource "aws_api_gateway_resource" "auth" {
 }
 
 module "cors_auth" {
-  source = "../modules/cors"
+  source = "../modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.auth.id}"
@@ -61,7 +62,7 @@ resource "aws_api_gateway_resource" "page" {
 }
 
 module "cors_page" {
-  source = "../modules/cors"
+  source = "../modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page.id}"
@@ -76,7 +77,7 @@ resource "aws_api_gateway_resource" "auth_addr" {
 }
 
 module "cors_auth_addr" {
-  source = "../modules/cors"
+  source = "../modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
@@ -91,7 +92,7 @@ resource "aws_api_gateway_resource" "page_addr" {
 }
 
 module "cors_page_addr" {
-  source = "../modules/cors"
+  source = "../modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
@@ -106,7 +107,7 @@ resource "aws_api_gateway_resource" "page_validate" {
 }
 
 module "cors_page_validate" {
-  source = "../modules/cors"
+  source = "../modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page_validate.id}"

@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "public_bucket" {
 
   enabled             = true
   default_root_object = "${aws_s3_bucket_object.root.key}"
-  aliases             = ["${var.alias_name}"]
+  aliases             = "${var.aliases}"
   http_version        = "http2"
 
   custom_error_response {
@@ -87,17 +87,5 @@ resource "aws_cloudfront_distribution" "public_bucket" {
   viewer_certificate {
     acm_certificate_arn = "${var.cert_arn}"
     ssl_support_method  = "sni-only"
-  }
-}
-
-resource "aws_route53_record" "cloudfront_alias" {
-  zone_id = "${var.zone_id}"
-  name    = "${var.alias_name}"
-  type    = "A"
-
-  alias {
-    zone_id                = "${aws_cloudfront_distribution.public_bucket.hosted_zone_id}"
-    name                   = "${aws_cloudfront_distribution.public_bucket.domain_name}"
-    evaluate_target_health = false
   }
 }
