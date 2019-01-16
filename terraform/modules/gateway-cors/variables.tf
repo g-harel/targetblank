@@ -1,7 +1,7 @@
 variable "rest_api_id" {
-  description = "aws_api_gateway_rest_api.<name>.id"
+  description = "Root API Gateway REST API's ID."
 }
 
 variable "gateway_resource_id" {
-  description = "aws_api_gateway_resource.<name>.id"
+  description = "The ID for the API Gateway resource (path) which will allow CORS."
 }

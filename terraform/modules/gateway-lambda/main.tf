@@ -1,31 +1,32 @@
-resource "aws_api_gateway_method" "auth_addr_delete" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.auth_addr.id}"
-  http_method   = "DELETE"
+resource "aws_api_gateway_method" "method" {
+  rest_api_id   = "${var.rest_api_id}"
+  resource_id   = "${var.gateway_resource_id}"
+  http_method   = "${var.http_method}"
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_integration" "auth_addr_delete" {
-  rest_api_id             = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id             = "${aws_api_gateway_resource.auth_addr.id}"
-  http_method             = "${aws_api_gateway_method.auth_addr_delete.http_method}"
+resource "aws_api_gateway_integration" "integration" {
+  rest_api_id             = "${var.rest_api_id}"
+  resource_id             = "${var.gateway_resource_id}"
+  http_method             = "${var.http_method}"
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${aws_lambda_function.password_reset.arn}/invocations"
+  uri                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${aws_lambda_function.function.arn}/invocations"
 }
 
-resource "aws_lambda_function" "password_reset" {
-  function_name    = "password_reset"
-  filename         = ".build/reset.zip"
-  source_code_hash = "${base64sha256(file(".build/reset.zip"))}"
+resource "aws_lambda_function" "function" {
+  function_name    = "${var.name}"
+  filename         = "${var.source}"
+  source_code_hash = "${base64sha256(file("${var.source}"))}"
   role             = "${var.role}"
-  handler          = "reset"
-  runtime          = "go1.x"
+  handler          = "${var.handler_name}"
+  runtime          = "${var.runtime}"
+  tags             = "${var.tags}"
 }
 
-resource "aws_lambda_permission" "password_reset" {
+resource "aws_lambda_permission" "permission" {
   statement_id  = "AllowGatewayInvoke"
-  function_name = "${aws_lambda_function.password_reset.arn}"
+  function_name = "${aws_lambda_function.function.arn}"
   action        = "lambda:InvokeFunction"
   principal     = "apigateway.amazonaws.com"
 }
