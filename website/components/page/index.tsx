@@ -42,10 +42,12 @@ export const Page: Component<Props> = (props) => () => {
 
     return (
         <div className="page">
-            <Wrapper>
-                <i className="fas fa-tools" />
-                &nbsp; Under Construction
-            </Wrapper>
+            {document.location.hostname !== "localhost" && (
+                <Wrapper>
+                    <i className="fas fa-tools" />
+                    &nbsp; Under Construction
+                </Wrapper>
+            )}
             <Component addr={props.addr} token={props.token} />
             <ErrorComponent />
         </div>

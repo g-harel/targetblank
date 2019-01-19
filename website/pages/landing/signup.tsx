@@ -20,6 +20,7 @@ export const Signup: Component<Props> = (props) => () => (
         <Input
             callback={props.callback}
             title="Create a page"
+            type="email"
             placeholder="john@example.com"
             validator={/^\S+@\S+\.\S{2,}$/g}
             message="That doesn't look like an email address"
