@@ -18,7 +18,7 @@ resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
   stage_name  = "prod"
 
-  stage_description = "${md5(file("terraform/functions/aws_api_gateway.tf"))}"
+  stage_description = "${md5(file("terraform/aws_api_gateway.tf"))}"
 
   lifecycle {
     create_before_destroy = true
@@ -47,7 +47,7 @@ resource "aws_api_gateway_resource" "auth" {
 }
 
 module "cors_auth" {
-  source = "../modules/gateway-cors"
+  source = "modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.auth.id}"
@@ -62,7 +62,7 @@ resource "aws_api_gateway_resource" "page" {
 }
 
 module "cors_page" {
-  source = "../modules/gateway-cors"
+  source = "modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page.id}"
@@ -77,7 +77,7 @@ resource "aws_api_gateway_resource" "auth_addr" {
 }
 
 module "cors_auth_addr" {
-  source = "../modules/gateway-cors"
+  source = "modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
@@ -92,7 +92,7 @@ resource "aws_api_gateway_resource" "page_addr" {
 }
 
 module "cors_page_addr" {
-  source = "../modules/gateway-cors"
+  source = "modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
@@ -107,7 +107,7 @@ resource "aws_api_gateway_resource" "page_validate" {
 }
 
 module "cors_page_validate" {
-  source = "../modules/gateway-cors"
+  source = "modules/gateway-cors"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page_validate.id}"

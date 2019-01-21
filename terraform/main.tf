@@ -17,9 +17,3 @@ module "website" {
     "website.f69400ca.js"  = "application/javascript"
   }
 }
-
-module "api" {
-  source = "./functions"
-
-  role = "${aws_iam_role.lambda.arn}"
-}
