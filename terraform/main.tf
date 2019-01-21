@@ -15,10 +15,10 @@ module "website" {
   source_dir    = ".build"
   root_document = "index.html"
 
-  files {
-    "website.f69400ca.css" = "text/css"
-    "website.f69400ca.js"  = "application/javascript"
-  }
+  files = [
+    "website.f69400ca.css",
+    "website.f69400ca.js",
+  ]
 }
 
 module "authenticate" {

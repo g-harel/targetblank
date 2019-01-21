@@ -9,10 +9,6 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- make terraform module to manage functions
-    - sync names with directories
-    - add prefix/tag?
-- random blob under logo on landing
 - display uncaught network errors
 - app ~ treat 5xx errors differently
 - offline page for playing around ("/localhost")

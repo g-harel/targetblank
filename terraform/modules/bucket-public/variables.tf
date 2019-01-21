@@ -20,6 +20,6 @@ variable "root_document" {
 }
 
 variable "files" {
-  description = "Map containing all file paths to be included as keys and the respective mime types as the values."
-  type        = "map"
+  description = "List of files to be included in the bucket."
+  type        = "list"
 }
