@@ -16,8 +16,8 @@ resource "aws_api_gateway_integration" "integration" {
 
 resource "aws_lambda_function" "function" {
   function_name    = "${var.name}"
-  filename         = "${var.source}"
-  source_code_hash = "${base64sha256(file("${var.source}"))}"
+  filename         = "${var.file}"
+  source_code_hash = "${base64sha256(file("${var.file}"))}"
   role             = "${var.role}"
   handler          = "${var.handler_name}"
   runtime          = "${var.runtime}"
