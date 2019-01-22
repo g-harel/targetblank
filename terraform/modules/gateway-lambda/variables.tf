@@ -19,8 +19,8 @@ variable "name" {
 }
 
 variable "handler_name" {
-  description = "Lambda funtion's entrypoint"
-  default     = "handler"
+  description = "Lambda function's entrypoint"
+  default     = ""
 }
 
 variable "runtime" {

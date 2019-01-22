@@ -19,7 +19,7 @@ resource "aws_lambda_function" "function" {
   filename         = "${var.file}"
   source_code_hash = "${base64sha256(file("${var.file}"))}"
   role             = "${var.role}"
-  handler          = "${var.handler_name}"
+  handler          = "${var.handler_name == "" ? var.name : var.handler_name}"
   runtime          = "${var.runtime}"
   tags             = "${var.tags}"
 }
