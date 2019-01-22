@@ -37,16 +37,9 @@ func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 		request := Request(req)
 
 		// Default handler response has an empty JSON body and status code of 200.
-		// Also includes CORS headers configured to allow cross domain requests.
 		response := &Response{
 			StatusCode: http.StatusOK,
-			Headers: map[string]string{
-				"Access-Control-Allow-Origin":      "*",
-				"Access-Control-Allow-Headers":     req.Headers["Access-Control-Request-Headers"],
-				"Access-Control-Allow-Methods":     req.HTTPMethod,
-				"Access-Control-Allow-Credentials": "true",
-			},
-			Body: "{}",
+			Body:       "{}",
 		}
 		response.ContentType("application/json")
 

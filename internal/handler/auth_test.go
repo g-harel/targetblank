@@ -56,7 +56,7 @@ func TestAuthenticate(t *testing.T) {
 		req := &Request{
 			Headers: map[string]string{},
 		}
-		req.Headers[tokenHeader] = token
+		req.Headers[AuthHeader] = AuthType + " " + token
 		return req.Authenticate(secret)
 	}
 

@@ -82,7 +82,7 @@ func TestDelete(t *testing.T) {
 				"addr": page.Addr,
 			},
 			Headers: map[string]string{
-				"token": token,
+				handler.AuthHeader: handler.AuthType + " " + token,
 			},
 		}, &handler.Response{})
 		if funcErr != nil {

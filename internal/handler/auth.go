@@ -3,12 +3,17 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/g-harel/targetblank/internal/crypto"
 )
 
-const tokenHeader = "token"
+// Expected authorization header configuration.
+const (
+	AuthHeader = "Authorization"
+	AuthType   = "Targetblank"
+)
 
 var longTTL = time.Hour * 18
 var shortTTL = time.Minute * 10
@@ -45,27 +50,32 @@ func CreateToken(short bool, secret string) (string, error) {
 
 // Authenticate validates the token in the request.
 func (r *Request) Authenticate(secret string) *Error {
-	t := r.Headers[tokenHeader]
-	if t == "" {
-		return ClientErr("missing authentication token (no \"%v\" header)", tokenHeader)
+	raw := r.Headers[AuthHeader]
+	if raw == "" {
+		return ClientErr("missing authorization (no \"%v\" header)", AuthHeader)
 	}
 
-	payload, err := crypto.Decrypt(t)
+	values := strings.Fields(raw)
+	if len(values) < 2 || values[0] != AuthType {
+		return ClientErr("invalid authorization")
+	}
+
+	payload, err := crypto.Decrypt(values[1])
 	if err != nil {
-		return ClientErr("invalid authentication token")
+		return ClientErr("invalid authorization")
 	}
 
-	p := &tokenPayload{}
-	err = json.Unmarshal(payload, p)
+	token := &tokenPayload{}
+	err = json.Unmarshal(payload, token)
 	if err != nil {
-		return ClientErr("invalid authentication token")
+		return ClientErr("invalid authorization")
 	}
 
-	if p.ExpireAt < time.Now().UnixNano() {
-		return ClientErr("expired authentication token")
+	if token.ExpireAt < time.Now().UnixNano() {
+		return ClientErr("expired authorization")
 	}
-	if p.Secret != secret {
-		return ClientErr("invalid authentication token")
+	if token.Secret != secret {
+		return ClientErr("invalid authorization")
 	}
 
 	return nil

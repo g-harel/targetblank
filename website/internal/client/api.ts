@@ -5,7 +5,7 @@ const hostname = "https://api.targetblank.org";
 interface IRequest {
     method: string;
     path: string;
-    headers?: Record<string, string>;
+    token?: string;
     body?: any;
     json?: boolean;
 }
@@ -17,7 +17,6 @@ interface IRequest {
 // Rejects if the status code is in the error range.
 const send = (req: IRequest) => {
     return new Promise<any>(async (resolve, reject) => {
-        req.headers = req.headers || {};
         req.body = req.body || "";
         req.json = req.json || false;
 
@@ -25,9 +24,12 @@ const send = (req: IRequest) => {
             req.body = undefined;
         }
 
+        const headers = {};
+        headers["Authorization"] = `Targetblank ${req.token}`;
+
         if (req.json) {
             req.body = JSON.stringify(req.body);
-            req.headers["Content-Type"] = "application/json";
+            headers["Content-Type"] = "application/json";
         }
 
         // Time out request after interval.
@@ -35,8 +37,8 @@ const send = (req: IRequest) => {
         setTimeout(() => reject("Timed out"), 5 * 1000);
 
         const res = await fetch(hostname + req.path, {
+            headers,
             method: req.method,
-            headers: req.headers,
             body: req.body,
         });
 
@@ -72,17 +74,17 @@ export class PageAPI {
 
     async delete(addr: string, token: string): Promise<void> {
         return send({
+            token,
             method: "DELETE",
             path: `/page/${addr}`,
-            headers: {token},
         });
     }
 
     async edit(addr: string, token: string, doc: string): Promise<IPageData> {
         return send({
+            token,
             method: "PUT",
             path: `/page/${addr}`,
-            headers: {token},
             body: doc,
             json: true,
         });
@@ -90,18 +92,18 @@ export class PageAPI {
 
     async fetch(addr: string, token: string): Promise<IPageData> {
         return send({
+            token,
             method: "GET",
             path: `/page/${addr}`,
-            headers: {token},
             json: true,
         });
     }
 
     async publish(addr: string, token: string): Promise<void> {
         return send({
+            token,
             method: "PATCH",
             path: `/page/${addr}`,
-            headers: {token},
         });
     }
 
@@ -117,9 +119,9 @@ export class PageAPI {
 export class PagePasswordAPI {
     async change(addr: string, token: string, pass: string): Promise<void> {
         return send({
+            token,
             method: "PUT",
             path: `/auth/${addr}`,
-            headers: {token},
             body: pass,
         });
     }

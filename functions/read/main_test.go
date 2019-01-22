@@ -52,7 +52,7 @@ func TestRead(t *testing.T) {
 				"addr": page.Addr,
 			},
 			Headers: map[string]string{
-				"token": token,
+				handler.AuthHeader: handler.AuthType + " " + token,
 			},
 		}, res)
 		if funcErr != nil {

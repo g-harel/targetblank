@@ -72,7 +72,7 @@ func TestUpdate(t *testing.T) {
 				"addr": page.Addr,
 			},
 			Headers: map[string]string{
-				"token": token,
+				handler.AuthHeader: handler.AuthType + " " + token,
 			},
 		}, &handler.Response{})
 		if funcErr != nil {
@@ -110,7 +110,7 @@ func TestUpdate(t *testing.T) {
 				"addr": page.Addr,
 			},
 			Headers: map[string]string{
-				"token": token,
+				handler.AuthHeader: handler.AuthType + " " + token,
 			},
 		}, &handler.Response{})
 		if funcErr == nil {

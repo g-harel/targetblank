@@ -88,7 +88,7 @@ func TestPasswd(t *testing.T) {
 				"addr": page.Addr,
 			},
 			Headers: map[string]string{
-				"token": token,
+				handler.AuthHeader: handler.AuthType + " " + token,
 			},
 			Body: pass,
 		}, &handler.Response{})

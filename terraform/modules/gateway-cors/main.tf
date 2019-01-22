@@ -47,7 +47,7 @@ resource "aws_api_gateway_integration_response" "cors" {
   status_code = "${aws_api_gateway_method_response.cors.status_code}"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'*'"
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, Authorization'"
     "method.response.header.Access-Control-Allow-Methods" = "'*'"
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
     "method.response.header.Access-Control-Allow-Credentials" = "'true'"
