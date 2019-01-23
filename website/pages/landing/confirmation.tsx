@@ -50,40 +50,13 @@ const TitleIcon = styled("i")({
 const EmailLink = styled("a")({
     color: "#aaa",
     display: "inline-block",
+    fontSize: "1.1rem",
     margin: "0.5rem 0 1rem",
 
     "&.inert": {
         cursor: "text",
         marginTop: "0.3rem",
         pointerEvents: "none",
-    },
-});
-
-const EmailLinkIcon = styled("i")({
-    fontSize: "0.6rem",
-    opacity: 0.9,
-    paddingLeft: "0.25rem",
-    transform: "translateY(-0.5px)",
-});
-
-const Providers = styled("div")({
-    paddingTop: "0.8rem",
-});
-
-const ProviderLink = styled("a")({
-    borderLeft: "1px solid #eee",
-    color: "#aaa",
-    display: "inline-block",
-    maxWidth: "25%",
-    padding: "0 0.5rem",
-    transition: "all 0.5s ease",
-
-    "&:hover": {
-        color: "#888",
-    },
-
-    "&:first-child": {
-        border: "none",
     },
 });
 
@@ -114,19 +87,7 @@ export const Confirmation: Component<Props> = (props) => {
             <div>
                 <EmailLink href={link} className={{inert: !link}}>
                     {email}
-                    {link && (
-                        <EmailLinkIcon className="fas fa-xs fa-external-link-alt" />
-                    )}
                 </EmailLink>
-                {!link && (
-                    <Providers>
-                        {...Object.keys(providers).map((name) => (
-                            <ProviderLink href={providers[name]}>
-                                {name}
-                            </ProviderLink>
-                        ))}
-                    </Providers>
-                )}
             </div>
         </Wrapper>
     );

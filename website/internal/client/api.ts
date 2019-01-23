@@ -24,6 +24,7 @@ const send = (req: IRequest) => {
             req.body = undefined;
         }
 
+        // Arbitrary headers are not allowed because they would interfere with CORS.
         const headers = {};
         headers["Authorization"] = `Targetblank ${req.token}`;
 
