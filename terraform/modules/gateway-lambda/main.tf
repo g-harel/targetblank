@@ -22,6 +22,7 @@ resource "aws_lambda_function" "function" {
   handler          = "${var.handler_name == "" ? var.name : var.handler_name}"
   runtime          = "${var.runtime}"
   tags             = "${var.tags}"
+  memory_size      = "${var.memory}"
 }
 
 resource "aws_lambda_permission" "permission" {
