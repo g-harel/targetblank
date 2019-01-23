@@ -88,6 +88,16 @@ func TestNew(t *testing.T) {
 		New(h)(events.APIGatewayProxyRequest{})
 	})
 
+	t.Run("should allow cross origin", func(t *testing.T) {
+		var h Handler = func(req *Request, res *Response) *Error {
+			if res.Headers["Access-Control-Allow-Origin"] != "*" {
+				t.Fatal("Expected default content type to be json")
+			}
+			return nil
+		}
+		New(h)(events.APIGatewayProxyRequest{})
+	})
+
 	t.Run("should transform handler errors into valid responses", func(t *testing.T) {
 		message := "error message"
 		status := 123

@@ -18,7 +18,7 @@ interface Data {
 export const Document: PageComponent<Data> = ({addr}, update) => {
     client.page.fetch((page) => update({page}), (err) => update({err}), addr);
 
-    return (data) => (
+    return (data) => data ? (
         <Wrapper>
             {!!data.err && "couldn't load"}
             {!!data.page && (
@@ -36,5 +36,5 @@ export const Document: PageComponent<Data> = ({addr}, update) => {
                 </Groups>
             )}
         </Wrapper>
-    );
+    ) : "loading";
 };

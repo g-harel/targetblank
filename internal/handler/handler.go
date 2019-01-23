@@ -39,7 +39,10 @@ func New(h Handler) func(events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 		// Default handler response has an empty JSON body and status code of 200.
 		response := &Response{
 			StatusCode: http.StatusOK,
-			Body:       "{}",
+			Headers: map[string]string{
+				"Access-Control-Allow-Origin": "*",
+			},
+			Body: "{}",
 		}
 		response.ContentType("application/json")
 
