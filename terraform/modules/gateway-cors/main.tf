@@ -47,10 +47,10 @@ resource "aws_api_gateway_integration_response" "cors" {
   status_code = "${aws_api_gateway_method_response.cors.status_code}"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type, Authorization'"
-    "method.response.header.Access-Control-Allow-Methods" = "'*'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-    "method.response.header.Access-Control-Allow-Credentials" = "'true'"
+    "method.response.header.Access-Control-Allow-Origin"      = "'${var.allow_origin}'"
+    "method.response.header.Access-Control-Allow-Methods"     = "'${join(",", var.allow_methods)}'"
+    "method.response.header.Access-Control-Allow-Headers"     = "'${join(",", var.allow_headers)}'"
+    "method.response.header.Access-Control-Allow-Credentials" = "'${var.allow_credentials}'"
   }
 
   depends_on = ["aws_api_gateway_method_response.cors"]
