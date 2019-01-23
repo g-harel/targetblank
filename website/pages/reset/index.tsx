@@ -10,12 +10,9 @@ const Wrapper = styled("div")({
 });
 
 export const Reset: PageComponent = ({addr, token: t}) => () => {
+    // Token from URL is used if it exists.
     const token = t || read(addr).token;
     write(addr, {token});
-
-    if (!token) {
-        app.redirect(`/${addr}/login`);
-    }
 
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {

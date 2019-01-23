@@ -12,6 +12,7 @@ TODO
 - display uncaught network errors
 - app ~ treat 5xx errors differently
 - offline page for playing around ("/localhost")
+- edit page line numbers
 - replace application secrets (eventually)
 
 requirements

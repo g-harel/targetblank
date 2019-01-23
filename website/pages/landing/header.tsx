@@ -4,7 +4,7 @@ import {Component} from "../../internal/types";
 
 export const headerHeight = 2.9;
 
-const Wrapper = styled("div")({
+const Wrapper = styled("header")({
     borderBottom: "1px solid #ddd",
     font: "800 1.6rem 'Lora', serif",
     height: `${headerHeight}rem`,

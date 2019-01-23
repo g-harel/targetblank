@@ -3,7 +3,7 @@ import {Component} from "../../internal/types";
 
 export const footerHeight = 2.8;
 
-const Wrapper = styled("div")({
+const Wrapper = styled("footer")({
     height: `${footerHeight}rem`,
     overflow: "hidden",
     textAlign: "center",

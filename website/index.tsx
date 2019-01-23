@@ -8,6 +8,7 @@ import {app} from "./internal/app";
 import {Page} from "./components/page";
 import {Landing} from "./pages/landing";
 import {Document} from "./pages/document";
+import {Edit} from "./pages/edit";
 import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
 import {Missing} from "./pages/missing";
@@ -20,9 +21,11 @@ app("/", (params) => () => <Page {...params} component={Landing} />);
 
 app("/:addr", (params) => () => <Page {...params} component={Document} />);
 
+app("/:addr/edit", (params) => () => <Page {...params} component={Edit} />);
+
 app("/:addr/login", (params) => () => <Page {...params} component={Login} />);
 
-app("/:addr/reset/:token", (params) => () => (
+app("/:addr/reset/:token?", (params) => () => (
     <Page {...params} component={Reset} />
 ));
 

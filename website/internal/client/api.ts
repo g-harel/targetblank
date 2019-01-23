@@ -28,11 +28,6 @@ const send = (req: IRequest) => {
         const headers = {};
         headers["Authorization"] = `Targetblank ${req.token}`;
 
-        if (req.json) {
-            req.body = JSON.stringify(req.body);
-            headers["Content-Type"] = "application/json";
-        }
-
         // Time out request after interval.
         // All other resolve/rejects will have no effect.
         setTimeout(() => reject("Timed out"), 5 * 1000);

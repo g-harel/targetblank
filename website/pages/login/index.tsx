@@ -1,6 +1,5 @@
 import {client} from "../../internal/client";
 import {app} from "../../internal/app";
-import {write} from "../../internal/client/storage";
 import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
@@ -17,7 +16,11 @@ export const Login: PageComponent = ({addr}) => () => {
                 app.redirect(`/${addr}`);
             };
 
-            client.page.token.create(callback, addr, pass);
+            const err = (message) => {
+                resolve(message);
+            };
+
+            client.page.token.create(callback, err, addr, pass);
         });
     };
 

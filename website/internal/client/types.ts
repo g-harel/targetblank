@@ -1,14 +1,14 @@
 export interface IPageItem {
     label: string;
     link: string;
-    items: IPageItem[];
+    entries: IPageItem[];
 }
 
 export interface IPageGroup {
     meta: {
         [key: string]: string;
     };
-    items: IPageItem[];
+    entries: IPageItem[];
 }
 
 export interface IPageData {

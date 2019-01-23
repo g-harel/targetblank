@@ -1,3 +1,4 @@
+import {app} from "../../internal/app";
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
@@ -10,31 +11,36 @@ const Group = styled("div")({});
 
 const Items = styled("div")({});
 
-interface Data {
-    page?: IPageData;
-    err?: string;
-}
+export const Document: PageComponent<IPageData> = ({addr}, update) => {
+    const err = (message) => {
+        console.warn(message);
+        app.redirect(`/${addr}/login`);
+    };
 
-export const Document: PageComponent<Data> = ({addr}, update) => {
-    client.page.fetch((page) => update({page}), (err) => update({err}), addr);
+    client.page.fetch(update, err, addr);
 
-    return (data) => data ? (
-        <Wrapper>
-            {!!data.err && "couldn't load"}
-            {!!data.page && (
+    return (data: IPageData) => {
+        // Response not yet received.
+        if (!data) {
+            // TODO
+            return "loading";
+        }
+
+        return (
+            <Wrapper>
                 <Groups>
-                    {data.page.groups.map((group) => (
+                    {...data.groups.map((group) => (
                         <Group>
-                            {group.meta.title || null}
+                            {group.meta.title || ""}
                             <Items>
-                                {group.items.map((item) => (
+                                {...group.entries.map((item) => (
                                     <pre>{JSON.stringify(item)}</pre>
                                 ))}
                             </Items>
                         </Group>
                     ))}
                 </Groups>
-            )}
-        </Wrapper>
-    ) : "loading";
+            </Wrapper>
+        );
+    };
 };
