@@ -19,8 +19,3 @@ export interface IPageData {
     };
     groups: IPageGroup[];
 }
-
-export interface IError {
-    statusCode: number;
-    message: string;
-}

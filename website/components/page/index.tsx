@@ -1,4 +1,3 @@
-import {ErrorComponent} from "../../internal/client/error";
 import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
 import {styled} from "../../internal/styled";
@@ -49,7 +48,6 @@ export const Page: Component<Props> = (props) => () => {
                 </Wrapper>
             )}
             <Component addr={props.addr} token={props.token} />
-            <ErrorComponent />
         </div>
     );
 };
