@@ -56,6 +56,9 @@ const send = (req: IRequest) => {
         } else {
             res.text().then(resolve);
         }
+    }).catch((e) => {
+        console.warn(e.toString());
+        throw e;
     });
 };
 

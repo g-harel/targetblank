@@ -3,6 +3,10 @@ import {Component} from "../../internal/types";
 import {styled} from "../../internal/styled";
 
 const Wrapper = styled("div")({
+    height: "100%",
+});
+
+const ConstructionSign = styled("div")({
     backgroundColor: "gold",
     borderRadius: "0.3rem",
     bottom: "2rem",
@@ -40,14 +44,14 @@ export const Page: Component<Props> = (props) => () => {
     }
 
     return (
-        <div className="page">
+        <Wrapper>
             {document.location.hostname !== "localhost" && (
-                <Wrapper>
+                <ConstructionSign>
                     <i className="fas fa-tools" />
                     &nbsp; Under Construction
-                </Wrapper>
+                </ConstructionSign>
             )}
             <Component addr={props.addr} token={props.token} />
-        </div>
+        </Wrapper>
     );
 };

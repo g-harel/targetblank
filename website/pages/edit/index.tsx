@@ -5,15 +5,23 @@ import {styled} from "../../internal/styled";
 
 const editorID = "targetblank-editor";
 const headerHeight = "2.9rem";
-const saveDelay = 1000;
+const lineHeight = "1.6rem";
+const editorPadding = "2.2rem";
+const saveDelay = 1400;
 
-const Wrapper = styled("div")({});
+const Wrapper = styled("div")({
+    minHeight: "100%",
+    backgroundColor: "#fafafa",
+});
 
 const Header = styled("header")({
+    backgroundColor: "#fff",
     borderBottom: "1px solid #ddd",
     height: headerHeight,
     padding: "0.85rem 1.4rem",
+    position: "fixed",
     userSelect: "none",
+    width: "100%",
 });
 
 const BackButton = styled("div")({
@@ -40,16 +48,31 @@ const SavedIcon = styled("i")({
 });
 
 const Editor = styled("textarea")({
+    lineHeight,
+    backgroundColor: "#fafafa",
     border: "none",
     fontFamily: "Inconsolata, monospace",
     fontSize: "1.2rem",
-    height: `calc(100% - ${headerHeight})`,
-    lineHeight: "1.3",
-    padding: "2.2rem 0 1rem 2.2rem",
+    marginTop: headerHeight,
     outline: "none",
+    padding: editorPadding,
+    paddingLeft: `calc(2 * ${editorPadding})`,
     resize: "none",
     whiteSpace: "pre",
     width: "100%",
+});
+
+const Lines = styled("div")({
+    height: 0,
+    opacity: 0.2,
+    textAlign: "right",
+    transform: `translateY(calc(${headerHeight} + ${editorPadding}))`,
+    userSelect: "none",
+    width: `calc(1.2 * ${editorPadding})`,
+});
+
+const Line = styled("div")({
+    lineHeight,
 });
 
 interface Data {
@@ -59,19 +82,11 @@ interface Data {
 }
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
-    const callback = (data: IPageData) => {
-        update({
-            page: data,
-            status: "saved",
-        });
-    };
-
-    const err = (message) => {
-        console.warn(message);
-        app.redirect(`/${addr}/login`);
-    };
-
-    client.page.fetch(callback, err, addr);
+    client.page.fetch(
+        (data: IPageData) => update({page: data, status: "saved"}),
+        () => app.redirect(`/${addr}/login`),
+        addr,
+    );
 
     return (data?: Data) => {
         // Response not yet received.
@@ -80,6 +95,53 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             return "loading";
         }
 
+        // Save editor contents after a delay.
+        let timeout: any = null;
+        const onInput = (e) => {
+            update({page: data.page, status: "saving"});
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                client.page.edit(
+                    () => update({page: data.page, status: "saved"}),
+                    (m) => update({page: data.page, status: "error", error: m}),
+                    addr,
+                    e.target.value,
+                );
+            }, saveDelay);
+        };
+
+        // Update editor height to match content.
+        const editor = document.getElementById(editorID);
+        if (editor) {
+            editor.style.height = "0";
+            editor.style.opacity = "1";
+            editor.style.height = `${editor.scrollHeight + 20}px`;
+        }
+
+        // Create line numbers.
+        let lines: number[] = [];
+        if (editor) {
+            const count = (editor as any).value.split("\n").length;
+            lines = Array(count);
+            for (let i = 0; i < count; i++) {
+                lines[i] = i + 1;
+            }
+        }
+
+        // Insert spaces when tab is pressed.
+        const onKeydown = (e) => {
+            if (e.key === "Tab") {
+                e.preventDefault();
+                const {target} = e;
+                const pos = target.selectionStart;
+                const before = target.value.substring(0, target.selectionStart);
+                const after = target.value.substring(target.selectionEnd);
+                target.value = `${before}    ${after}`;
+                target.selectionEnd = pos + 4;
+            }
+        };
+
+        // Change status depending on state.
         let statusContent: any = null;
         if (data.status === "error") {
             statusContent = data.error;
@@ -94,23 +156,6 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             );
         }
 
-        let timeout: any = null;
-        const onChange = (e) => {
-            const {value} = e.target;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                update({page: data.page, status: "saving"});
-
-                const callback = () => {
-                    update({page: data.page, status: "saved"});
-                };
-                const err = (message) => {
-                    update({page: data.page, status: "error", error: message});
-                };
-                client.page.edit(callback, err, addr, value);
-            }, saveDelay);
-        };
-
         return (
             <Wrapper>
                 <Header>
@@ -121,10 +166,14 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                         {statusContent}
                     </Status>
                 </Header>
+                <Lines>{...lines.map((n) => <Line>{n}</Line>)}</Lines>
                 <Editor
                     id={editorID}
+                    style="opacity: 0;"
                     value={data.page.raw}
-                    oninput={onChange}
+                    oninput={onInput}
+                    onkeydown={onKeydown}
+                    spellcheck={false}
                 />
             </Wrapper>
         );

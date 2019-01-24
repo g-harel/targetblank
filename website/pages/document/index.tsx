@@ -5,6 +5,15 @@ import {styled} from "../../internal/styled";
 
 const Wrapper = styled("div")({});
 
+const EditButton = styled("div")({
+    cursor: "pointer",
+    display: "inline-block",
+    float: "right",
+    userSelect: "none",
+    padding: "0.85rem 1.4rem",
+    fontWeight: "bold",
+});
+
 const Groups = styled("div")({});
 
 const Group = styled("div")({});
@@ -20,6 +29,8 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
     client.page.fetch(update, err, addr);
 
     return (data: IPageData) => {
+        console.log(data);
+
         // Response not yet received.
         if (!data) {
             // TODO
@@ -28,6 +39,9 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
 
         return (
             <Wrapper>
+                <EditButton onclick={() => app.redirect(`/${addr}/edit`)}>
+                    edit
+                </EditButton>
                 <Groups>
                     {...data.groups.map((group) => (
                         <Group>

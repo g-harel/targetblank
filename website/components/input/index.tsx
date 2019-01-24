@@ -35,7 +35,7 @@ const Title = styled("span")({
 });
 
 const StyledInput = styled("input")({
-    border: "1px solid #ddd",
+    border: "1px solid #bbb",
     borderRadius: "2px",
     height: "1.85rem",
     margin: "0.3rem 0.5rem 0",
@@ -44,7 +44,8 @@ const StyledInput = styled("input")({
     width: `${width}rem`,
 
     "&:focus": {
-        border: "1px solid mediumslateblue",
+        boxShadow: "0 0 1px 1px #eee",
+        borderColor: "inherit",
     },
 
     ...placeholder({
@@ -67,7 +68,7 @@ const Button = styled("button")({
     "&.enabled": {
         pointerEvents: "all",
         cursor: "pointer",
-        color: "mediumslateblue",
+        color: "inherit",
     },
 });
 
