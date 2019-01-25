@@ -10,8 +10,8 @@ const editorPadding = "2.2rem";
 const saveDelay = 1400;
 
 const Wrapper = styled("div")({
-    minHeight: "100%",
     backgroundColor: "#fafafa",
+    minHeight: "100%",
 });
 
 const Header = styled("header")({
@@ -22,18 +22,19 @@ const Header = styled("header")({
     position: "fixed",
     userSelect: "none",
     width: "100%",
+    zIndex: 1,
 });
 
-const BackButton = styled("div")({
+const DoneButton = styled("div")({
     cursor: "pointer",
     display: "inline-block",
+    float: "right",
     userSelect: "none",
     fontWeight: "bold",
 });
 
 const Status = styled("div")({
     display: "inline-block",
-    float: "right",
     fontWeight: "bold",
 
     "&.error": {
@@ -51,12 +52,16 @@ const Editor = styled("textarea")({
     lineHeight,
     backgroundColor: "#fafafa",
     border: "none",
+    color: "#333",
     fontFamily: "Inconsolata, monospace",
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
+    fontWeight: 700,
     marginTop: headerHeight,
+    minHeight: "100%",
     outline: "none",
     padding: editorPadding,
     paddingLeft: `calc(2 * ${editorPadding})`,
+    paddingRight: `calc(2 * ${editorPadding})`,
     resize: "none",
     whiteSpace: "pre",
     width: "100%",
@@ -82,11 +87,65 @@ interface Data {
 }
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
+    // Load page data.
     client.page.fetch(
         (data: IPageData) => update({page: data, status: "saved"}),
         () => app.redirect(`/${addr}/login`),
         addr,
     );
+
+    // Swallow `ctrl+s` to prevent browser popup.
+    // https://stackoverflow.com/questions/4446987/overriding-controls-save-functionality-in-browser
+    document.addEventListener(
+        "keydown",
+        (e) => {
+            const ctrl = navigator.platform.match("Mac")
+                ? e.metaKey
+                : e.ctrlKey;
+            if (e.key === "s" && ctrl) {
+                e.preventDefault();
+            }
+        },
+        false,
+    );
+
+    // Save editor contents after a delay.
+    // Counter prevents stale requests from updating the status.
+    let timeout: any = null;
+    let counter = 0;
+    const onInput = (data: Data) => (e) => {
+        update({page: data.page, status: "saving"});
+        clearTimeout(timeout);
+        counter++;
+        const selfCounter = counter;
+        timeout = setTimeout(() => {
+            client.page.edit(
+                () => {
+                    if (selfCounter !== counter) return;
+                    update({page: data.page, status: "saved"});
+                },
+                (m) => {
+                    if (selfCounter !== counter) return;
+                    update({page: data.page, status: "error", error: m});
+                },
+                addr,
+                e.target.value,
+            );
+        }, saveDelay);
+    };
+
+    // Insert spaces when tab is pressed.
+    const onKeydown = (e) => {
+        if (e.key === "Tab") {
+            e.preventDefault();
+            const {target} = e;
+            const pos = target.selectionStart;
+            const before = target.value.substring(0, target.selectionStart);
+            const after = target.value.substring(target.selectionEnd);
+            target.value = `${before}    ${after}`;
+            target.selectionEnd = pos + 4;
+        }
+    };
 
     return (data?: Data) => {
         // Response not yet received.
@@ -94,21 +153,6 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             // TODO
             return "loading";
         }
-
-        // Save editor contents after a delay.
-        let timeout: any = null;
-        const onInput = (e) => {
-            update({page: data.page, status: "saving"});
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                client.page.edit(
-                    () => update({page: data.page, status: "saved"}),
-                    (m) => update({page: data.page, status: "error", error: m}),
-                    addr,
-                    e.target.value,
-                );
-            }, saveDelay);
-        };
 
         // Update editor height to match content.
         const editor = document.getElementById(editorID);
@@ -128,19 +172,6 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             }
         }
 
-        // Insert spaces when tab is pressed.
-        const onKeydown = (e) => {
-            if (e.key === "Tab") {
-                e.preventDefault();
-                const {target} = e;
-                const pos = target.selectionStart;
-                const before = target.value.substring(0, target.selectionStart);
-                const after = target.value.substring(target.selectionEnd);
-                target.value = `${before}    ${after}`;
-                target.selectionEnd = pos + 4;
-            }
-        };
-
         // Change status depending on state.
         let statusContent: any = null;
         if (data.status === "error") {
@@ -159,9 +190,9 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
         return (
             <Wrapper>
                 <Header>
-                    <BackButton onclick={() => app.redirect(`/${addr}`)}>
-                        back
-                    </BackButton>
+                    <DoneButton onclick={() => app.redirect(`/${addr}`)}>
+                        done
+                    </DoneButton>
                     <Status className={{error: !!data.error}}>
                         {statusContent}
                     </Status>
@@ -171,7 +202,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                     id={editorID}
                     style="opacity: 0;"
                     value={data.page.raw}
-                    oninput={onInput}
+                    oninput={onInput(data)}
                     onkeydown={onKeydown}
                     spellcheck={false}
                 />

@@ -11,6 +11,7 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - display uncaught network errors
 - app ~ treat 5xx errors differently
+- stricter parsing (to differentiate control chars from labels)
 - offline page for playing around ("/localhost")
 - replace application secrets (eventually)
 
