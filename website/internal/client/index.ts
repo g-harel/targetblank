@@ -105,13 +105,19 @@ class PagePasswordClient {
         this.api = api;
     }
 
-    change(cb: Callback<void>, err: ErrorHandler, addr, pass) {
-        const {token} = read(addr);
-        if (token === null) {
+    change(
+        cb: Callback<void>,
+        err: ErrorHandler,
+        addr: string,
+        pass: string,
+        token?: string,
+    ) {
+        const t = token || read(addr).token;
+        if (t === null) {
             return err(missingToken("change password", addr));
         }
         this.api
-            .change(addr, token, pass)
+            .change(addr, t, pass)
             .then(cb)
             .catch(err);
     }

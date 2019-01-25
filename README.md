@@ -9,8 +9,7 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- display uncaught network errors
-- app ~ treat 5xx errors differently
+- generic (full page?) loading component
 - stricter parsing (to differentiate control chars from labels)
 - offline page for playing around ("/localhost")
 - replace application secrets (eventually)

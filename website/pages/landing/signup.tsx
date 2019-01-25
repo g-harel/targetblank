@@ -19,7 +19,7 @@ export const Signup: Component<Props> = (props) => () => (
     <Wrapper className={{visible: props.visible}}>
         <Input
             callback={props.callback}
-            title="Create a page"
+            title="create a page"
             type="email"
             placeholder="john@example.com"
             validator={/^\S+@\S+\.\S{2,}$/g}
