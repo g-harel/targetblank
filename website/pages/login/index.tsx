@@ -29,7 +29,7 @@ export const Login: PageComponent = ({addr}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
             client.page.token.create(
-                () => app.redirect(`/${addr}/login`),
+                () => app.redirect(`/${addr}`),
                 resolve,
                 addr,
                 pass,
@@ -42,9 +42,7 @@ export const Login: PageComponent = ({addr}) => () => {
     return (
         <Wrapper>
             <ForgotWrapper>
-                <ForgotLink onclick={onClick}>
-                    reset password
-                </ForgotLink>
+                <ForgotLink onclick={onClick}>reset password</ForgotLink>
             </ForgotWrapper>
             <Password callback={submit} title="log in" />
         </Wrapper>

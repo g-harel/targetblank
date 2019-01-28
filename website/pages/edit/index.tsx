@@ -2,6 +2,7 @@ import {app} from "../../internal/app";
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
+import {Loading} from "../../components/loading";
 
 const editorID = "targetblank-editor";
 const headerHeight = "2.9rem";
@@ -149,10 +150,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
 
     return (data?: Data) => {
         // Response not yet received.
-        if (!data) {
-            // TODO
-            return "loading";
-        }
+        if (!data) return <Loading />;
 
         // Update editor height to match content.
         const editor = document.getElementById(editorID);

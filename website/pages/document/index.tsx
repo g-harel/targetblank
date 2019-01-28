@@ -2,6 +2,7 @@ import {app} from "../../internal/app";
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
+import {Loading} from "../../components/loading";
 
 const Wrapper = styled("div")({});
 
@@ -21,21 +22,11 @@ const Group = styled("div")({});
 const Items = styled("div")({});
 
 export const Document: PageComponent<IPageData> = ({addr}, update) => {
-    const err = (message) => {
-        console.warn(message);
-        app.redirect(`/${addr}/login`);
-    };
-
-    client.page.fetch(update, err, addr);
+    client.page.fetch(update, () => app.redirect(`/${addr}/login`), addr);
 
     return (data: IPageData) => {
-        console.log(data);
-
         // Response not yet received.
-        if (!data) {
-            // TODO
-            return "loading";
-        }
+        if (!data) return <Loading />;
 
         return (
             <Wrapper>

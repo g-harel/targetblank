@@ -9,6 +9,8 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
+- replace jss with https://github.com/typestyle/typestyle
+- make editor a component
 - generic (full page?) loading component
 - stricter parsing (to differentiate control chars from labels)
 - offline page for playing around ("/localhost")

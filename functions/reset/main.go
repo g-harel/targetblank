@@ -43,10 +43,10 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 
 	err = mailerSend(
 		email,
-		"Your page password has been reset!",
+		"Reset your page password!",
 		`<html>
 			<body>
-				<h3>Follow the link to confirm you're the owner.</h3>
+				<h3>Follow the link to update your password.</h3>
 				<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
 			</body>
 		</html>`,
