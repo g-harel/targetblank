@@ -13,9 +13,5 @@ const Wrapper = styled("div")({
 });
 
 export const Loading: Component = () => () => {
-    return (
-        <Wrapper>
-            targetblank
-        </Wrapper>
-    );
+    return <Wrapper>targetblank</Wrapper>;
 };

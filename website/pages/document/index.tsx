@@ -3,21 +3,44 @@ import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
 import {Loading} from "../../components/loading";
+import {Item} from "./item";
 
-const Wrapper = styled("div")({});
+const Wrapper = styled("div")({
+    height: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+});
 
 const EditButton = styled("div")({
     cursor: "pointer",
-    display: "inline-block",
+    display: "inline",
     float: "right",
-    userSelect: "none",
-    padding: "0.85rem 1.4rem",
     fontWeight: "bold",
+    padding: "0.85rem 1.4rem",
+    position: "absolute",
+    right: 0,
+    userSelect: "none",
 });
 
-const Groups = styled("div")({});
+const Groups = styled("div")({
+    alignContent: "center",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    maxWidth: "100%",
+    minHeight: "100%",
+    padding: "2rem 1rem",
+});
 
-const Group = styled("div")({});
+const Group = styled("div")({
+    border: "1px solid #eee",
+    borderRadius: "2px",
+    flexBasis: "30%",
+    flexGrow: 1,
+    flexShrink: 0,
+    margin: "1rem",
+    padding: "1rem 1.4rem",
+});
 
 const Items = styled("div")({});
 
@@ -36,10 +59,9 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
                 <Groups>
                     {...data.groups.map((group) => (
                         <Group>
-                            {group.meta.title || ""}
                             <Items>
                                 {...group.entries.map((item) => (
-                                    <pre>{JSON.stringify(item)}</pre>
+                                    <Item {...item} />
                                 ))}
                             </Items>
                         </Group>
