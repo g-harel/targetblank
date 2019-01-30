@@ -7,6 +7,8 @@ import {Item} from "./item";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
+    display: "flex",
+    justifyContent: "center",
     height: "100%",
     maxWidth: "1200px",
     margin: "0 auto",
@@ -23,12 +25,13 @@ const Edit = styled("div")({
 });
 
 const Groups = styled("div")({
+    alignSelf: "center",
     alignContent: "center",
     display: "flex",
+    flexShrink: 0,
+    flexGrow: 1,
     flexWrap: "wrap",
     justifyContent: "center",
-    maxWidth: "100%",
-    minHeight: "100%",
     padding: "2rem 1rem",
 });
 
