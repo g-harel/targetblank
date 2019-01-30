@@ -4,8 +4,7 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- replace jss with https://github.com/typestyle/typestyle
-- keyboard shortcuts to edit page
+- keyboard shortcuts to edit page and to click links
 - add page publish button
 - conditionally show edit button if token is present
 - make editor a component

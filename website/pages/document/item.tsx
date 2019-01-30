@@ -9,8 +9,10 @@ const Wrapper = styled("div")({
     lineHeight: "1.6rem",
     padding: "0.3rem",
 
-    "& &": {
-        paddingLeft: "2rem",
+    $nest: {
+        "& &": {
+            paddingLeft: "2rem",
+        },
     },
 });
 

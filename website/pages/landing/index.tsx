@@ -27,8 +27,10 @@ const Screen = styled("div")({
     verticalAlign: "top",
     width: `${screenWidth}rem`,
 
-    "&.scrolled": {
-        transform: "translateX(-100%)",
+    $nest: {
+        "&.scrolled": {
+            transform: "translateX(-100%)",
+        },
     },
 });
 

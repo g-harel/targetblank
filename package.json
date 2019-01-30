@@ -7,13 +7,10 @@
     "fmt": "prettier --list-different --write --ignore-path .gitignore \"**/*.{js,ts,tsx}\""
   },
   "dependencies": {
-    "jss": "^9.8.7",
-    "jss-preset-default": "^4.5.0",
-    "okwolo": "^3.4.3"
+    "okwolo": "^3.4.3",
+    "typestyle": "^2.0.1"
   },
   "devDependencies": {
-    "@types/jss": "^9.5.7",
-    "@types/request-promise-native": "^1.0.15",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",

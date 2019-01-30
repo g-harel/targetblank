@@ -24,8 +24,10 @@ const domains: Record<string, string> = {
 const Wrapper = styled("div")({
     opacity: 0,
 
-    "&.visible": {
-        opacity: 1,
+    $nest: {
+        "&.visible": {
+            opacity: 1,
+        },
     },
 });
 
@@ -41,9 +43,11 @@ const TitleIcon = styled("i")({
     opacity: 0,
     transition: "all 1s ease",
 
-    "&.visible": {
-        opacity: 1,
-        transitionDelay: "0.25s",
+    $nest: {
+        "&.visible": {
+            opacity: 1,
+            transitionDelay: "0.25s",
+        },
     },
 });
 
@@ -53,10 +57,12 @@ const EmailLink = styled("a")({
     fontSize: "1.1rem",
     margin: "0.5rem 0 1rem",
 
-    "&.inert": {
-        cursor: "text",
-        marginTop: "0.3rem",
-        pointerEvents: "none",
+    $nest: {
+        "&.inert": {
+            cursor: "text",
+            marginTop: "0.3rem",
+            pointerEvents: "none",
+        },
     },
 });
 

@@ -16,12 +16,14 @@ export const reset: Style & Record<string, any> = {
     textAlign: "inherit",
     width: "auto",
 
-    "&::-moz-focus-inner": {
-        padding: "0",
-        border: "0",
-    },
+    $nest: {
+        "&::-moz-focus-inner": {
+            padding: "0",
+            border: "0",
+        },
 
-    "&:focus": {
-        outline: "none",
+        "&:focus": {
+            outline: "none",
+        },
     },
 };

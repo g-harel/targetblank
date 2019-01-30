@@ -38,8 +38,10 @@ const Status = styled("div")({
     display: "inline-block",
     fontWeight: "bold",
 
-    "&.error": {
-        color: "tomato",
+    $nest: {
+        "&.error": {
+            color: "tomato",
+        },
     },
 });
 
@@ -189,9 +191,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             <Wrapper>
                 <Header>
                     <Done>
-                        <Anchor href={`/${addr}`}>
-                            done
-                        </Anchor>
+                        <Anchor href={`/${addr}`}>done</Anchor>
                     </Done>
                     <Status className={{error: !!data.error}}>
                         {statusContent}

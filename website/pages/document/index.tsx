@@ -54,9 +54,7 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
         return (
             <Wrapper>
                 <Edit>
-                    <Anchor href={`/${addr}/edit`}>
-                        edit
-                    </Anchor>
+                    <Anchor href={`/${addr}/edit`}>edit</Anchor>
                 </Edit>
                 <Groups>
                     {...data.groups.map((group) => (

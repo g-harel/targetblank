@@ -16,8 +16,10 @@ const Icon = styled("i")({
     fontSize: "1.6rem",
     transition: "all 0.2s ease",
 
-    "&:hover": {
-        color: "#ddd",
+    $nest: {
+        "&:hover": {
+            color: "#ddd",
+        },
     },
 });
 

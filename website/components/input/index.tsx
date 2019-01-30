@@ -11,17 +11,21 @@ const Form = styled("form")({
     textAlign: "left",
     margin: "0 auto",
 
-    "&.loading": {
-        filter: "grayscale(100%)",
-        pointerEvents: "none",
+    $nest: {
+        "&.loading": {
+            filter: "grayscale(100%)",
+            pointerEvents: "none",
 
-        "& *:not(button)": {
-            opacity: "0.5",
-        },
+            $nest: {
+                "& *:not(button)": {
+                    opacity: 0.5,
+                },
 
-        "& button": {
-            color: "#555",
-            cursor: "default",
+                "& button": {
+                    color: "#555",
+                    cursor: "default",
+                },
+            },
         },
     },
 });
@@ -43,15 +47,17 @@ const StyledInput = styled("input")({
     padding: "0.25rem 1.8rem 0.25rem 0.5rem",
     width: `${width}rem`,
 
-    "&:focus": {
-        boxShadow: "0 0 1px 1px #eee",
-        borderColor: "inherit",
-    },
+    $nest: {
+        "&:focus": {
+            boxShadow: "0 0 1px 1px #eee",
+            borderColor: "inherit",
+        },
 
-    ...placeholder({
-        color: "#cfcfcf",
-        opacity: 1,
-    }),
+        ...placeholder({
+            color: "#cfcfcf",
+            opacity: 1,
+        }),
+    },
 });
 
 const Button = styled("button")({
@@ -65,10 +71,12 @@ const Button = styled("button")({
     color: "#cfcfcf",
     float: "right",
 
-    "&.enabled": {
-        pointerEvents: "all",
-        cursor: "pointer",
-        color: "inherit",
+    $nest: {
+        "&.enabled": {
+            pointerEvents: "all",
+            cursor: "pointer",
+            color: "inherit",
+        },
     },
 });
 

@@ -5,8 +5,10 @@ import {Input, Props as InputProps} from "../../components/input";
 const Wrapper = styled("div")({
     opacity: 0,
 
-    "&.visible": {
-        opacity: 1,
+    $nest: {
+        "&.visible": {
+            opacity: 1,
+        },
     },
 });
 
