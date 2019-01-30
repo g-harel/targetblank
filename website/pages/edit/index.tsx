@@ -119,7 +119,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                 </Header>
                 <Editor
                     id="page-editor"
-                    onInput={save(data)}
+                    callback={save(data)}
                     value={data.page.raw}
                 />
             </Wrapper>
