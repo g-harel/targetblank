@@ -7,7 +7,6 @@ TODO
 - keyboard shortcuts to edit page and to click links
 - add page publish button
 - conditionally show edit button if token is present
-- make editor a component
 - stricter parsing (to differentiate control chars from labels)
 - offline page for playing around ("/localhost")
 - replace application secrets (eventually)
