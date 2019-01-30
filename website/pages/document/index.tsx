@@ -4,6 +4,7 @@ import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
 import {Loading} from "../../components/loading";
 import {Item} from "./item";
+import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
     height: "100%",
@@ -11,8 +12,7 @@ const Wrapper = styled("div")({
     margin: "0 auto",
 });
 
-const EditButton = styled("div")({
-    cursor: "pointer",
+const Edit = styled("div")({
     display: "inline",
     float: "right",
     fontWeight: "bold",
@@ -53,9 +53,11 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
 
         return (
             <Wrapper>
-                <EditButton onclick={() => app.redirect(`/${addr}/edit`)}>
-                    edit
-                </EditButton>
+                <Edit>
+                    <Anchor href={`/${addr}/edit`}>
+                        edit
+                    </Anchor>
+                </Edit>
                 <Groups>
                     {...data.groups.map((group) => (
                         <Group>

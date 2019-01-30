@@ -3,26 +3,23 @@ import {app} from "../../internal/app";
 import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
+import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
     paddingTop: "20vh",
 });
 
-const ForgotWrapper = styled("div")({
+const Forgot = styled("div")({
+    color: "#aaa",
+    cursor: "pointer",
+    fontSize: "0.9rem",
     height: 0,
     margin: "0 auto",
     padding: "0 0.9rem",
     textAlign: "right",
     transform: "translateY(0.85rem)",
-    width: "17rem",
-});
-
-const ForgotLink = styled("div")({
-    color: "#aaa",
-    cursor: "pointer",
-    display: "inline-block",
-    fontSize: "0.9rem",
     userSelect: "none",
+    width: "17rem",
 });
 
 export const Login: PageComponent = ({addr}) => () => {
@@ -37,13 +34,11 @@ export const Login: PageComponent = ({addr}) => () => {
         });
     };
 
-    const onClick = () => app.redirect(`/${addr}/forgot`);
-
     return (
         <Wrapper>
-            <ForgotWrapper>
-                <ForgotLink onclick={onClick}>reset password</ForgotLink>
-            </ForgotWrapper>
+            <Forgot>
+                <Anchor href={`/${addr}/forgot`}>reset password</Anchor>
+            </Forgot>
             <Password callback={submit} title="log in" />
         </Wrapper>
     );

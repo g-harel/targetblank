@@ -5,7 +5,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - replace jss with https://github.com/typestyle/typestyle
-- make anchor component to rely less on onclick
 - keyboard shortcuts to edit page
 - add page publish button
 - conditionally show edit button if token is present

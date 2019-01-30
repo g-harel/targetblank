@@ -1,6 +1,7 @@
 import {IPageItem} from "../../internal/client/types";
 import {Component} from "../../internal/types";
 import {styled} from "../../internal/styled";
+import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
     fontSize: "1.1rem",
@@ -13,19 +14,21 @@ const Wrapper = styled("div")({
     },
 });
 
-const ItemLink = styled("a")({
+const ItemTitle = styled("span")({
     color: "#888",
 });
 
-const ItemTitle = styled("span")({});
-
 export const Item: Component<IPageItem> = (props) => () => {
-    const Title = props.link ? ItemLink : ItemTitle;
+    let Title = null;
+    if (props.link) {
+        Title = <Anchor href={props.link}>{props.label}</Anchor>;
+    } else {
+        Title = <ItemTitle>{props.label}</ItemTitle>;
+    }
+
     return (
         <Wrapper>
-            <Title href={props.link}>
-                {props.label}
-            </Title>
+            {Title}
             {...props.entries.map((item) => <Item {...item} />)}
         </Wrapper>
     );

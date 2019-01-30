@@ -3,6 +3,7 @@ import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
 import {Loading} from "../../components/loading";
+import {Anchor} from "../../components/anchor";
 
 const editorID = "targetblank-editor";
 const headerHeight = "2.9rem";
@@ -26,8 +27,7 @@ const Header = styled("header")({
     zIndex: 1,
 });
 
-const DoneButton = styled("div")({
-    cursor: "pointer",
+const Done = styled("div")({
     display: "inline-block",
     float: "right",
     userSelect: "none",
@@ -188,9 +188,11 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
         return (
             <Wrapper>
                 <Header>
-                    <DoneButton onclick={() => app.redirect(`/${addr}`)}>
-                        done
-                    </DoneButton>
+                    <Done>
+                        <Anchor href={`/${addr}`}>
+                            done
+                        </Anchor>
+                    </Done>
                     <Status className={{error: !!data.error}}>
                         {statusContent}
                     </Status>

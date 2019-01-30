@@ -1,5 +1,6 @@
 import {styled} from "../../internal/styled";
 import {Component} from "../../internal/types";
+import {Anchor} from "../../components/anchor";
 
 export const footerHeight = 2.8;
 
@@ -22,8 +23,8 @@ const Icon = styled("i")({
 
 export const Footer: Component = () => () => (
     <Wrapper>
-        <a href="https://github.com/g-harel/targetblank">
+        <Anchor href="https://github.com/g-harel/targetblank">
             <Icon className="fab fa-github" />
-        </a>
+        </Anchor>
     </Wrapper>
 );
