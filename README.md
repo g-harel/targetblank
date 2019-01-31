@@ -7,7 +7,6 @@ TODO
 - keyboard shortcuts to edit page and to click links
 - add page publish button
 - make "done" disabled while saving
-- editor autofocus
 - less jumping around at bottom of editor on firefox
 - conditionally show edit button if token is present
 - stricter parsing (to differentiate control chars from labels)

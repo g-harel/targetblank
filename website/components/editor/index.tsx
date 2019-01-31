@@ -47,6 +47,16 @@ export interface Props {
 }
 
 export const Editor: Component<Props> = (props) => () => {
+    setTimeout(() =>
+        requestAnimationFrame(() => {
+            const input = document.getElementById(props.id);
+            if (input && document.activeElement !== input) {
+                input.focus();
+                (input as any).setSelectionRange(0, 0);
+            }
+        }),
+    );
+
     const onKeydown = (e) => {
         // Swallow `ctrl+s` to prevent browser popup.
         const ctrl = navigator.platform.match("Mac")
