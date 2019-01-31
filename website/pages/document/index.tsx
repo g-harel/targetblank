@@ -28,7 +28,7 @@ const Edit = styled("div")({
 const Groups = styled("div")({
     display: "flex",
     flexWrap: "wrap",
-    paddingBottom: "3rem",
+    padding: "0 1rem 3rem",
 });
 
 const Group = styled("div")({

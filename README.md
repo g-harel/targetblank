@@ -8,6 +8,10 @@ TODO
 - add page publish button
 - login button instead of edit when public
 - stricter parsing (to differentiate control chars from labels)
+- optimize fonts + icons
+- cache bust on static file change
+- https://www.npmjs.com/package/normalize.css
+- make new page more interesting
 - extend token expiration time
 - add explanation text on landing
 - offline page for playing around ("/localhost")
