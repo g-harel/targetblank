@@ -7,14 +7,14 @@ const Wrapper = styled("div")({
 });
 
 const ConstructionSign = styled("div")({
-    backgroundColor: "gold",
+    backgroundColor: "red",
     borderRadius: "0.3rem",
     bottom: "2rem",
+    color: "white",
     fontFamily: "Inconsolata, monospace",
     fontSize: "1.2rem",
     fontWeight: "bold",
     left: "2rem",
-    opacity: 0.5,
     padding: "1rem",
     position: "fixed",
     textAlign: "center",

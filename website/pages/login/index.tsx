@@ -4,10 +4,9 @@ import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
 import {Anchor} from "../../components/anchor";
+import {Header} from "../../components/header";
 
-const Wrapper = styled("div")({
-    paddingTop: "20vh",
-});
+const Wrapper = styled("div")({});
 
 const Forgot = styled("div")({
     color: "#aaa",
@@ -36,6 +35,7 @@ export const Login: PageComponent = ({addr}) => () => {
 
     return (
         <Wrapper>
+            <Header muted />
             <Forgot>
                 <Anchor href={`/${addr}/forgot`}>reset password</Anchor>
             </Forgot>

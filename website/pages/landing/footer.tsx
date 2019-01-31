@@ -2,11 +2,11 @@ import {styled} from "../../internal/styled";
 import {Component} from "../../internal/types";
 import {Anchor} from "../../components/anchor";
 
-export const footerHeight = 2.8;
-
 const Wrapper = styled("footer")({
-    height: `${footerHeight}rem`,
+    bottom: 0,
     overflow: "hidden",
+    padding: "1rem",
+    position: "absolute",
     textAlign: "center",
     width: "100vw",
 });

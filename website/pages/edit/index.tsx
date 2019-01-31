@@ -15,6 +15,7 @@ const Wrapper = styled("div")({
 });
 
 const Header = styled("header")({
+    "-moz-user-select": "-moz-none",
     backgroundColor: "#fff",
     borderBottom: "1px solid #ddd",
     height: headerHeight,

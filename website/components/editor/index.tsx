@@ -59,9 +59,7 @@ export const Editor: Component<Props> = (props) => () => {
 
     const onKeydown = (e) => {
         // Swallow `ctrl+s` to prevent browser popup.
-        const ctrl = navigator.platform.match("Mac")
-            ? e.metaKey
-            : e.ctrlKey;
+        const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
         if (ctrl && e.key === "s") {
             e.preventDefault();
         }

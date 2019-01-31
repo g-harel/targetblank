@@ -5,17 +5,18 @@ import {styled} from "../../internal/styled";
 import {Loading} from "../../components/loading";
 import {Item} from "./item";
 import {Anchor} from "../../components/anchor";
+import {Header} from "../../components/header";
 
 const Wrapper = styled("div")({
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
     height: "100%",
     maxWidth: "1200px",
     margin: "0 auto",
 });
 
 const Edit = styled("div")({
-    display: "inline",
+    "-moz-user-select": "-moz-none",
     float: "right",
     fontWeight: "bold",
     padding: "0.85rem 1.4rem",
@@ -25,14 +26,9 @@ const Edit = styled("div")({
 });
 
 const Groups = styled("div")({
-    alignSelf: "center",
-    alignContent: "center",
     display: "flex",
-    flexShrink: 0,
-    flexGrow: 1,
     flexWrap: "wrap",
-    justifyContent: "center",
-    padding: "2rem 1rem",
+    paddingBottom: "3rem",
 });
 
 const Group = styled("div")({
@@ -59,6 +55,7 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
                 <Edit>
                     <Anchor href={`/${addr}/edit`}>edit</Anchor>
                 </Edit>
+                <Header muted title={data.meta.title || addr} />
                 <Groups>
                     {...data.groups.map((group) => (
                         <Group>

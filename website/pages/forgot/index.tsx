@@ -3,10 +3,9 @@ import {app} from "../../internal/app";
 import {Input} from "../../components/input";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
+import {Header} from "../../components/header";
 
-const Wrapper = styled("div")({
-    paddingTop: "20vh",
-});
+const Wrapper = styled("div")({});
 
 export const Forgot: PageComponent = ({addr}) => () => {
     const submit = (email: string) => {
@@ -22,6 +21,7 @@ export const Forgot: PageComponent = ({addr}) => () => {
 
     return (
         <Wrapper>
+            <Header muted />
             <Input
                 callback={submit}
                 title="reset password"

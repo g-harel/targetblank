@@ -2,8 +2,8 @@ import {client} from "../../internal/client";
 import {styled} from "../../internal/styled";
 import {Signup} from "./signup";
 import {PageComponent} from "../../components/page";
-import {Footer, footerHeight} from "./footer";
-import {Header, headerHeight} from "./header";
+import {Footer} from "./footer";
+import {Header} from "../../components/header";
 import {Confirmation} from "./confirmation";
 
 const screenWidth = 20;
@@ -13,15 +13,12 @@ const Wrapper = styled("div")({
 });
 
 const Screens = styled("div")({
-    height: `calc(100vh - ${headerHeight + footerHeight + 0.1}rem)`,
     marginLeft: `calc(50vw - ${screenWidth / 2}rem);`,
     width: "1000vw",
 });
 
 const Screen = styled("div")({
     display: "inline-block",
-    height: "99%",
-    paddingTop: `calc(25vh - ${headerHeight}rem)`,
     textAlign: "center",
     transition: "all 0.7s ease",
     verticalAlign: "top",

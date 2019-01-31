@@ -6,12 +6,13 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - keyboard shortcuts to edit page and to click links
 - add page publish button
-- make "done" disabled while saving
-- less jumping around at bottom of editor on firefox
-- conditionally show edit button if token is present
+- login button instead of edit when public
 - stricter parsing (to differentiate control chars from labels)
+- extend token expiration time
+- add explanation text on landing
 - offline page for playing around ("/localhost")
 - replace application secrets (eventually)
+- set up regular database backups
 
 requirements
 - text-based template for links, labels, categories, etc.
