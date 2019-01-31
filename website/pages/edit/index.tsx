@@ -30,6 +30,13 @@ const Done = styled("div")({
     float: "right",
     userSelect: "none",
     fontWeight: "bold",
+
+    $nest: {
+        "&.disabled": {
+            pointerEvents: "none",
+            color: "#ccc",
+        },
+    },
 });
 
 const Status = styled("div")({
@@ -110,7 +117,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
         return (
             <Wrapper>
                 <Header>
-                    <Done>
+                    <Done className={{disabled: data.status === "saving"}}>
                         <Anchor href={`/${addr}`}>done</Anchor>
                     </Done>
                     <Status className={{error: !!data.error}}>
