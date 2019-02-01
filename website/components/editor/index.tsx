@@ -12,9 +12,7 @@ const Textarea = styled("textarea")({
     backgroundColor: "#fafafa",
     border: "none",
     color: "#333",
-    fontFamily: "Inconsolata, monospace",
-    fontSize: "1.1rem",
-    fontWeight: 700,
+    fontFamily: "SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace",
     marginTop: headerHeight,
     minHeight: "100%",
     outline: "none",
@@ -29,9 +27,9 @@ const Textarea = styled("textarea")({
 
 const Lines = styled("div")({
     height: 0,
-    opacity: 0.2,
+    opacity: Math.PI / 10,
     textAlign: "right",
-    transform: `translateY(calc(${headerHeight} + ${editorPadding}))`,
+    transform: `translateY(calc(${headerHeight} + ${editorPadding} + 1px))`,
     userSelect: "none",
     width: `calc(1.6 * ${editorPadding})`,
 });

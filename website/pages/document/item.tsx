@@ -4,7 +4,6 @@ import {styled} from "../../internal/styled";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
-    fontSize: "1.1rem",
     fontWeight: 700,
     lineHeight: "1.6rem",
     padding: "0.3rem",

@@ -68,6 +68,7 @@ resource "aws_cloudfront_distribution" "public_bucket" {
     cached_methods         = ["HEAD", "GET", "OPTIONS"]
     target_origin_id       = "${aws_s3_bucket.public_bucket.id}"
     viewer_protocol_policy = "redirect-to-https"
+    compress               = true
 
     forwarded_values {
       query_string = false

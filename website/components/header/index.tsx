@@ -3,11 +3,14 @@ import {Component} from "../../internal/types";
 
 const Wrapper = styled("header")({
     "-moz-user-select": "-moz-none",
-    font: "800 1.6rem 'Lora', serif",
+    fontFamily: "Arial, Helvetica Neue, Helvetica, sans-serif",
+    fontSize: "1.7rem",
+    fontWeight: "bold",
     lineHeight: "2.9rem",
     padding: "4.5rem 1.4rem 4rem",
     textAlign: "center",
     userSelect: "none",
+    pointerEvents: "none",
     width: "100%",
 
     $nest: {

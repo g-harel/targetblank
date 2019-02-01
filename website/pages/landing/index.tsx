@@ -2,7 +2,6 @@ import {client} from "../../internal/client";
 import {styled} from "../../internal/styled";
 import {Signup} from "./signup";
 import {PageComponent} from "../../components/page";
-import {Footer} from "./footer";
 import {Header} from "../../components/header";
 import {Confirmation} from "./confirmation";
 
@@ -61,7 +60,6 @@ export const Landing: PageComponent = (props, update) => {
                     <Confirmation email={email} visible={!!email} />
                 </Screen>
             </Screens>
-            <Footer />
         </Wrapper>
     );
 };

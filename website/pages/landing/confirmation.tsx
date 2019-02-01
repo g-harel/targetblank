@@ -39,7 +39,7 @@ const Title = styled("span")({
 const TitleIcon = styled("i")({
     color: "yellowgreen",
     display: "block",
-    margin: "0.6rem 0",
+    margin: "1rem 0",
     opacity: 0,
     transition: "all 1s ease",
 
@@ -52,9 +52,8 @@ const TitleIcon = styled("i")({
 });
 
 const EmailLink = styled("a")({
-    color: "#aaa",
+    color: "#888",
     display: "inline-block",
-    fontSize: "1.1rem",
     margin: "0.5rem 0 1rem",
 
     $nest: {

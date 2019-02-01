@@ -32,7 +32,6 @@ const Form = styled("form")({
 
 const Title = styled("span")({
     display: "block",
-    fontSize: "1.3rem",
     fontWeight: "bold",
     margin: "0.5rem 0.9rem 0.1rem",
     width: `${width}rem`,
@@ -44,7 +43,7 @@ const StyledInput = styled("input")({
     height: "1.85rem",
     margin: "0.3rem 0.5rem 0",
     outline: "0",
-    padding: "0.25rem 1.8rem 0.25rem 0.5rem",
+    padding: "1rem 1.8rem 1rem 0.5rem",
     width: `${width}rem`,
 
     $nest: {
@@ -63,7 +62,7 @@ const StyledInput = styled("input")({
 const Button = styled("button")({
     ...reset,
 
-    transform: "translate(-0.35rem, -1.95rem)",
+    transform: "translate(-0.35rem, -2.05rem)",
     padding: "0.65rem 0.7rem 0.65rem",
     display: "inline-block",
     pointerEvents: "none",
@@ -82,7 +81,7 @@ const Button = styled("button")({
 
 const Error = styled("div")({
     color: "tomato",
-    fontSize: "0.75rem",
+    fontSize: "0.8rem",
     height: "1.15rem",
     margin: "0.35rem 1rem",
     width: `${width}rem`,

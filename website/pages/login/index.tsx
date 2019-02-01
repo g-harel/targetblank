@@ -10,15 +10,10 @@ const Wrapper = styled("div")({});
 
 const Forgot = styled("div")({
     color: "#aaa",
-    cursor: "pointer",
-    fontSize: "0.9rem",
-    height: 0,
-    margin: "0 auto",
-    padding: "0 0.9rem",
-    textAlign: "right",
-    transform: "translateY(0.85rem)",
+    fontSize: "0.8rem",
+    textAlign: "center",
+    transform: "translateY(-1.7rem)",
     userSelect: "none",
-    width: "17rem",
 });
 
 export const Login: PageComponent = ({addr}) => () => {
@@ -36,10 +31,10 @@ export const Login: PageComponent = ({addr}) => () => {
     return (
         <Wrapper>
             <Header muted />
+            <Password callback={submit} title="log in" />
             <Forgot>
                 <Anchor href={`/${addr}/forgot`}>reset password</Anchor>
             </Forgot>
-            <Password callback={submit} title="log in" />
         </Wrapper>
     );
 };
