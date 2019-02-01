@@ -5,6 +5,7 @@ import {styled} from "../../internal/styled";
 import {Loading} from "../../components/loading";
 import {Anchor} from "../../components/anchor";
 import {Editor} from "../../components/editor";
+import {Icon} from "../../components/icon";
 
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
@@ -49,12 +50,6 @@ const Status = styled("div")({
             color: "tomato",
         },
     },
-});
-
-const SavedIcon = styled("i")({
-    color: "yellowgreen",
-    margin: "0 0.4rem",
-    transform: "translate(0, 0.1rem)",
 });
 
 interface Data {
@@ -109,8 +104,8 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
         } else if (data.status === "saved") {
             statusContent = (
                 <span>
-                    <SavedIcon className="far fa-lg fa-check-circle" />
-                    saved
+                    <Icon name="check" color="yellowgreen" />
+                    &nbsp;saved
                 </span>
             );
         }

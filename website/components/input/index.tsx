@@ -2,6 +2,7 @@ import {styled} from "../../internal/styled";
 import {placeholder} from "../../internal/styles/placeholder";
 import {reset} from "../../internal/styles/button";
 import {Component} from "../../internal/types";
+import {Icon} from "../icon";
 
 const width = 16;
 
@@ -62,7 +63,7 @@ const StyledInput = styled("input")({
 const Button = styled("button")({
     ...reset,
 
-    transform: "translate(-0.35rem, -2.05rem)",
+    transform: "translate(-0.35rem, -2.15rem)",
     padding: "0.65rem 0.7rem 0.65rem",
     display: "inline-block",
     pointerEvents: "none",
@@ -178,9 +179,9 @@ export const Input: Component<Props> = (props, update) => {
             />
             <Button type="submit" className={{enabled: valid}}>
                 {loading ? (
-                    <i className="far fa-xs fa-spinner-third fa-spin" />
+                    <Icon name="spinner" spin size={0.8} />
                 ) : (
-                    <i className="far fa-xs fa-arrow-right" />
+                    <Icon name="arrow" size={0.8} />
                 )}
             </Button>
             <Error>{error}</Error>

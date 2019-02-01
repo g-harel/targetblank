@@ -7,6 +7,7 @@
     "fmt": "prettier --list-different --write --ignore-path .gitignore \"**/*.{js,ts,tsx}\""
   },
   "dependencies": {
+    "normalize.css": "^8.0.1",
     "okwolo": "^3.4.3",
     "typestyle": "^2.0.1"
   },

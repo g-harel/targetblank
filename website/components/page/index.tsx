@@ -45,10 +45,7 @@ export const Page: Component<Props> = (props) => () => {
     return (
         <Wrapper>
             {document.location.hostname !== "localhost" && (
-                <ConstructionSign>
-                    <i className="fas fa-tools" />
-                    &nbsp; Under Construction
-                </ConstructionSign>
+                <ConstructionSign>Under Construction</ConstructionSign>
             )}
             <Component addr={props.addr} token={props.token} />
         </Wrapper>

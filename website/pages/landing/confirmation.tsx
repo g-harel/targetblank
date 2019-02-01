@@ -1,5 +1,6 @@
 import {styled} from "../../internal/styled";
 import {Component} from "../../internal/types";
+import {Icon} from "../../components/icon";
 
 // Most common email providers and their web interface url.
 const providers: Record<string, string> = {
@@ -36,9 +37,7 @@ const Title = styled("span")({
     fontWeight: "bold",
 });
 
-const TitleIcon = styled("i")({
-    color: "yellowgreen",
-    display: "block",
+const TitleIcon = styled("div")({
     margin: "1rem 0",
     opacity: 0,
     transition: "all 1s ease",
@@ -84,9 +83,9 @@ export const Confirmation: Component<Props> = (props) => {
     return () => (
         <Wrapper className={{visible}}>
             <Title>
-                <TitleIcon
-                    className={["far fa-lg fa-check-circle", {visible}]}
-                />
+                <TitleIcon className={{visible}}>
+                    <Icon name="check" color="yellowgreen" size={1.4} />
+                </TitleIcon>
                 Confirmation Sent
             </Title>
             <div>

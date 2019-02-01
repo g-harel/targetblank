@@ -7,7 +7,11 @@ export interface Props {
     callback: InputProps["callback"];
 }
 
-export const Password: Component<Props> = ({title, callback, validate}) => () => (
+export const Password: Component<Props> = ({
+    title,
+    callback,
+    validate,
+}) => () => (
     <Input
         title={title}
         callback={callback}

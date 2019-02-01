@@ -12,7 +12,8 @@ const Textarea = styled("textarea")({
     backgroundColor: "#fafafa",
     border: "none",
     color: "#333",
-    fontFamily: "SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace",
+    fontFamily:
+        "SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace",
     marginTop: headerHeight,
     minHeight: "100%",
     outline: "none",

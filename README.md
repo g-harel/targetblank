@@ -6,15 +6,14 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - keyboard shortcuts to edit page and to click links
 - add page publish button
+- login page error and reset link overlap
 - login button instead of edit when public
 - stricter parsing (to differentiate control chars from labels)
-- optimize icons
-- eliminate css output file
-- cache bust on static file change
-- https://www.npmjs.com/package/normalize.css
-- make new page more interesting
+- cache bust on static file update (short caching time for index)
+- make new page more interesting (mini-tutorial)
 - extend token expiration time
 - add explanation text on landing
+- move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 - offline page for playing around ("/localhost")
 - replace application secrets (eventually)
 - set up regular database backups
