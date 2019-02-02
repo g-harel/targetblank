@@ -333,17 +333,17 @@ func TestDocument(t *testing.T) {
 			doc.Version = "1"
 			doc.Meta["key1"] = "value1"
 			doc.Meta["key2"] = "value2"
-			doc.Meta["kEy_-3"] = "!@ $%^& *()[] +-_= <>?,.; ':|\\`~"
+			doc.Meta["kEy3"] = "!@ $%^& *()[] +-_= <>?,.; ':|\\`~"
 			documentEquals(t, doc,
 				"version 1",
 				"key1=value1",
 				"key2 = value2",
-				"kEy_-3= !@ $%^& *()[] +-_= <>?,.; ':|\\`~",
+				"kEy3= !@ $%^& *()[] +-_= <>?,.; ':|\\`~",
 				"===",
 			)
 		})
 
-		t.Run("should not recognize non-alphanumeric characters [^A-Za-z0-9_-] as documentEquals meta keys", func(t *testing.T) {
+		t.Run("should not recognize non-alphanumeric characters [^A-Za-z0-9] as documentEquals meta keys", func(t *testing.T) {
 			produceErr(t, 2, ".*",
 				"version 1",
 				"!@key=test",
@@ -406,14 +406,14 @@ func TestDocument(t *testing.T) {
 			doc.AddGroupMeta("key1", "value1")
 			doc.AddGroup()
 			doc.AddGroupMeta("key2", "value2")
-			doc.AddGroupMeta("kEy_-3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~")
+			doc.AddGroupMeta("kEy3", "!@ $%^& *()[] +-_= <>?,.; ':|\\`~")
 			documentEquals(t, doc,
 				"version 1",
 				"===",
 				"key1=value1",
 				"---",
 				"key2 = value2",
-				"kEy_-3= !@ $%^& *()[] +-_= <>?,.; ':|\\`~",
+				"kEy3= !@ $%^& *()[] +-_= <>?,.; ':|\\`~",
 			)
 		})
 
@@ -426,14 +426,7 @@ func TestDocument(t *testing.T) {
 		})
 
 		t.Run("should not accept group metadata after the first entry", func(t *testing.T) {
-			doc := newDocument()
-			doc.Version = "1"
-			doc.AddGroupMeta("key1", "value1")
-			doc.AddGroup()
-			doc.AddGroupMeta("key2", "value2")
-			doc.Enter(0, "link", "test")
-			doc.Enter(0, "", "key3=value3")
-			documentEquals(t, doc,
+			produceErr(t, 7, "syntax",
 				"version 1",
 				"===",
 				"key1=value1",

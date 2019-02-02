@@ -20,7 +20,7 @@ func Document(s string) (string, error) {
 	v1HeaderMetadataRule := rule{
 		Name:     "header-metadata",
 		Disabled: true,
-		Pattern:  regexp.MustCompile(`^(?P<key>[A-Za-z0-9_-]+)\s*=\s*(?P<value>.*)$`),
+		Pattern:  regexp.MustCompile(`^(?P<key>[A-Za-z0-9]+)\s*=\s*(?P<value>.*)$`),
 		Handler: func(ctx *context) {
 			doc.Meta[ctx.Param("key")] = ctx.Param("value")
 			ctx.LineParsed()
@@ -56,7 +56,7 @@ func Document(s string) (string, error) {
 	v1EntryRule := rule{
 		Name:     "label",
 		Disabled: true,
-		Pattern:  regexp.MustCompile(`^(?P<indent>\s*)(?P<label>[^\s\[].+?)?(?:\[(?P<link>.*)\])?$`),
+		Pattern:  regexp.MustCompile(`^(?P<indent>\s*)(?P<label>[^\s\[-][^=]+?)?(?:\[(?P<link>.*)\])?$`),
 		Handler: func(ctx *context) {
 			indent := ctx.Param("indent")
 			label := ctx.Param("label")
