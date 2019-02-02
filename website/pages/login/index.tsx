@@ -11,9 +11,11 @@ const Wrapper = styled("div")({});
 const Forgot = styled("div")({
     color: "#aaa",
     fontSize: "0.8rem",
-    textAlign: "center",
-    transform: "translateY(-1.7rem)",
-    userSelect: "none",
+    margin: "0 auto",
+    paddingRight: "0.5rem",
+    textAlign: "right",
+    transform: "translateY(-1.9rem)",
+    width: "16rem",
 });
 
 export const Login: PageComponent = ({addr}) => () => {
