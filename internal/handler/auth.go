@@ -15,7 +15,7 @@ const (
 	AuthType   = "Targetblank"
 )
 
-var longTTL = time.Hour * 18
+var longTTL = time.Hour * 24 * 3
 var shortTTL = time.Minute * 10
 
 type tokenPayload struct {

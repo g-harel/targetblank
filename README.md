@@ -4,19 +4,20 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- keyboard shortcuts to edit page and to click links
-- add page publish button
+- stricter parsing (to differentiate control chars from labels)
 - login page error and reset link overlap
 - login button instead of edit when public
-- stricter parsing (to differentiate control chars from labels)
-- cache bust on static file update (short caching time for index)
-- make new page more interesting (mini-tutorial)
-- extend token expiration time
+- keyboard shortcuts to edit page
+- add page publish button
+- make new documents more interesting (mini-tutorial)
+- keyboard shortcuts for quick links
+- unlock static output file names
 - add explanation text on landing
-- move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+    - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 - offline page for playing around ("/localhost")
-- replace application secrets (eventually)
-- set up regular database backups
+- release
+    - replace application secrets (eventually)
+    - set up regular database backups
 
 requirements
 - text-based template for links, labels, categories, etc.
