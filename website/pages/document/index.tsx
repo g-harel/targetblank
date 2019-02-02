@@ -15,7 +15,7 @@ const Wrapper = styled("div")({
     margin: "0 auto",
 });
 
-const Edit = styled("div")({
+const Action = styled("div")({
     "-moz-user-select": "-moz-none",
     float: "right",
     fontWeight: "bold",
@@ -52,10 +52,14 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
 
         return (
             <Wrapper>
-                <Edit>
-                    <Anchor href={`/${addr}/edit`}>edit</Anchor>
-                </Edit>
-                <Header muted title={data.meta.title || addr} />
+                <Action>
+                    {client.page.auth(addr) ? (
+                        <Anchor href={`/${addr}/edit`}>edit</Anchor>
+                    ) : (
+                        <Anchor href={`/${addr}/login`}>login</Anchor>
+                    )}
+                </Action>
+                <Header muted title={data.meta.title} />
                 <Groups>
                     {...data.groups.map((group) => (
                         <Group>

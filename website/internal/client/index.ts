@@ -34,6 +34,10 @@ class PageClient {
         this.token = new PageTokenClient(new PageTokenAPI());
     }
 
+    auth(addr: string): boolean {
+        return !!read(addr).token;
+    }
+
     create(cb: Callback<string>, err: ErrorHandler, email: string) {
         this.api
             .create(email)

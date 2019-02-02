@@ -4,7 +4,6 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- login button instead of edit when public
 - keyboard shortcuts to edit page
 - add page publish button
 - make new documents more interesting (mini-tutorial)

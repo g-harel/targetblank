@@ -27,6 +27,7 @@ export interface Props {
 
 export const Header: Component<Props> = (props) => () => (
     <Wrapper className={{muted: props.muted}}>
-        {props.title || "targetblank"}
+        {props.title === undefined ? "targetblank" : props.title}
+        &nbsp;
     </Wrapper>
 );
