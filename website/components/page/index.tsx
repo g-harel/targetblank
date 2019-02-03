@@ -1,6 +1,7 @@
 import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
 import {styled} from "../../internal/styled";
+import {reset} from "../../internal/keyboard";
 
 const Wrapper = styled("div")({
     height: "100%",
@@ -42,8 +43,8 @@ export const Page: Component<Props> = (props) => () => {
         Component = Missing;
     }
 
-    // Reset any key listeners added by the previous page.
-    window.onkeypress = null;
+    // Reset keyboard listeners added by the previous page.
+    reset();
 
     return (
         <Wrapper>

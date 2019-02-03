@@ -6,6 +6,7 @@ import {Loading} from "../../components/loading";
 import {Anchor} from "../../components/anchor";
 import {Editor} from "../../components/editor";
 import {Icon} from "../../components/icon";
+import {keyboard} from "../../internal/keyboard";
 
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
@@ -101,12 +102,11 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     };
 
     // Navigate to the document page with "ctrl+enter".
-    window.onkeypress = (e) => {
-        const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
-        if (ctrl && e.key === "Enter") {
+    keyboard((e) => {
+        if (e.ctrl && e.key === "Enter") {
             app.redirect(`/${addr}`);
         }
-    };
+    });
 
     return (data?: Data) => {
         // Response not yet received.

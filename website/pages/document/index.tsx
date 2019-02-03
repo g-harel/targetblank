@@ -6,6 +6,7 @@ import {Loading} from "../../components/loading";
 import {Item} from "./item";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
+import {keyboard} from "../../internal/keyboard";
 
 const Wrapper = styled("div")({
     display: "flex",
@@ -62,12 +63,11 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
     client.page.fetch(update, () => app.redirect(`/${addr}/login`), addr);
 
     // Navigate to the edit page with "ctrl+enter".
-    window.onkeypress = (e) => {
-        const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
-        if (ctrl && e.key === "Enter") {
+    keyboard((e) => {
+        if (e.ctrl && e.key === "Enter") {
             app.redirect(`/${addr}/edit`);
         }
-    };
+    });
 
     return (data: IPageData) => {
         // Response not yet received.
