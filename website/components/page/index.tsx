@@ -42,6 +42,9 @@ export const Page: Component<Props> = (props) => () => {
         Component = Missing;
     }
 
+    // Reset any key listeners added by the previous page.
+    window.onkeypress = null;
+
     return (
         <Wrapper>
             {document.location.hostname !== "localhost" && (

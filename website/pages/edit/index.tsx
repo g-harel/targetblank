@@ -30,13 +30,22 @@ const Header = styled("header")({
 const Done = styled("div")({
     display: "inline-block",
     float: "right",
-    userSelect: "none",
     fontWeight: "bold",
 
     $nest: {
         "&.disabled": {
             pointerEvents: "none",
             color: "#ccc",
+        },
+
+        "&:hover": {
+            $nest: {
+                "&::before": {
+                    content: `"ctrl + enter"`,
+                    opacity: 0.3,
+                    margin: "0 0.7rem",
+                },
+            },
         },
     },
 });
@@ -89,6 +98,14 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                 value,
             );
         }, saveDelay);
+    };
+
+    // Navigate to the document page with "ctrl+enter".
+    window.onkeypress = (e) => {
+        const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
+        if (ctrl && e.key === "Enter") {
+            app.redirect(`/${addr}`);
+        }
     };
 
     return (data?: Data) => {
