@@ -8,7 +8,6 @@ resource "aws_api_gateway_deployment" "deployment" {
     "module.create",
     "module.delete",
     "module.passwd",
-    "module.publish",
     "module.read",
     "module.reset",
     "module.update",

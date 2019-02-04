@@ -83,17 +83,6 @@ class PageClient {
             .catch(err);
     }
 
-    publish(cb: Callback<void>, err: ErrorHandler, addr: string) {
-        const {token} = read(addr);
-        if (token === null) {
-            return err(missingToken("publish", addr));
-        }
-        this.api
-            .publish(addr, token)
-            .then(cb)
-            .catch(err);
-    }
-
     validate(cb: Callback<void>, err: ErrorHandler, doc: string) {
         this.api
             .validate(doc)

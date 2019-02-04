@@ -4,7 +4,7 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- add page publish button
+- expire localstorage data
 - make new documents more interesting (mini-tutorial)
 - unlock static output file names
 - add explanation text on landing
@@ -40,7 +40,6 @@ endpoints (/api/v1..)
 - fetch page             (GET    /page/:address [auth]         )
 - edit page document     (PUT    /page/:address [auth] data    )
 - delete page            (DELETE /page/:address [auth]         )
-- make page public       (PATCH  /page/:address [auth]         )
 
 dynamodb schema {
     addr: string (6 alphanumeric chars),

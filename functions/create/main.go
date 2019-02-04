@@ -71,7 +71,7 @@ func Create(req *handler.Request, res *handler.Response) *handler.Error {
 	}
 	page.Document = doc
 
-	page.Published = false
+	page.Published = true
 
 	// Loop until an available address is found.
 	for {

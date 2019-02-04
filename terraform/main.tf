@@ -74,19 +74,6 @@ module "passwd" {
   http_method         = "PUT"
 }
 
-module "publish" {
-  source = "./modules/gateway-lambda"
-
-  name   = "publish"
-  file   = ".build/publish.zip"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
-
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
-  http_method         = "PATCH"
-}
-
 module "read" {
   source = "./modules/gateway-lambda"
 

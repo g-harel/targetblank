@@ -98,14 +98,6 @@ export class PageAPI {
         });
     }
 
-    async publish(addr: string, token: string): Promise<void> {
-        return send({
-            token,
-            method: "PATCH",
-            path: `/page/${addr}`,
-        });
-    }
-
     async validate(doc: string): Promise<void> {
         return send({
             method: "POST",

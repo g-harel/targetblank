@@ -69,8 +69,8 @@ func TestCreate(t *testing.T) {
 			t.Fatal("Item's email hash does not match given one")
 		}
 
-		if page.Published {
-			t.Fatal("New pages should not be public by default")
+		if !page.Published {
+			t.Fatal("New pages should be public by default")
 		}
 	})
 
