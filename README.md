@@ -6,11 +6,11 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 TODO
 - add page publish button
 - make new documents more interesting (mini-tutorial)
-- keyboard shortcuts for quick links
 - unlock static output file names
 - add explanation text on landing
     - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 - offline page for playing around ("/localhost")
+- keyboard shortcuts for quick links
 - release
     - replace application secrets (eventually)
     - set up regular database backups

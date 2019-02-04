@@ -28,15 +28,17 @@ const Textarea = styled("textarea")({
 
 const Lines = styled("div")({
     height: 0,
-    opacity: Math.PI / 10,
+    color: "#ccc",
     textAlign: "right",
     transform: `translateY(calc(${headerHeight} + ${editorPadding} + 1px))`,
     userSelect: "none",
-    width: `calc(1.6 * ${editorPadding})`,
+    width: `calc(1.6 * ${editorPadding} + 1rem)`,
 });
 
 const Line = styled("div")({
     lineHeight,
+    backgroundColor: "#fafafa",
+    paddingRight: "1rem",
 });
 
 export interface Props {
@@ -46,6 +48,7 @@ export interface Props {
 }
 
 export const Editor: Component<Props> = (props) => () => {
+    // Set focus to start of textarea.
     setTimeout(() =>
         requestAnimationFrame(() => {
             const input = document.getElementById(props.id);

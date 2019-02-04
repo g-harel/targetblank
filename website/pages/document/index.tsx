@@ -7,6 +7,7 @@ import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, redirect} from "../../routes";
+import {breakpoint} from "../../internal/styles/breakpoint";
 
 const Wrapper = styled("div")({
     display: "flex",
@@ -53,8 +54,14 @@ const Group = styled("div")({
     flexBasis: "30%",
     flexGrow: 0,
     flexShrink: 0,
-    margin: "1rem",
+    margin: "0 1rem 2rem",
     padding: "1rem 1.4rem",
+
+    $nest: {
+        [breakpoint.sm]: {
+            flexGrow: 1,
+        },
+    },
 });
 
 const Items = styled("div")({});
