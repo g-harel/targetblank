@@ -1,4 +1,3 @@
-import {app} from "../../internal/app";
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
@@ -7,6 +6,7 @@ import {Anchor} from "../../components/anchor";
 import {Editor} from "../../components/editor";
 import {Icon} from "../../components/icon";
 import {keyboard} from "../../internal/keyboard";
+import {path, routes, redirect} from "../../routes";
 
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
@@ -72,7 +72,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     // Load page data.
     client.page.fetch(
         (data: IPageData) => update({page: data, status: "saved"}),
-        () => app.redirect(`/${addr}/login`),
+        () => redirect(routes.login, addr),
         addr,
     );
 
@@ -104,7 +104,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     // Navigate to the document page with "ctrl+enter".
     keyboard((e) => {
         if (e.ctrl && e.key === "Enter") {
-            app.redirect(`/${addr}`);
+            redirect(routes.document, addr);
         }
     });
 
@@ -131,7 +131,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             <Wrapper>
                 <Header>
                     <Done className={{disabled: data.status === "saving"}}>
-                        <Anchor href={`/${addr}`}>done</Anchor>
+                        <Anchor href={path(routes.document, addr)}>done</Anchor>
                     </Done>
                     <Status className={{error: !!data.error}}>
                         {statusContent}

@@ -1,10 +1,10 @@
 import {client} from "../../internal/client";
-import {app} from "../../internal/app";
 import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
+import {path, routes, redirect} from "../../routes";
 
 const Wrapper = styled("div")({});
 
@@ -22,7 +22,7 @@ export const Login: PageComponent = ({addr}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
             client.page.token.create(
-                () => app.redirect(`/${addr}`),
+                () => redirect(routes.document, addr),
                 resolve,
                 addr,
                 pass,
@@ -35,7 +35,7 @@ export const Login: PageComponent = ({addr}) => () => {
             <Header muted />
             <Password callback={submit} title="log in" />
             <Forgot>
-                <Anchor href={`/${addr}/forgot`}>reset password</Anchor>
+                <Anchor href={path(routes.forgot, addr)}>reset password</Anchor>
             </Forgot>
         </Wrapper>
     );

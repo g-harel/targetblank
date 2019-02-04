@@ -1,4 +1,3 @@
-import {app} from "../../internal/app";
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/styled";
@@ -7,6 +6,7 @@ import {Item} from "./item";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
+import {path, routes, redirect} from "../../routes";
 
 const Wrapper = styled("div")({
     display: "flex",
@@ -60,12 +60,12 @@ const Group = styled("div")({
 const Items = styled("div")({});
 
 export const Document: PageComponent<IPageData> = ({addr}, update) => {
-    client.page.fetch(update, () => app.redirect(`/${addr}/login`), addr);
+    client.page.fetch(update, () => redirect(routes.login, addr), addr);
 
     // Navigate to the edit page with "ctrl+enter".
     keyboard((e) => {
         if (e.ctrl && e.key === "Enter") {
-            app.redirect(`/${addr}/edit`);
+            redirect(routes.edit, addr);
         }
     });
 
@@ -78,10 +78,10 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
                 <Action>
                     {client.page.auth(addr) ? (
                         <Edit>
-                            <Anchor href={`/${addr}/edit`}>edit</Anchor>
+                            <Anchor href={path(routes.edit, addr)}>edit</Anchor>
                         </Edit>
                     ) : (
-                        <Anchor href={`/${addr}/login`}>login</Anchor>
+                        <Anchor href={path(routes.login, addr)}>login</Anchor>
                     )}
                 </Action>
                 <Header muted title={data.meta.title} />
