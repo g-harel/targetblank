@@ -72,7 +72,9 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
     // Navigate to the edit page with "ctrl+enter".
     keyboard((e) => {
         if (e.ctrl && e.key === "Enter") {
-            redirect(routes.edit, addr);
+            if (client.page.auth(addr)) {
+                redirect(routes.edit, addr);
+            }
         }
     });
 

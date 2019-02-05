@@ -4,7 +4,6 @@ https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-an
 https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
-- expire localstorage data
 - make new documents more interesting (mini-tutorial)
 - unlock static output file names
 - add explanation text on landing
