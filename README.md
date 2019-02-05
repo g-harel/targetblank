@@ -5,7 +5,6 @@ https://github.com/hashicorp/best-practices/tree/master/terraform
 
 TODO
 - make new documents more interesting (mini-tutorial)
-- unlock static output file names
 - add explanation text on landing
     - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 - offline page for playing around ("/localhost")

@@ -5,6 +5,15 @@ locals {
   }
 }
 
+data "local_file" "manifest" {
+  filename = ".build/parcel-manifest.json"
+}
+
+# Using external data source to parse manifest contents as JSON.
+data "external" "manifest" {
+  program = ["echo", "${data.local_file.manifest.content}"]
+}
+
 module "website" {
   source = "./modules/bucket-public"
 
@@ -16,8 +25,8 @@ module "website" {
   root_document = "index.html"
 
   files = [
-    "website.f69400ca.css",
-    "website.f69400ca.js",
+    "${lookup(data.external.manifest.result["index"], "tsx")}",
+    "${lookup(data.external.manifest.result["global"], "scss")}",
   ]
 }
 

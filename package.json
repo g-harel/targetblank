@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "parcel build website/index.html -d .build --no-content-hash --no-source-maps",
+    "build": "parcel build website/index.html -d .build --no-source-maps",
     "dev": "parcel -p 1324 -d .dist website/index.html",
     "test": "run-s fmt lint build",
     "lint": "tslint website/**/*.ts --fix",
@@ -18,6 +18,7 @@
     "node-sass": "^4.11.0",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.11.0",
+    "parcel-plugin-bundle-manifest": "^0.2.0",
     "prettier": "^1.15.3",
     "sass": "^1.15.2",
     "tslint": "^5.12.0",

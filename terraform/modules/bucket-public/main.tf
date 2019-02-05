@@ -23,11 +23,12 @@ EOF
 }
 
 resource "aws_s3_bucket_object" "root" {
-  bucket       = "${aws_s3_bucket.public_bucket.bucket}"
-  key          = "${var.root_document}"
-  source       = "${var.source_dir}/${var.root_document}"
-  content_type = "text/html"
-  etag         = "${md5(file("${var.source_dir}/${var.root_document}"))}"
+  bucket        = "${aws_s3_bucket.public_bucket.bucket}"
+  key           = "${var.root_document}"
+  source        = "${var.source_dir}/${var.root_document}"
+  content_type  = "text/html"
+  cache_control = "no-cache"
+  etag          = "${md5(file("${var.source_dir}/${var.root_document}"))}"
 }
 
 resource "aws_s3_bucket_object" "files" {
