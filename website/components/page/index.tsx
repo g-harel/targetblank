@@ -34,11 +34,11 @@ export interface Props extends PageProps {
 export const Page: Component<Props> = (props) => () => {
     let Component: PageComponent = props.component;
 
-    if (props.addr && !props.addr.match(/\w{6}/)) {
+    if (props.addr && !props.addr.match(/^\w{6}$/)) {
         console.warn("invalid `addr` in path");
         Component = Missing;
     }
-    if (props.token && !props.token.match(/[^\s\/]+/)) {
+    if (props.token && !props.token.match(/^[^\s\/]+$/)) {
         console.warn("invalid `token` in path");
         Component = Missing;
     }
