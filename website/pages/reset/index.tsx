@@ -10,17 +10,15 @@ const Wrapper = styled("div")({});
 export const Reset: PageComponent = ({addr, token}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
-            client.page.password.change(
+            client(addr).passUpdate(
                 () => {
-                    client.page.token.create(
+                    client(addr).tokenCreate(
                         () => redirect(routes.document, addr),
                         resolve,
-                        addr,
                         pass,
                     );
                 },
                 resolve,
-                addr,
                 pass,
                 token,
             );

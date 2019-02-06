@@ -8,6 +8,8 @@ import {Icon} from "../../components/icon";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, redirect} from "../../routes";
 
+client()();
+
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
 
@@ -69,16 +71,15 @@ interface Data {
 }
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
-    if (!client.page.auth(addr)) {
+    if (!client(addr).isAuthorized()) {
         setTimeout(() => redirect(routes.login, addr));
         return () => null;
     }
 
     // Load page data.
-    client.page.fetch(
+    client(addr).pageRead(
         (data: IPageData) => update({page: data, status: "saved"}),
         () => redirect(routes.login, addr),
-        addr,
     );
 
     // Save editor contents after a delay.
@@ -91,7 +92,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
         counter++;
         const selfCounter = counter;
         timeout = setTimeout(() => {
-            client.page.edit(
+            client(addr).pageUpdate(
                 () => {
                     if (selfCounter !== counter) return;
                     update({page: data.page, status: "saved"});
@@ -100,7 +101,6 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                     if (selfCounter !== counter) return;
                     update({page: data.page, status: "error", error: m});
                 },
-                addr,
                 value,
             );
         }, saveDelay);

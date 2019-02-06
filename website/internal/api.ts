@@ -126,7 +126,7 @@ export const tokenCreate = async (
     });
 };
 
-export const passwordUpdate = async (
+export const passUpdate = async (
     addr: string,
     token: string,
     pass: string,
@@ -139,10 +139,7 @@ export const passwordUpdate = async (
     });
 };
 
-export const passwordReset = async (
-    addr: string,
-    email: string,
-): Promise<void> => {
+export const passReset = async (addr: string, email: string): Promise<void> => {
     return send({
         method: "DELETE",
         path: `/auth/${addr}`,

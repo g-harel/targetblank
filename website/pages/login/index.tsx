@@ -21,10 +21,9 @@ const Forgot = styled("div")({
 export const Login: PageComponent = ({addr}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
-            client.page.token.create(
+            client(addr).tokenCreate(
                 () => redirect(routes.document, addr),
                 resolve,
-                addr,
                 pass,
             );
         });
