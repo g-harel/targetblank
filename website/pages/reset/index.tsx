@@ -11,7 +11,14 @@ export const Reset: PageComponent = ({addr, token}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
             client.page.password.change(
-                () => redirect(routes.login, addr),
+                () => {
+                    client.page.token.create(
+                        () => redirect(routes.document, addr),
+                        resolve,
+                        addr,
+                        pass,
+                    );
+                },
                 resolve,
                 addr,
                 pass,
