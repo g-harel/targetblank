@@ -1,6 +1,6 @@
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 import {Loading} from "../../components/loading";
 import {Anchor} from "../../components/anchor";
 import {Editor} from "../../components/editor";

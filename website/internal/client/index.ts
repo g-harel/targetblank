@@ -1,8 +1,8 @@
-import {PageTokenAPI, PagePasswordAPI, PageAPI} from "./api";
-import {read, write} from "./storage";
-import {IPageData} from "./types";
+import * as api from "../api";
+import {read, write} from "../storage";
+import {IPageData} from "../types";
 
-export {IPageData} from "./types";
+export {IPageData} from "../types";
 
 type Callback<T> = (value: T) => void;
 type ErrorHandler = Callback<string> | null;
@@ -23,15 +23,12 @@ const writeData = (addr: string) => (data: IPageData) => {
 };
 
 class PageClient {
-    private api: PageAPI;
-
     public password: PagePasswordClient;
     public token: PageTokenClient;
 
-    constructor(api: PageAPI) {
-        this.api = api;
-        this.password = new PagePasswordClient(new PagePasswordAPI());
-        this.token = new PageTokenClient(new PageTokenAPI());
+    constructor() {
+        this.password = new PagePasswordClient();
+        this.token = new PageTokenClient();
     }
 
     auth(addr: string): boolean {
@@ -39,8 +36,7 @@ class PageClient {
     }
 
     create(cb: Callback<string>, err: ErrorHandler, email: string) {
-        this.api
-            .create(email)
+        api.pageCreate(email)
             .then(cb)
             .catch(err);
     }
@@ -50,8 +46,7 @@ class PageClient {
         if (token === null) {
             return err(missingToken("delete", addr));
         }
-        this.api
-            .delete(addr, token)
+        api.pageDelete(addr, token)
             .then(cb)
             .catch(err);
     }
@@ -66,8 +61,7 @@ class PageClient {
         if (token === null) {
             return err(missingToken("edit", addr));
         }
-        this.api
-            .edit(addr, token, doc)
+        api.pageUpdate(addr, token, doc)
             .then(writeData(addr))
             .then(cb)
             .catch(err);
@@ -76,28 +70,20 @@ class PageClient {
     fetch(cb: Callback<IPageData>, err: ErrorHandler, addr: string) {
         const {data: cachedData, token} = read(addr);
         if (cachedData !== null) cb(cachedData);
-        this.api
-            .fetch(addr, token || undefined)
+        api.pageRead(addr, token || undefined)
             .then(writeData(addr))
             .then(cb)
             .catch(err);
     }
 
     validate(cb: Callback<void>, err: ErrorHandler, doc: string) {
-        this.api
-            .validate(doc)
+        api.pageValidate(doc)
             .then(cb)
             .catch(err);
     }
 }
 
 class PagePasswordClient {
-    private api: PagePasswordAPI;
-
-    constructor(api: PagePasswordAPI) {
-        this.api = api;
-    }
-
     change(
         cb: Callback<void>,
         err: ErrorHandler,
@@ -109,35 +95,26 @@ class PagePasswordClient {
         if (t === null) {
             return err(missingToken("change password", addr));
         }
-        this.api
-            .change(addr, t, pass)
+        api.passwordUpdate(addr, t, pass)
             .then(cb)
             .catch(err);
     }
 
     reset(cb: Callback<void>, err: ErrorHandler, addr: string, email: string) {
-        this.api
-            .reset(addr, email)
+        api.passwordReset(addr, email)
             .then(cb)
             .catch(err);
     }
 }
 
 class PageTokenClient {
-    private api: PageTokenAPI;
-
-    constructor(api: PageTokenAPI) {
-        this.api = api;
-    }
-
     create(
         cb: Callback<string>,
         err: ErrorHandler,
         addr: string,
         pass: string,
     ) {
-        this.api
-            .create(addr, pass)
+        api.tokenCreate(addr, pass)
             .then(writeToken(addr))
             .then(cb)
             .catch(err);
@@ -145,5 +122,5 @@ class PageTokenClient {
 }
 
 export const client = {
-    page: new PageClient(new PageAPI()),
+    page: new PageClient(),
 };

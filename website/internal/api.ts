@@ -62,76 +62,90 @@ const send = (req: IRequest) => {
     });
 };
 
-export class PageAPI {
-    async create(email: string): Promise<string> {
-        return send({
-            method: "POST",
-            path: "/page",
-            body: email,
-        });
-    }
+export const pageCreate = async (email: string): Promise<string> => {
+    return send({
+        method: "POST",
+        path: "/page",
+        body: email,
+    });
+};
 
-    async delete(addr: string, token: string): Promise<void> {
-        return send({
-            token,
-            method: "DELETE",
-            path: `/page/${addr}`,
-        });
-    }
+export const pageDelete = async (
+    addr: string,
+    token: string,
+): Promise<void> => {
+    return send({
+        token,
+        method: "DELETE",
+        path: `/page/${addr}`,
+    });
+};
 
-    async edit(addr: string, token: string, doc: string): Promise<IPageData> {
-        return send({
-            token,
-            method: "PUT",
-            path: `/page/${addr}`,
-            body: doc,
-            json: true,
-        });
-    }
+export const pageUpdate = async (
+    addr: string,
+    token: string,
+    doc: string,
+): Promise<IPageData> => {
+    return send({
+        token,
+        method: "PUT",
+        path: `/page/${addr}`,
+        body: doc,
+        json: true,
+    });
+};
 
-    async fetch(addr: string, token: string): Promise<IPageData> {
-        return send({
-            token,
-            method: "GET",
-            path: `/page/${addr}`,
-            json: true,
-        });
-    }
+export const pageRead = async (
+    addr: string,
+    token: string,
+): Promise<IPageData> => {
+    return send({
+        token,
+        method: "GET",
+        path: `/page/${addr}`,
+        json: true,
+    });
+};
 
-    async validate(doc: string): Promise<void> {
-        return send({
-            method: "POST",
-            path: "/page/validate",
-            body: doc,
-        });
-    }
-}
+export const pageValidate = async (doc: string): Promise<void> => {
+    return send({
+        method: "POST",
+        path: "/page/validate",
+        body: doc,
+    });
+};
 
-export class PagePasswordAPI {
-    async change(addr: string, token: string, pass: string): Promise<void> {
-        return send({
-            token,
-            method: "PUT",
-            path: `/auth/${addr}`,
-            body: pass,
-        });
-    }
+export const tokenCreate = async (
+    addr: string,
+    pass: string,
+): Promise<string> => {
+    return send({
+        method: "POST",
+        path: `/auth/${addr}`,
+        body: pass,
+    });
+};
 
-    async reset(addr: string, email: string): Promise<void> {
-        return send({
-            method: "DELETE",
-            path: `/auth/${addr}`,
-            body: email,
-        });
-    }
-}
+export const passwordUpdate = async (
+    addr: string,
+    token: string,
+    pass: string,
+): Promise<void> => {
+    return send({
+        token,
+        method: "PUT",
+        path: `/auth/${addr}`,
+        body: pass,
+    });
+};
 
-export class PageTokenAPI {
-    async create(addr: string, pass: string): Promise<string> {
-        return send({
-            method: "POST",
-            path: `/auth/${addr}`,
-            body: pass,
-        });
-    }
-}
+export const passwordReset = async (
+    addr: string,
+    email: string,
+): Promise<void> => {
+    return send({
+        method: "DELETE",
+        path: `/auth/${addr}`,
+        body: email,
+    });
+};

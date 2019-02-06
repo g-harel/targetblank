@@ -1,7 +1,7 @@
 import {client} from "../../internal/client";
 import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 import {Header} from "../../components/header";
 import {routes, redirect} from "../../routes";
 

@@ -1,7 +1,7 @@
 import {Component} from "../../internal/types";
 import {Header} from "../header";
 import {Icon} from "../icon";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 
 const Spinner = styled("div")({
     opacity: 0.2,

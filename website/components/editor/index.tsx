@@ -1,5 +1,5 @@
 import {Component} from "../../internal/types";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 
 const headerHeight = "2.9rem";
 const lineHeight = "1.6rem";

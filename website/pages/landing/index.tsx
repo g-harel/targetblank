@@ -1,5 +1,5 @@
 import {client} from "../../internal/client";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 import {Signup} from "./signup";
 import {PageComponent} from "../../components/page";
 import {Header} from "../../components/header";

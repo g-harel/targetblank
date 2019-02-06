@@ -1,6 +1,6 @@
 import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 import {reset} from "../../internal/keyboard";
 
 const Wrapper = styled("div")({

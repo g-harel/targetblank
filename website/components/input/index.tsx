@@ -1,6 +1,4 @@
-import {styled} from "../../internal/styled";
-import {placeholder} from "../../internal/styles/placeholder";
-import {reset} from "../../internal/styles/button";
+import {styled, reset, placeholder} from "../../internal/style";
 import {Component} from "../../internal/types";
 import {Icon} from "../icon";
 

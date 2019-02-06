@@ -1,6 +1,5 @@
-import {IPageItem} from "../../internal/client/types";
-import {Component} from "../../internal/types";
-import {styled} from "../../internal/styled";
+import {Component, IPageItem} from "../../internal/types";
+import {styled} from "../../internal/style";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({

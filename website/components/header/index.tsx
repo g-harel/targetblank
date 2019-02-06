@@ -1,4 +1,4 @@
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 import {Component} from "../../internal/types";
 
 const Wrapper = styled("header")({

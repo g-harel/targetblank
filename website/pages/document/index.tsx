@@ -1,13 +1,12 @@
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
-import {styled} from "../../internal/styled";
+import {styled, breakpoint} from "../../internal/style";
 import {Loading} from "../../components/loading";
 import {Item} from "./item";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, redirect} from "../../routes";
-import {breakpoint} from "../../internal/styles/breakpoint";
 
 const Wrapper = styled("div")({
     display: "flex",

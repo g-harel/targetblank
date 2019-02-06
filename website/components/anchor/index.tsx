@@ -1,6 +1,6 @@
 import {Component} from "../../internal/types";
 import {app} from "../../internal/app";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 
 const Wrapper = styled("a")({
     color: "inherit",

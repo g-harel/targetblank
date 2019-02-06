@@ -1,7 +1,7 @@
 import {keyframes} from "typestyle";
 
 import {Component} from "../../internal/types";
-import {styled} from "../../internal/styled";
+import {styled} from "../../internal/style";
 
 const spin = keyframes({
     "0%": {transform: "rotate(0deg)"},
