@@ -69,6 +69,11 @@ interface Data {
 }
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
+    if (!client.page.auth(addr)) {
+        setTimeout(() => redirect(routes.login, addr));
+        return () => null;
+    }
+
     // Load page data.
     client.page.fetch(
         (data: IPageData) => update({page: data, status: "saved"}),

@@ -1,9 +1,7 @@
 <!--
 
-https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html
-https://github.com/hashicorp/best-practices/tree/master/terraform
-
 TODO
+- automatic login after resetting password
 - make new documents more interesting (mini-tutorial)
 - add explanation text on landing
     - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
@@ -56,6 +54,8 @@ links
 - https://gist.github.com/prwhite/8168133
 - https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
 - https://scene-si.org/2018/05/08/protecting-api-access-with-jwt/
+- https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html
+- https://github.com/hashicorp/best-practices/tree/master/terraform
 
 -->
 
