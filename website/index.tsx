@@ -2,7 +2,7 @@
 import h from "okwolo/src/h";
 (window as any).h = h;
 
-import "./global.scss";
+import "./global.css";
 import "normalize.css";
 
 import {app} from "./internal/app";

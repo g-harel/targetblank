@@ -8,8 +8,6 @@ import {Icon} from "../../components/icon";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, redirect} from "../../routes";
 
-client()();
-
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
 

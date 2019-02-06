@@ -26,7 +26,7 @@ module "website" {
 
   files = [
     "${lookup(data.external.manifest.result["index"], "tsx")}",
-    "${lookup(data.external.manifest.result["global"], "scss")}",
+    "${lookup(data.external.manifest.result["global"], "css")}",
   ]
 }
 
