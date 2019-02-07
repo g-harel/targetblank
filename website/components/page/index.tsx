@@ -2,6 +2,7 @@ import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
 import {styled} from "../../internal/style";
 import {reset} from "../../internal/keyboard";
+import {localAddr} from "../../internal/client";
 
 const Wrapper = styled("div")({
     height: "100%",
@@ -29,16 +30,23 @@ export type PageComponent<A = any> = Component<PageProps, A>;
 
 export interface Props extends PageProps {
     component: PageComponent;
+    allowLocalAddr?: boolean;
 }
 
 export const Page: Component<Props> = (props) => () => {
+    const {addr, token, allowLocalAddr} = props;
     let Component: PageComponent = props.component;
 
-    if (props.addr && !props.addr.match(/^\w{6}$/)) {
+    if (addr === localAddr) {
+        if (!allowLocalAddr) {
+            console.warn("local `addr` not allowed");
+            Component = Missing;
+        }
+    } else if (addr && !addr.match(/^\w{6}$/)) {
         console.warn("invalid `addr` in path");
         Component = Missing;
     }
-    if (props.token && !props.token.match(/^[^\s\/]+$/)) {
+    if (token && !token.match(/^[^\s\/]+$/)) {
         console.warn("invalid `token` in path");
         Component = Missing;
     }
@@ -51,7 +59,7 @@ export const Page: Component<Props> = (props) => () => {
             {document.location.hostname !== "localhost" && (
                 <ConstructionSign>Under Construction</ConstructionSign>
             )}
-            <Component addr={props.addr} token={props.token} />
+            <Component addr={addr} token={token} />
         </Wrapper>
     );
 };

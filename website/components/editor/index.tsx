@@ -48,17 +48,6 @@ export interface Props {
 }
 
 export const Editor: Component<Props> = (props) => () => {
-    // Set focus to start of textarea.
-    setTimeout(() =>
-        requestAnimationFrame(() => {
-            const input = document.getElementById(props.id);
-            if (input && document.activeElement !== input) {
-                input.focus();
-                (input as any).setSelectionRange(0, 0);
-            }
-        }),
-    );
-
     const onKeydown = (e: KeyboardEvent) => {
         // Swallow `ctrl+s` to prevent browser popup.
         const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
@@ -79,24 +68,36 @@ export const Editor: Component<Props> = (props) => () => {
         }
     };
 
-    const editor = document.getElementById(props.id);
+    const onInput = (e: any) => {
+        props.callback(e.target.value);
+    };
 
-    // Update editor height to match content.
-    if (editor) {
-        editor.style.height = "0";
-        editor.style.opacity = "1";
-        editor.style.height = `${editor.scrollHeight + 20}px`;
-        editor.style.marginBottom = "-20px";
-    }
+    setTimeout(() =>
+        requestAnimationFrame(() => {
+            const editor = document.getElementById(props.id);
+
+            // Set focus to start of textarea.
+            if (editor && document.activeElement !== editor) {
+                editor.focus();
+                (editor as any).setSelectionRange(0, 0);
+            }
+
+            // Update editor height to match content.
+            if (editor) {
+                editor.style.height = "0";
+                editor.style.opacity = "1";
+                editor.style.height = `${editor.scrollHeight + 20}px`;
+                editor.style.marginBottom = "-20px";
+            }
+        }),
+    );
 
     // Create line numbers.
     let lines: number[] = [];
-    if (editor) {
-        const count = (editor as any).value.split("\n").length;
-        lines = Array(count);
-        for (let i = 0; i < count; i++) {
-            lines[i] = i + 1;
-        }
+    const count = props.value.split("\n").length;
+    lines = Array(count);
+    for (let i = 0; i < count; i++) {
+        lines[i] = i + 1;
     }
 
     return (
@@ -106,7 +107,7 @@ export const Editor: Component<Props> = (props) => () => {
                 id={props.id}
                 style="opacity: 0;"
                 value={props.value}
-                oninput={(e: any) => props.callback(e.target.value)}
+                oninput={onInput}
                 onkeydown={onKeydown}
                 spellcheck={false}
             />

@@ -23,16 +23,6 @@ export const remoteClient = (addr: string): Client => ({
         return !!read(addr).token;
     },
 
-    pageDelete(cb, err) {
-        const {token} = read(addr);
-        if (token === null) {
-            return err(missingToken("delete", addr));
-        }
-        api.pageDelete(addr, token)
-            .then(cb)
-            .catch(err);
-    },
-
     pageUpdate(cb, err, doc) {
         const {token} = read(addr);
         if (token === null) {

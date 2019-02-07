@@ -1,8 +1,7 @@
 <!--
 
 TODO
-- https://www.npmjs.com/package/parcel-plugin-typescript
-- offline page for playing around ("/127.0.0.1", "/local")
+- change title depending on page
 - fuzzy match lines to give better parsing errors
 - rename reset and forgot pages
 - make new documents more interesting (mini-tutorial)

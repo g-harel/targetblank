@@ -107,11 +107,12 @@ export const pageRead = async (
     });
 };
 
-export const pageValidate = async (doc: string): Promise<void> => {
+export const pageValidate = async (doc: string): Promise<IPageData> => {
     return send({
         method: "POST",
         path: "/page/validate",
         body: doc,
+        json: true,
     });
 };
 

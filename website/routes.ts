@@ -11,6 +11,7 @@ import {Missing} from "./pages/missing";
 interface Route {
     path: string;
     component: Component<any, any>;
+    allowLocalAddr?: boolean;
 }
 
 // Generates the route path from the path params.
@@ -42,10 +43,12 @@ export const routes = routeTable({
     document: {
         path: "/:addr",
         component: Document,
+        allowLocalAddr: true,
     },
     edit: {
         path: "/:addr/edit",
         component: Edit,
+        allowLocalAddr: true,
     },
     login: {
         path: "/:addr/login",

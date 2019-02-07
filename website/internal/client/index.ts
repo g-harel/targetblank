@@ -1,6 +1,7 @@
 import * as api from "../api";
 import {IPageData} from "../types";
 import {remoteClient} from "./remote";
+import {localClient} from "./local";
 
 export {IPageData} from "../types";
 
@@ -11,7 +12,6 @@ export type ErrHandler = Callback<string>;
 
 export interface Client {
     isAuthorized(): boolean;
-    pageDelete(cb: Callback, err: ErrHandler): void;
     pageUpdate(cb: Callback<IPageData>, err: ErrHandler, doc: string): void;
     pageRead(cb: Callback<IPageData>, err: ErrHandler): void;
     passUpdate(
@@ -30,14 +30,18 @@ interface ClientGenerator {
 
 interface StaticClient {
     pageCreate: (cb: Callback<string>, err: ErrHandler, email: string) => void;
-    pageValidate: (cb: Callback<void>, err: ErrHandler, doc: string) => void;
+    pageValidate: (
+        cb: Callback<IPageData>,
+        err: ErrHandler,
+        doc: string,
+    ) => void;
 }
 
 const clientGenerator: ClientGenerator = (addr) => {
-    if (addr !== localAddr) {
-        return remoteClient(addr);
+    if (addr === localAddr) {
+        return localClient();
     }
-    throw "can't use local address";
+    return remoteClient(addr);
 };
 
 const staticClient: StaticClient = {

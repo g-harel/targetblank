@@ -63,7 +63,7 @@ const Status = styled("div")({
 });
 
 export interface Data {
-    page: IPageData;
+    value: string;
     status: "saving" | "saved" | "error";
     error?: string;
 }
@@ -76,7 +76,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
 
     // Load page data.
     client(addr!).pageRead(
-        (data: IPageData) => update({page: data, status: "saved"}),
+        (data: IPageData) => update({value: data.raw, status: "saved"}),
         () => redirect(routes.login, addr!),
     );
 
@@ -84,8 +84,8 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     // Counter prevents stale requests from updating the status.
     let timeout: any = null;
     let counter = 0;
-    const save = (data: Data) => (value: string) => {
-        update({page: data.page, status: "saving"});
+    const save = (value: string) => {
+        update({value, status: "saving"});
         clearTimeout(timeout);
         counter++;
         const selfCounter = counter;
@@ -93,11 +93,11 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             client(addr!).pageUpdate(
                 () => {
                     if (selfCounter !== counter) return;
-                    update({page: data.page, status: "saved"});
+                    update({value, status: "saved"});
                 },
                 (m) => {
                     if (selfCounter !== counter) return;
-                    update({page: data.page, status: "error", error: m});
+                    update({value, status: "error", error: m});
                 },
                 value,
             );
@@ -144,8 +144,8 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                 </Header>
                 <Editor
                     id="page-editor"
-                    callback={save(data)}
-                    value={data.page.raw}
+                    callback={save}
+                    value={data.value}
                 />
             </Wrapper>
         );

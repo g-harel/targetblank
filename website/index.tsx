@@ -14,8 +14,6 @@ app.use("target", document.body);
 app.setState({});
 
 Object.keys(routes).forEach((name) => {
-    const {path, component} = routes[name as keyof typeof routes];
-    app(path, (params: Props) => () => (
-        <Page {...params} component={component} />
-    ));
+    const route = routes[name as keyof typeof routes];
+    app(route.path, (params: Props) => () => <Page {...params} {...route} />);
 });
