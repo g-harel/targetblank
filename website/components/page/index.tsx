@@ -25,7 +25,7 @@ export interface PageProps {
     token?: string;
 }
 
-export type PageComponent<A = undefined> = Component<PageProps, A>;
+export type PageComponent<A = any> = Component<PageProps, A>;
 
 export interface Props extends PageProps {
     component: PageComponent;

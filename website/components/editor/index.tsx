@@ -59,7 +59,7 @@ export const Editor: Component<Props> = (props) => () => {
         }),
     );
 
-    const onKeydown = (e) => {
+    const onKeydown = (e: KeyboardEvent) => {
         // Swallow `ctrl+s` to prevent browser popup.
         const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
         if (ctrl && e.key === "s") {
@@ -69,7 +69,7 @@ export const Editor: Component<Props> = (props) => () => {
         // Insert spaces when tab is pressed.
         if (e.key === "Tab") {
             e.preventDefault();
-            const {target} = e;
+            const target = (e.target as any) as HTMLTextAreaElement;
             const pos = target.selectionStart;
             const before = target.value.substring(0, target.selectionStart);
             const after = target.value.substring(target.selectionEnd);
@@ -106,7 +106,7 @@ export const Editor: Component<Props> = (props) => () => {
                 id={props.id}
                 style="opacity: 0;"
                 value={props.value}
-                oninput={(e) => props.callback(e.target.value)}
+                oninput={(e: any) => props.callback(e.target.value)}
                 onkeydown={onKeydown}
                 spellcheck={false}
             />

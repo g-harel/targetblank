@@ -62,35 +62,35 @@ const Status = styled("div")({
     },
 });
 
-interface Data {
+export interface Data {
     page: IPageData;
     status: "saving" | "saved" | "error";
     error?: string;
 }
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
-    if (!client(addr).isAuthorized()) {
-        setTimeout(() => redirect(routes.login, addr));
+    if (!client(addr!).isAuthorized()) {
+        setTimeout(() => redirect(routes.login, addr!));
         return () => null;
     }
 
     // Load page data.
-    client(addr).pageRead(
+    client(addr!).pageRead(
         (data: IPageData) => update({page: data, status: "saved"}),
-        () => redirect(routes.login, addr),
+        () => redirect(routes.login, addr!),
     );
 
     // Save editor contents after a delay.
     // Counter prevents stale requests from updating the status.
     let timeout: any = null;
     let counter = 0;
-    const save = (data: Data) => (value) => {
+    const save = (data: Data) => (value: string) => {
         update({page: data.page, status: "saving"});
         clearTimeout(timeout);
         counter++;
         const selfCounter = counter;
         timeout = setTimeout(() => {
-            client(addr).pageUpdate(
+            client(addr!).pageUpdate(
                 () => {
                     if (selfCounter !== counter) return;
                     update({page: data.page, status: "saved"});
@@ -107,7 +107,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     // Navigate to the document page with "ctrl+enter".
     keyboard((e) => {
         if (e.ctrl && e.key === "Enter") {
-            redirect(routes.document, addr);
+            redirect(routes.document, addr!);
         }
     });
 
@@ -134,7 +134,9 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             <Wrapper>
                 <Header>
                     <Done className={{disabled: data.status === "saving"}}>
-                        <Anchor href={path(routes.document, addr)}>done</Anchor>
+                        <Anchor href={path(routes.document, addr!)}>
+                            done
+                        </Anchor>
                     </Done>
                     <Status className={{error: !!data.error}}>
                         {statusContent}

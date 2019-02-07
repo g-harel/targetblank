@@ -25,7 +25,7 @@ const send = (req: IRequest) => {
         }
 
         // Arbitrary headers are not allowed because they would interfere with CORS.
-        const headers = {};
+        const headers: Record<string, string> = {};
         headers["Authorization"] = `Targetblank ${req.token}`;
 
         // Time out request after interval.

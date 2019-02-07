@@ -21,7 +21,9 @@ const empty = () => ({token: null, data: null});
 
 // Read page data from local storage.
 export const read = (addr: string): Cache => {
-    const data: Cache | null = JSON.parse(localStorage.getItem(keyData(addr)));
+    const data: Cache | null = JSON.parse(
+        localStorage.getItem(keyData(addr)) || "null",
+    );
     if (!data) {
         return empty();
     }
@@ -29,7 +31,7 @@ export const read = (addr: string): Cache => {
     // Remove expired tokens.
     if (data.token) {
         const expiry: Expiry | null = JSON.parse(
-            localStorage.getItem(keyExpiry(addr)),
+            localStorage.getItem(keyExpiry(addr)) || "null",
         );
         if (!expiry || expiry.time < Date.now()) {
             write(addr, {token: null});
@@ -43,7 +45,7 @@ export const read = (addr: string): Cache => {
 // Update stored data from local storage.
 export const write = (addr: string, values: Partial<Cache>) => {
     const data: Cache =
-        JSON.parse(localStorage.getItem(keyData(addr))) || empty();
+        JSON.parse(localStorage.getItem(keyData(addr)) || "null") || empty();
 
     // Update expiry time when token is written.
     if (values.token && values.token !== data.token) {

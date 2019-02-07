@@ -18,61 +18,61 @@ const writeData = (addr: string) => (data: IPageData) => {
     return data;
 };
 
-export class RemoteClient extends Client {
+export const remoteClient = (addr: string): Client => ({
     isAuthorized() {
-        return !!read(this.addr).token;
-    }
+        return !!read(addr).token;
+    },
 
     pageDelete(cb, err) {
-        const {token} = read(this.addr);
+        const {token} = read(addr);
         if (token === null) {
-            return err(missingToken("delete", this.addr));
+            return err(missingToken("delete", addr));
         }
-        api.pageDelete(this.addr, token)
+        api.pageDelete(addr, token)
             .then(cb)
             .catch(err);
-    }
+    },
 
     pageUpdate(cb, err, doc) {
-        const {token} = read(this.addr);
+        const {token} = read(addr);
         if (token === null) {
-            return err(missingToken("edit", this.addr));
+            return err(missingToken("edit", addr));
         }
-        api.pageUpdate(this.addr, token, doc)
-            .then(writeData(this.addr))
+        api.pageUpdate(addr, token, doc)
+            .then(writeData(addr))
             .then(cb)
             .catch(err);
-    }
+    },
 
     pageRead(cb, err) {
-        const {data: cachedData, token} = read(this.addr);
+        const {data: cachedData, token} = read(addr);
         if (cachedData !== null) cb(cachedData);
-        api.pageRead(this.addr, token || undefined)
-            .then(writeData(this.addr))
+        api.pageRead(addr, token || "")
+            .then(writeData(addr))
             .then(cb)
             .catch(err);
-    }
+    },
 
     passUpdate(cb, err, pass, token) {
-        const t = token || read(this.addr).token;
+        const t = token || read(addr).token;
         if (t === null) {
-            return err(missingToken("change password", this.addr));
+            return err(missingToken("change password", addr));
         }
-        api.passUpdate(this.addr, t, pass)
+        api.passUpdate(addr, t, pass)
             .then(cb)
             .catch(err);
-    }
+    },
 
     passReset(cb, err, email) {
-        api.passReset(this.addr, email)
+        api.passReset(addr, email)
             .then(cb)
             .catch(err);
-    }
+    },
 
     tokenCreate(cb, err, pass) {
-        api.tokenCreate(this.addr, pass)
-            .then(writeToken(this.addr))
+        api.tokenCreate(addr, pass)
+            .then(writeToken(addr))
             .then(cb)
             .catch(err);
-    }
-}
+    },
+});

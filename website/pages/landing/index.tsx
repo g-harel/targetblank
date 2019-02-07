@@ -30,7 +30,7 @@ const Screen = styled("div")({
     },
 });
 
-export const Landing: PageComponent = (props, update) => {
+export const Landing: PageComponent = (_, update) => {
     let email = "";
 
     const submit = (newEmail: string) => {
@@ -40,12 +40,7 @@ export const Landing: PageComponent = (props, update) => {
                 update();
                 resolve("");
             };
-
-            const err = (message) => {
-                resolve(message);
-            };
-
-            client.pageCreate(callback, err, newEmail);
+            client.pageCreate(callback, resolve, newEmail);
         });
     };
 

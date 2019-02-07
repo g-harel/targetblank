@@ -10,8 +10,8 @@ const Wrapper = styled("div")({});
 export const Forgot: PageComponent = ({addr}) => () => {
     const submit = (email: string) => {
         return new Promise<string>((resolve) => {
-            client(addr).passReset(
-                () => redirect(routes.login, addr),
+            client(addr!).passReset(
+                () => redirect(routes.login, addr!),
                 resolve,
                 email,
             );

@@ -7,13 +7,15 @@ import "normalize.css";
 
 import {app} from "./internal/app";
 import {routes} from "./routes";
-import {Page} from "./components/page";
+import {Page, Props} from "./components/page";
 
 app.use("target", document.body);
 
 app.setState({});
 
 Object.keys(routes).forEach((name) => {
-    const {path, component} = routes[name];
-    app(path, (params) => () => <Page {...params} component={component} />);
+    const {path, component} = routes[name as keyof typeof routes];
+    app(path, (params: Props) => () => (
+        <Page {...params} component={component} />
+    ));
 });

@@ -89,7 +89,7 @@ const Error = styled("div")({
 export interface Props {
     title?: string;
     type?: string;
-    callback?: (string) => Promise<string>;
+    callback: (value: string) => Promise<string>;
     validator: RegExp;
     message: string;
     placeholder: string;
@@ -99,7 +99,7 @@ export interface Props {
 const focusOnInput = () => {
     setTimeout(() =>
         requestAnimationFrame(() => {
-            const input: HTMLElement = document.querySelector("form input");
+            const input = document.querySelector<HTMLElement>("form input");
             if (input) {
                 input.focus();
             }
@@ -117,13 +117,13 @@ export const Input: Component<Props> = (props, update) => {
         focusOnInput();
     }
 
-    let timeout;
+    let timeout: any;
 
-    const oninput = (event) => {
+    const oninput = (event: TextEvent) => {
         // Reset any pending error message.
         clearTimeout(timeout);
 
-        value = event.target.value.trim();
+        value = (event.target as HTMLInputElement).value.trim();
         valid = !!value.match(props.validator);
 
         // Immediately show new valid state.
@@ -143,7 +143,7 @@ export const Input: Component<Props> = (props, update) => {
         }, 750);
     };
 
-    const onsubmit = async (e) => {
+    const onsubmit = async (e: KeyboardEvent) => {
         e.preventDefault();
 
         if (!valid) {

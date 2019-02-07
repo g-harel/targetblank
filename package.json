@@ -2,8 +2,9 @@
   "scripts": {
     "build": "parcel build website/index.html -d .build --no-source-maps",
     "dev": "parcel -p 1324 -d .dist website/index.html",
-    "test": "run-s fmt lint build",
-    "lint": "tslint website/**/*.ts --fix",
+    "test": "run-s fmt lint check build",
+    "lint": "tslint --project tsconfig.json website/**/*.ts --fix",
+    "check": "tsc -noEmit",
     "fmt": "prettier --list-different --write --ignore-path .gitignore \"**/*.{js,ts,tsx}\""
   },
   "dependencies": {

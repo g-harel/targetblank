@@ -22,7 +22,7 @@ export const Anchor: Component<Props> = (props) => {
         href = `https://${href}`;
     }
 
-    const onClick = (e) => {
+    const onClick = (e: MouseEvent) => {
         if (isRelative(href)) {
             e.preventDefault();
             app.redirect(href);

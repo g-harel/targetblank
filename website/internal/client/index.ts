@@ -1,33 +1,27 @@
 import * as api from "../api";
 import {IPageData} from "../types";
-import {RemoteClient} from "./remote";
+import {remoteClient} from "./remote";
 
 export {IPageData} from "../types";
 
 export const localAddr = "local";
 
-type Callback<T = void> = (value: T) => void;
-type ErrHandler = Callback<string> | null;
+export type Callback<T = void> = (value: T) => void;
+export type ErrHandler = Callback<string>;
 
-export abstract class Client {
-    protected addr: string;
-
-    constructor(addr: string) {
-        this.addr = addr;
-    }
-
-    abstract isAuthorized(): boolean;
-    abstract pageDelete(cb: Callback, err: ErrHandler): void;
-    abstract pageUpdate(cb: Callback<IPageData>, err: ErrHandler, doc: string);
-    abstract pageRead(cb: Callback<IPageData>, err: ErrHandler);
-    abstract passUpdate(
+export interface Client {
+    isAuthorized(): boolean;
+    pageDelete(cb: Callback, err: ErrHandler): void;
+    pageUpdate(cb: Callback<IPageData>, err: ErrHandler, doc: string): void;
+    pageRead(cb: Callback<IPageData>, err: ErrHandler): void;
+    passUpdate(
         cb: Callback,
         err: ErrHandler,
         pass: string,
         token?: string,
-    );
-    abstract passReset(cb: Callback, err: ErrHandler, email: string);
-    abstract tokenCreate(cb: Callback<string>, err: ErrHandler, pass: string);
+    ): void;
+    passReset(cb: Callback, err: ErrHandler, email: string): void;
+    tokenCreate(cb: Callback<string>, err: ErrHandler, pass: string): void;
 }
 
 interface ClientGenerator {
@@ -41,7 +35,7 @@ interface StaticClient {
 
 const clientGenerator: ClientGenerator = (addr) => {
     if (addr !== localAddr) {
-        return new RemoteClient(addr);
+        return remoteClient(addr);
     }
     throw "can't use local address";
 };

@@ -66,13 +66,13 @@ const Group = styled("div")({
 const Items = styled("div")({});
 
 export const Document: PageComponent<IPageData> = ({addr}, update) => {
-    client(addr).pageRead(update, () => redirect(routes.login, addr));
+    client(addr!).pageRead(update, () => redirect(routes.login, addr!));
 
     // Navigate to the edit page with "ctrl+enter".
     keyboard((e) => {
         if (e.ctrl && e.key === "Enter") {
-            if (client(addr).isAuthorized()) {
-                redirect(routes.edit, addr);
+            if (client(addr!).isAuthorized()) {
+                redirect(routes.edit, addr!);
             }
         }
     });
@@ -84,12 +84,14 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
         return (
             <Wrapper>
                 <Action>
-                    {client(addr).isAuthorized() ? (
+                    {client(addr!).isAuthorized() ? (
                         <Edit>
-                            <Anchor href={path(routes.edit, addr)}>edit</Anchor>
+                            <Anchor href={path(routes.edit, addr!)}>
+                                edit
+                            </Anchor>
                         </Edit>
                     ) : (
-                        <Anchor href={path(routes.login, addr)}>login</Anchor>
+                        <Anchor href={path(routes.login, addr!)}>login</Anchor>
                     )}
                 </Action>
                 <Header muted title={data.meta.title} />

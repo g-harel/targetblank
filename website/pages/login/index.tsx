@@ -21,8 +21,8 @@ const Forgot = styled("div")({
 export const Login: PageComponent = ({addr}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
-            client(addr).tokenCreate(
-                () => redirect(routes.document, addr),
+            client(addr!).tokenCreate(
+                () => redirect(routes.document, addr!),
                 resolve,
                 pass,
             );
@@ -34,7 +34,9 @@ export const Login: PageComponent = ({addr}) => () => {
             <Header muted />
             <Password callback={submit} title="log in" />
             <Forgot>
-                <Anchor href={path(routes.forgot, addr)}>reset password</Anchor>
+                <Anchor href={path(routes.forgot, addr!)}>
+                    reset password
+                </Anchor>
             </Forgot>
         </Wrapper>
     );
