@@ -31,7 +31,7 @@ const Header = styled("header")({
 const Done = styled("div")({
     display: "inline-block",
     float: "right",
-    fontWeight: "bold",
+    fontWeight: 600,
 
     $nest: {
         "&.disabled": {
@@ -53,7 +53,7 @@ const Done = styled("div")({
 
 const Status = styled("div")({
     display: "inline-block",
-    fontWeight: "bold",
+    fontWeight: 600,
 
     $nest: {
         "&.error": {

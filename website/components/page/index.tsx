@@ -14,7 +14,7 @@ const ConstructionSign = styled("div")({
     bottom: "2rem",
     color: "white",
     fontFamily: "monospace",
-    fontWeight: "bold",
+    fontWeight: 600,
     left: "2rem",
     padding: "1rem",
     position: "fixed",

@@ -19,7 +19,7 @@ const Wrapper = styled("div")({
 const Action = styled("div")({
     "-moz-user-select": "-moz-none",
     float: "right",
-    fontWeight: "bold",
+    fontWeight: 600,
     padding: "0.85rem 1.4rem",
     position: "absolute",
     right: 0,

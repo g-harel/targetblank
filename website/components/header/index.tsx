@@ -5,7 +5,7 @@ const Wrapper = styled("header")({
     "-moz-user-select": "-moz-none",
     fontFamily: "Arial, Helvetica Neue, Helvetica, sans-serif",
     fontSize: "1.7rem",
-    fontWeight: "bold",
+    fontWeight: 600,
     lineHeight: "2.9rem",
     padding: "4.5rem 1.4rem 4rem",
     textAlign: "center",

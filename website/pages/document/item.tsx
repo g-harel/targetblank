@@ -3,7 +3,7 @@ import {styled} from "../../internal/style";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
-    fontWeight: 700,
+    fontWeight: 600,
     lineHeight: "1.6rem",
     padding: "0.3rem",
 

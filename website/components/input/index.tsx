@@ -31,7 +31,7 @@ const Form = styled("form")({
 
 const Title = styled("span")({
     display: "block",
-    fontWeight: "bold",
+    fontWeight: 600,
     margin: "0.5rem 0.9rem 0.1rem",
     width: `${width}rem`,
 });

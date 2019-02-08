@@ -34,7 +34,7 @@ const Wrapper = styled("div")({
 
 const Title = styled("span")({
     fontSize: "1.3rem",
-    fontWeight: "bold",
+    fontWeight: 600,
 });
 
 const TitleIcon = styled("div")({
