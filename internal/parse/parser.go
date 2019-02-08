@@ -9,6 +9,7 @@ import (
 // Rule defines behavior associated with patterns in the input string.
 type rule struct {
 	Name     string
+	Hint     string
 	Pattern  *regexp.Regexp
 	Handler  func(ctx *context)
 	Required bool
@@ -50,7 +51,7 @@ func (p *parser) Parse(s string) error {
 			if match == nil {
 				// Required rules must match when checked (rules added before the required ones are still given priority).
 				if r.Required {
-					ctx.Error("expected %s", r.Name)
+					ctx.Error("expected %s (ex: \"%s\")", r.Name, r.Hint)
 					return ctx.currentErr
 				}
 				continue
@@ -75,7 +76,7 @@ func (p *parser) Parse(s string) error {
 
 		// No match has occurred with any rule's pattern. Line has incorrect syntax.
 		if !matched {
-			ctx.Error("syntax error")
+			ctx.Error("unrecognized syntax")
 			return ctx.currentErr
 		}
 	}
@@ -83,7 +84,7 @@ func (p *parser) Parse(s string) error {
 	// If any required rules are still enabled after parsing the full string, content is missing.
 	for _, r := range p.rules {
 		if r.Required && !r.Disabled {
-			ctx.Error("expected %s", r.Name)
+			ctx.Error("expected %s (ex: \"%s\")", r.Name, r.Hint)
 			return ctx.currentErr
 		}
 	}

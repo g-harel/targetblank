@@ -152,10 +152,10 @@ func TestDocumentEnter(t *testing.T) {
 
 		err = doc.Enter(2, "", "")
 		if err == nil {
-			t.Fatalf("Expected invalid depth error")
+			t.Fatalf("Expected indentation level skipped error")
 		}
-		if strings.Index(err.Error(), "invalid depth") == -1 {
-			t.Fatalf("Expected invalid depth error, but got: %s", err)
+		if strings.Index(err.Error(), "indentation level skipped") == -1 {
+			t.Fatalf("Expected indentation level skipped error, but got: %s", err)
 		}
 	})
 
@@ -448,7 +448,7 @@ func TestDocument(t *testing.T) {
 		})
 
 		t.Run("should not allow labels to skip indentation levels", func(t *testing.T) {
-			produceErr(t, 6, "depth",
+			produceErr(t, 6, "skipped",
 				"version 1",
 				"===",
 				"label",

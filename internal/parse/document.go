@@ -56,7 +56,7 @@ func Document(s string) (string, error) {
 	v1EntryRule := rule{
 		Name:     "label",
 		Disabled: true,
-		Pattern:  regexp.MustCompile(`^(?P<indent>\s*)(?P<label>[^\s\[-][^=]+?)?(?:\[(?P<link>.*)\])?$`),
+		Pattern:  regexp.MustCompile(`^(?P<indent>\s*)(?P<label>[^\s\[-][^=]*?)?(?:\[(?P<link>.*)\])?$`),
 		Handler: func(ctx *context) {
 			indent := ctx.Param("indent")
 			label := ctx.Param("label")
@@ -84,6 +84,7 @@ func Document(s string) (string, error) {
 	v1HeaderRule := rule{
 		Name:     "header",
 		Required: true,
+		Hint:     "===",
 		Pattern:  regexp.MustCompile(`^===$`),
 		Handler: func(ctx *context) {
 			ctx.DisableSelf()
@@ -127,7 +128,8 @@ func Document(s string) (string, error) {
 	versionRule := rule{
 		Name:     "version",
 		Required: true,
-		Pattern:  regexp.MustCompile(`^version (?P<number>\d+)$`),
+		Hint:     "version 1",
+		Pattern:  regexp.MustCompile(`^version (?P<number>\d+(\.\d+)?)$`),
 		Handler: func(ctx *context) {
 			version := ctx.Param("number")
 			if version == "1" {
@@ -188,22 +190,22 @@ type documentEntry struct {
 }
 
 // AddGroup adds a new empty group.
-func (p *document) AddGroup() *document {
-	p.Groups = append(p.Groups, &documentEntityGroup{
+func (d *document) AddGroup() *document {
+	d.Groups = append(d.Groups, &documentEntityGroup{
 		Entries: []*documentEntry{},
 		Meta:    map[string]string{},
 	})
-	return p
+	return d
 }
 
 // AddGroupMeta adds a key/value pair into the last group's metadata map.
-func (p *document) AddGroupMeta(key, value string) *document {
-	p.Groups[len(p.Groups)-1].Meta[key] = value
-	return p
+func (d *document) AddGroupMeta(key, value string) *document {
+	d.Groups[len(d.Groups)-1].Meta[key] = value
+	return d
 }
 
 // Enter adds a new entry relative to the most recent one.
-func (p *document) Enter(depth int, link, label string) error {
+func (d *document) Enter(depth int, link, label string) error {
 	if depth < 0 {
 		return fmt.Errorf("invalid depth")
 	}
@@ -224,7 +226,7 @@ func (p *document) Enter(depth int, link, label string) error {
 		Children: []*documentEntry{},
 	}
 
-	parentGroup := p.Groups[len(p.Groups)-1]
+	parentGroup := d.Groups[len(d.Groups)-1]
 
 	if depth == 0 {
 		parentGroup.Entries = append(parentGroup.Entries, entry)
@@ -232,13 +234,13 @@ func (p *document) Enter(depth int, link, label string) error {
 	}
 
 	if len(parentGroup.Entries) == 0 {
-		return fmt.Errorf("invalid depth")
+		return fmt.Errorf("indentation level skipped")
 	}
 
 	parent := parentGroup.Entries[len(parentGroup.Entries)-1]
 	for i := 1; i < depth; i++ {
 		if len(parent.Children) == 0 {
-			return fmt.Errorf("invalid depth")
+			return fmt.Errorf("indentation level skipped")
 		}
 		parent = parent.Children[len(parent.Children)-1]
 	}
