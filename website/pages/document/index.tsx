@@ -81,6 +81,8 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
         // Response not yet received.
         if (!data) return <Loading />;
 
+        document.title = data.meta.title || "targetblank";
+
         return (
             <Wrapper>
                 <Action>

@@ -1,7 +1,6 @@
 <!--
 
 TODO
-- change title depending on page
 - fuzzy match lines to give better parsing errors
 - rename reset and forgot pages
 - make new documents more interesting (mini-tutorial)

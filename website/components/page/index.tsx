@@ -54,6 +54,9 @@ export const Page: Component<Props> = (props) => () => {
     // Reset keyboard listeners added by the previous page.
     reset();
 
+    // Reset document title.
+    document.title = "targetblank";
+
     return (
         <Wrapper>
             {document.location.hostname !== "localhost" && (
