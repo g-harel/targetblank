@@ -8,7 +8,7 @@ import {path, routes, redirect} from "../../routes";
 
 const Wrapper = styled("div")({});
 
-const Forgot = styled("div")({
+const Recover = styled("div")({
     color: "#aaa",
     fontSize: "0.8rem",
     margin: "0 auto",
@@ -33,11 +33,11 @@ export const Login: PageComponent = ({addr}) => () => {
         <Wrapper>
             <Header muted />
             <Password callback={submit} title="log in" />
-            <Forgot>
-                <Anchor href={path(routes.forgot, addr!)}>
+            <Recover>
+                <Anchor href={path(routes.recover, addr!)}>
                     reset password
                 </Anchor>
-            </Forgot>
+            </Recover>
         </Wrapper>
     );
 };

@@ -1,7 +1,6 @@
 <!--
 
 TODO
-- rename reset and forgot pages
 - make new documents more interesting (mini-tutorial)
 - add explanation text on landing
     - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html

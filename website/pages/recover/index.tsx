@@ -7,7 +7,7 @@ import {routes, redirect} from "../../routes";
 
 const Wrapper = styled("div")({});
 
-export const Forgot: PageComponent = ({addr}) => () => {
+export const Recover: PageComponent = ({addr}) => () => {
     const submit = (email: string) => {
         return new Promise<string>((resolve) => {
             client(addr!).passReset(

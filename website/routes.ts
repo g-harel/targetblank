@@ -2,7 +2,7 @@ import {app} from "./internal/app";
 import {Component} from "./internal/types";
 import {Landing} from "./pages/landing";
 import {Document} from "./pages/document";
-import {Forgot} from "./pages/forgot";
+import {Recover} from "./pages/recover";
 import {Edit} from "./pages/edit";
 import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
@@ -54,9 +54,9 @@ export const routes = routeTable({
         path: "/:addr/login",
         component: Login,
     },
-    forgot: {
-        path: "/:addr/forgot",
-        component: Forgot,
+    recover: {
+        path: "/:addr/recover",
+        component: Recover,
     },
     reset: {
         path: "/:addr/reset/:token?",
