@@ -57,19 +57,6 @@ module "create" {
   http_method         = "POST"
 }
 
-module "delete" {
-  source = "./modules/gateway-lambda"
-
-  name   = "delete"
-  file   = ".build/delete.zip"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
-
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
-  http_method         = "DELETE"
-}
-
 module "passwd" {
   source = "./modules/gateway-lambda"
 

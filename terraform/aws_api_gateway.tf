@@ -6,7 +6,6 @@ resource "aws_api_gateway_deployment" "deployment" {
   depends_on = [
     "module.authenticate",
     "module.create",
-    "module.delete",
     "module.passwd",
     "module.read",
     "module.reset",

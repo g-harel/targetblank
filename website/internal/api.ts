@@ -70,17 +70,6 @@ export const pageCreate = async (email: string): Promise<string> => {
     });
 };
 
-export const pageDelete = async (
-    addr: string,
-    token: string,
-): Promise<void> => {
-    return send({
-        token,
-        method: "DELETE",
-        path: `/page/${addr}`,
-    });
-};
-
 export const pageUpdate = async (
     addr: string,
     token: string,

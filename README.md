@@ -35,7 +35,6 @@ endpoints (/api/v1..)
 - validate page document (POST   /page/validate        doc     )
 - fetch page             (GET    /page/:address [auth]         )
 - edit page document     (PUT    /page/:address [auth] data    )
-- delete page            (DELETE /page/:address [auth]         )
 
 dynamodb schema {
     addr: string (6 alphanumeric chars),
