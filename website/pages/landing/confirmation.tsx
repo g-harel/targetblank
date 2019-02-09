@@ -22,18 +22,10 @@ const domains: Record<string, string> = {
     msn: "outlook",
 };
 
-const Wrapper = styled("div")({
-    opacity: 0,
-
-    $nest: {
-        "&.visible": {
-            opacity: 1,
-        },
-    },
-});
+const Wrapper = styled("div")({});
 
 const Title = styled("span")({
-    fontSize: "1.3rem",
+    fontSize: "1.2rem",
     fontWeight: 600,
 });
 
@@ -41,13 +33,6 @@ const TitleIcon = styled("div")({
     margin: "1rem 0",
     opacity: 0,
     transition: "all 1s ease",
-
-    $nest: {
-        "&.visible": {
-            opacity: 1,
-            transitionDelay: "0.25s",
-        },
-    },
 });
 
 const EmailLink = styled("a")({
@@ -66,11 +51,10 @@ const EmailLink = styled("a")({
 
 export interface Props {
     email: string;
-    visible?: boolean;
 }
 
 export const Confirmation: Component<Props> = (props) => {
-    const {email, visible} = props;
+    const {email} = props;
 
     // Attempt to find the web interface link from the email's domain.
     let link: string | null = null;
@@ -81,9 +65,9 @@ export const Confirmation: Component<Props> = (props) => {
     }
 
     return () => (
-        <Wrapper className={{visible}}>
+        <Wrapper>
             <Title>
-                <TitleIcon className={{visible}}>
+                <TitleIcon>
                     <Icon name="check" color="yellowgreen" size={1.4} />
                 </TitleIcon>
                 Confirmation Sent

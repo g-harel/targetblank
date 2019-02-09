@@ -52,7 +52,7 @@ const StyledInput = styled("input")({
         },
 
         ...placeholder({
-            color: "#cfcfcf",
+            color: "#ccc",
             opacity: 1,
         }),
     },

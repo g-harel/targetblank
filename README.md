@@ -1,9 +1,9 @@
 <!--
 
 TODO
-- make new documents more interesting (mini-tutorial)
 - add explanation text on landing
     - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+- make new documents more interesting (mini-tutorial)
 - keyboard shortcuts for quick links
 - release
     - replace application secrets (eventually)

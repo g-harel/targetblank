@@ -25,7 +25,7 @@ export const Recover: PageComponent = ({addr}) => () => {
                 callback={submit}
                 title="reset password"
                 type="email"
-                placeholder="john@example.com"
+                placeholder="email@example.com"
                 validator={/.*/g}
                 message=""
                 focus={true}

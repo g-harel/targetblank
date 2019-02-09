@@ -20,14 +20,24 @@ const Wrapper = styled("header")({
     },
 });
 
+const Subtitle = styled("div")({
+    color: "#ccc",
+    height: 0,
+    fontSize: "1rem",
+    transform: "translateY(-1rem)",
+});
+
 export interface Props {
     title?: string;
     muted?: boolean;
+    sub?: string;
 }
 
 export const Header: Component<Props> = (props) => () => (
     <Wrapper className={{muted: props.muted}}>
+        &nbsp;
         {props.title === undefined ? "targetblank" : props.title}
         &nbsp;
+        {props.sub ? <Subtitle>{props.sub}</Subtitle> : ""}
     </Wrapper>
 );

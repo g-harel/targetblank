@@ -18,6 +18,7 @@ const Screens = styled("div")({
 
 const Screen = styled("div")({
     display: "inline-block",
+    opacity: 0,
     textAlign: "center",
     transition: "all 0.7s ease",
     verticalAlign: "top",
@@ -26,6 +27,10 @@ const Screen = styled("div")({
     $nest: {
         "&.scrolled": {
             transform: "translateX(-100%)",
+        },
+
+        "&.visible": {
+            opacity: 1,
         },
     },
 });
@@ -46,13 +51,13 @@ export const Landing: PageComponent = (_, update) => {
 
     return () => (
         <Wrapper>
-            <Header />
+            <Header sub="organize your links" />
             <Screens>
-                <Screen className={{scrolled: !!email}}>
-                    <Signup callback={submit} visible={!email} />
+                <Screen className={{scrolled: !!email, visible: !email}}>
+                    <Signup callback={submit} />
                 </Screen>
-                <Screen className={{scrolled: !!email}}>
-                    <Confirmation email={email} visible={!!email} />
+                <Screen className={{scrolled: !!email, visible: !!email}}>
+                    <Confirmation email={email} />
                 </Screen>
             </Screens>
         </Wrapper>
