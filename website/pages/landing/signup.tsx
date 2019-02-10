@@ -16,7 +16,7 @@ export const Signup: Component<Props> = (props) => () => (
             type="email"
             placeholder="email@example.com"
             validator={/^\S+@\S+\.\S{2,}$/g}
-            message="That doesn't look like an email address"
+            message="invalid an email address"
             focus={true}
         />
     </Wrapper>

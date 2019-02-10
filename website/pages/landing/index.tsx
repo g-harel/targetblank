@@ -10,7 +10,7 @@ import {path, routes} from "../../routes";
 const screenWidth = 20;
 
 const Wrapper = styled("div")({
-    overflowX: "hidden",
+    overflow: "hidden",
 });
 
 const Screens = styled("div")({
