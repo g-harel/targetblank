@@ -39,9 +39,11 @@ const Title = styled("span")({
 const StyledInput = styled("input")({
     border: "1px solid #bbb",
     borderRadius: "2px",
+    boxShadow: "none",
+    fontSize: "0.9rem",
     height: "1.85rem",
     margin: "0.3rem 0.5rem 0",
-    outline: "0",
+    outline: "none",
     padding: "1rem 1.8rem 1rem 0.5rem",
     width: `${width}rem`,
 
@@ -52,7 +54,7 @@ const StyledInput = styled("input")({
         },
 
         ...placeholder({
-            color: "#ccc",
+            color: "#bbb",
             opacity: 1,
         }),
     },

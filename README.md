@@ -1,8 +1,7 @@
 <!--
 
 TODO
-- add explanation text on landing
-    - move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
+- move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 - make new documents more interesting (mini-tutorial)
 - keyboard shortcuts for quick links
 - release
@@ -61,7 +60,7 @@ links
 [![Build Status](https://travis-ci.org/g-harel/targetblank.svg?branch=master)](https://travis-ci.org/g-harel/targetblank)
 [![Test Coverage](https://img.shields.io/codecov/c/github/g-harel/targetblank.svg)](https://codecov.io/gh/g-harel/targetblank)
 
-Targetblank is an in-browser tool to manage and structure links. Pages are defined by a markdown-like document and can be made publicly readable to share with others.
+Targetblank is an in-browser tool to organize links. Pages are defined by a markdown-like document and can be shared with others.
 
 ## Development
 

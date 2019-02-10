@@ -31,7 +31,6 @@ const Title = styled("span")({
 
 const TitleIcon = styled("div")({
     margin: "1rem 0",
-    opacity: 0,
     transition: "all 1s ease",
 });
 

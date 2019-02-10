@@ -142,11 +142,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                         {statusContent}
                     </Status>
                 </Header>
-                <Editor
-                    id="page-editor"
-                    callback={save}
-                    value={data.value}
-                />
+                <Editor id="page-editor" callback={save} value={data.value} />
             </Wrapper>
         );
     };
