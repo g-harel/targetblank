@@ -1,11 +1,12 @@
 <!--
 
 TODO
-- move out of ses sandbox https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html
 - make new documents more interesting (mini-tutorial)
 - keyboard shortcuts for quick links
 - release
-    - replace application secrets (eventually)
+    - remove under construction banner
+    - take application secrets from environment
+    - wipe database (possibly contains old formats)
     - set up regular database backups
 
 requirements

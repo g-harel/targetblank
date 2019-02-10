@@ -23,10 +23,9 @@ resource "aws_api_gateway_deployment" "deployment" {
   }
 }
 
-# TODO remove hardcoded
 resource "aws_api_gateway_domain_name" "domain_name" {
-  domain_name     = "api.targetblank.org"
-  certificate_arn = "arn:aws:acm:us-east-1:159048808775:certificate/a50ef51c-8730-49f6-82b8-b2044223ff8b"
+  domain_name     = "api.${local.domain_name}"
+  certificate_arn = "${aws_acm_certificate.ssl_cert.arn}"
 }
 
 resource "aws_api_gateway_base_path_mapping" "base_path_mapping" {
