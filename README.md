@@ -2,7 +2,7 @@
 
 TODO
 - preserve cursor position in editor
-- keyboard shortcuts for quick links
+- hint about typing for quick links
 - release
     - remove "under construction" banner
     - take application secrets from environment

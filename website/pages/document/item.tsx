@@ -1,8 +1,9 @@
-import {Component, IPageItem} from "../../internal/types";
+import {Component, IPageEntry} from "../../internal/types";
 import {styled} from "../../internal/style";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
+    color: "#333",
     fontWeight: 600,
     lineHeight: "1.6rem",
     padding: "0.6rem 0.3rem 0",
@@ -13,7 +14,7 @@ const Wrapper = styled("div")({
         },
 
         "&.highlighted": {
-            color: "red",
+            color: "yellowgreen",
         },
     },
 });
@@ -23,8 +24,8 @@ const ItemTitle = styled("span")({
 });
 
 export interface Props {
-    item: IPageItem;
-    isHighlighted: (item: IPageItem) => boolean;
+    item: IPageEntry;
+    isHighlighted: (item: IPageEntry) => boolean;
 }
 
 export const Item: Component<Props> = (props) => () => {

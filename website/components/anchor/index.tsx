@@ -12,6 +12,7 @@ const isRelative = (href: String): boolean => {
 
 export interface Props {
     href: string;
+    immediate?: boolean;
 }
 
 export const Anchor: Component<Props> = (props) => {
@@ -28,6 +29,15 @@ export const Anchor: Component<Props> = (props) => {
             app.redirect(href);
         }
     };
+
+    // Immediately follow link.
+    if (props.immediate) {
+        if (isRelative(href)) {
+            app.redirect(href);
+        } else {
+            (window as any).location = href;
+        }
+    }
 
     return () => (
         <Wrapper href={href} onclick={onClick}>

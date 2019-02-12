@@ -7,6 +7,7 @@ import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, redirect} from "../../routes";
+import {IPageEntry} from "../../internal/types";
 
 const keyboardTimeout = 1000;
 
@@ -68,8 +69,6 @@ const Group = styled("div")({
 const Items = styled("div")({});
 
 export const Document: PageComponent = ({addr}, update) => {
-    let highlight: string = "";
-    let timer: any = null;
     let data: IPageData | null = null;
 
     client(addr!).pageRead(
@@ -80,6 +79,10 @@ export const Document: PageComponent = ({addr}, update) => {
         () => redirect(routes.login, addr!),
     );
 
+    let highlight: string = "";
+    let highlighted: IPageEntry | null = null;
+    let highlighTimer: any = null;
+
     keyboard((e) => {
         // Navigate to the edit page with "ctrl+enter".
         if (e.ctrl && e.key === "Enter") {
@@ -87,11 +90,17 @@ export const Document: PageComponent = ({addr}, update) => {
             return;
         }
 
-        // Update highlight on keboard clicks.
-        if (e.key.match(/^[a-z]$/g)) {
+        // Follow highlighted link when enter is pressed.
+        if (e.key === "Enter" && highlighted) {
+            console.log(e, highlighted);
+            return Anchor({immediate: true, href: highlighted.link}, () => {});
+        }
+
+        // Update highlight on keyboard clicks.
+        if (e.key.match(/^[a-z0-9 -]$/g)) {
             highlight += e.key;
-            clearTimeout(timer);
-            timer = setTimeout(() => {
+            clearTimeout(highlighTimer);
+            highlighTimer = setTimeout(() => {
                 highlight = "";
                 update();
             }, keyboardTimeout);
@@ -106,9 +115,9 @@ export const Document: PageComponent = ({addr}, update) => {
         document.title = data.meta.title || "targetblank";
 
         // Checker given to pick the highlighted item.
-        let found = false;
+        highlighted = null;
         const isHighlighted: ItemProps["isHighlighted"] = (item) => {
-            if (found) {
+            if (highlighted) {
                 return false;
             }
             if (highlight.length === 0) {
@@ -124,7 +133,7 @@ export const Document: PageComponent = ({addr}, update) => {
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "");
             if (formattedString.indexOf(highlight) >= 0) {
-                found = true;
+                highlighted = item;
                 return true;
             }
 

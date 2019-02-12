@@ -3,17 +3,17 @@ export type Component<P extends object = {}, D = undefined> = (
     update: (data?: D) => void,
 ) => any;
 
-export interface IPageItem {
+export interface IPageEntry {
     label: string;
     link: string;
-    entries: IPageItem[];
+    entries: IPageEntry[];
 }
 
 export interface IPageGroup {
     meta: {
         [key: string]: string;
     };
-    entries: IPageItem[];
+    entries: IPageEntry[];
 }
 
 export interface IPageData {
