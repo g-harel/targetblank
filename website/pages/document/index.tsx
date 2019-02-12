@@ -2,11 +2,13 @@ import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
 import {styled, breakpoint} from "../../internal/style";
 import {Loading} from "../../components/loading";
-import {Item} from "./item";
+import {Item, Props as ItemProps} from "./item";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, redirect} from "../../routes";
+
+const keyboardTimeout = 1000;
 
 const Wrapper = styled("div")({
     display: "flex",
@@ -65,21 +67,69 @@ const Group = styled("div")({
 
 const Items = styled("div")({});
 
-export const Document: PageComponent<IPageData> = ({addr}, update) => {
-    client(addr!).pageRead(update, () => redirect(routes.login, addr!));
+export const Document: PageComponent = ({addr}, update) => {
+    let highlight: string = "";
+    let timer: any = null;
+    let data: IPageData | null = null;
 
-    // Navigate to the edit page with "ctrl+enter".
+    client(addr!).pageRead(
+        (d) => {
+            data = d;
+            update();
+        },
+        () => redirect(routes.login, addr!),
+    );
+
     keyboard((e) => {
+        // Navigate to the edit page with "ctrl+enter".
         if (e.ctrl && e.key === "Enter") {
             redirect(routes.edit, addr!);
+            return;
+        }
+
+        // Update highlight on keboard clicks.
+        if (e.key.match(/^[a-z]$/g)) {
+            highlight += e.key;
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                highlight = "";
+                update();
+            }, keyboardTimeout);
+            update();
         }
     });
 
-    return (data: IPageData) => {
+    return () => {
         // Response not yet received.
         if (!data) return <Loading />;
 
         document.title = data.meta.title || "targetblank";
+
+        // Checker given to pick the highlighted item.
+        let found = false;
+        const isHighlighted: ItemProps["isHighlighted"] = (item) => {
+            if (found) {
+                return false;
+            }
+            if (highlight.length === 0) {
+                return false;
+            }
+            if (!item.link || !item.label) {
+                return false;
+            }
+
+            // Format string to lowercase and remove accents.
+            const formattedString = item.label
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+            if (formattedString.indexOf(highlight) >= 0) {
+                found = true;
+                return true;
+            }
+
+            return false;
+        };
 
         return (
             <Wrapper>
@@ -100,7 +150,10 @@ export const Document: PageComponent<IPageData> = ({addr}, update) => {
                         <Group>
                             <Items>
                                 {...group.entries.map((item) => (
-                                    <Item {...item} />
+                                    <Item
+                                        item={item}
+                                        isHighlighted={isHighlighted}
+                                    />
                                 ))}
                             </Items>
                         </Group>

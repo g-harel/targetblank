@@ -64,7 +64,7 @@ const Button = styled("button")({
     ...reset,
 
     transform: "translate(-0.35rem, -2.15rem)",
-    padding: "0.65rem 0.7rem 0.65rem",
+    padding: "0.45rem 0.7rem",
     display: "inline-block",
     pointerEvents: "none",
     cursor: "default",

@@ -11,6 +11,10 @@ const Wrapper = styled("div")({
         "& &": {
             paddingLeft: "2rem",
         },
+
+        "&.highlighted": {
+            color: "red",
+        },
     },
 });
 
@@ -18,18 +22,25 @@ const ItemTitle = styled("span")({
     color: "#888",
 });
 
-export const Item: Component<IPageItem> = (props) => () => {
+export interface Props {
+    item: IPageItem;
+    isHighlighted: (item: IPageItem) => boolean;
+}
+
+export const Item: Component<Props> = (props) => () => {
     let Title = null;
-    if (props.link) {
-        Title = <Anchor href={props.link}>{props.label}</Anchor>;
+    if (props.item.link) {
+        Title = <Anchor href={props.item.link}>{props.item.label}</Anchor>;
     } else {
-        Title = <ItemTitle>{props.label}</ItemTitle>;
+        Title = <ItemTitle>{props.item.label}</ItemTitle>;
     }
 
     return (
-        <Wrapper>
+        <Wrapper className={{highlighted: props.isHighlighted(props.item)}}>
             {Title}
-            {...props.entries.map((item) => <Item {...item} />)}
+            {...props.item.entries.map((item) => (
+                <Item item={item} isHighlighted={props.isHighlighted} />
+            ))}
         </Wrapper>
     );
 };
