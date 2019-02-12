@@ -5,7 +5,7 @@ import {Anchor} from "../../components/anchor";
 const Wrapper = styled("div")({
     fontWeight: 600,
     lineHeight: "1.6rem",
-    padding: "0.3rem",
+    padding: "0.6rem 0.3rem 0",
 
     $nest: {
         "& &": {

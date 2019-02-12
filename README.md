@@ -1,10 +1,11 @@
 <!--
 
 TODO
-- make new documents more interesting (mini-tutorial)
+- don't allow navigation to document page while saving in edit page
+- preserve cursor position in editor
 - keyboard shortcuts for quick links
 - release
-    - remove under construction banner
+    - remove "under construction" banner
     - take application secrets from environment
     - wipe database (possibly contains old formats)
     - set up regular database backups

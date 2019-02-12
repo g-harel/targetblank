@@ -17,7 +17,41 @@ import (
 var mailerSend = mailer.Send
 var storagePageCreate = storage.PageCreate
 
-var defaultDocument = "version 1\n==="
+var defaultDocument = `# Everything after a pound character (#), trailing whitespace and empty lines are ignored.
+
+# Documents must start with their version (currently only 1).
+version 1
+
+# Document metadata key-value pairs can be added at the top of the document.
+key=value
+
+# The "title" key can be used to name the document.
+title=Hello World
+
+# The first group starts after the header line.
+===
+
+# Group metadata key-value pairs can be added at the start of each group.
+# These values are currently ignored, but may be used in the future.
+key=value
+
+# Groups contain entries containing a label and a link.
+labelled link [example.com]
+
+# Both the label and the link are optional.
+label without link
+[example.com]
+example.com
+
+# New groups are started using the group delimiter.
+---
+
+# Group entries can be nested indefinitely (using indentation).
+entry 1
+    entry 2
+        entry 3
+    entry 4
+`
 
 // Generates a pseudorandom page id.
 func genPageID() string {

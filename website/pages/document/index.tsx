@@ -54,7 +54,7 @@ const Group = styled("div")({
     flexGrow: 0,
     flexShrink: 0,
     margin: "0 1rem 2rem",
-    padding: "1rem 1.4rem",
+    padding: "1rem 1.4rem 1.6rem",
 
     $nest: {
         [breakpoint.sm]: {
