@@ -43,7 +43,7 @@ const Done = styled("div")({
             $nest: {
                 "&::before": {
                     content: `"ctrl + enter"`,
-                    opacity: 0.3,
+                    color: colors.textSecondaryLarge,
                     margin: "0 0.7rem",
                 },
             },

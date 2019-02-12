@@ -1,5 +1,5 @@
 import {Component} from "../../internal/types";
-import {styled, colors} from "../../internal/style";
+import {styled, colors, fonts} from "../../internal/style";
 
 const headerHeight = "2.9rem";
 const lineHeight = "1.6rem";
@@ -12,8 +12,7 @@ const Textarea = styled("textarea")({
     backgroundColor: colors.backgroundSecondary,
     border: "none",
     color: colors.textPrimary,
-    fontFamily:
-        "SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace",
+    fontFamily: fonts.monospace,
     marginTop: headerHeight,
     minHeight: "100%",
     outline: "none",

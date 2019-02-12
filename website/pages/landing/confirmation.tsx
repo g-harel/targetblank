@@ -1,4 +1,4 @@
-import {styled, colors} from "../../internal/style";
+import {styled, colors, size, fonts} from "../../internal/style";
 import {Component} from "../../internal/types";
 import {Icon} from "../../components/icon";
 
@@ -25,17 +25,18 @@ const domains: Record<string, string> = {
 const Wrapper = styled("div")({});
 
 const Title = styled("span")({
-    fontSize: "1.2rem",
+    fontSize: size.large,
     fontWeight: 600,
 });
 
 const TitleIcon = styled("div")({
-    margin: "1rem 0",
+    margin: "1rem 0 0.5rem",
     transition: "all 1s ease",
 });
 
 const EmailLink = styled("a")({
     color: colors.textSecondarySmall,
+    fontSize: size.tiny,
     display: "inline-block",
     margin: "0.5rem 0 1rem",
 

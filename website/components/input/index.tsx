@@ -1,4 +1,4 @@
-import {styled, reset, placeholder, colors} from "../../internal/style";
+import {styled, reset, placeholder, colors, size} from "../../internal/style";
 import {Component} from "../../internal/types";
 import {Icon} from "../icon";
 
@@ -40,7 +40,6 @@ const StyledInput = styled("input")({
     border: `1px solid ${colors.textSecondarySmall}`,
     borderRadius: "2px",
     boxShadow: "none",
-    fontSize: "0.9rem",
     height: "1.85rem",
     margin: "0.3rem 0.5rem 0",
     outline: "none",
@@ -68,7 +67,7 @@ const Button = styled("button")({
     display: "inline-block",
     pointerEvents: "none",
     cursor: "default",
-    color: colors.textSecondarySmall,
+    color: colors.textSecondaryLarge,
     float: "right",
 
     $nest: {
@@ -82,7 +81,7 @@ const Button = styled("button")({
 
 const Error = styled("div")({
     color: colors.error,
-    fontSize: "0.8rem",
+    fontSize: size.tiny,
     height: "1.15rem",
     margin: "0.35rem 1rem",
     width: `${width}rem`,

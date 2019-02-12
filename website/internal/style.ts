@@ -5,19 +5,41 @@ export const styled = (tag: string) => (s: types.NestedCSSProperties) => {
     return `${tag} .${style(s)}` as any;
 };
 
-const unique = (s: types.NestedCSSProperties) => {
-    s.$unique = true;
-    return s;
+// Standardized breakpoints.
+export const breakpoint = {
+    sm: "@media(max-width: 768px)",
 };
 
-// Helper to style element's placeholder.
-export const placeholder = (s: types.NestedCSSProperties) => ({
-    "&::placeholder": unique(s),
-    "&::-webkit-input-placeholder": unique(s),
-    "&::-moz-placeholder": unique(s),
-    "&:-moz-placeholder": unique(s),
-    "&:-ms-input-placeholder": unique(s),
-});
+// Standardized font families.
+export const fonts = {
+    monospace:
+        "SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace",
+    normal:
+        // tslint:disable-next-line:quotemark
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, ' +
+        // tslint:disable-next-line:quotemark
+        'Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+};
+
+// Standardized font sizes.
+export const size = {
+    tiny: "0.9rem",
+    normal: "1rem",
+    large: "1.2rem",
+    title: "1.7rem",
+};
+
+// Standardized colors.
+export const colors = {
+    success: "yellowgreen",
+    error: "tomato",
+    decoration: "#e8e8e8",
+    backgroundPrimary: "#ffffff",
+    backgroundSecondary: "#fafafa",
+    textPrimary: "#333333",
+    textSecondarySmall: "#767676",
+    textSecondaryLarge: "#949494",
+};
 
 // Button reset styles.
 export const reset: types.NestedCSSProperties = {
@@ -46,19 +68,16 @@ export const reset: types.NestedCSSProperties = {
     },
 };
 
-// Standardized breakpoints.
-export const breakpoint = {
-    sm: "@media(max-width: 768px)",
-};
+// Helper to style element's placeholder.
+export const placeholder = (s: types.NestedCSSProperties) => ({
+    "&::placeholder": unique(s),
+    "&::-webkit-input-placeholder": unique(s),
+    "&::-moz-placeholder": unique(s),
+    "&:-moz-placeholder": unique(s),
+    "&:-ms-input-placeholder": unique(s),
+});
 
-// Standardized colors.
-export const colors = {
-    success: "yellowgreen",
-    error: "tomato",
-    decoration: "#e8e8e8",
-    backgroundPrimary: "#ffffff",
-    backgroundSecondary: "#fafafa",
-    textPrimary: "#333333",
-    textSecondarySmall: "#767676",
-    textSecondaryLarge: "#949494",
+const unique = (s: types.NestedCSSProperties) => {
+    s.$unique = true;
+    return s;
 };

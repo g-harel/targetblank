@@ -1,5 +1,5 @@
 import {client, localAddr} from "../../internal/client";
-import {styled, colors} from "../../internal/style";
+import {styled, colors, size} from "../../internal/style";
 import {Signup} from "./signup";
 import {PageComponent} from "../../components/page";
 import {Header} from "../../components/header";
@@ -38,7 +38,8 @@ const Screen = styled("div")({
 });
 
 const Info = styled("div")({
-    fontSize: "0.8rem",
+    color: colors.textSecondarySmall,
+    fontSize: size.tiny,
     fontWeight: 600,
     padding: "0 1rem",
     marginTop: "-0.5rem",
@@ -51,7 +52,7 @@ const Spacer = styled("div")({
 });
 
 const Try = styled("div")({
-    color: colors.textSecondarySmall,
+    color: colors.textPrimary,
     fontWeight: 600,
     marginBottom: "1.9rem",
 });

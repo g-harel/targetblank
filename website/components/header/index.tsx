@@ -1,10 +1,10 @@
-import {colors, styled} from "../../internal/style";
+import {colors, styled, size} from "../../internal/style";
 import {Component} from "../../internal/types";
 
 const Wrapper = styled("header")({
     "-moz-user-select": "-moz-none",
     fontFamily: "Arial, Helvetica Neue, Helvetica, sans-serif",
-    fontSize: "1.7rem",
+    fontSize: size.title,
     fontWeight: 600,
     lineHeight: "2.9rem",
     padding: "4.5rem 1.4rem 4rem",
@@ -23,7 +23,7 @@ const Wrapper = styled("header")({
 const Subtitle = styled("div")({
     color: colors.textSecondarySmall,
     height: 0,
-    fontSize: "1rem",
+    fontSize: size.normal,
     transform: "translateY(-1rem)",
 });
 
