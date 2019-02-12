@@ -1,6 +1,6 @@
 import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 import {reset} from "../../internal/keyboard";
 import {localAddr} from "../../internal/client";
 
@@ -9,10 +9,10 @@ const Wrapper = styled("div")({
 });
 
 const ConstructionSign = styled("div")({
-    backgroundColor: "red",
+    backgroundColor: colors.error,
     borderRadius: "0.3rem",
     bottom: "2rem",
-    color: "white",
+    color: colors.backgroundPrimary,
     fontFamily: "monospace",
     fontWeight: 600,
     left: "2rem",
@@ -39,10 +39,10 @@ export const Page: Component<Props> = (props) => () => {
 
     if (addr === localAddr) {
         if (!allowLocalAddr) {
-            console.warn("local `addr` not allowed");
+            console.warn("local address not allowed");
             Component = Missing;
         }
-    } else if (addr && !addr.match(/^\w{6}$/)) {
+    } else if (addr && !addr.match(/^\w{6}$/g)) {
         console.warn("invalid `addr` in path");
         Component = Missing;
     }

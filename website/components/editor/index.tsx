@@ -1,5 +1,5 @@
 import {Component} from "../../internal/types";
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 
 const headerHeight = "2.9rem";
 const lineHeight = "1.6rem";
@@ -9,9 +9,9 @@ const Wrapper = styled("div")({});
 
 const Textarea = styled("textarea")({
     lineHeight,
-    backgroundColor: "#fafafa",
+    backgroundColor: colors.backgroundSecondary,
     border: "none",
-    color: "#333",
+    color: colors.textPrimary,
     fontFamily:
         "SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace",
     marginTop: headerHeight,
@@ -27,8 +27,9 @@ const Textarea = styled("textarea")({
 });
 
 const Lines = styled("div")({
+    "-moz-user-select": "none",
     height: 0,
-    color: "#ccc",
+    color: colors.textSecondarySmall,
     textAlign: "right",
     transform: `translateY(calc(${headerHeight} + ${editorPadding} + 1px))`,
     userSelect: "none",
@@ -37,7 +38,7 @@ const Lines = styled("div")({
 
 const Line = styled("div")({
     lineHeight,
-    backgroundColor: "#fafafa",
+    backgroundColor: colors.backgroundSecondary,
     paddingRight: "1rem",
 });
 

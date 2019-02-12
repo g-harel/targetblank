@@ -1,5 +1,5 @@
 import {client, localAddr} from "../../internal/client";
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 import {Signup} from "./signup";
 import {PageComponent} from "../../components/page";
 import {Header} from "../../components/header";
@@ -46,12 +46,12 @@ const Info = styled("div")({
 
 const Spacer = styled("div")({
     height: 0,
-    borderBottom: "1px solid #eee",
+    borderBottom: `1px solid ${colors.decoration}`,
     margin: "2rem",
 });
 
 const Try = styled("div")({
-    color: "#bbb",
+    color: colors.textSecondarySmall,
     fontWeight: 600,
     marginBottom: "1.9rem",
 });

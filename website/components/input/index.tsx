@@ -1,4 +1,4 @@
-import {styled, reset, placeholder} from "../../internal/style";
+import {styled, reset, placeholder, colors} from "../../internal/style";
 import {Component} from "../../internal/types";
 import {Icon} from "../icon";
 
@@ -21,7 +21,7 @@ const Form = styled("form")({
                 },
 
                 "& button": {
-                    color: "#555",
+                    color: colors.textPrimary,
                     cursor: "default",
                 },
             },
@@ -37,7 +37,7 @@ const Title = styled("span")({
 });
 
 const StyledInput = styled("input")({
-    border: "1px solid #bbb",
+    border: `1px solid ${colors.textSecondarySmall}`,
     borderRadius: "2px",
     boxShadow: "none",
     fontSize: "0.9rem",
@@ -49,12 +49,12 @@ const StyledInput = styled("input")({
 
     $nest: {
         "&:focus": {
-            boxShadow: "0 0 1px 1px #eee",
-            borderColor: "inherit",
+            boxShadow: `0 0 0.5px 1px ${colors.decoration}`,
+            borderColor: colors.textPrimary,
         },
 
         ...placeholder({
-            color: "#bbb",
+            color: colors.textSecondarySmall,
             opacity: 1,
         }),
     },
@@ -68,7 +68,7 @@ const Button = styled("button")({
     display: "inline-block",
     pointerEvents: "none",
     cursor: "default",
-    color: "#cfcfcf",
+    color: colors.textSecondarySmall,
     float: "right",
 
     $nest: {
@@ -81,7 +81,7 @@ const Button = styled("button")({
 });
 
 const Error = styled("div")({
-    color: "tomato",
+    color: colors.error,
     fontSize: "0.8rem",
     height: "1.15rem",
     margin: "0.35rem 1rem",

@@ -1,4 +1,4 @@
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 import {Component} from "../../internal/types";
 import {Icon} from "../../components/icon";
 
@@ -35,7 +35,7 @@ const TitleIcon = styled("div")({
 });
 
 const EmailLink = styled("a")({
-    color: "#888",
+    color: colors.textSecondarySmall,
     display: "inline-block",
     margin: "0.5rem 0 1rem",
 

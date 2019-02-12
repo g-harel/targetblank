@@ -1,7 +1,7 @@
 import {client} from "../../internal/client";
 import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {path, routes, redirect} from "../../routes";
@@ -9,12 +9,12 @@ import {path, routes, redirect} from "../../routes";
 const Wrapper = styled("div")({});
 
 const Recover = styled("div")({
-    color: "#aaa",
+    color: colors.textSecondarySmall,
     fontSize: "0.8rem",
     margin: "0 auto",
     paddingRight: "0.5rem",
     textAlign: "right",
-    transform: "translateY(-1.9rem)",
+    transform: "translateY(-2rem)",
     width: "16rem",
 });
 

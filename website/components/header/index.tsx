@@ -1,4 +1,4 @@
-import {styled} from "../../internal/style";
+import {colors, styled} from "../../internal/style";
 import {Component} from "../../internal/types";
 
 const Wrapper = styled("header")({
@@ -15,13 +15,13 @@ const Wrapper = styled("header")({
 
     $nest: {
         "&.muted": {
-            opacity: 0.4,
+            color: colors.textSecondaryLarge,
         },
     },
 });
 
 const Subtitle = styled("div")({
-    color: "#ccc",
+    color: colors.textSecondarySmall,
     height: 0,
     fontSize: "1rem",
     transform: "translateY(-1rem)",

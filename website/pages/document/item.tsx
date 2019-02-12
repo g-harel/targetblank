@@ -1,9 +1,9 @@
 import {Component, IPageEntry} from "../../internal/types";
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
-    color: "#333",
+    color: colors.textPrimary,
     fontWeight: 600,
     lineHeight: "1.6rem",
     padding: "0.6rem 0.3rem 0",
@@ -14,13 +14,13 @@ const Wrapper = styled("div")({
         },
 
         "&.highlighted": {
-            color: "yellowgreen",
+            color: colors.success,
         },
     },
 });
 
 const ItemTitle = styled("span")({
-    color: "#888",
+    color: colors.textSecondarySmall,
 });
 
 export interface Props {

@@ -27,8 +27,8 @@ labelled link [example.com]
 
 # Both the label and the link are optional.
 label without link
-[example.com]
-example.com
+[google.com]
+amazon.com
 
 # New groups are started using the group delimiter.
 ---

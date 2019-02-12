@@ -50,3 +50,15 @@ export const reset: types.NestedCSSProperties = {
 export const breakpoint = {
     sm: "@media(max-width: 768px)",
 };
+
+// Standardized colors.
+export const colors = {
+    success: "yellowgreen",
+    error: "tomato",
+    decoration: "#e8e8e8",
+    backgroundPrimary: "#ffffff",
+    backgroundSecondary: "#fafafa",
+    textPrimary: "#333333",
+    textSecondarySmall: "#767676",
+    textSecondaryLarge: "#949494",
+};

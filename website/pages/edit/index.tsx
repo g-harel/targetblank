@@ -1,6 +1,6 @@
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
-import {styled} from "../../internal/style";
+import {styled, colors} from "../../internal/style";
 import {Loading} from "../../components/loading";
 import {Anchor} from "../../components/anchor";
 import {Editor} from "../../components/editor";
@@ -12,14 +12,14 @@ const headerHeight = "2.9rem";
 const saveDelay = 1400;
 
 const Wrapper = styled("div")({
-    backgroundColor: "#fafafa",
+    backgroundColor: colors.backgroundSecondary,
     minHeight: "100%",
 });
 
 const Header = styled("header")({
     "-moz-user-select": "-moz-none",
-    backgroundColor: "#fff",
-    borderBottom: "1px solid #ddd",
+    backgroundColor: colors.backgroundPrimary,
+    borderBottom: `1px solid ${colors.decoration}`,
     height: headerHeight,
     padding: "0.85rem 1.4rem",
     position: "fixed",
@@ -36,7 +36,7 @@ const Done = styled("div")({
     $nest: {
         "&.disabled": {
             pointerEvents: "none",
-            color: "#ccc",
+            color: colors.textSecondaryLarge,
         },
 
         "&:hover": {
@@ -57,7 +57,7 @@ const Status = styled("div")({
 
     $nest: {
         "&.error": {
-            color: "tomato",
+            color: colors.error,
         },
     },
 });

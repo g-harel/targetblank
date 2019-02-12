@@ -1,6 +1,7 @@
 <!--
 
 TODO
+- standardize font sizes
 - preserve cursor position in editor
 - hint about typing for quick links
 - release

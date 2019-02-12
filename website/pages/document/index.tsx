@@ -1,6 +1,6 @@
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
-import {styled, breakpoint} from "../../internal/style";
+import {styled, breakpoint, colors} from "../../internal/style";
 import {Loading} from "../../components/loading";
 import {Item, Props as ItemProps} from "./item";
 import {Anchor} from "../../components/anchor";
@@ -51,7 +51,7 @@ const Groups = styled("div")({
 });
 
 const Group = styled("div")({
-    border: "1px solid #eee",
+    border: `1px solid ${colors.decoration}`,
     borderRadius: "2px",
     flexBasis: "30%",
     flexGrow: 0,
