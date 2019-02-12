@@ -105,13 +105,16 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     };
 
     // Navigate to the document page with "ctrl+enter".
+    let saving = false;
     keyboard((e) => {
-        if (e.ctrl && e.key === "Enter") {
+        if (!saving && e.ctrl && e.key === "Enter") {
             redirect(routes.document, addr!);
         }
     });
 
     return (data?: Data) => {
+        saving = !!data && data.status === "saving";
+
         // Response not yet received.
         if (!data) return <Loading />;
 

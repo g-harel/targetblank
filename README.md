@@ -1,7 +1,6 @@
 <!--
 
 TODO
-- don't allow navigation to document page while saving in edit page
 - preserve cursor position in editor
 - keyboard shortcuts for quick links
 - release
