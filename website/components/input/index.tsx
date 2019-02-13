@@ -34,6 +34,12 @@ const Title = styled("span")({
     fontWeight: 600,
     margin: "0.5rem 0.9rem 0.1rem",
     width: `${width}rem`,
+
+    $nest: {
+        "&.error": {
+            color: colors.error,
+        },
+    },
 });
 
 const StyledInput = styled("input")({
@@ -52,6 +58,10 @@ const StyledInput = styled("input")({
             borderColor: colors.textPrimary,
         },
 
+        "&.error": {
+            borderColor: colors.error,
+        },
+
         ...placeholder({
             color: colors.textSecondarySmall,
             opacity: 1,
@@ -62,13 +72,14 @@ const StyledInput = styled("input")({
 const Button = styled("button")({
     ...reset,
 
-    transform: "translate(-0.35rem, -2.15rem)",
+    transform: "translate(-0.5rem, -2.1rem)",
     padding: "0.45rem 0.7rem",
     display: "inline-block",
     pointerEvents: "none",
     cursor: "default",
     color: colors.textSecondaryLarge,
     float: "right",
+    lineHeight: 1,
 
     $nest: {
         "&.enabled": {
@@ -76,12 +87,17 @@ const Button = styled("button")({
             cursor: "pointer",
             color: "inherit",
         },
+
+        "&.error": {
+            color: colors.error,
+        },
     },
 });
 
 const Error = styled("div")({
     color: colors.error,
     fontSize: size.tiny,
+    fontWeight: 600,
     height: "1.15rem",
     margin: "0.35rem 1rem",
     width: `${width}rem`,
@@ -169,14 +185,15 @@ export const Input: Component<Props> = (props, update) => {
 
     return () => (
         <Form className={{loading}} onsubmit={onsubmit}>
-            {!!props.title && <Title>{props.title}</Title>}
+            {!!props.title && <Title className={{error}}>{props.title}</Title>}
             <StyledInput
                 type={props.type || "text"}
                 value={value}
                 oninput={oninput}
-                placeholder={` ${props.placeholder}`}
+                placeholder={`${props.placeholder}`}
+                className={{error}}
             />
-            <Button type="submit" className={{enabled: valid}}>
+            <Button type="submit" className={{error, enabled: valid}}>
                 {loading ? (
                     <Icon name="spinner" spin size={0.8} />
                 ) : (

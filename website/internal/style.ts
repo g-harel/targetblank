@@ -23,7 +23,7 @@ export const fonts = {
 
 // Standardized font sizes.
 export const size = {
-    tiny: "0.9rem",
+    tiny: "0.8rem",
     normal: "1rem",
     large: "1.2rem",
     title: "1.7rem",

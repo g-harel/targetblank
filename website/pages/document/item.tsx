@@ -14,7 +14,7 @@ const Wrapper = styled("div")({
         },
 
         "&.highlighted": {
-            color: colors.success,
+            color: colors.error,
         },
     },
 });
