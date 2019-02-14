@@ -26,19 +26,6 @@ const Footer = styled("footer")({
     textAlign: "center",
 });
 
-const ConstructionSign = styled("div")({
-    backgroundColor: colors.error,
-    borderRadius: "0.3rem",
-    bottom: "2rem",
-    color: colors.backgroundPrimary,
-    fontFamily: "monospace",
-    fontWeight: 600,
-    left: "2rem",
-    padding: "1rem",
-    position: "fixed",
-    textAlign: "center",
-});
-
 export interface PageProps {
     addr?: string;
     token?: string;
@@ -77,9 +64,6 @@ export const Page: Component<Props> = (props) => () => {
 
     return (
         <Wrapper>
-            {document.location.hostname !== "localhost" && (
-                <ConstructionSign>Under Construction</ConstructionSign>
-            )}
             <Content>
                 <Component addr={addr} token={token} />
             </Content>
