@@ -1,12 +1,10 @@
 <!--
 
 TODO
-- hint about typing for quick links
+- make colors warmer
+- list features in readme
 - release
-    - remove "under construction" banner
     - take application secrets from environment
-    - wipe database (possibly contains old formats)
-    - set up regular database backups
 
 requirements
 - text-based template for links, labels, categories, etc.
