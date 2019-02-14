@@ -1,4 +1,4 @@
-import {styled, colors, size, fonts} from "../../internal/style";
+import {styled, colors, size} from "../../internal/style";
 import {Component} from "../../internal/types";
 import {Icon} from "../../components/icon";
 

@@ -16,10 +16,10 @@ const Textarea = styled("textarea")({
     marginTop: headerHeight,
     minHeight: "100%",
     outline: "none",
-    paddingTop: editorPadding,
-    paddingBottom: 0,
+    overflowY: "hidden",
     paddingLeft: `calc(2.4 * ${editorPadding})`,
     paddingRight: `calc(2.4 * ${editorPadding})`,
+    paddingTop: editorPadding,
     resize: "none",
     whiteSpace: "pre",
     width: "100%",
@@ -94,8 +94,7 @@ export const Editor: Component<Props> = (props) => () => {
             if (editor) {
                 editor.style.height = "0";
                 editor.style.opacity = "1";
-                editor.style.height = `${editor.scrollHeight + 20}px`;
-                editor.style.marginBottom = "-20px";
+                editor.style.height = `${editor.scrollHeight}px`;
             }
         }),
     );

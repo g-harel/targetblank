@@ -1,11 +1,29 @@
 import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
-import {styled, colors} from "../../internal/style";
+import {styled, colors, size} from "../../internal/style";
 import {reset} from "../../internal/keyboard";
 import {localAddr} from "../../internal/client";
+import {Anchor} from "../anchor";
 
 const Wrapper = styled("div")({
-    height: "100%",
+    backgroundColor: colors.backgroundSecondary,
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100%",
+});
+
+const Content = styled("div")({
+    flex: "1 0 auto",
+});
+
+const Footer = styled("footer")({
+    backgroundColor: colors.backgroundSecondary,
+    color: colors.textSecondaryLarge,
+    flexShrink: 0,
+    fontSize: size.tiny,
+    fontWeight: 600,
+    padding: "1.5rem",
+    textAlign: "center",
 });
 
 const ConstructionSign = styled("div")({
@@ -62,7 +80,18 @@ export const Page: Component<Props> = (props) => () => {
             {document.location.hostname !== "localhost" && (
                 <ConstructionSign>Under Construction</ConstructionSign>
             )}
-            <Component addr={addr} token={token} />
+            <Content>
+                <Component addr={addr} token={token} />
+            </Content>
+            <Footer>
+                <Anchor href="/">home</Anchor>
+                &nbsp;&nbsp;&nbsp;
+                <Anchor href="https://github.com/g-harel/targetblank/#readme">
+                    about
+                </Anchor>
+                &nbsp;&nbsp;&nbsp;
+                <Anchor href="mailto:gabrielj.harel@gmail.com">contact</Anchor>
+            </Footer>
         </Wrapper>
     );
 };

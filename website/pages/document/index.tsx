@@ -47,7 +47,7 @@ const Groups = styled("div")({
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "center",
-    padding: "0 1rem 3rem",
+    padding: "0 1rem",
 });
 
 const Group = styled("div")({
