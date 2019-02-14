@@ -49,6 +49,8 @@ export interface Props {
 
 export const Editor: Component<Props> = (props) => () => {
     const onKeydown = (e: KeyboardEvent) => {
+        updateCursorPosition(e);
+
         // Swallow `ctrl+s` to prevent browser popup.
         const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
         if (ctrl && e.key === "s") {
@@ -68,6 +70,11 @@ export const Editor: Component<Props> = (props) => () => {
         }
     };
 
+    const updateCursorPosition = (e: any) => {
+        (window as any).editor = (window as any).editor || {};
+        (window as any).editor[props.id] = e.target.selectionStart;
+    };
+
     const onInput = (e: any) => {
         props.callback(e.target.value);
     };
@@ -76,10 +83,11 @@ export const Editor: Component<Props> = (props) => () => {
         requestAnimationFrame(() => {
             const editor = document.getElementById(props.id);
 
-            // Set focus to start of textarea.
+            // Set focus to last known position.
             if (editor && document.activeElement !== editor) {
                 editor.focus();
-                (editor as any).setSelectionRange(0, 0);
+                const position = ((window as any).editor || {})[props.id];
+                (editor as any).setSelectionRange(position, position);
             }
 
             // Update editor height to match content.
@@ -109,6 +117,7 @@ export const Editor: Component<Props> = (props) => () => {
                 value={props.value}
                 oninput={onInput}
                 onkeydown={onKeydown}
+                onclick={updateCursorPosition}
                 spellcheck={false}
             />
         </Wrapper>
