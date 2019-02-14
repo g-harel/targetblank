@@ -14,7 +14,7 @@ const Recover = styled("div")({
     margin: "0 auto",
     paddingRight: "0.5rem",
     textAlign: "right",
-    transform: "translateY(-2rem)",
+    transform: "translateY(-1.85rem)",
     width: "16rem",
 });
 

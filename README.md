@@ -1,10 +1,9 @@
 <!--
 
 TODO
-- make colors warmer
 - list features in readme
-- release
-    - take application secrets from environment
+- take application secrets from environment
+- continuous deployment (github actions?)
 
 requirements
 - text-based template for links, labels, categories, etc.

@@ -33,12 +33,12 @@ export const size = {
 export const colors = {
     success: "yellowgreen",
     error: "tomato",
-    decoration: "#e8e8e8",
+    decoration: "#e8e3e6",
     backgroundPrimary: "#ffffff",
-    backgroundSecondary: "#fafafa",
-    textPrimary: "#333333",
-    textSecondarySmall: "#767676",
-    textSecondaryLarge: "#949494",
+    backgroundSecondary: "#faf8f6",
+    textPrimary: "#332832",
+    textSecondarySmall: "#766873",
+    textSecondaryLarge: "#948c91",
 };
 
 // Button reset styles.
