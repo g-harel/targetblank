@@ -18,7 +18,6 @@ const Textarea = styled("textarea")({
     outline: "none",
     overflowY: "hidden",
     paddingLeft: `calc(2.4 * ${editorPadding})`,
-    paddingRight: `calc(2.4 * ${editorPadding})`,
     paddingTop: editorPadding,
     resize: "none",
     whiteSpace: "pre",
@@ -92,7 +91,6 @@ export const Editor: Component<Props> = (props) => () => {
 
             // Update editor height to match content.
             if (editor) {
-                editor.style.height = "0";
                 editor.style.opacity = "1";
                 editor.style.height = `${editor.scrollHeight}px`;
             }

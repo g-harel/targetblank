@@ -22,7 +22,7 @@ title=Hello World
 # These values are currently ignored, but may be used in the future.
 key=value
 
-# Groups contain entries containing a label and a link.
+# Groups hold entries containing a label and a link.
 labelled link [example.com]
 
 # Both the label and the link are optional.
@@ -33,7 +33,7 @@ amazon.com
 # New groups are started using the group delimiter.
 ---
 
-# Group entries can be nested indefinitely (using indentation).
+# Group entries can be nested using indentation.
 entry 1
     entry 2
         entry 3
