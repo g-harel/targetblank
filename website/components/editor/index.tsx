@@ -7,7 +7,7 @@ const editorPadding = "1.8rem";
 
 const Wrapper = styled("div")({});
 
-const Textarea = styled("textarea")({
+const StyledTextarea = styled("textarea")({
     lineHeight,
     backgroundColor: colors.backgroundSecondary,
     border: "none",
@@ -29,7 +29,7 @@ const Lines = styled("div")({
     height: 0,
     color: colors.textSecondarySmall,
     textAlign: "right",
-    transform: `translateY(calc(${headerHeight} + ${editorPadding} + 1px))`,
+    transform: `translateY(calc(${headerHeight} + ${editorPadding}))`,
     userSelect: "none",
     width: `calc(1.6 * ${editorPadding} + 1rem)`,
 });
@@ -108,7 +108,7 @@ export const Editor: Component<Props> = (props) => () => {
     return (
         <Wrapper>
             <Lines>{...lines.map((n) => <Line>{n}</Line>)}</Lines>
-            <Textarea
+            <StyledTextarea
                 id={props.id}
                 style="opacity: 0;"
                 value={props.value}

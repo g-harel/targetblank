@@ -2,6 +2,7 @@
 
 TODO
 - take application secrets from environment
+- scroll area in editor
 - continuous deployment (github actions?)
 
 -->
@@ -11,7 +12,7 @@ TODO
 [![Build Status](https://travis-ci.org/g-harel/targetblank.svg?branch=master)](https://travis-ci.org/g-harel/targetblank)
 [![Test Coverage](https://img.shields.io/codecov/c/github/g-harel/targetblank.svg)](https://codecov.io/gh/g-harel/targetblank)
 
-Browser tool to organize links. Pages are defined by a [markdown-like document](#document-format) which allows links to be labelled, nested and grouped.
+Browser tool to organize links. Pages are defined by a [structured document](#document-format) which allows links to be labelled, nested and grouped.
 
 - **Productivity focused** Follow links by typing their label and pressing enter.
 

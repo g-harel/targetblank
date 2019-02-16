@@ -6,7 +6,6 @@ import {localAddr} from "../../internal/client";
 import {Anchor} from "../anchor";
 
 const Wrapper = styled("div")({
-    backgroundColor: colors.backgroundSecondary,
     display: "flex",
     flexDirection: "column",
     minHeight: "100%",
@@ -17,7 +16,6 @@ const Content = styled("div")({
 });
 
 const Footer = styled("footer")({
-    backgroundColor: colors.backgroundSecondary,
     color: colors.textSecondaryLarge,
     flexShrink: 0,
     fontSize: size.tiny,

@@ -7,7 +7,7 @@ export const styled = (tag: string) => (s: types.NestedCSSProperties) => {
 
 // Standardized breakpoints.
 export const breakpoint = {
-    sm: "@media(max-width: 768px)",
+    sm: "@media(max-width: 720px)",
 };
 
 // Standardized font families.
