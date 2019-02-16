@@ -1,6 +1,5 @@
 GO=go
 NPM=npm
-ZIP=zip
 
 BUILD_DIR=.build
 FUNCS_DIR=functions
@@ -14,7 +13,6 @@ build:
 	@for NAME in $(FUNC_NAMES) ; do \
 		GOOS=linux GOARCH=amd64 \
 		$(GO) build -o "$(BUILD_DIR)/$$NAME" "./$(FUNCS_DIR)/$$NAME" ;\
-		$(ZIP) -j "$(BUILD_DIR)/$$NAME.zip" "$(BUILD_DIR)/$$NAME" ;\
 	done
 
 cov-report:

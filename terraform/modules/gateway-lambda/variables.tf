@@ -10,22 +10,12 @@ variable "http_method" {
   description = "HTTP method on the API Gateway resource (path) which the Lambda function is invoked on."
 }
 
-variable "file" {
-  description = "Local path to the Lambda function's deployment package."
+variable "bin" {
+  description = "Local path to the compiled Lambda function binary."
 }
 
 variable "name" {
   description = "Unique name given to the Lambda function."
-}
-
-variable "handler_name" {
-  description = "Lambda function's entrypoint"
-  default     = ""
-}
-
-variable "runtime" {
-  description = "An identifier for the Lmabda function's runtime."
-  default     = "go1.x"
 }
 
 variable "role" {
@@ -42,4 +32,3 @@ variable "memory" {
   description = "Lambda function's memory."
   default     = 128
 }
-

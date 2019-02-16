@@ -2,6 +2,7 @@
 
 TODO
 - take application secrets from environment
+- remove cmd directory
 - scroll area in editor
 - continuous deployment (github actions?)
 

@@ -1,5 +1,6 @@
 locals {
   domain_name = "targetblank.org"
+
   lambda_tags = {
     project = "targetblank"
   }
@@ -17,7 +18,7 @@ data "external" "manifest" {
 module "website" {
   source = "./modules/bucket-public"
 
-  aliases  = ["${local.domain_name}"]
+  aliases     = ["${local.domain_name}"]
   cert_arn    = "${aws_acm_certificate.ssl_cert.arn}"
   bucket_name = "targetblank-static-website"
 
@@ -34,7 +35,7 @@ module "authenticate" {
   source = "./modules/gateway-lambda"
 
   name = "authenticate"
-  file = ".build/authenticate.zip"
+  bin  = ".build/authenticate"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
@@ -47,7 +48,7 @@ module "create" {
   source = "./modules/gateway-lambda"
 
   name   = "create"
-  file   = ".build/create.zip"
+  bin    = ".build/create"
   role   = "${aws_iam_role.lambda.arn}"
   tags   = "${local.lambda_tags}"
   memory = 320
@@ -60,10 +61,10 @@ module "create" {
 module "passwd" {
   source = "./modules/gateway-lambda"
 
-  name   = "passwd"
-  file   = ".build/passwd.zip"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
+  name = "passwd"
+  bin  = ".build/passwd"
+  role = "${aws_iam_role.lambda.arn}"
+  tags = "${local.lambda_tags}"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
@@ -73,10 +74,10 @@ module "passwd" {
 module "read" {
   source = "./modules/gateway-lambda"
 
-  name   = "read"
-  file   = ".build/read.zip"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
+  name = "read"
+  bin  = ".build/read"
+  role = "${aws_iam_role.lambda.arn}"
+  tags = "${local.lambda_tags}"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
@@ -86,10 +87,10 @@ module "read" {
 module "reset" {
   source = "./modules/gateway-lambda"
 
-  name   = "reset"
-  file   = ".build/reset.zip"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
+  name = "reset"
+  bin  = ".build/reset"
+  role = "${aws_iam_role.lambda.arn}"
+  tags = "${local.lambda_tags}"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
@@ -99,10 +100,10 @@ module "reset" {
 module "update" {
   source = "./modules/gateway-lambda"
 
-  name   = "update"
-  file   = ".build/update.zip"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
+  name = "update"
+  bin  = ".build/update"
+  role = "${aws_iam_role.lambda.arn}"
+  tags = "${local.lambda_tags}"
 
   rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
   gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
@@ -113,7 +114,7 @@ module "validate" {
   source = "./modules/gateway-lambda"
 
   name = "validate"
-  file = ".build/validate.zip"
+  bin  = ".build/validate"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 

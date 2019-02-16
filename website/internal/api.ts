@@ -30,7 +30,7 @@ const send = (req: IRequest) => {
 
         // Time out request after interval.
         // All other resolve/rejects will have no effect.
-        setTimeout(() => reject("Timed out"), 5 * 1000);
+        setTimeout(() => reject("request timeout"), 5 * 1000);
 
         const res = await fetch(hostname + req.path, {
             headers,
@@ -47,7 +47,7 @@ const send = (req: IRequest) => {
         if (res.status > 400) {
             return res.text().then((message) => {
                 console.error(`Status Code Error\n${message}`);
-                reject("Something went wrong");
+                reject("something went wrong");
             });
         }
 

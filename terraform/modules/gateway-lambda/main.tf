@@ -1,3 +1,9 @@
+data "archive_file" "file" {
+  type        = "zip"
+  source_file = "${path.root}/${var.bin}"
+  output_path = "${var.bin}.zip"
+}
+
 resource "aws_api_gateway_method" "method" {
   rest_api_id   = "${var.rest_api_id}"
   resource_id   = "${var.gateway_resource_id}"
@@ -16,11 +22,11 @@ resource "aws_api_gateway_integration" "integration" {
 
 resource "aws_lambda_function" "function" {
   function_name    = "${var.name}"
-  filename         = "${var.file}"
-  source_code_hash = "${base64sha256(file("${var.file}"))}"
+  filename         = "${data.archive_file.file.output_path}"
+  source_code_hash = "${data.archive_file.file.output_base64sha256}"
   role             = "${var.role}"
-  handler          = "${var.handler_name == "" ? var.name : var.handler_name}"
-  runtime          = "${var.runtime}"
+  handler          = "${basename(var.bin)}"
+  runtime          = "go1.x"
   tags             = "${var.tags}"
   memory_size      = "${var.memory}"
 }

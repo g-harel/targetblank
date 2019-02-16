@@ -29,4 +29,3 @@ variable "allow_credentials" {
   type        = "string"
   default     = "true"
 }
-
