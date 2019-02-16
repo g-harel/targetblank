@@ -16,7 +16,7 @@ action "terraform-init" {
 }
 
 action "terraform-apply" {
-  uses = "hharnisc/terraform-github-actions-apply@v0.0.3-beta-02"
+  uses = "g-harel/terraform-github-actions-apply@d49255c"
   needs = ["terraform-init"]
   secrets = [
     "GITHUB_TOKEN",
