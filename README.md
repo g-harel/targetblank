@@ -2,9 +2,7 @@
 
 TODO
 - take application secrets from environment
-- remove cmd directory
 - scroll area in editor
-- continuous deployment (github actions?)
 
 -->
 
@@ -93,21 +91,9 @@ The built-in `go test` command can be used to validate changes to backend code.
 
 ## Deployment
 
-This project is hosted on AWS and uses Terraform to manage the cloud resources.
+This project is hosted on AWS and uses [Terraform](https://www.terraform.io/) to manage the cloud resources.
 
-To recompile Lambda Functions and transpile frontend assets:
-
-```bash
-$ make build
-```
-
-To update deployed resources after changes to the terraform files or to the source code:
-
-```bash
-$ terraform apply
-```
-
-_The AWS credentials will be [loaded from the environment](https://www.terraform.io/docs/providers/aws/#environment-variables)._
+The [deployment workflow](./.github/main.workflow) uses [GitHub Actions](https://developer.github.com/actions/) to package and apply changes on every change to master.
 
 ## License
 
