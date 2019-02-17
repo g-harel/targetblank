@@ -13,6 +13,66 @@ action "go build authenticate" {
   }
 }
 
+action "go build create" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/create ./functions/create"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+    GO111MODULE = "on"
+  }
+}
+
+action "go build passwd" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/passwd ./functions/passwd"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+    GO111MODULE = "on"
+  }
+}
+
+action "go build read" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/read ./functions/read"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+    GO111MODULE = "on"
+  }
+}
+
+action "go build reset" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/reset ./functions/reset"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+    GO111MODULE = "on"
+  }
+}
+
+action "go build update" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/update ./functions/update"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+    GO111MODULE = "on"
+  }
+}
+
+action "go build validate" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/validate ./functions/validate"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+    GO111MODULE = "on"
+  }
+}
+
 action "npm install" {
   uses = "actions/npm@59b64a5"
   args = "install"
@@ -40,6 +100,12 @@ action "terraform apply" {
   uses = "g-harel/terraform-github-actions-apply@d49255c"
   needs = [
     "go build authenticate",
+    "go build create",
+    "go build passwd",
+    "go build read",
+    "go build reset",
+    "go build update",
+    "go build validate",
     "npm build",
     "terraform init",
   ]
