@@ -3,8 +3,17 @@ workflow "Deploy" {
   resolves = ["terraform apply"]
 }
 
+action "go mod download" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go mod download"
+  env = {
+    GO111MODULE = "on"
+  }
+}
+
 action "go build authenticate" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/authenticate ./functions/authenticate"
   env = {
     GOOS = "linux"
@@ -15,6 +24,7 @@ action "go build authenticate" {
 
 action "go build create" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/create ./functions/create"
   env = {
     GOOS = "linux"
@@ -25,6 +35,7 @@ action "go build create" {
 
 action "go build passwd" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/passwd ./functions/passwd"
   env = {
     GOOS = "linux"
@@ -35,6 +46,7 @@ action "go build passwd" {
 
 action "go build read" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/read ./functions/read"
   env = {
     GOOS = "linux"
@@ -45,6 +57,7 @@ action "go build read" {
 
 action "go build reset" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/reset ./functions/reset"
   env = {
     GOOS = "linux"
@@ -55,6 +68,7 @@ action "go build reset" {
 
 action "go build update" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/update ./functions/update"
   env = {
     GOOS = "linux"
@@ -65,6 +79,7 @@ action "go build update" {
 
 action "go build validate" {
   uses = "cedrickring/golang-action@1.1.0"
+  needs = ["go mod download"]
   args = "go build -o .build/validate ./functions/validate"
   env = {
     GOOS = "linux"
