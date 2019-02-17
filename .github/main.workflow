@@ -1,6 +1,15 @@
 workflow "Deploy" {
   on = "push"
-  resolves = ["terraform-apply"]
+  resolves = ["terraform apply"]
+}
+
+action "go build authenticate" {
+  uses = "cedrickring/golang-action@1.1.0"
+  args = "go build -o .build/authenticate ./functions/authenticate"
+  env = {
+    GOOS = "linux"
+    GOARCH = "amd64"
+  }
 }
 
 action "npm install" {
@@ -28,7 +37,11 @@ action "terraform init" {
 
 action "terraform apply" {
   uses = "g-harel/terraform-github-actions-apply@d49255c"
-  needs = ["npm build", "terraform init"]
+  needs = [
+    "go build authenticate",
+    "npm build",
+    "terraform init",
+  ]
   secrets = [
     "GITHUB_TOKEN",
     "AWS_ACCESS_KEY_ID",
