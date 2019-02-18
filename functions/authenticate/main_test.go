@@ -6,11 +6,13 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/handler"
+	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
 
 func init() {
+	secretsKey = mockSecrets.Key
 	storagePageRead = mockStorage.PageRead
 }
 

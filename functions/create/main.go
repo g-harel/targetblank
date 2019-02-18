@@ -11,10 +11,12 @@ import (
 	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/internal/parse"
 	"github.com/g-harel/targetblank/services/mailer"
+	"github.com/g-harel/targetblank/services/secrets"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
 var mailerSend = mailer.Send
+var secretsKey = secrets.Key
 var storagePageCreate = storage.PageCreate
 
 var defaultDocument = `# Everything after a pound character (#), trailing whitespace and empty lines are ignored.
@@ -119,7 +121,12 @@ func Create(req *handler.Request, res *handler.Response) *handler.Error {
 		}
 	}
 
-	token, err := handler.CreateToken(true, page.Addr)
+	key, err := secretsKey()
+	if err != nil {
+		return handler.InternalErr("read secret key: %v", err)
+	}
+
+	token, err := handler.CreateToken(key, true, page.Addr)
 	if err != nil {
 		return handler.InternalErr("create token: %v", err)
 	}

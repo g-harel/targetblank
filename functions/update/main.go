@@ -4,9 +4,11 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/internal/parse"
+	"github.com/g-harel/targetblank/services/secrets"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
+var secretsKey = secrets.Key
 var storagePageUpdateDocument = storage.PageUpdateDocument
 
 // Update overrides the page document.
@@ -16,7 +18,12 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 		return funcErr
 	}
 
-	funcErr = req.Authenticate(addr)
+	key, err := secretsKey()
+	if err != nil {
+		return handler.InternalErr("read secret key: %v", err)
+	}
+
+	funcErr = req.Authenticate(key, addr)
 	if funcErr != nil {
 		return funcErr
 	}

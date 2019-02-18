@@ -3,18 +3,20 @@ package crypto
 import (
 	"encoding/base64"
 	"testing"
+
+	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
 )
 
 func TestEncrypt(t *testing.T) {
 	t.Run("should not produce the same result for the same input", func(t *testing.T) {
 		payload := "test payload"
 
-		tkn1, err := Encrypt([]byte(payload))
+		tkn1, err := Encrypt(mockSecrets.RawKey, []byte(payload))
 		if err != nil {
 			t.Fatalf("Error creating ciphertext: %v", err)
 		}
 
-		tkn2, err := Encrypt([]byte(payload))
+		tkn2, err := Encrypt(mockSecrets.RawKey, []byte(payload))
 		if err != nil {
 			t.Fatalf("Error creating ciphertext: %v", err)
 		}
@@ -32,7 +34,7 @@ func TestEncrypt(t *testing.T) {
 		}
 
 		for _, payload := range payloads {
-			tkn, err := Encrypt([]byte(payload))
+			tkn, err := Encrypt(mockSecrets.RawKey, []byte(payload))
 			if err != nil {
 				t.Fatalf("Error creating ciphertext: %v", err)
 			}
@@ -54,12 +56,12 @@ func TestDecrypt(t *testing.T) {
 		}
 
 		for _, payload := range payloads {
-			tkn, err := Encrypt([]byte(payload))
+			tkn, err := Encrypt(mockSecrets.RawKey, []byte(payload))
 			if err != nil {
 				t.Fatalf("Error creating ciphertext: %v", err)
 			}
 
-			pld, err := Decrypt(tkn)
+			pld, err := Decrypt(mockSecrets.RawKey, tkn)
 			if err != nil {
 				t.Fatalf("Error reading ciphertext: %v", err)
 			}

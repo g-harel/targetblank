@@ -1,11 +1,3 @@
-<!--
-
-TODO
-- take application secrets from environment
-- scroll area in editor
-
--->
-
 # [targetblank](https://targetblank.org)
 
 [![Build Status](https://travis-ci.org/g-harel/targetblank.svg?branch=master)](https://travis-ci.org/g-harel/targetblank)

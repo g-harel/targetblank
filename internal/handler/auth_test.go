@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"testing"
 	"time"
+
+	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
 )
 
 func init() {
@@ -15,12 +17,12 @@ func TestCreateToken(t *testing.T) {
 	t.Run("should not produce the same token for the same input", func(t *testing.T) {
 		secret := "test secret"
 
-		tkn1, err := CreateToken(false, secret)
+		tkn1, err := CreateToken(mockSecrets.RawKey, false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
-		tkn2, err := CreateToken(false, secret)
+		tkn2, err := CreateToken(mockSecrets.RawKey, false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
@@ -38,7 +40,7 @@ func TestCreateToken(t *testing.T) {
 		}
 
 		for _, secret := range secrets {
-			tkn, funcErr := CreateToken(false, secret)
+			tkn, funcErr := CreateToken(mockSecrets.RawKey, false, secret)
 			if funcErr != nil {
 				t.Fatalf("Unexpected error creating token: %v", funcErr)
 			}
@@ -57,13 +59,13 @@ func TestAuthenticate(t *testing.T) {
 			Headers: map[string]string{},
 		}
 		req.Headers[AuthHeader] = AuthType + " " + token
-		return req.Authenticate(secret)
+		return req.Authenticate(mockSecrets.RawKey, secret)
 	}
 
 	t.Run("should produce an error if the secret is wrong", func(t *testing.T) {
 		secret := "s3cr3t"
 
-		tkn, err := CreateToken(false, secret)
+		tkn, err := CreateToken(mockSecrets.RawKey, false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
@@ -72,7 +74,7 @@ func TestAuthenticate(t *testing.T) {
 			t.Fatalf("Unexpected error when validating with a correct secret: %v", funcErr)
 		}
 
-		tkn, err = CreateToken(false, secret)
+		tkn, err = CreateToken(mockSecrets.RawKey, false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
@@ -85,7 +87,7 @@ func TestAuthenticate(t *testing.T) {
 	t.Run("should reject expired tokens", func(t *testing.T) {
 		secret := "secret"
 
-		tkn, err := CreateToken(false, secret)
+		tkn, err := CreateToken(mockSecrets.RawKey, false, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
@@ -106,7 +108,7 @@ func TestAuthenticate(t *testing.T) {
 	t.Run("should use short expiry for restricted tokens", func(t *testing.T) {
 		secret := "SeCrEt"
 
-		tkn, err := CreateToken(true, secret)
+		tkn, err := CreateToken(mockSecrets.RawKey, true, secret)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}

@@ -10,8 +10,7 @@ resource "aws_iam_role" "lambda" {
       "Principal": {
         "Service": "lambda.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
     }
   ]
 }
@@ -51,8 +50,7 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
     {
       "Action": "dynamodb:*",
       "Resource": "${aws_dynamodb_table.pages.arn}",
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
     }
   ]
 }
@@ -70,8 +68,27 @@ resource "aws_iam_role_policy" "lambda_ses" {
     {
       "Action": "ses:*",
       "Resource": "*",
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "lambda_ssm" {
+  name = "ssm-policy"
+  role = "${aws_iam_role.lambda.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Resource": "*",
+      "Effect": "Allow"
     }
   ]
 }

@@ -6,14 +6,22 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"io"
 )
 
-var key = []byte("super good secret key that needs to be 32 characters long")[:32] // TODO
+// Deterministically converts an arbitrary string into a 32 byte slice.
+func clean(key string) []byte {
+	if len(key) > 32 {
+		return []byte(key[:32])
+	}
+
+	return []byte(fmt.Sprintf("%-32v", key))
+}
 
 // Encrypt encrypts the input bytes into a base64 encoded string.
-func Encrypt(payload []byte) (string, error) {
-	block, err := aes.NewCipher(key)
+func Encrypt(key string, payload []byte) (string, error) {
+	block, err := aes.NewCipher(clean(key))
 	if err != nil {
 		return "", err
 	}
@@ -35,13 +43,13 @@ func Encrypt(payload []byte) (string, error) {
 }
 
 // Decrypt attempts to decrypt the input string.
-func Decrypt(token string) ([]byte, error) {
+func Decrypt(key string, token string) ([]byte, error) {
 	ciphertext, err := base64.URLEncoding.DecodeString(token)
 	if err != nil {
 		return []byte{}, err
 	}
 
-	block, err := aes.NewCipher(key)
+	block, err := aes.NewCipher(clean(key))
 	if err != nil {
 		return []byte{}, err
 	}

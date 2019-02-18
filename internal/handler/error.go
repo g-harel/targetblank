@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/g-harel/targetblank/internal/crypto"
 )
 
 // Common client error messages.
@@ -42,16 +40,8 @@ func InternalErr(format string, a ...interface{}) *Error {
 
 	log.Printf("ERROR: %v\n", err)
 
-	// Message payload is encrypted using the application secret.
-	// Allows the message to be recovered for debugging without exposing internals.
-	msg, err := crypto.Encrypt([]byte(err.Error()))
-	if err != nil {
-		msg = ErrGeneric
-		log.Printf("ERROR*: %v\n", err)
-	}
-
 	return &Error{
-		error: errors.New(msg),
+		error: errors.New(ErrGeneric),
 		code:  http.StatusInternalServerError,
 	}
 }

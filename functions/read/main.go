@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/handler"
+	"github.com/g-harel/targetblank/services/secrets"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
+var secretsKey = secrets.Key
 var storagePageRead = storage.PageRead
 
 // Read responds with a parsed version of the page document.
@@ -25,7 +27,12 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 	}
 
 	if !page.Published {
-		funcErr = req.Authenticate(addr)
+		key, err := secretsKey()
+		if err != nil {
+			return handler.InternalErr("read secret key: %v", err)
+		}
+
+		funcErr = req.Authenticate(key, addr)
 		if funcErr != nil {
 			// Page existence is kept hidden.
 			return handler.ClientErr(handler.ErrPageNotFound)

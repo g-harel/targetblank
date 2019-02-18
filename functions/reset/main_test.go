@@ -8,12 +8,14 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/handler"
 	mockMailer "github.com/g-harel/targetblank/services/mailer/mock"
+	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
 
 func init() {
 	mailerSend = mockMailer.Send
+	secretsKey = mockSecrets.Key
 	storagePageRead = mockStorage.PageRead
 }
 

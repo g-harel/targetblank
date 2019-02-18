@@ -6,11 +6,13 @@ import (
 
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/handler"
+	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
 
 func init() {
+	secretsKey = mockSecrets.Key
 	storagePageUpdatePassword = mockStorage.PageUpdatePassword
 }
 
@@ -78,7 +80,7 @@ func TestPasswd(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handler.CreateToken(false, addr)
+		token, err := handler.CreateToken(mockSecrets.RawKey, false, addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}

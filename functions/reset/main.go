@@ -7,9 +7,11 @@ import (
 	"github.com/g-harel/targetblank/internal/crypto"
 	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/mailer"
+	"github.com/g-harel/targetblank/services/secrets"
 	"github.com/g-harel/targetblank/services/storage"
 )
 
+var secretsKey = secrets.Key
 var mailerSend = mailer.Send
 var storagePageRead = storage.PageRead
 
@@ -36,7 +38,12 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.ClientErr(handler.ErrPageNotFound)
 	}
 
-	token, err := handler.CreateToken(true, addr)
+	key, err := secretsKey()
+	if err != nil {
+		return handler.InternalErr("read secret key: %v", err)
+	}
+
+	token, err := handler.CreateToken(key, true, addr)
 	if err != nil {
 		return handler.InternalErr("create token: %v", err)
 	}

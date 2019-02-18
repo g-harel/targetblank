@@ -5,11 +5,13 @@ import (
 	"testing"
 
 	"github.com/g-harel/targetblank/internal/handler"
+	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
 	"github.com/g-harel/targetblank/services/storage"
 	mockStorage "github.com/g-harel/targetblank/services/storage/mock"
 )
 
 func init() {
+	secretsKey = mockSecrets.Key
 	storagePageRead = mockStorage.PageRead
 }
 
@@ -41,7 +43,7 @@ func TestRead(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handler.CreateToken(false, page.Addr)
+		token, err := handler.CreateToken(mockSecrets.RawKey, false, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}

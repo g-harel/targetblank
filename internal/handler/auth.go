@@ -24,7 +24,7 @@ type tokenPayload struct {
 }
 
 // CreateToken creates a new authentication token.
-func CreateToken(short bool, secret string) (string, error) {
+func CreateToken(key string, short bool, secret string) (string, error) {
 	expire := time.Now()
 	if short {
 		expire = expire.Add(shortTTL)
@@ -40,7 +40,7 @@ func CreateToken(short bool, secret string) (string, error) {
 		return "", fmt.Errorf("marshall token: %v", err)
 	}
 
-	t, err := crypto.Encrypt(payload)
+	t, err := crypto.Encrypt(key, payload)
 	if err != nil {
 		return "", fmt.Errorf("encrypt token: %v", err)
 	}
@@ -49,7 +49,7 @@ func CreateToken(short bool, secret string) (string, error) {
 }
 
 // Authenticate validates the token in the request.
-func (r *Request) Authenticate(secret string) *Error {
+func (r *Request) Authenticate(key, secret string) *Error {
 	raw := r.Headers[AuthHeader]
 	if raw == "" {
 		return ClientErr("missing authorization (no \"%v\" header)", AuthHeader)
@@ -60,7 +60,7 @@ func (r *Request) Authenticate(secret string) *Error {
 		return ClientErr("invalid authorization")
 	}
 
-	payload, err := crypto.Decrypt(values[1])
+	payload, err := crypto.Decrypt(key, values[1])
 	if err != nil {
 		return ClientErr("invalid authorization")
 	}
