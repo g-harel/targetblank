@@ -4,6 +4,7 @@ import {styled, colors, fonts} from "../../internal/style";
 const headerHeight = "2.9rem";
 const lineHeight = "1.6rem";
 const editorPadding = "1.8rem";
+const tab = "    ";
 
 const Wrapper = styled("div")({});
 
@@ -63,8 +64,24 @@ export const Editor: Component<Props> = (props) => () => {
             const pos = target.selectionStart;
             const before = target.value.substring(0, target.selectionStart);
             const after = target.value.substring(target.selectionEnd);
-            target.value = `${before}    ${after}`;
-            target.selectionEnd = pos + 4;
+
+            if (e.shiftKey) {
+                const beforeLines = before.split("\n");
+                if (beforeLines.length > 0) {
+                    const lastLineIndex = beforeLines.length - 1;
+                    const lastLine = beforeLines[lastLineIndex];
+                    if (lastLine.startsWith(tab)) {
+                        beforeLines[lastLineIndex] = lastLine.substr(tab.length);
+                    }
+                }
+                target.value = `${beforeLines.join("\n")}${after}`;
+                target.selectionStart = pos - 4;
+                target.selectionEnd = pos - 4;
+            } else {
+                target.value = `${before}${tab}${after}`;
+                target.selectionEnd = pos + 4;
+            }
+
             props.callback(target.value);
         }
     };
