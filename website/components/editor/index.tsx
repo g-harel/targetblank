@@ -72,11 +72,11 @@ export const Editor: Component<Props> = (props) => () => {
                     const lastLine = beforeLines[lastLineIndex];
                     if (lastLine.startsWith(tab)) {
                         beforeLines[lastLineIndex] = lastLine.substr(tab.length);
+                        target.value = `${beforeLines.join("\n")}${after}`;
+                        target.selectionStart = pos - 4;
+                        target.selectionEnd = pos - 4;
                     }
                 }
-                target.value = `${beforeLines.join("\n")}${after}`;
-                target.selectionStart = pos - 4;
-                target.selectionEnd = pos - 4;
             } else {
                 target.value = `${before}${tab}${after}`;
                 target.selectionEnd = pos + 4;
