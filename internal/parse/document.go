@@ -215,7 +215,7 @@ func (d *document) Enter(depth int, link, label string) error {
 	if label == "" {
 		label = link
 	}
-	match, err := regexp.MatchString(`^\S+((\.|:)\S+)+(\/\S*)*$`, label)
+	match, err := regexp.MatchString(`^\S+(\/|\.|:)\S+$`, label)
 	if link == "" && err == nil && match {
 		link = label
 	}

@@ -192,6 +192,7 @@ func TestDocumentEnter(t *testing.T) {
 		expectURL(true, "www.example.com")
 		expectURL(true, "example.com?q=test")
 		expectURL(true, "localhost:8080")
+		expectURL(true, "test/url")
 		expectURL(false, "example: Example")
 		expectURL(false, "ExampleExample")
 		expectURL(false, "Example example example")
