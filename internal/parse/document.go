@@ -3,6 +3,7 @@ package parse
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 )
@@ -218,6 +219,15 @@ func (d *document) Enter(depth int, link, label string) error {
 	match, err := regexp.MatchString(`^\S+(\/|\.|:)\S+$`, label)
 	if link == "" && err == nil && match {
 		link = label
+	}
+
+	if link != "" {
+		u, err := url.Parse(label)
+		isMissingScheme := err == nil && (u.Scheme == "" || u.Scheme == "localhost")
+		isNotRelative := !strings.HasPrefix(label, "/")
+		if isMissingScheme && isNotRelative {
+			link = "http://" + link
+		}
 	}
 
 	entry := &documentEntry{

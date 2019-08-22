@@ -31,11 +31,7 @@ export interface Props {
 export const Item: Component<Props> = (props) => () => {
     let Title = null;
     if (props.item.link) {
-        let link = props.item.link;
-        if (!link.startsWith("http") && link.includes("/") && link[0] !== "/") {
-            link = `http://${link}`;
-        }
-        Title = <Anchor href={link}>{props.item.label}</Anchor>;
+        Title = <Anchor href={props.item.link}>{props.item.label}</Anchor>;
     } else {
         Title = <ItemTitle>{props.item.label}</ItemTitle>;
     }
