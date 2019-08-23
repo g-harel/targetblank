@@ -174,25 +174,47 @@ func TestDocumentEnter(t *testing.T) {
 	})
 
 	t.Run("should use label as link if it resembles a url", func(t *testing.T) {
-		expectURL := func(label string, link string) {
+		expectURL := func(label string, expectedLink bool) {
 			doc := newDocument()
 			doc.Enter(0, "", label)
-			if doc.Groups[0].Entries[0].Link != link {
+			if (doc.Groups[0].Entries[0].Link != "") != expectedLink {
 				t.Run(label, func(t *testing.T) {
-					t.Errorf("Actual and expected link values do not match: \n\"%v\"\n\"%v\"", doc.Groups[0].Entries[0].Link, label)
+					if expectedLink {
+						t.Errorf("Label should have been interpreted as link: \"%v\"", label)
+					} else {
+						t.Errorf("Label should not have been interpreted as link: \n\"%v\"\n\"%v\"", label, doc.Groups[0].Entries[0].Link)
+					}
 				})
 			}
 		}
 
-		expectURL("https://example.com/test", "https://example.com/test")
-		expectURL("www.example.com", "http://www.example.com")
-		expectURL("example.com?q=test", "http://example.com?q=test")
-		expectURL("localhost:8080", "http://localhost:8080")
-		expectURL("file:///home/test/", "file:///home/test/")
-		expectURL("test/url", "http://test/url")
-		expectURL("example: Example", "")
-		expectURL("ExampleExample", "")
-		expectURL("Example example example", "")
+		expectURL("https://example.com/test", true)
+		expectURL("www.example.com", true)
+		expectURL("example.com?q=test", true)
+		expectURL("localhost:8080", true)
+		expectURL("file:///home/test/", true)
+		expectURL("test/url", true)
+		expectURL("example: Example", false)
+		expectURL("ExampleExample", false)
+		expectURL("Example example example", false)
+	})
+
+	t.Run("should correctly add protocol to links", func(t *testing.T) {
+		expectLink := func(link string, out string) {
+			doc := newDocument()
+			doc.Enter(0, link, "")
+			if doc.Groups[0].Entries[0].Link != out {
+				t.Errorf("Actual and expected link do not match: \n\"%v\"\n\"%v\"", doc.Groups[0].Entries[0].Link, out)
+			}
+		}
+
+		expectLink("https://example.com/test", "https://example.com/test")
+		expectLink("www.example.com", "http://www.example.com")
+		expectLink("http://example.com?q=test", "http://example.com?q=test")
+		expectLink("localhost:8080", "http://localhost:8080")
+		expectLink("file:///home/test/", "file:///home/test/")
+		expectLink("test/url", "http://test/url")
+		expectLink("/test", "/test")
 	})
 
 	t.Run("should correctly append entries", func(t *testing.T) {
