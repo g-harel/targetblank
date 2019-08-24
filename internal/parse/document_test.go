@@ -202,7 +202,7 @@ func TestDocumentEnter(t *testing.T) {
 	t.Run("should correctly add protocol to links", func(t *testing.T) {
 		expectLink := func(link string, out string) {
 			doc := newDocument()
-			doc.Enter(0, link, "")
+			doc.Enter(0, link, "test")
 			if doc.Groups[0].Entries[0].Link != out {
 				t.Errorf("Actual and expected link do not match: \n\"%v\"\n\"%v\"", doc.Groups[0].Entries[0].Link, out)
 			}

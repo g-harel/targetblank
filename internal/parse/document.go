@@ -222,9 +222,9 @@ func (d *document) Enter(depth int, link, label string) error {
 	}
 
 	if link != "" {
-		u, err := url.Parse(label)
+		u, err := url.Parse(link)
 		isMissingScheme := err == nil && (u.Scheme == "" || u.Scheme == "localhost")
-		isNotRelative := !strings.HasPrefix(label, "/")
+		isNotRelative := !strings.HasPrefix(link, "/")
 		if isMissingScheme && isNotRelative {
 			link = "http://" + link
 		}
