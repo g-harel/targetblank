@@ -1,0 +1,105 @@
+on: push
+name: Deploy
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@master
+
+    - name: terraform init
+      uses: hashicorp/terraform-github-actions/init@v0.1.2
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TF_ACTION_WORKING_DIR: .
+
+    - name: npm install
+      uses: actions/npm@59b64a5
+      with:
+        args: install
+
+    - name: go mod download
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+      with:
+        args: go mod download
+
+    - name: npm build
+      uses: actions/npm@59b64a5
+      with:
+        args: run build
+
+    - name: go build validate
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/validate ./functions/validate
+
+    - name: go build update
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/update ./functions/update
+
+    - name: go build reset
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/reset ./functions/reset
+
+    - name: go build read
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/read ./functions/read
+
+    - name: go build passwd
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/passwd ./functions/passwd
+
+    - name: go build create
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/create ./functions/create
+
+    - name: go build authenticate
+      uses: cedrickring/golang-action@1.1.0
+      env:
+        GO111MODULE: "on"
+        GOARCH: amd64
+        GOOS: linux
+      with:
+        args: go build -o .build/authenticate ./functions/authenticate
+
+    - name: terraform apply
+      uses: g-harel/terraform-github-actions-apply@d49255c
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TF_ACTION_WORKING_DIR: .
