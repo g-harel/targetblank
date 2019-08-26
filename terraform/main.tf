@@ -19,7 +19,7 @@ module "website" {
   source = "./modules/bucket-public"
 
   aliases     = ["${local.domain_name}"]
-  cert_arn    = "${aws_acm_certificate.ssl_cert.arn}"
+  cert_arn    = "${aws_acm_certificate_validation.cert.certificate_arn}"
   bucket_name = "targetblank-static-website"
 
   source_dir    = ".build"
