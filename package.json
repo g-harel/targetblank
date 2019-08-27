@@ -2,7 +2,8 @@
   "scripts": {
     "build": "parcel build website/index.html -d .build --no-source-maps",
     "dev": "parcel -p 1324 -d .dist website/index.html",
-    "test": "run-s fmt lint check build",
+    "test": "run-s fmt lint check test:unit build",
+    "test:unit": "jest",
     "lint": "tslint --project tsconfig.json website/**/*.ts --fix",
     "check": "tsc -noEmit",
     "fmt": "prettier --list-different --write --ignore-path .gitignore \"**/*.{js,ts,tsx}\""
@@ -13,13 +14,16 @@
     "typestyle": "^2.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.18",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
+    "jest": "^24.9.0",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.11.0",
     "parcel-plugin-bundle-manifest": "^0.2.0",
     "prettier": "^1.16.4",
+    "ts-jest": "^24.0.2",
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.9.2",
     "typescript": "^3.3.1"
@@ -29,5 +33,9 @@
     "trailingComma": "all",
     "bracketSpacing": false,
     "arrowParens": "always"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
