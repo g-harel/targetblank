@@ -1,10 +1,10 @@
 import {Component} from "../../internal/types";
 import {styled, colors, fonts} from "../../internal/style";
+import {LineEditor} from "./lines";
 
 const headerHeight = "2.9rem";
 const lineHeight = "1.6rem";
 const editorPadding = "1.8rem";
-const tab = "    ";
 
 const Wrapper = styled("div")({});
 
@@ -61,28 +61,21 @@ export const Editor: Component<Props> = (props) => () => {
         if (e.key === "Tab") {
             e.preventDefault();
             const target = (e.target as any) as HTMLTextAreaElement;
-            const pos = target.selectionStart;
-            const before = target.value.substring(0, target.selectionStart);
-            const after = target.value.substring(target.selectionEnd);
+            const lineEditor = new LineEditor(
+                target.value,
+                target.selectionStart,
+                target.selectionEnd,
+            );
 
             if (e.shiftKey) {
-                const beforeLines = before.split("\n");
-                if (beforeLines.length > 0) {
-                    const lastLineIndex = beforeLines.length - 1;
-                    const lastLine = beforeLines[lastLineIndex];
-                    if (lastLine.startsWith(tab)) {
-                        beforeLines[lastLineIndex] = lastLine.substr(
-                            tab.length,
-                        );
-                        target.value = `${beforeLines.join("\n")}${after}`;
-                        target.selectionStart = pos - 4;
-                        target.selectionEnd = pos - 4;
-                    }
-                }
+                lineEditor.unindent();
             } else {
-                target.value = `${before}${tab}${after}`;
-                target.selectionEnd = pos + 4;
+                lineEditor.indent();
             }
+
+            target.value = lineEditor.toString();
+            target.selectionStart = lineEditor.getSelectionStart();
+            target.selectionEnd = lineEditor.getSelectionEnd();
 
             props.callback(target.value);
         }
