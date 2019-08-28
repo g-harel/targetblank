@@ -1,6 +1,6 @@
 import {Component} from "../../internal/types";
 import {styled, colors, fonts} from "../../internal/style";
-import {LineEditor} from "./lines";
+import {FileEditor} from "./file";
 
 const headerHeight = "2.9rem";
 const lineHeight = "1.6rem";
@@ -61,7 +61,7 @@ export const Editor: Component<Props> = (props) => () => {
         if (e.key === "Tab") {
             e.preventDefault();
             const target = (e.target as any) as HTMLTextAreaElement;
-            const lineEditor = new LineEditor(
+            const lineEditor = new FileEditor(
                 target.value,
                 target.selectionStart,
                 target.selectionEnd,
@@ -73,7 +73,7 @@ export const Editor: Component<Props> = (props) => () => {
                 lineEditor.indent();
             }
 
-            target.value = lineEditor.toString();
+            target.value = lineEditor.getContent();
             target.selectionStart = lineEditor.getSelectionStart();
             target.selectionEnd = lineEditor.getSelectionEnd();
 
