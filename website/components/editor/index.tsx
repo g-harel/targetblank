@@ -47,6 +47,9 @@ export interface Props {
     value: string;
 }
 
+// TODO only call callback if content changes.
+// TODO less duplicate code to handle keyboard shortcuts
+// TODO Add shortcuts to docs (readme + new page)
 export const Editor: Component<Props> = (props) => () => {
     const onKeydown = (e: KeyboardEvent) => {
         updateCursorPosition(e);
@@ -57,25 +60,48 @@ export const Editor: Component<Props> = (props) => () => {
             e.preventDefault();
         }
 
-        // Insert spaces when tab is pressed.
+        // Modify indentation when tab is pressed.
         if (e.key === "Tab") {
             e.preventDefault();
             const target = (e.target as any) as HTMLTextAreaElement;
-            const lineEditor = new FileEditor(
+            const fileEditor = new FileEditor(
                 target.value,
                 target.selectionStart,
                 target.selectionEnd,
             );
 
             if (e.shiftKey) {
-                lineEditor.unindent();
+                fileEditor.unindent();
             } else {
-                lineEditor.indent();
+                fileEditor.indent();
             }
 
-            target.value = lineEditor.getContent();
-            target.selectionStart = lineEditor.getSelectionStart();
-            target.selectionEnd = lineEditor.getSelectionEnd();
+            target.value = fileEditor.getContent();
+            target.selectionStart = fileEditor.getSelectionStart();
+            target.selectionEnd = fileEditor.getSelectionEnd();
+
+            props.callback(target.value);
+        }
+
+        // Move lines using alt + arrows.
+        if (e.altKey && (e.keyCode === 38 || e.keyCode === 40)) {
+            e.preventDefault();
+            const target = (e.target as any) as HTMLTextAreaElement;
+            const fileEditor = new FileEditor(
+                target.value,
+                target.selectionStart,
+                target.selectionEnd,
+            );
+
+            if (e.keyCode === 38) {
+                fileEditor.moveUp();
+            } else {
+                fileEditor.moveDown();
+            }
+
+            target.value = fileEditor.getContent();
+            target.selectionStart = fileEditor.getSelectionStart();
+            target.selectionEnd = fileEditor.getSelectionEnd();
 
             props.callback(target.value);
         }

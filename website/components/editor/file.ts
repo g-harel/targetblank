@@ -1,6 +1,9 @@
 const INDENT = "    ";
 const INDENT_LENGTH = INDENT.length;
 
+// Helper class used with methods that edit blocks of text.
+// Instances of the class are stateful and will maintain file contents and
+// cursor positions.
 export class FileEditor {
     private lines: string[];
     private selectionStart: number;
@@ -8,13 +11,13 @@ export class FileEditor {
 
     constructor(content: string, selectionStart: number, selectionEnd: number) {
         // Selection indecies are checked on creation.
-        // It is assumed methods that modify the file will keep the selection valid.
-        if (selectionStart >= content.length || selectionStart < 0) {
+        // Methods that modify the file will keep the selection valid.
+        if (selectionStart > content.length || selectionStart < 0) {
             throw new Error(
                 "FileEditor: selection start index is out of range.",
             );
         }
-        if (selectionEnd >= content.length || selectionEnd < 0) {
+        if (selectionEnd > content.length || selectionEnd < 0) {
             throw new Error("FileEditor: selection end index is out of range.");
         }
         if (selectionStart > selectionEnd) {
@@ -100,6 +103,44 @@ export class FileEditor {
         if (selectionEndLine !== this.lineByPos(this.selectionEnd)) {
             this.selectionEnd = this.posByLine(selectionEndLine);
         }
+    }
+
+    // Moves the currently selected lines up by one.
+    public moveUp() {
+        const selectionStartLine = this.lineByPos(this.selectionStart);
+        const selectionEndLine = this.lineByPos(this.selectionEnd);
+        if (selectionStartLine === 0) return;
+
+        // Swap lines in place till the entire selection is moved.
+        for (let i = selectionStartLine; i <= selectionEndLine; i++) {
+            const temp = this.lines[i];
+            this.lines[i] = this.lines[i - 1];
+            this.lines[i - 1] = temp;
+        }
+
+        // Modify selection indecies.
+        const movedChars = this.lines[selectionEndLine].length + 1;
+        this.selectionStart -= movedChars;
+        this.selectionEnd -= movedChars;
+    }
+
+    // Moves the currently selected lines down by one.
+    public moveDown() {
+        const selectionStartLine = this.lineByPos(this.selectionStart);
+        const selectionEndLine = this.lineByPos(this.selectionEnd);
+        if (selectionEndLine >= this.lines.length) return;
+
+        // Swap lines in place till the entire selection is moved.
+        for (let i = selectionEndLine; i >= selectionStartLine; i--) {
+            const temp = this.lines[i];
+            this.lines[i] = this.lines[i + 1];
+            this.lines[i + 1] = temp;
+        }
+
+        // Modify selection indecies.
+        const movedChars = this.lines[selectionStartLine].length + 1;
+        this.selectionStart += movedChars;
+        this.selectionEnd += movedChars;
     }
 
     // Return a joined view of the file.
