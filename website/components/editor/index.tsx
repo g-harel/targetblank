@@ -47,8 +47,6 @@ export interface Props {
     value: string;
 }
 
-// TODO only call callback if content changes.
-// TODO less duplicate code to handle keyboard shortcuts
 // TODO Add shortcuts to docs (readme + new page)
 export const Editor: Component<Props> = (props) => () => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -60,50 +58,44 @@ export const Editor: Component<Props> = (props) => () => {
             e.preventDefault();
         }
 
-        // Modify indentation when tab is pressed.
-        if (e.key === "Tab") {
+        // Standardized helper to modify the contents in response to a command.
+        const editFile = (op: keyof FileEditor) => {
             e.preventDefault();
+
             const target = (e.target as any) as HTMLTextAreaElement;
+            const initialValue = target.value;
             const fileEditor = new FileEditor(
                 target.value,
                 target.selectionStart,
                 target.selectionEnd,
             );
 
-            if (e.shiftKey) {
-                fileEditor.unindent();
-            } else {
-                fileEditor.indent();
-            }
+            fileEditor[op]();
 
             target.value = fileEditor.getContent();
             target.selectionStart = fileEditor.getSelectionStart();
             target.selectionEnd = fileEditor.getSelectionEnd();
 
-            props.callback(target.value);
+            if (initialValue !== target.value) {
+                props.callback(target.value);
+            }
+        };
+
+        // Modify indentation when tab is pressed.
+        if (e.key === "Tab") {
+            if (e.shiftKey) {
+                editFile("unindent");
+            } else {
+                editFile("indent");
+            }
         }
 
         // Move lines using alt + arrows.
-        if (e.altKey && (e.keyCode === 38 || e.keyCode === 40)) {
-            e.preventDefault();
-            const target = (e.target as any) as HTMLTextAreaElement;
-            const fileEditor = new FileEditor(
-                target.value,
-                target.selectionStart,
-                target.selectionEnd,
-            );
-
-            if (e.keyCode === 38) {
-                fileEditor.moveUp();
-            } else {
-                fileEditor.moveDown();
-            }
-
-            target.value = fileEditor.getContent();
-            target.selectionStart = fileEditor.getSelectionStart();
-            target.selectionEnd = fileEditor.getSelectionEnd();
-
-            props.callback(target.value);
+        if (e.key === "ArrowUp" && e.altKey) {
+            editFile("moveUp");
+        }
+        if (e.key === "ArrowDown" && e.altKey) {
+            editFile("moveDown");
         }
     };
 
