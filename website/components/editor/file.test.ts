@@ -26,4 +26,76 @@ describe("FileEditor", () => {
         const file = "";
         expect(() => new FileEditor(file, 0, 10)).toThrow();
     });
+
+    describe("indent", () => {
+        it("should work correctly on a single line", () => {
+            const input = "abc";
+            const cursor = 0;
+            const expected = "    abc";
+
+            const fileEditor = new FileEditor(input, cursor, cursor);
+            fileEditor.indent();
+
+            expect(fileEditor.getContent()).toBe(expected);
+        });
+
+        it("should work correctly on multiple lines", () => {
+            const input = "abc\n    123\n456\n    xyz";
+            const cursorStart = 6;
+            const cursorEnd = 14;
+            const expected = "abc\n        123\n    456\n    xyz";
+
+            const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
+            fileEditor.indent();
+
+            expect(fileEditor.getContent()).toBe(expected);
+        });
+    });
+
+    describe("unindent", () => {
+        it("should work correctly on a single line", () => {
+            const input = "    abc";
+            const cursor = 0;
+            const expected = "abc";
+
+            const fileEditor = new FileEditor(input, cursor, cursor);
+            fileEditor.unindent();
+
+            expect(fileEditor.getContent()).toBe(expected);
+        });
+
+        it("should be a noop if the line is not indented", () => {
+            const input = "abc";
+            const cursor = 0;
+            const expected = "abc";
+
+            const fileEditor = new FileEditor(input, cursor, cursor);
+            fileEditor.unindent();
+
+            expect(fileEditor.getContent()).toBe(expected);
+        });
+
+        it("should be a noop if the line is partially indented", () => {
+            const input = "  abc";
+            const cursor = 0;
+            const expected = "  abc";
+
+            const fileEditor = new FileEditor(input, cursor, cursor);
+            fileEditor.unindent();
+
+            expect(fileEditor.getContent()).toBe(expected);
+        });
+
+        it("should work correctly on multiple lines", () => {
+            const input = "abc\n    123\n456\n    xyz";
+            const cursorStart = 6;
+            const cursorEnd = 14;
+            const expected = "abc\n123\n456\n    xyz";
+
+            const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
+            fileEditor.unindent();
+
+            expect(fileEditor.getContent()).toBe(expected);
+        });
+    });
 });
