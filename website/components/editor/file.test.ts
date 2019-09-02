@@ -50,6 +50,32 @@ describe("FileEditor", () => {
 
             expect(fileEditor.getContent()).toBe(expected);
         });
+
+        it("should correctly adjust cursor position", () => {
+            const input = "  123";
+            const cursor = 2;
+            const expectedCursor = 6;
+
+            const fileEditor = new FileEditor(input, cursor, cursor);
+            fileEditor.indent();
+
+            expect(fileEditor.getSelectionStart()).toBe(expectedCursor);
+            expect(fileEditor.getSelectionEnd()).toBe(expectedCursor);
+        });
+
+        it("should correctly adjust cursor position", () => {
+            const input = "  abc\n  123\n 456\nxyz";
+            const cursorStart = 10;
+            const cursorEnd = 13;
+            const expectedStart = 14;
+            const expectedEnd = 21;
+
+            const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
+            fileEditor.indent();
+
+            expect(fileEditor.getSelectionStart()).toBe(expectedStart);
+            expect(fileEditor.getSelectionEnd()).toBe(expectedEnd);
+        });
     });
 
     describe("unindent", () => {
