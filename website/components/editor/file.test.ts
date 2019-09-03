@@ -63,12 +63,12 @@ describe("FileEditor", () => {
             expect(fileEditor.getSelectionEnd()).toBe(expectedCursor);
         });
 
-        it("should correctly adjust cursor position", () => {
+        it("should correctly adjust cursor position on multiple lines", () => {
             const input = "  abc\n  123\n 456\nxyz";
             const cursorStart = 10;
-            const cursorEnd = 13;
+            const cursorEnd = 18;
             const expectedStart = 14;
-            const expectedEnd = 21;
+            const expectedEnd = 30;
 
             const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
             fileEditor.indent();
@@ -122,6 +122,46 @@ describe("FileEditor", () => {
             fileEditor.unindent();
 
             expect(fileEditor.getContent()).toBe(expected);
+        });
+
+        it("should correctly adjust cursor position", () => {
+            const input = "        123";
+            const cursor = 7;
+            const expectedCursor = 3;
+
+            const fileEditor = new FileEditor(input, cursor, cursor);
+            fileEditor.unindent();
+
+            expect(fileEditor.getSelectionStart()).toBe(expectedCursor);
+            expect(fileEditor.getSelectionEnd()).toBe(expectedCursor);
+        });
+
+        it("should correctly adjust cursor position on multiple lines", () => {
+            const input = "  abc\n    123\n  456\n      xyz";
+            const cursorStart = 10;
+            const cursorEnd = 25;
+            const expectedStart = 6;
+            const expectedEnd = 17;
+
+            const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
+            fileEditor.unindent();
+
+            expect(fileEditor.getSelectionStart()).toBe(expectedStart);
+            expect(fileEditor.getSelectionEnd()).toBe(expectedEnd);
+        });
+
+        it("should not change the cursor's line when it close to the start", () => {
+            const input = "  abc\n    123\n  456\n      xyz";
+            const cursorStart = 6;
+            const cursorEnd = 21;
+            const expectedStart = 6;
+            const expectedEnd = 16;
+
+            const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
+            fileEditor.unindent();
+
+            expect(fileEditor.getSelectionStart()).toBe(expectedStart);
+            expect(fileEditor.getSelectionEnd()).toBe(expectedEnd);
         });
     });
 });
