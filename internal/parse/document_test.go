@@ -331,6 +331,21 @@ func TestDocument(t *testing.T) {
 		)
 	})
 
+	t.Run("should only interpret comments when not attached to content", func(t *testing.T) {
+		doc := newDocument()
+		doc.Version = "1"
+		doc.Enter(0, "", "test#label")
+		doc.Enter(0, "http://example.com/test#test", "url")
+		documentEquals(t, doc,
+			"version 1 # ignore me",
+			"===",
+			"#still a comment",
+			"# also a comment",
+			"test#label",
+			"url [http://example.com/test#test]",
+		)
+	})
+
 	t.Run("should not accept version > 1", func(t *testing.T) {
 		produceErr(t, 1, "unsupported version",
 			"version 2",

@@ -118,7 +118,7 @@ func Document(s string) (string, error) {
 	// commentRule removes comments.
 	commentRule := rule{
 		Name:    "comment",
-		Pattern: regexp.MustCompile(`^(?P<content>[^#]*)(#.*)$`),
+		Pattern: regexp.MustCompile(`^(?P<content>[^#]*\s)?(#.*)$`),
 		Handler: func(ctx *context) {
 			ctx.ReplaceLine(ctx.Param("content"))
 		},
