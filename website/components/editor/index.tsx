@@ -90,12 +90,16 @@ export const Editor: Component<Props> = (props) => () => {
             }
         }
 
-        // Move lines using alt + arrows.
-        if (e.key === "ArrowUp" && e.altKey) {
-            editFile("moveUp");
+        // Indent lines using ctrl + brackets.
+        if (ctrl) {
+            if (e.key === "[") editFile("unindent");
+            if (e.key === "]") editFile("indent");
         }
-        if (e.key === "ArrowDown" && e.altKey) {
-            editFile("moveDown");
+
+        // Move lines using alt + arrows.
+        if (e.altKey) {
+            if (e.key === "ArrowUp") editFile("moveUp");
+            if (e.key === "ArrowDown") editFile("moveDown");
         }
     };
 
