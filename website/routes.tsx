@@ -7,6 +7,13 @@ import {Edit} from "./pages/edit";
 import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
 import {Missing} from "./pages/missing";
+import {Page, Props} from "./components/page";
+
+const hostname = "targetblank.org";
+const isExtension =
+    (window as any).chrome &&
+    (window as any).chrome.runtime &&
+    (window as any).chrome.runtime.id;
 
 interface Route {
     path: string;
@@ -27,9 +34,24 @@ export const path = (route: Route, ...params: string[]) => {
     return path;
 };
 
-// Redirects to the route using the path params.
-export const redirect = (route: Route, ...params: string[]) => {
-    app.redirect(path(route, ...params));
+// Unsafe relative redirect which works in an extension.
+export const relativeRedirect = (path: string) => {
+    if (isExtension) {
+        const url = `https://${hostname}${path}`;
+        (window as any).location = url;
+    } else {
+        app.redirect(path);
+    }
+};
+
+// Redirects to the typed route using the path params.
+export const safeRedirect = (route: Route, ...params: string[]) => {
+    if (isExtension) {
+        // TODO inject addr
+        app.show(path(route, ...params));
+    } else {
+        app.redirect(path(route, ...params));
+    }
 };
 
 // Using an index signature ({[name: string]: Route}) would not keep hints about existing routes.
@@ -67,3 +89,16 @@ export const routes = routeTable({
         component: Missing,
     },
 });
+
+export const registerRoutes = () => {
+    Object.keys(routes).forEach((name) => {
+        const route = routes[name as keyof typeof routes];
+        app(route.path, (params: Props) => {
+            if (isExtension) {
+                // TODO infer from storage.
+                params.addr = "test";
+            }
+            return () => <Page {...params} {...route} />;
+        });
+    });
+};

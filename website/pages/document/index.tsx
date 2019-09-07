@@ -6,7 +6,7 @@ import {Item, Props as ItemProps} from "./item";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
-import {path, routes, redirect} from "../../routes";
+import {path, routes, safeRedirect} from "../../routes";
 import {IPageEntry} from "../../internal/types";
 
 const keyboardTimeout = 1000;
@@ -76,7 +76,7 @@ export const Document: PageComponent = ({addr}, update) => {
             data = d;
             update();
         },
-        () => redirect(routes.login, addr!),
+        () => safeRedirect(routes.login, addr!),
     );
 
     let highlight: string = "";
@@ -86,7 +86,7 @@ export const Document: PageComponent = ({addr}, update) => {
     keyboard((e) => {
         // Navigate to the edit page with "ctrl+enter".
         if (e.ctrl && e.key === "Enter") {
-            redirect(routes.edit, addr!);
+            safeRedirect(routes.edit, addr!);
             return;
         }
 

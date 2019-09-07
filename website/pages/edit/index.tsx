@@ -6,7 +6,7 @@ import {Anchor} from "../../components/anchor";
 import {Editor} from "../../components/editor";
 import {Icon} from "../../components/icon";
 import {keyboard} from "../../internal/keyboard";
-import {path, routes, redirect} from "../../routes";
+import {path, routes, safeRedirect} from "../../routes";
 
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
@@ -70,14 +70,14 @@ export interface Data {
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
     if (!client(addr!).isAuthorized()) {
-        setTimeout(() => redirect(routes.login, addr!));
+        setTimeout(() => safeRedirect(routes.login, addr!));
         return () => null;
     }
 
     // Load page data.
     client(addr!).pageRead(
         (data: IPageData) => update({value: data.raw, status: "saved"}),
-        () => redirect(routes.login, addr!),
+        () => safeRedirect(routes.login, addr!),
     );
 
     // Save editor contents after a delay.
@@ -108,7 +108,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     let saving = false;
     keyboard((e) => {
         if (!saving && e.ctrl && e.key === "Enter") {
-            redirect(routes.document, addr!);
+            safeRedirect(routes.document, addr!);
         }
     });
 

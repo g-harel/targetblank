@@ -3,7 +3,7 @@ import {Input} from "../../components/input";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/style";
 import {Header} from "../../components/header";
-import {routes, redirect} from "../../routes";
+import {routes, safeRedirect} from "../../routes";
 
 const Wrapper = styled("div")({});
 
@@ -11,7 +11,7 @@ export const Recover: PageComponent = ({addr}) => () => {
     const submit = (email: string) => {
         return new Promise<string>((resolve) => {
             client(addr!).passReset(
-                () => redirect(routes.login, addr!),
+                () => safeRedirect(routes.login, addr!),
                 resolve,
                 email,
             );

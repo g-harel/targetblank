@@ -3,7 +3,7 @@ import {Password} from "../../components/input/password";
 import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/style";
 import {Header} from "../../components/header";
-import {routes, redirect} from "../../routes";
+import {routes, safeRedirect} from "../../routes";
 
 const Wrapper = styled("div")({});
 
@@ -13,7 +13,7 @@ export const Reset: PageComponent = ({addr, token}) => () => {
             client(addr!).passUpdate(
                 () => {
                     client(addr!).tokenCreate(
-                        () => redirect(routes.document, addr!),
+                        () => safeRedirect(routes.document, addr!),
                         resolve,
                         pass,
                     );

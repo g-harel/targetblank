@@ -4,7 +4,7 @@ import {PageComponent} from "../../components/page";
 import {styled, colors, size} from "../../internal/style";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
-import {path, routes, redirect} from "../../routes";
+import {path, routes, safeRedirect} from "../../routes";
 
 const Wrapper = styled("div")({});
 
@@ -22,7 +22,7 @@ export const Login: PageComponent = ({addr}) => () => {
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
             client(addr!).tokenCreate(
-                () => redirect(routes.document, addr!),
+                () => safeRedirect(routes.document, addr!),
                 resolve,
                 pass,
             );

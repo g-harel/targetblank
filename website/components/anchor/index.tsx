@@ -1,6 +1,6 @@
 import {Component} from "../../internal/types";
-import {app} from "../../internal/app";
 import {styled} from "../../internal/style";
+import {relativeRedirect} from "../../routes";
 
 const Wrapper = styled("a")({
     color: "inherit",
@@ -26,14 +26,14 @@ export const Anchor: Component<Props> = (props) => {
     const onClick = (e: MouseEvent) => {
         if (isRelative(href)) {
             e.preventDefault();
-            app.redirect(href);
+            relativeRedirect(href);
         }
     };
 
     // Immediately follow link.
     if (props.immediate) {
         if (isRelative(href)) {
-            app.redirect(href);
+            relativeRedirect(href);
         } else {
             (window as any).location = href;
         }
