@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "parcel build website/index.html -d .build --no-source-maps",
+    "build": "parcel build website/index.html -d .website --no-source-maps",
     "dev": "parcel -p 1324 -d .dist website/index.html",
     "test": "run-s fmt lint check test:unit build",
     "test:unit": "jest",

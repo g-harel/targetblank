@@ -40,7 +40,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/validate ./functions/validate
+        args: go build -o .functions/validate ./functions/validate
 
     - name: go build update
       uses: cedrickring/golang-action@1.1.0
@@ -49,7 +49,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/update ./functions/update
+        args: go build -o .functions/update ./functions/update
 
     - name: go build reset
       uses: cedrickring/golang-action@1.1.0
@@ -58,7 +58,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/reset ./functions/reset
+        args: go build -o .functions/reset ./functions/reset
 
     - name: go build read
       uses: cedrickring/golang-action@1.1.0
@@ -67,7 +67,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/read ./functions/read
+        args: go build -o .functions/read ./functions/read
 
     - name: go build passwd
       uses: cedrickring/golang-action@1.1.0
@@ -76,7 +76,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/passwd ./functions/passwd
+        args: go build -o .functions/passwd ./functions/passwd
 
     - name: go build create
       uses: cedrickring/golang-action@1.1.0
@@ -85,7 +85,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/create ./functions/create
+        args: go build -o .functions/create ./functions/create
 
     - name: go build authenticate
       uses: cedrickring/golang-action@1.1.0
@@ -94,7 +94,7 @@ jobs:
         GOARCH: amd64
         GOOS: linux
       with:
-        args: go build -o .build/authenticate ./functions/authenticate
+        args: go build -o .functions/authenticate ./functions/authenticate
 
     - name: terraform apply
       uses: g-harel/terraform-github-actions-apply@d49255c

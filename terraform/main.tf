@@ -7,7 +7,7 @@ locals {
 }
 
 data "local_file" "manifest" {
-  filename = ".build/parcel-manifest.json"
+  filename = ".website/parcel-manifest.json"
 }
 
 # Using external data source to parse manifest contents as JSON.
@@ -22,7 +22,7 @@ module "website" {
   cert_arn    = "${aws_acm_certificate_validation.cert.certificate_arn}"
   bucket_name = "targetblank-static-website"
 
-  source_dir    = ".build"
+  source_dir    = ".website"
   root_document = "index.html"
 
   files = [
@@ -35,7 +35,7 @@ module "authenticate" {
   source = "./modules/gateway-lambda"
 
   name = "authenticate"
-  bin  = ".build/authenticate"
+  bin  = ".functions/authenticate"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
@@ -48,7 +48,7 @@ module "create" {
   source = "./modules/gateway-lambda"
 
   name   = "create"
-  bin    = ".build/create"
+  bin    = ".functions/create"
   role   = "${aws_iam_role.lambda.arn}"
   tags   = "${local.lambda_tags}"
   memory = 320
@@ -62,7 +62,7 @@ module "passwd" {
   source = "./modules/gateway-lambda"
 
   name = "passwd"
-  bin  = ".build/passwd"
+  bin  = ".functions/passwd"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
@@ -75,7 +75,7 @@ module "read" {
   source = "./modules/gateway-lambda"
 
   name = "read"
-  bin  = ".build/read"
+  bin  = ".functions/read"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
@@ -88,7 +88,7 @@ module "reset" {
   source = "./modules/gateway-lambda"
 
   name = "reset"
-  bin  = ".build/reset"
+  bin  = ".functions/reset"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
@@ -101,7 +101,7 @@ module "update" {
   source = "./modules/gateway-lambda"
 
   name = "update"
-  bin  = ".build/update"
+  bin  = ".functions/update"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
@@ -114,7 +114,7 @@ module "validate" {
   source = "./modules/gateway-lambda"
 
   name = "validate"
-  bin  = ".build/validate"
+  bin  = ".functions/validate"
   role = "${aws_iam_role.lambda.arn}"
   tags = "${local.lambda_tags}"
 
