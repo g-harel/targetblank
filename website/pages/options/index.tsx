@@ -1,18 +1,7 @@
-// The h function provided by okwolo is attached to the global object.
-import h from "okwolo/src/h";
-(window as any).h = h;
-
-import "../website/global.css";
-import "normalize.css";
-
-import {app} from "../website/internal/app";
-import {Input} from "../website/components/input";
-import {styled, colors, size, fonts} from "../website/internal/style";
-import {Header} from "../website/components/header";
-
-app.use("target", document.body);
-
-app.setState({});
+import {Input} from "../../components/input";
+import {styled, colors, size, fonts} from "../../internal/style";
+import {Header} from "../../components/header";
+import {PageComponent} from "../../components/page";
 
 const Wrapper = styled("div")({});
 
@@ -35,7 +24,9 @@ const Address = styled("div")({
     padding: "0.5em 1em",
 });
 
-app(() => () => {
+export const Recover: PageComponent = ({addr}) => () => {
+    document.title = "targetblank - options";
+
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
             console.log(pass);
@@ -62,4 +53,4 @@ app(() => () => {
             </Current>
         </Wrapper>
     );
-});
+};

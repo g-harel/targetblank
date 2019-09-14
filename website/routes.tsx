@@ -8,12 +8,9 @@ import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
 import {Missing} from "./pages/missing";
 import {Page, Props} from "./components/page";
+import {isExtension} from "./internal/extension";
 
 const hostname = "targetblank.org";
-const isExtension =
-    (window as any).chrome &&
-    (window as any).chrome.runtime &&
-    (window as any).chrome.runtime.id;
 
 interface Route {
     path: string;

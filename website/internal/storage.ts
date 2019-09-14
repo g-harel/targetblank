@@ -17,7 +17,7 @@ const keyData = (addr: string) => `addr:${addr}`;
 const keyExpiry = (addr: string) => `kill:${addr}`;
 
 // Generates a zeroed-out page cache value.
-const empty = () => ({token: null, data: null});
+const empty = (): Cache => ({token: null, data: null});
 
 // Read page data from local storage.
 export const read = (addr: string): Cache => {

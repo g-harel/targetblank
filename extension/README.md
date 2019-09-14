@@ -14,18 +14,3 @@ TODO
     - override router to send to real page
 
 -->
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>targetblank - options</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width">
-</head>
-
-<body>
-    <script src="./options.tsx"></script>
-</body>
-
-</html>
