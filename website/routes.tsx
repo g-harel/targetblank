@@ -7,8 +7,10 @@ import {Edit} from "./pages/edit";
 import {Reset} from "./pages/reset";
 import {Login} from "./pages/login";
 import {Missing} from "./pages/missing";
-import {Page, Props} from "./components/page";
-import {isExtension} from "./internal/extension";
+import {Page, Props as PageProps} from "./components/page";
+import {isExtension, read} from "./internal/extension";
+import {Options} from "./pages/options";
+import {Loading} from "./components/loading";
 
 const hostname = "targetblank.org";
 
@@ -44,7 +46,6 @@ export const relativeRedirect = (path: string) => {
 // Redirects to the typed route using the path params.
 export const safeRedirect = (route: Route, ...params: string[]) => {
     if (isExtension) {
-        // TODO inject addr
         app.show(path(route, ...params));
     } else {
         app.redirect(path(route, ...params));
@@ -58,6 +59,10 @@ export const routes = routeTable({
     landing: {
         path: "/",
         component: Landing,
+    },
+    options: {
+        path: "/extension-options",
+        component: Options,
     },
     document: {
         path: "/:addr",
@@ -87,15 +92,37 @@ export const routes = routeTable({
     },
 });
 
+// Transparently injects address when running in an extension context.
+// TODO default extension path should not be homepage.
+const PageLoader: Component<PageProps> = (params, update) => {
+    let addr = params.addr;
+    let addrIsLoading = addr === undefined && isExtension;
+
+    if (addrIsLoading) {
+        read().then(({addr: storedAddress}) => {
+            if (storedAddress == null) {
+                safeRedirect(routes.options);
+                return;
+            }
+            addr = storedAddress;
+            addrIsLoading = false;
+            update();
+        });
+    }
+
+    return () => {
+        params.addr = addr;
+        return addrIsLoading
+            ? <Loading />
+            : <Page {...params} />;
+    };
+};
+
 export const registerRoutes = () => {
     Object.keys(routes).forEach((name) => {
         const route = routes[name as keyof typeof routes];
-        app(route.path, (params: Props) => {
-            if (isExtension) {
-                // TODO infer from storage.
-                params.addr = "test";
-            }
-            return () => <Page {...params} {...route} />;
+        app(route.path, (params: PageProps) => {
+            return () => <PageLoader {...params} {...route} />;
         });
     });
 };

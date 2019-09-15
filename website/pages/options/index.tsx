@@ -24,7 +24,7 @@ const Address = styled("div")({
     padding: "0.5em 1em",
 });
 
-export const Recover: PageComponent = ({addr}) => () => {
+export const Options: PageComponent = ({addr}) => () => {
     document.title = "targetblank - options";
 
     const submit = (pass: string) => {
@@ -45,12 +45,14 @@ export const Recover: PageComponent = ({addr}) => () => {
                 placeholder="a1b2c3"
                 focus
             />
-            <Current>
-                current address
-                <Address>
-                    a1b2c3
-                </Address>
-            </Current>
+            {!!addr && (
+                <Current>
+                    current address
+                    <Address>
+                        {addr}
+                    </Address>
+                </Current>
+            )}
         </Wrapper>
     );
 };
