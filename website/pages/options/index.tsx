@@ -2,6 +2,9 @@ import {Input} from "../../components/input";
 import {styled, colors, size, fonts} from "../../internal/style";
 import {Header} from "../../components/header";
 import {PageComponent} from "../../components/page";
+import {write, ExtensionStore, read} from "../../internal/extension";
+import {routes, path, safeRedirect} from "../../routes";
+import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({});
 
@@ -10,7 +13,7 @@ const Current = styled("div")({
     display: "flex",
     flexDirection: "column",
     fontSize: size.tiny,
-    paddingTop: "3em",
+    marginTop: "3em",
 });
 
 const Address = styled("div")({
@@ -24,33 +27,40 @@ const Address = styled("div")({
     padding: "0.5em 1em",
 });
 
-export const Options: PageComponent = ({addr}) => () => {
+export const Options: PageComponent = (_, update) => {
     document.title = "targetblank - options";
+    let options: ExtensionStore | null = null;
 
-    const submit = (pass: string) => {
-        return new Promise<string>((resolve) => {
-            console.log(pass);
-            resolve("");
+    const submit = async (addr: string) => {
+        await write({addr});
+        setTimeout(() => {
+            safeRedirect(routes.document, addr);
         });
+        return "";
     };
 
-    return (
+    read().then((opts) => {
+        options = opts;
+        update();
+    });
+
+    return () => (
         <Wrapper>
             <Header muted />
             <Input
                 title="set homepage address"
                 callback={submit}
-                validator={/.*/g}
+                validator={/^\w{6}$|^local$/g}
                 message="invalid address"
                 placeholder="a1b2c3"
                 focus
             />
-            {!!addr && (
+            {options && !!options.addr && (
                 <Current>
                     current address
-                    <Address>
-                        {addr}
-                    </Address>
+                    <Anchor href={path(routes.document, options.addr)}>
+                        <Address>{options.addr}</Address>
+                    </Anchor>
                 </Current>
             )}
         </Wrapper>

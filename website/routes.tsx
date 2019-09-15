@@ -34,8 +34,19 @@ export const path = (route: Route, ...params: string[]) => {
 };
 
 // Unsafe relative redirect which works in an extension.
-export const relativeRedirect = (path: string) => {
+export const relativeRedirect = async (path: string) => {
     if (isExtension) {
+        const {addr} = await read();
+
+        const canBeShown = !!(
+            path === routes.options.path ||
+            (addr && path.startsWith(`/${addr}`))
+        );
+        if (canBeShown) {
+            app.show(path);
+            return;
+        }
+
         const url = `https://${hostname}${path}`;
         (window as any).location = url;
     } else {
@@ -63,6 +74,13 @@ export const routes = routeTable({
     options: {
         path: "/extension-options",
         component: Options,
+    },
+    extension: {
+        // Matches the `window.location.pathname` for the extension's `newtab` page.
+        // Must be placed before `/:addr` to have higher match priority.
+        path: "/index.html",
+        component: Document,
+        allowLocalAddr: true,
     },
     document: {
         path: "/:addr",
@@ -96,15 +114,18 @@ export const routes = routeTable({
 // TODO default extension path should not be homepage.
 const PageLoader: Component<PageProps> = (params, update) => {
     let addr = params.addr;
-    let addrIsLoading = addr === undefined && isExtension;
+    let addrIsLoading =
+        isExtension &&
+        addr === undefined &&
+        params.component !== routes.options.component;
 
     if (addrIsLoading) {
-        read().then(({addr: storedAddress}) => {
-            if (storedAddress == null) {
+        read().then(({addr: storedAddr}) => {
+            if (storedAddr == null) {
                 safeRedirect(routes.options);
                 return;
             }
-            addr = storedAddress;
+            addr = storedAddr;
             addrIsLoading = false;
             update();
         });
@@ -112,9 +133,7 @@ const PageLoader: Component<PageProps> = (params, update) => {
 
     return () => {
         params.addr = addr;
-        return addrIsLoading
-            ? <Loading />
-            : <Page {...params} />;
+        return addrIsLoading ? <Loading /> : <Page {...params} />;
     };
 };
 

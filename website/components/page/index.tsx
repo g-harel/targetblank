@@ -4,6 +4,8 @@ import {styled, colors, size} from "../../internal/style";
 import {reset} from "../../internal/keyboard";
 import {localAddr} from "../../internal/client";
 import {Anchor} from "../anchor";
+import {path, routes} from "../../routes";
+import {isExtension} from "../../internal/extension";
 
 const Wrapper = styled("div")({
     display: "flex",
@@ -22,6 +24,11 @@ const Footer = styled("footer")({
     fontWeight: 600,
     padding: "1.5rem",
     textAlign: "center",
+});
+
+const ExtensionOptions = styled("div")({
+    padding: "1rem",
+    color: colors.textPrimary,
 });
 
 export interface PageProps {
@@ -66,6 +73,13 @@ export const Page: Component<Props> = (props) => () => {
                 <Component addr={addr} token={token} />
             </Content>
             <Footer>
+                {isExtension && (
+                    <ExtensionOptions>
+                        <Anchor href={path(routes.options)}>
+                            extension options
+                        </Anchor>
+                    </ExtensionOptions>
+                )}
                 <Anchor href="/">home</Anchor>
                 &nbsp;&nbsp;&nbsp;
                 <Anchor href="https://github.com/g-harel/targetblank/#readme">

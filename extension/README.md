@@ -12,5 +12,6 @@ TODO
     - auto deploy to extension stores
     - detect running in extension
     - override router to send to real page
+- local links
 
 -->
