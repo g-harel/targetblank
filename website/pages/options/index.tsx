@@ -6,7 +6,20 @@ import {write, ExtensionStore, read} from "../../internal/extension";
 import {routes, path, safeRedirect} from "../../routes";
 import {Anchor} from "../../components/anchor";
 
-const Wrapper = styled("div")({});
+const Wrapper = styled("div")({
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+});
+
+const Info = styled("div")({
+    color: colors.textSecondarySmall,
+    fontSize: size.tiny,
+    fontWeight: 600,
+    marginTop: "-0.5rem",
+    textAlign: "center",
+    width: "18rem",
+});
 
 const Current = styled("div")({
     alignItems: "center",
@@ -46,7 +59,7 @@ export const Options: PageComponent = (_, update) => {
 
     return () => (
         <Wrapper>
-            <Header muted />
+            <Header muted sub="extension options" />
             <Input
                 title="set homepage address"
                 callback={submit}
@@ -55,6 +68,10 @@ export const Options: PageComponent = (_, update) => {
                 placeholder="a1b2c3"
                 focus
             />
+            <Info>
+                Use the "local" address to only store your page on this computer.
+                Document must still be parsed on the server.
+            </Info>
             {options && !!options.addr && (
                 <Current>
                     current address
