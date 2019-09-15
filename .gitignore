@@ -1,5 +1,6 @@
 coverage.txt
 node_modules
+_*
 .*
 !.gitignore
 !.travis.yml
