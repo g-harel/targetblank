@@ -2,6 +2,12 @@
     "manifest_version": 2,
     "name": "targetblank",
     "version": "0.0.0",
+    "applications": {
+        "gecko": {
+            "id": "targetblank"
+        }
+    },
+
     "permissions": ["storage"],
     "chrome_url_overrides": {
         "newtab": "index.html"

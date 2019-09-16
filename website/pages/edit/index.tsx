@@ -28,6 +28,11 @@ const Header = styled("header")({
     zIndex: 1,
 });
 
+// Inline element to ensure no content is rendered under the header.
+const HeaderPlaceholder = styled("div")({
+    height: headerHeight,
+});
+
 const Done = styled("div")({
     display: "inline-block",
     float: "right",
@@ -145,6 +150,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                         {statusContent}
                     </Status>
                 </Header>
+                <HeaderPlaceholder />
                 <Editor id="page-editor" callback={save} value={data.value} />
             </Wrapper>
         );

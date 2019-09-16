@@ -69,8 +69,8 @@ export const Options: PageComponent = (_, update) => {
                 focus
             />
             <Info>
-                Use the "local" address to only store your page on this computer.
-                Document must still be parsed on the server.
+                Use the "local" address to only store your page on this
+                computer. Document must still be parsed on the server.
             </Info>
             {options && !!options.addr && (
                 <Current>

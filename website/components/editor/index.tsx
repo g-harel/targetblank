@@ -2,43 +2,48 @@ import {Component} from "../../internal/types";
 import {styled, colors, fonts} from "../../internal/style";
 import {FileEditor} from "./file";
 
-const headerHeight = "2.9rem";
-const lineHeight = "1.6rem";
-const editorPadding = "1.8rem";
+// Values used to compute the approximate size of the the textbox without hacks.
+// https://stackoverflow.com/q/2803880
+const lineHeight = 1.6;
+const charWidthRatio = 0.66;
 
-const Wrapper = styled("div")({});
+const Wrapper = styled("div")({
+    display: "flex",
+    flexDirection: "row",
+    padding: "1.8rem 0 0 1.8rem",
+});
+
+const LineNumbers = styled("div")({
+    display: "flex",
+    flexDirection: "column",
+    paddingRight: "1rem",
+});
+
+const LineNumber = styled("div")({
+    "-moz-user-select": "none",
+    backgroundColor: colors.backgroundSecondary,
+    color: colors.textSecondarySmall,
+    lineHeight: `${lineHeight}rem`,
+    textAlign: "right",
+    userSelect: "none",
+});
+
+// Wrapper to prevent the scrollbar from moving the content on chrome.
+const ScrollWrapper = styled("div")({
+    flexGrow: 1,
+    overflowX: "auto",
+});
 
 const StyledTextarea = styled("textarea")({
-    lineHeight,
     backgroundColor: colors.backgroundSecondary,
     border: "none",
     color: colors.textPrimary,
     fontFamily: fonts.monospace,
-    marginTop: headerHeight,
-    minHeight: "100%",
+    lineHeight: `${lineHeight}rem`,
     outline: "none",
-    overflowY: "hidden",
-    paddingLeft: `calc(2.4 * ${editorPadding})`,
-    paddingTop: editorPadding,
+    overflow: "hidden",
     resize: "none",
     whiteSpace: "pre",
-    width: "100%",
-});
-
-const Lines = styled("div")({
-    "-moz-user-select": "none",
-    height: 0,
-    color: colors.textSecondarySmall,
-    textAlign: "right",
-    transform: `translateY(calc(${headerHeight} + ${editorPadding}))`,
-    userSelect: "none",
-    width: `calc(1.6 * ${editorPadding} + 1rem)`,
-});
-
-const Line = styled("div")({
-    lineHeight,
-    backgroundColor: colors.backgroundSecondary,
-    paddingRight: "1rem",
 });
 
 export interface Props {
@@ -47,7 +52,10 @@ export interface Props {
     value: string;
 }
 
-// TODO Add shortcuts to docs (readme + new page)
+// Editor component holds no state and expects its parent
+// to update the value as provided to the callback. This
+// ensures the editor is only updated once on each change
+// since the parent is expected to already get re-rendered.
 export const Editor: Component<Props> = (props) => () => {
     const onKeydown = (e: KeyboardEvent) => {
         updateCursorPosition(e);
@@ -122,35 +130,46 @@ export const Editor: Component<Props> = (props) => () => {
                 const position = ((window as any).editor || {})[props.id];
                 (editor as any).setSelectionRange(position, position);
             }
-
-            // Update editor height to match content.
-            if (editor) {
-                editor.style.opacity = "1";
-                editor.style.height = `${editor.scrollHeight}px`;
-            }
         }),
     );
 
-    // Create line numbers.
-    let lines: number[] = [];
-    const count = props.value.split("\n").length;
-    lines = Array(count);
-    for (let i = 0; i < count; i++) {
-        lines[i] = i + 1;
+    const lines = props.value.split("\n");
+
+    // Find longest line.
+    let longest = 0;
+    for (const line of lines) {
+        longest = Math.max(longest, line.length);
     }
+
+    // Create line numbers.
+    let lineNumbers: number[] = [];
+    const count = lines.length;
+    lineNumbers = Array(count);
+    for (let i = 0; i < count; i++) {
+        lineNumbers[i] = i + 1;
+    }
+
+    const style = `
+        width: ${charWidthRatio * longest + 3}em;
+        height: ${lineHeight * lines.length}em;
+    `;
 
     return (
         <Wrapper>
-            <Lines>{...lines.map((n) => <Line>{n}</Line>)}</Lines>
-            <StyledTextarea
-                id={props.id}
-                style="opacity: 0;"
-                value={props.value}
-                oninput={onInput}
-                onkeydown={onKeydown}
-                onclick={updateCursorPosition}
-                spellcheck={false}
-            />
+            <LineNumbers>
+                {...lineNumbers.map((n) => <LineNumber>{n}</LineNumber>)}
+            </LineNumbers>
+            <ScrollWrapper>
+                <StyledTextarea
+                    id={props.id}
+                    style={style}
+                    value={props.value}
+                    oninput={onInput}
+                    onkeydown={onKeydown}
+                    onclick={updateCursorPosition}
+                    spellcheck={false}
+                />
+            </ScrollWrapper>
         </Wrapper>
     );
 };
