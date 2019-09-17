@@ -119,6 +119,7 @@ export interface Props {
     title?: string;
     hint?: string;
     type?: string;
+    autocomplete?: string;
     callback: (value: string) => Promise<string>;
     validator: RegExp;
     message: string;

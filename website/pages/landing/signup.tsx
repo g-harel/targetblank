@@ -14,6 +14,7 @@ export const Signup: Component<Props> = (props) => () => (
             callback={props.callback}
             title="create a page"
             type="email"
+            autocomplete="email"
             placeholder="email@example.com"
             validator={/^\S+@\S+\.\S{2,}$/g}
             message="invalid email address"

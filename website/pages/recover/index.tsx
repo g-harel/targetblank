@@ -26,6 +26,7 @@ export const Recover: PageComponent = ({addr}) => () => {
                 title="reset password"
                 hint={addr}
                 type="email"
+                autocomplete="email"
                 placeholder="email@example.com"
                 validator={/.*/g}
                 message=""

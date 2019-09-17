@@ -4,6 +4,7 @@ import {Component} from "../../internal/types";
 export interface Props {
     title: string;
     hint?: string;
+    autocomplete?: string;
     validate?: boolean;
     callback: InputProps["callback"];
 }
@@ -11,6 +12,7 @@ export interface Props {
 export const Password: Component<Props> = ({
     title,
     hint,
+    autocomplete,
     callback,
     validate,
 }) => () => (
@@ -19,6 +21,7 @@ export const Password: Component<Props> = ({
         hint={hint}
         callback={callback}
         type="password"
+        autocomplete={autocomplete}
         validator={validate ? /.{8,32}/gi : /./}
         message="password is too short"
         placeholder="password123"

@@ -10,6 +10,7 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
+- always 200 when resetting password
 - update documentation/onboarding
     - simplify initial document
     - move some features to advanced section(s)

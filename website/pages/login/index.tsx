@@ -32,7 +32,12 @@ export const Login: PageComponent = ({addr}) => () => {
     return (
         <Wrapper>
             <Header muted />
-            <Password callback={submit} title="log in" hint={addr} />
+            <Password
+                callback={submit}
+                title="log in"
+                hint={addr}
+                autocomplete="current-password"
+            />
             <Recover>
                 <Anchor href={path(routes.recover, addr!)}>
                     reset password

@@ -31,6 +31,7 @@ export const Reset: PageComponent = ({addr, token}) => () => {
             <Password
                 title="set password"
                 hint={addr}
+                autocomplete="new-password"
                 validate
                 callback={submit}
             />
