@@ -24,6 +24,7 @@ export const Recover: PageComponent = ({addr}) => () => {
             <Input
                 callback={submit}
                 title="reset password"
+                hint={addr}
                 type="email"
                 placeholder="email@example.com"
                 validator={/.*/g}

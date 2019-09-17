@@ -28,7 +28,12 @@ export const Reset: PageComponent = ({addr, token}) => () => {
     return (
         <Wrapper>
             <Header muted />
-            <Password title="set password" validate callback={submit} />
+            <Password
+                title="set password"
+                hint={addr}
+                validate
+                callback={submit}
+            />
         </Wrapper>
     );
 };

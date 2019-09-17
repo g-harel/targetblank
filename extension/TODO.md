@@ -14,13 +14,10 @@ TODO
     - simplify initial document
     - move some features to advanced section(s)
     - link to extension
-- fix quick links in extension
 - focus on page + option to disable
-- reuse compiled bundle
-    - auto deploy to extension stores
 - local (file) links
 - accessibility
 - editor line alignment with scrollbar
-- input component title hint (for page address on login/reset/etc)
+- auto deploy to extension stores
 
 -->
