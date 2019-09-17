@@ -30,8 +30,9 @@ const Form = styled("form")({
 });
 
 const Title = styled("span")({
-    display: "block",
+    display: "flex",
     fontWeight: 600,
+    alignItems: "center",
     margin: "0.5rem 0.9rem 0.1rem",
     width: `${width}rem`,
 
@@ -40,6 +41,12 @@ const Title = styled("span")({
             color: colors.error,
         },
     },
+});
+
+const Hint = styled("span")({
+    color: colors.textSecondaryLarge,
+    fontSize: size.tiny,
+    marginLeft: "0.5rem",
 });
 
 const StyledInput = styled("input")({
@@ -105,6 +112,7 @@ const Error = styled("div")({
 
 export interface Props {
     title?: string;
+    hint?: string;
     type?: string;
     callback: (value: string) => Promise<string>;
     validator: RegExp;
@@ -185,7 +193,10 @@ export const Input: Component<Props> = (props, update) => {
 
     return () => (
         <Form className={{loading}} onsubmit={onsubmit}>
-            {!!props.title && <Title className={{error}}>{props.title}</Title>}
+            <Title className={{error}}>
+                {!!props.title && props.title}
+                {!!props.hint && <Hint>{props.hint}</Hint>}
+            </Title>
             <StyledInput
                 type={props.type || "text"}
                 value={value}
