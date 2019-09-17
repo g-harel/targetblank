@@ -50,7 +50,6 @@ export const reset: types.NestedCSSProperties = {
     font: "inherit",
     lineHeight: "normal",
     margin: "0",
-    outline: "none",
     overflow: "visible",
     padding: "0",
     textAlign: "inherit",
@@ -60,10 +59,6 @@ export const reset: types.NestedCSSProperties = {
         "&::-moz-focus-inner": {
             padding: "0",
             border: "0",
-        },
-
-        "&:focus": {
-            outline: "none",
         },
     },
 };

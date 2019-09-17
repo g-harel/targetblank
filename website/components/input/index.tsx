@@ -17,7 +17,7 @@ const Form = styled("form")({
 
             $nest: {
                 "& *:not(button)": {
-                    opacity: 0.5,
+                    opacity: 0.7,
                 },
 
                 "& button": {
@@ -47,6 +47,12 @@ const Hint = styled("span")({
     color: colors.textSecondaryLarge,
     fontSize: size.tiny,
     marginLeft: "0.5rem",
+
+    $nest: {
+        "&.error": {
+            color: colors.error,
+        },
+    },
 });
 
 const StyledInput = styled("input")({
@@ -55,7 +61,6 @@ const StyledInput = styled("input")({
     boxShadow: "none",
     height: "1.85rem",
     margin: "0.3rem 0.5rem 0",
-    outline: "none",
     padding: "1rem 1.8rem 1rem 0.5rem",
     width: `${width}rem`,
 
@@ -195,7 +200,7 @@ export const Input: Component<Props> = (props, update) => {
         <Form className={{loading}} onsubmit={onsubmit}>
             <Title className={{error}}>
                 {!!props.title && props.title}
-                {!!props.hint && <Hint>{props.hint}</Hint>}
+                {!!props.hint && <Hint className={{error}}>{props.hint}</Hint>}
             </Title>
             <StyledInput
                 type={props.type || "text"}

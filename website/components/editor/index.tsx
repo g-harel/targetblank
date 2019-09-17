@@ -126,7 +126,7 @@ export const Editor: Component<Props> = (props) => () => {
 
             // Set focus to last known position.
             if (editor && document.activeElement !== editor) {
-                editor.focus();
+                editor.focus({preventScroll: true});
                 const position = ((window as any).editor || {})[props.id];
                 (editor as any).setSelectionRange(position, position);
             }

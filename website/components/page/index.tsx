@@ -13,7 +13,7 @@ const Wrapper = styled("div")({
     minHeight: "100%",
 });
 
-const Content = styled("div")({
+const Content = styled("main")({
     flex: "1 0 auto",
 });
 
