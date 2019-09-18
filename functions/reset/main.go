@@ -28,14 +28,16 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handler.ClientErr(handler.ErrPageNotFound)
+		// Page existence is kept hidden.
+		return nil
 	}
 
 	email := strings.TrimSpace(req.Body)
 
 	ok := crypto.HashCheck(email, page.Email)
 	if !ok {
-		return handler.ClientErr(handler.ErrPageNotFound)
+		// Configured email cannot be verified.
+		return nil
 	}
 
 	key, err := secretsKey()

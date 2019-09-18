@@ -27,6 +27,7 @@ func Authenticate(req *handler.Request, res *handler.Response) *handler.Error {
 	}
 
 	if !crypto.HashCheck(req.Body, page.Password) {
+		// Page existence is kept hidden.
 		return handler.ClientErr(handler.ErrPageNotFound)
 	}
 

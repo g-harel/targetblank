@@ -10,15 +10,14 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- always 200 when resetting password
+- update email templates
+    - mention reset token expires
 - update documentation/onboarding
     - simplify initial document
     - move some features to advanced section(s)
     - link to extension
 - focus on page + option to disable
 - local (file) links
-- accessibility
-- editor line alignment with scrollbar
 - auto deploy to extension stores
 
 -->
