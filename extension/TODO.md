@@ -10,6 +10,7 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
+- shortcut to comment out sections
 - update email templates
     - mention reset token expires
 - update documentation/onboarding

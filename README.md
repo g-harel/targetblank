@@ -5,68 +5,72 @@
 
 Browser tool to organize links. Pages are defined by a [structured document](#document-format) which allows links to be labelled, nested and grouped.
 
-- **Productivity focused** Follow links by typing their label and pressing enter.
+- **Productivity focused** Do everything from the comfort of your keyboard.
 
 - **Shareable** Pages are publicly readable by anyone with the link.
 
 - **Optimized for performance** Aggressive caching, small code bundles and native font stacks.
 
+<!--
+
+- **Browser Extension** An even snappier homepage and simple setup.
+
+ -->
+
 ## Document Format
 
-#### Minimal
+The page structure is defined entirely by the _document_. Instead of adding, updating and removing links with buttons, targetblank uses text to represent your page. Although the syntax is completely different, it works similarly to other structured documents like [markdown](https://en.wikipedia.org/wiki/Markdown) or [yaml](https://en.wikipedia.org/wiki/YAML).
 
-```shell
-version 1
-===
+A minimal _document_ contains at least a _version_ line and a _header_ line. The _version_ is the first thing the parser reads, and it makes it easier to keep the format backwards-compatible if the syntax needs to change in the future.
+
+```diff
++ version 1
++ ===
 ```
 
-#### Simple
+The space between the _version_ and _header_ lines is used for _metadata_ about the page. For now, this only allows the page's title to be configured, but please [open an issue](https://github.com/g-harel/targetblank/issues/new) to share your ideas (ex. background image). The format of a _metadata_ entry is a _name_, followed by `=` and finally the _value_.
 
-```shell
-version 1
-title=bookmarks
-===
-example.com
-email [mail.google.com]
+```diff
+  version 1
++ title = Hello World!
+  ===
 ```
 
-#### Detailed
+Your _links_ are added after the _header_ line and can be formatted in two ways. The simplest way is to simply write the _link_ on its own line, the parser will make sure it's detected and clickable. Alternatively, _links_ can be _labelled_, which lets you control what text is displayed in the place of the full _link_.
 
-```shell
-# Everything after a pound character (#), trailing whitespace and empty lines are ignored.
+```diff
+  version 1
+  title = Hello World
+  ===
++ example.com?q=foo
++ labelled link [example.com?q=bar]
+```
 
-# Documents must start with their version (currently only 1).
-version 1
+You can also add _labels_ on their own, without a link. These will not be clickable, but can be a convenient way to organize your _links_. For even more control, the _links_ and _labels_ can be indented into whatever shape makes sense for your use case.
 
-# Document metadata key-value pairs can be added at the top of the document.
-key=value
+```diff
+  version 1
+  title = Hello World
+  ===
++ productivity
+      example.com?q=foo
++         example.com/baz
+      labelled link [example.com?q=bar]
+```
 
-# The "title" key can be used to name the document.
-title=Hello World
+When a single _group_ isn't enough, you can add a _group delimiter_ to create a new one and add more _links_. This will be reflected on the homepage by a new section side-by-side with the first one. After a few _groups_ (depending on the size of your screen) they will start wrapping underneath the first row of sections on the homepage.
 
-# The first group starts after the header line.
-===
-
-# Group metadata key-value pairs can be added at the start of each group.
-# These values are currently ignored, but may be used in the future.
-key=value
-
-# Groups hold entries containing a label and a link.
-labelled link [example.com]
-
-# Both the label and the link are optional.
-label without link
-[google.com]
-amazon.com
-
-# New groups are started using the group delimiter.
----
-
-# Group entries can be nested using indentation.
-entry 1
-    entry 2
-        entry 3
-    entry 4
+```diff
+  version 1
+  title = Hello World
+  ===
+  productivity
+      example.com?q=foo
+          example.com/baz
+      labelled link [example.com?q=bar]
+  ---
++ communication
++     example.com/chat
 ```
 
 ## Development
