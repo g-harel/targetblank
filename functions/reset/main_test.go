@@ -35,7 +35,7 @@ func TestReset(t *testing.T) {
 		}
 	})
 
-	t.Run("should check that the page's email matches", func(t *testing.T) {
+	t.Run("should silently check that the page's email matches", func(t *testing.T) {
 		email := "oP8a0M2G@example.com"
 
 		page := &storage.Page{
@@ -52,8 +52,8 @@ func TestReset(t *testing.T) {
 				"addr": page.Addr,
 			},
 		}, &handler.Response{})
-		if funcErr == nil {
-			t.Fatal("Expected handler to reject non-matching email")
+		if funcErr != nil {
+			t.Fatal("Expected handler to silently reject non-matching email")
 		}
 	})
 
