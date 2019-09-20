@@ -36,7 +36,7 @@ The space between the _version_ and _header_ lines is used for _metadata_ about 
   ===
 ```
 
-Your _links_ are added after the _header_ line and can be formatted in two ways. The simplest way is to simply write the _link_ on its own line, the parser will make sure it's detected and clickable. Alternatively, _links_ can be _labelled_, which lets you control what text is displayed in the place of the full _link_.
+Your _links_ are added after the _header_ line and can be formatted in two ways. The simplest way is to simply write the _link_ on its own line, the parser will make sure it's detected and clickable. Alternatively, _links_ can be _labelled_, which lets you control what text is displayed in place of the full _link_.
 
 ```diff
   version 1

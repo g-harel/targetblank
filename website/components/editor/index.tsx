@@ -102,6 +102,7 @@ export const Editor: Component<Props> = (props) => () => {
         if (ctrl) {
             if (e.key === "[") editFile("unindent");
             if (e.key === "]") editFile("indent");
+            if (e.key === "/") editFile("toggleComment");
         }
 
         // Move lines using alt + arrows.

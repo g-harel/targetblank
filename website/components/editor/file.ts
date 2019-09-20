@@ -1,5 +1,8 @@
 const INDENT = "    ";
 const INDENT_LENGTH = INDENT.length;
+const COMMENT = "#";
+const COMMENT_LENGTH = COMMENT.length;
+const COMMENT_REPLACE_PATTERN = /^(\s*)# ?/g;
 
 // Helper class used with methods that edit blocks of text.
 // Instances of the class are stateful and will maintain file contents and
@@ -54,6 +57,11 @@ export class FileEditor {
             charCount += this.lines[i].length + 1;
         }
         return charCount;
+    }
+
+    // Decides whether or not a line contains content.
+    private lineIsEmpty(line: number): boolean {
+        return this.lines[line].trim() === "";
     }
 
     // Increase indentation level of all selected lines.
@@ -141,6 +149,49 @@ export class FileEditor {
         const movedChars = this.lines[selectionStartLine].length + 1;
         this.selectionStart += movedChars;
         this.selectionEnd += movedChars;
+    }
+
+    public toggleComment() {
+        const selectionStartLine = this.lineByPos(this.selectionStart);
+        const selectionEndLine = this.lineByPos(this.selectionEnd);
+
+        // Decide whether to comment or un-comment selection. Lines will be
+        // commented out if any of the selected lines is not currently commented.
+        let makeComment = false;
+        for (let i = selectionStartLine; i <= selectionEndLine; i++) {
+            if (this.lineIsEmpty(i)) continue;
+            makeComment =
+                makeComment || !this.lines[i].trim().startsWith(COMMENT);
+        }
+
+        if (makeComment) {
+            let totalAdded = 0;
+            for (let i = selectionStartLine; i <= selectionEndLine; i++) {
+                if (this.lineIsEmpty(i)) continue;
+                this.lines[i] = `${COMMENT} ${this.lines[i]}`;
+                totalAdded += 1 + COMMENT_LENGTH;
+            }
+            // Modify selection indecies.
+            this.selectionStart += COMMENT_LENGTH + 1;
+            this.selectionEnd += totalAdded;
+        } else {
+            let firstLineRemoved = 0;
+            let totalRemoved = 0;
+            for (let i = selectionStartLine; i <= selectionEndLine; i++) {
+                if (this.lineIsEmpty(i)) continue;
+                const initialLength = this.lines[i].length;
+                this.lines[i] = this.lines[i].replace(
+                    COMMENT_REPLACE_PATTERN,
+                    "$1",
+                );
+                const removed = initialLength - this.lines[i].length;
+                totalRemoved += removed;
+                if (i === selectionStartLine) firstLineRemoved = removed;
+            }
+            // Modify selection indecies.
+            this.selectionStart -= firstLineRemoved;
+            this.selectionEnd -= totalRemoved;
+        }
     }
 
     // Return a joined view of the file.
