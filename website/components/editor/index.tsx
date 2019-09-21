@@ -1,6 +1,6 @@
 import {Component} from "../../internal/types";
 import {styled, colors, fonts} from "../../internal/style";
-import {FileEditor} from "./file";
+import {FileEditor} from "../../internal/editor/file";
 
 // Values used to compute the approximate size of the the textbox without hacks.
 // https://stackoverflow.com/q/2803880
@@ -93,7 +93,7 @@ export const Editor: Component<Props> = (props) => () => {
         if (e.key === "Tab") {
             if (e.shiftKey) {
                 editFile("unindent");
-            } else {
+            } else if (!e.altKey) {
                 editFile("indent");
             }
         }

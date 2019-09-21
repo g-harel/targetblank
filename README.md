@@ -11,7 +11,7 @@ Browser tool to organize links. Pages are defined by a [structured document](#do
 
 - **Optimized for performance** Aggressive caching, small code bundles and native font stacks.
 
-<!--
+<!-- TODO extension blurb
 
 - **Browser Extension** An even snappier homepage and simple setup.
 
@@ -73,6 +73,10 @@ When a single _group_ isn't enough, you can add a _group delimiter_ to create a 
 +     example.com/chat
 ```
 
+<!-- TODO keyboard shortcuts -->
+
+<!-- TODO example pages -->
+
 ## Development
 
 ```bash
@@ -90,6 +94,8 @@ The built-in `go test` command can be used to validate changes to backend code.
 This project is hosted on AWS and uses [Terraform](https://www.terraform.io/) to manage the cloud resources.
 
 The [deployment workflow](./.github/main.workflow) uses [GitHub Actions](https://developer.github.com/actions/) to package and apply changes on every change to master.
+
+<!-- TODO browser deploy -->
 
 ## License
 

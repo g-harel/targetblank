@@ -157,40 +157,80 @@ export class FileEditor {
 
         // Decide whether to comment or un-comment selection. Lines will be
         // commented out if any of the selected lines is not currently commented.
-        let makeComment = false;
+        let comment = false;
         for (let i = selectionStartLine; i <= selectionEndLine; i++) {
             if (this.lineIsEmpty(i)) continue;
-            makeComment =
-                makeComment || !this.lines[i].trim().startsWith(COMMENT);
+            comment = comment || !this.lines[i].trim().startsWith(COMMENT);
         }
 
-        if (makeComment) {
+        if (comment) {
+            const startIndexInLine =
+                this.selectionStart - this.posByLine(selectionStartLine);
+            const endIndexInLine =
+                this.selectionEnd - this.posByLine(selectionEndLine);
+            // Find highest possible level that can be commented.
+            let level = Infinity;
+            for (let i = selectionStartLine; i <= selectionEndLine; i++) {
+                if (this.lineIsEmpty(i)) continue;
+                const line = this.lines[i];
+                const indent = line.length - line.replace(/^\s*/g, "").length;
+                level = Math.min(level, indent);
+            }
+            // Only comment at valid indentation levels.
+            level = level - (level % INDENT_LENGTH);
             let totalAdded = 0;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
                 if (this.lineIsEmpty(i)) continue;
-                this.lines[i] = `${COMMENT} ${this.lines[i]}`;
-                totalAdded += 1 + COMMENT_LENGTH;
+                const line = this.lines[i];
+                this.lines[i] = `${line.slice(0, level)}${COMMENT} ${line.slice(
+                    level,
+                )}`;
+                totalAdded += COMMENT_LENGTH + 1;
             }
             // Modify selection indecies.
-            this.selectionStart += COMMENT_LENGTH + 1;
-            this.selectionEnd += totalAdded;
+            if (startIndexInLine >= level) {
+                this.selectionStart += COMMENT_LENGTH + 1;
+            }
+            if (endIndexInLine >= level) {
+                this.selectionEnd += totalAdded;
+            } else {
+                this.selectionEnd += totalAdded - COMMENT_LENGTH - 1;
+            }
         } else {
+            const startIndexInLine =
+                this.selectionStart - this.posByLine(selectionStartLine);
+            const endIndexInLine =
+                this.selectionEnd - this.posByLine(selectionEndLine);
             let firstLineRemoved = 0;
+            let firstLineRemovedIndex = 0;
+            let lastLineRemoved = 0;
+            let lastLineRemovedIndex = 0;
             let totalRemoved = 0;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
                 if (this.lineIsEmpty(i)) continue;
-                const initialLength = this.lines[i].length;
-                this.lines[i] = this.lines[i].replace(
-                    COMMENT_REPLACE_PATTERN,
-                    "$1",
-                );
-                const removed = initialLength - this.lines[i].length;
+                const line = this.lines[i];
+                const whitespace = (line.match(/^\s*/g) || [""])[0].length;
+                if (i === selectionStartLine) {
+                    firstLineRemovedIndex = whitespace;
+                }
+                if (i === selectionEndLine - 1) {
+                    lastLineRemovedIndex = whitespace;
+                }
+                this.lines[i] = line.replace(COMMENT_REPLACE_PATTERN, "$1");
+                const removed = line.length - this.lines[i].length;
                 totalRemoved += removed;
                 if (i === selectionStartLine) firstLineRemoved = removed;
+                if (i === selectionEndLine - 1) lastLineRemoved = removed;
             }
             // Modify selection indecies.
-            this.selectionStart -= firstLineRemoved;
-            this.selectionEnd -= totalRemoved;
+            if (startIndexInLine >= firstLineRemovedIndex) {
+                this.selectionStart -= firstLineRemoved;
+            }
+            if (endIndexInLine >= lastLineRemovedIndex) {
+                this.selectionEnd -= totalRemoved;
+            } else {
+                this.selectionEnd -= totalRemoved - lastLineRemoved;
+            }
         }
     }
 
