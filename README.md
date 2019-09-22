@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/g-harel/targetblank.svg?branch=master)](https://travis-ci.org/g-harel/targetblank)
 [![Test Coverage](https://img.shields.io/codecov/c/github/g-harel/targetblank.svg)](https://codecov.io/gh/g-harel/targetblank)
 
-Browser tool to organize links. Pages are defined by a [structured document](#document-format) which allows links to be labelled, nested and grouped.
+<!-- TODO example pages -->
 
-- **Productivity focused** Do everything from the comfort of your keyboard.
+- **Productivity focused** [Do everything from the comfort of your keyboard.](#keyboard-shortcuts)
 
 - **Shareable** Pages are publicly readable by anyone with the link.
 
@@ -13,7 +13,7 @@ Browser tool to organize links. Pages are defined by a [structured document](#do
 
 <!-- TODO extension blurb
 
-- **Browser Extension** An even snappier homepage and simple setup.
+- **Browser Extension** An even snappier homepage and built-in conveniences.
 
  -->
 
@@ -73,9 +73,23 @@ When a single _group_ isn't enough, you can add a _group delimiter_ to create a 
 +     example.com/chat
 ```
 
-<!-- TODO keyboard shortcuts -->
+## Keyboard Shortcuts
 
-<!-- TODO example pages -->
+Targetblank is meant to be usable and productive using only a keyboard. The [document format](#document-format) goes a long way towards making that a reality, but these shortcuts help complete the story, adding quick navigation and useful text-editing commands. The editor shortcuts are inspired by common text editor keybindings and work on multi-line selections. If your favorite shortcut is missing, please [let me know](https://github.com/g-harel/targetblank/issues/new).
+
+page     | shortcut       | description
+-------- | -------------- | -----------------------
+homepage | `ctrl + enter` | Navigate to editor
+&nbsp;   | `<any>`        | Highlight link
+&nbsp;   | `enter`        | Follow highlighted link
+editor   | `ctrl + enter` | Navigate to homepage
+&nbsp;   | `tab`          | Indent
+&nbsp;   | `shift + tab`  | Un-indent
+&nbsp;   | `ctrl + ]`     | Indent
+&nbsp;   | `ctrl + [`     | Un-indent
+&nbsp;   | `ctrl + /`     | Toggle comment
+&nbsp;   | `alt + up`     | Move up
+&nbsp;   | `alt + down`   | Move down
 
 ## Development
 
@@ -88,6 +102,8 @@ This will launch a local server which watches and serves contents from [`./websi
 _The api is not mocked in dev mode, it points to production endpoints._
 
 The built-in `go test` command can be used to validate changes to backend code.
+
+<!-- TODO extension dev -->
 
 ## Deployment
 

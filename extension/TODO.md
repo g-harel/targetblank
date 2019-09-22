@@ -10,10 +10,9 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- snap indentation to closest power of four
-    - delete full tabs with backspace
-- shortcut to comment out sections
-    - add tests
+- editor shortcuts
+    - snap indentation to closest power of four
+    - duplicate
 - update email templates
     - mention reset token expires
 - update documentation/onboarding
