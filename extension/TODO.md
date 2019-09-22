@@ -10,9 +10,10 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- editor shortcuts
-    - snap indentation to closest power of four
+- editor
     - duplicate
+    - focus end by clicking container
+    - enter keeps indentation
 - update email templates
     - mention reset token expires
 - update documentation/onboarding

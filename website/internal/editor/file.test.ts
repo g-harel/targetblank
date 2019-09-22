@@ -54,7 +54,7 @@ describe("FileEditor", () => {
         it("should correctly adjust cursor position", () => {
             const input = "  123";
             const cursor = 2;
-            const expectedCursor = 6;
+            const expectedCursor = 4;
 
             const fileEditor = new FileEditor(input, cursor, cursor);
             fileEditor.indent();
@@ -67,8 +67,8 @@ describe("FileEditor", () => {
             const input = "  abc\n  123\n 456\nxyz";
             const cursorStart = 10;
             const cursorEnd = 18;
-            const expectedStart = 14;
-            const expectedEnd = 30;
+            const expectedStart = 12;
+            const expectedEnd = 27;
 
             const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
             fileEditor.indent();
@@ -101,10 +101,10 @@ describe("FileEditor", () => {
             expect(fileEditor.getContent()).toBe(expected);
         });
 
-        it("should be a noop if the line is partially indented", () => {
+        it("should work correctly on partially indented lines", () => {
             const input = "  abc";
             const cursor = 0;
-            const expected = "  abc";
+            const expected = "abc";
 
             const fileEditor = new FileEditor(input, cursor, cursor);
             fileEditor.unindent();
@@ -155,7 +155,7 @@ describe("FileEditor", () => {
             const cursorStart = 6;
             const cursorEnd = 21;
             const expectedStart = 6;
-            const expectedEnd = 16;
+            const expectedEnd = 14;
 
             const fileEditor = new FileEditor(input, cursorStart, cursorEnd);
             fileEditor.unindent();

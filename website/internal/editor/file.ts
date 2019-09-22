@@ -64,6 +64,14 @@ export class FileEditor {
         return this.lines[line].trim() === "";
     }
 
+    // Calculates the number of spaces at the start of the line.
+    private leadingSpace(line: number): number {
+        const contents = this.lines[line];
+        let count = 0;
+        while (contents[count] === " ") count++;
+        return count;
+    }
+
     // Increase indentation level of all selected lines.
     // Cursor positions are updated.
     public indent() {
@@ -71,14 +79,19 @@ export class FileEditor {
         const selectionEndLine = this.lineByPos(this.selectionEnd);
 
         // Modify line contents.
+        let firstLineAdded = 0;
+        let totalAdded = 0;
         for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-            this.lines[i] = INDENT + this.lines[i];
+            if (this.lineIsEmpty(i)) continue;
+            const add = INDENT_LENGTH - (this.leadingSpace(i) % INDENT_LENGTH);
+            this.lines[i] = INDENT.slice(0, add) + this.lines[i];
+            if (i === selectionStartLine) firstLineAdded = add;
+            totalAdded += add;
         }
 
         // Modify selection indecies.
-        this.selectionStart += INDENT_LENGTH;
-        const editedLines = selectionEndLine - selectionStartLine + 1;
-        this.selectionEnd += INDENT_LENGTH * editedLines;
+        this.selectionStart += firstLineAdded;
+        this.selectionEnd += totalAdded;
     }
 
     // Decrease indentation level of all selected lines.
@@ -88,21 +101,22 @@ export class FileEditor {
         const selectionEndLine = this.lineByPos(this.selectionEnd);
 
         // Modify line contents (if they start with an indent).
-        let editedLines = 0;
-        let firstLineEdited = false;
+        let firstLineRemoved = 0;
+        let totalRemoved = 0;
         for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-            if (this.lines[i].startsWith(INDENT)) {
-                if (i === selectionStartLine) firstLineEdited = true;
-                this.lines[i] = this.lines[i].substr(INDENT_LENGTH);
-                editedLines++;
-            }
+            if (this.lineIsEmpty(i)) continue;
+            const whitespace = this.leadingSpace(i);
+            if (whitespace === 0) continue;
+            let remove = whitespace % INDENT_LENGTH;
+            if (remove === 0) remove = INDENT_LENGTH;
+            this.lines[i] = this.lines[i].substr(remove);
+            if (i === selectionStartLine) firstLineRemoved = remove;
+            totalRemoved += remove;
         }
 
         // Modify selection indecies.
-        if (firstLineEdited) {
-            this.selectionStart -= INDENT_LENGTH;
-        }
-        this.selectionEnd -= INDENT_LENGTH * editedLines;
+        this.selectionStart -= firstLineRemoved;
+        this.selectionEnd -= totalRemoved;
 
         // Keep cursor on same line it was before unindent.
         if (selectionStartLine !== this.lineByPos(this.selectionStart)) {
@@ -172,9 +186,7 @@ export class FileEditor {
             let level = Infinity;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
                 if (this.lineIsEmpty(i)) continue;
-                const line = this.lines[i];
-                const indent = line.length - line.replace(/^\s*/g, "").length;
-                level = Math.min(level, indent);
+                level = Math.min(level, this.leadingSpace(i));
             }
             // Only comment at valid indentation levels.
             level = level - (level % INDENT_LENGTH);
@@ -208,14 +220,13 @@ export class FileEditor {
             let totalRemoved = 0;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
                 if (this.lineIsEmpty(i)) continue;
-                const line = this.lines[i];
-                const whitespace = (line.match(/^\s*/g) || [""])[0].length;
                 if (i === selectionStartLine) {
-                    firstLineRemovedIndex = whitespace;
+                    firstLineRemovedIndex = this.leadingSpace(i);
                 }
                 if (i === selectionEndLine - 1) {
-                    lastLineRemovedIndex = whitespace;
+                    lastLineRemovedIndex = this.leadingSpace(i);
                 }
+                const line = this.lines[i];
                 this.lines[i] = line.replace(COMMENT_REPLACE_PATTERN, "$1");
                 const removed = line.length - this.lines[i].length;
                 totalRemoved += removed;
