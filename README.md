@@ -1,15 +1,18 @@
-# [targetblank](https://targetblank.org)
-
-[![Build Status](https://travis-ci.org/g-harel/targetblank.svg?branch=master)](https://travis-ci.org/g-harel/targetblank)
-[![Test Coverage](https://img.shields.io/codecov/c/github/g-harel/targetblank.svg)](https://codecov.io/gh/g-harel/targetblank)
+<p align="center">
+    <a href="https://targetblank.org">
+        <img src="https://svgsaur.us/?t=targetblank&o=b&s=26&c=332832&w=152&y=55" />
+        <br>
+        <img src="https://svgsaur.us/?t=organize_your_links&s=16&c=766873&w=152&y=12" />
+    </a>
+</p>
 
 <!-- TODO example pages -->
 
-- **Productivity focused** [Do everything from the comfort of your keyboard.](#keyboard-shortcuts)
+- **Productivity focused** &nbsp; [Do everything from the comfort of your keyboard.](#keyboard-shortcuts)
 
-- **Shareable** Pages are publicly readable by anyone with the link.
+- **Shareable** &nbsp; Pages are publicly readable by anyone with the link.
 
-- **Optimized for performance** Aggressive caching, small code bundles and native font stacks.
+- **Optimized for performance** &nbsp; Aggressive caching, small code bundles and native font stacks.
 
 <!-- TODO extension blurb
 
@@ -92,6 +95,9 @@ editor   | `ctrl + enter` | Navigate to homepage
 &nbsp;   | `alt + down`   | Move down
 
 ## Development
+
+[![Build Status](https://travis-ci.org/g-harel/targetblank.svg?branch=master)](https://travis-ci.org/g-harel/targetblank)
+[![Test Coverage](https://img.shields.io/codecov/c/github/g-harel/targetblank.svg)](https://codecov.io/gh/g-harel/targetblank)
 
 ```bash
 $ npm run dev
