@@ -64,6 +64,14 @@ export class FileEditor {
         return this.lines[line].trim() === "";
     }
 
+    // Computes whether the selection is multiline or not.
+    private isMultilineSelection(): boolean {
+        return (
+            this.lineByPos(this.selectionStart) !==
+            this.lineByPos(this.selectionEnd)
+        );
+    }
+
     // Calculates the number of spaces at the start of the line.
     private leadingSpace(line: number): number {
         const contents = this.lines[line];
@@ -82,7 +90,7 @@ export class FileEditor {
         let firstLineAdded = 0;
         let totalAdded = 0;
         for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-            if (this.lineIsEmpty(i)) continue;
+            if (this.lineIsEmpty(i) && this.isMultilineSelection()) continue;
             const add = INDENT_LENGTH - (this.leadingSpace(i) % INDENT_LENGTH);
             this.lines[i] = INDENT.slice(0, add) + this.lines[i];
             if (i === selectionStartLine) firstLineAdded = add;
@@ -104,11 +112,10 @@ export class FileEditor {
         let firstLineRemoved = 0;
         let totalRemoved = 0;
         for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-            if (this.lineIsEmpty(i)) continue;
+            if (this.lineIsEmpty(i) && this.isMultilineSelection()) continue;
             const whitespace = this.leadingSpace(i);
             if (whitespace === 0) continue;
-            let remove = whitespace % INDENT_LENGTH;
-            if (remove === 0) remove = INDENT_LENGTH;
+            const remove = whitespace % INDENT_LENGTH || INDENT_LENGTH;
             this.lines[i] = this.lines[i].substr(remove);
             if (i === selectionStartLine) firstLineRemoved = remove;
             totalRemoved += remove;
@@ -173,7 +180,7 @@ export class FileEditor {
         // commented out if any of the selected lines is not currently commented.
         let comment = false;
         for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-            if (this.lineIsEmpty(i)) continue;
+            if (this.lineIsEmpty(i) && this.isMultilineSelection()) continue;
             comment = comment || !this.lines[i].trim().startsWith(COMMENT);
         }
 
@@ -185,14 +192,18 @@ export class FileEditor {
             // Find highest possible level that can be commented.
             let level = Infinity;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-                if (this.lineIsEmpty(i)) continue;
+                if (this.lineIsEmpty(i) && this.isMultilineSelection()) {
+                    continue;
+                }
                 level = Math.min(level, this.leadingSpace(i));
             }
             // Only comment at valid indentation levels.
             level = level - (level % INDENT_LENGTH);
             let totalAdded = 0;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-                if (this.lineIsEmpty(i)) continue;
+                if (this.lineIsEmpty(i) && this.isMultilineSelection()) {
+                    continue;
+                }
                 const line = this.lines[i];
                 this.lines[i] = `${line.slice(0, level)}${COMMENT} ${line.slice(
                     level,
@@ -219,7 +230,9 @@ export class FileEditor {
             let lastLineRemovedIndex = 0;
             let totalRemoved = 0;
             for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-                if (this.lineIsEmpty(i)) continue;
+                if (this.lineIsEmpty(i) && this.isMultilineSelection()) {
+                    continue;
+                }
                 if (i === selectionStartLine) {
                     firstLineRemovedIndex = this.leadingSpace(i);
                 }
