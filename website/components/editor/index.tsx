@@ -1,6 +1,6 @@
 import {Component} from "../../internal/types";
 import {styled, colors, fonts} from "../../internal/style";
-import {FileEditor} from "../../internal/editor/file";
+import {Command, command} from "../../internal/editor";
 
 // Values used to compute the approximate size of the the textbox without hacks.
 // https://stackoverflow.com/q/2803880
@@ -67,22 +67,16 @@ export const Editor: Component<Props> = (props) => () => {
         }
 
         // Standardized helper to modify the contents in response to a command.
-        const editFile = (op: keyof FileEditor) => {
+        const editFile = (command: Command) => {
             e.preventDefault();
 
             const target = (e.target as any) as HTMLTextAreaElement;
             const initialValue = target.value;
-            const fileEditor = new FileEditor(
-                target.value,
-                target.selectionStart,
-                target.selectionEnd,
-            );
 
-            fileEditor[op]();
-
-            target.value = fileEditor.getContent();
-            target.selectionStart = fileEditor.getSelectionStart();
-            target.selectionEnd = fileEditor.getSelectionEnd();
+            const out = command(target);
+            target.value = out.value;
+            target.selectionStart = out.selectionStart;
+            target.selectionEnd = out.selectionEnd;
 
             if (initialValue !== target.value) {
                 props.callback(target.value);
@@ -92,23 +86,23 @@ export const Editor: Component<Props> = (props) => () => {
         // Modify indentation when tab is pressed.
         if (e.key === "Tab") {
             if (e.shiftKey) {
-                editFile("unindent");
+                editFile(command.unindent);
             } else if (!e.altKey) {
-                editFile("indent");
+                editFile(command.indent);
             }
         }
 
         // Indent lines using ctrl + brackets.
         if (ctrl) {
-            if (e.key === "[") editFile("unindent");
-            if (e.key === "]") editFile("indent");
-            if (e.key === "/") editFile("toggleComment");
+            if (e.key === "[") editFile(command.unindent);
+            if (e.key === "]") editFile(command.indent);
+            if (e.key === "/") editFile(command.toggleComment);
         }
 
         // Move lines using alt + arrows.
         if (e.altKey) {
-            if (e.key === "ArrowUp") editFile("moveUp");
-            if (e.key === "ArrowDown") editFile("moveDown");
+            if (e.key === "ArrowUp") editFile(command.moveUp);
+            if (e.key === "ArrowDown") editFile(command.moveDown);
         }
     };
 

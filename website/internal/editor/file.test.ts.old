@@ -1,4 +1,4 @@
-import {FileEditor} from "./file";
+import {FileEditor} from "./comment";
 
 describe("FileEditor", () => {
     it("should not modify contents on creation", () => {
