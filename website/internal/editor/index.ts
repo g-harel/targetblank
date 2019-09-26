@@ -29,3 +29,4 @@ export const command = {
 
 // Type check.
 const _: Record<string, Command> = command;
+if (0) console.log(_);
