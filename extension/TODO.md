@@ -12,8 +12,8 @@ firefox
 TODO
 - editor
     - duplicate
-    - focus end by clicking container
     - enter keeps indentation
+    - undo history
 - update email templates
     - mention reset token expires
 - update documentation/onboarding

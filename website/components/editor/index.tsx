@@ -10,6 +10,7 @@ const charWidthRatio = 0.66;
 const Wrapper = styled("div")({
     display: "flex",
     flexDirection: "row",
+    flexGrow: 1,
     padding: "1.8rem 0 0 1.8rem",
 });
 
@@ -30,6 +31,8 @@ const LineNumber = styled("div")({
 
 // Wrapper to prevent the scrollbar from moving the content on chrome.
 const ScrollWrapper = styled("div")({
+    display: "flex",
+    flexDirection: "column",
     flexGrow: 1,
     overflowX: "auto",
 });
@@ -38,11 +41,13 @@ const StyledTextarea = styled("textarea")({
     backgroundColor: colors.backgroundSecondary,
     border: "none",
     color: colors.textPrimary,
+    flexGrow: 1,
     fontFamily: fonts.monospace,
     lineHeight: `${lineHeight}rem`,
     outline: "none",
     overflow: "hidden",
     resize: "none",
+    minWidth: "100%",
     whiteSpace: "pre",
 });
 

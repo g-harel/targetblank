@@ -13,6 +13,9 @@ const saveDelay = 1400;
 
 const Wrapper = styled("div")({
     backgroundColor: colors.backgroundSecondary,
+    display: "flex",
+    flexDirection: "column",
+    flexGrow: 1,
     minHeight: "100%",
 });
 

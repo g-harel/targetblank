@@ -14,7 +14,9 @@ const Wrapper = styled("div")({
 });
 
 const Content = styled("main")({
+    display: "flex",
     flex: "1 0 auto",
+    flexDirection: "column",
 });
 
 const Footer = styled("footer")({
