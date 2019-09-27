@@ -54,14 +54,13 @@ const Group = styled("div")({
     border: `1px solid ${colors.decoration}`,
     borderRadius: "2px",
     flexBasis: "30%",
-    flexGrow: 0,
-    flexShrink: 0,
+    flexGrow: 1,
     margin: "0 1rem 2rem",
     padding: "1rem 1.4rem 1.6rem",
 
     $nest: {
         [breakpoint.sm]: {
-            flexGrow: 1,
+            flexBasis: "50%",
         },
     },
 });
