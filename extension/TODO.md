@@ -11,16 +11,12 @@ firefox
 
 TODO
 - editor
-    - duplicate
-    - enter keeps indentation
     - undo history
-- update email templates
-    - mention reset token expires
+    - enter keeps indentation
 - update documentation/onboarding
     - simplify initial document
     - move some features to advanced section(s)
     - link to extension
-- focus on page + option to disable
 - local (file) links
 - auto deploy to extension stores
 

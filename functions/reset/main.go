@@ -57,6 +57,8 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 			<body>
 				<h3>Follow the link to update your password.</h3>
 				<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
+				<br />
+				<sup>This link will expire in 10 minutes</sup>
 			</body>
 		</html>`,
 		&struct {
