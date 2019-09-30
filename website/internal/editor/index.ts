@@ -16,13 +16,14 @@ export interface Command {
 }
 
 import {toggleComment} from "./comment";
-import {indent, unindent} from "./indentation";
+import {indent, unindent, newline} from "./indentation";
 import {moveUp, moveDown} from "./movement";
 
 export const command = {
     toggleComment,
     indent,
     unindent,
+    newline,
     moveUp,
     moveDown,
 };

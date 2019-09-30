@@ -104,6 +104,12 @@ export const Editor: Component<Props> = (props) => () => {
             if (e.key === "/") editFile(command.toggleComment);
         }
 
+        if (e.key === "Enter") {
+            if (!ctrl && !e.altKey && !e.shiftKey) {
+                editFile(command.newline);
+            }
+        }
+
         // Move lines using alt + arrows.
         if (e.altKey) {
             if (e.key === "ArrowUp") editFile(command.moveUp);

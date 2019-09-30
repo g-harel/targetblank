@@ -73,3 +73,20 @@ export const unindent: Command = (state) => {
 
     return render(s);
 };
+
+export const newline: Command = (state) => {
+    const s = init(state);
+
+    const selectionLine = lineByPos(s, s.selectionEnd);
+
+    const whitespace = leadingSpace(s, selectionLine);
+    const lineIndex = selectionLine + 1;
+    const indentCount = Math.max(whitespace / INDENT_LENGTH);
+    const line = INDENT.repeat(indentCount).slice(0, whitespace);
+    s.lines.splice(lineIndex, 0, line);
+    const newSelection = posByLine(s, lineIndex) + whitespace;
+    s.selectionStart = newSelection;
+    s.selectionEnd = newSelection;
+
+    return render(s);
+};
