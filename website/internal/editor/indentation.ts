@@ -7,6 +7,7 @@ import {
     leadingSpace,
     render,
     posByLine,
+    indexInLine,
 } from "./util";
 
 export const INDENT = "    ";
@@ -78,12 +79,18 @@ export const newline: Command = (state) => {
     const s = init(state);
 
     const selectionLine = lineByPos(s, s.selectionEnd);
+    const cursorPositionInLine = indexInLine(s, s.selectionEnd);
 
+    const before = s.lines[selectionLine].slice(0, cursorPositionInLine);
+    const after = s.lines[selectionLine].slice(cursorPositionInLine);
     const whitespace = leadingSpace(s, selectionLine);
     const lineIndex = selectionLine + 1;
     const indentCount = Math.max(whitespace / INDENT_LENGTH);
-    const line = INDENT.repeat(indentCount).slice(0, whitespace);
+
+    s.lines[selectionLine] = before;
+    const line = INDENT.repeat(indentCount).slice(0, whitespace) + after;
     s.lines.splice(lineIndex, 0, line);
+
     const newSelection = posByLine(s, lineIndex) + whitespace;
     s.selectionStart = newSelection;
     s.selectionEnd = newSelection;

@@ -75,3 +75,8 @@ export const leadingSpace = (s: InternalEditorState, line: number): number => {
     while (contents[count] === " ") count++;
     return count;
 };
+
+// Computes the cursor position of the given position in its line.
+export const indexInLine = (s: InternalEditorState, pos: number): number => {
+    return pos - posByLine(s, lineByPos(s, pos));
+};

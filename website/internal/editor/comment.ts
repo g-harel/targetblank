@@ -6,8 +6,8 @@ import {
     lineIsEmpty,
     isMultilineSelection,
     leadingSpace,
-    posByLine,
     render,
+    indexInLine,
 } from "./util";
 
 export const COMMENT = "#";
@@ -36,9 +36,8 @@ const commentOn: Command = (state) => {
 
     const selectionStartLine = lineByPos(s, s.selectionStart);
     const selectionEndLine = lineByPos(s, s.selectionEnd);
-    const startIndexInLine =
-        s.selectionStart - posByLine(s, selectionStartLine);
-    const endIndexInLine = s.selectionEnd - posByLine(s, selectionEndLine);
+    const startIndexInLine = indexInLine(s, s.selectionStart);
+    const endIndexInLine = indexInLine(s, s.selectionEnd);
 
     // Find highest possible level that can be commented.
     let level = Infinity;
@@ -79,9 +78,8 @@ const commentOff: Command = (state) => {
 
     const selectionStartLine = lineByPos(s, s.selectionStart);
     const selectionEndLine = lineByPos(s, s.selectionEnd);
-    const startIndexInLine =
-        s.selectionStart - posByLine(s, selectionStartLine);
-    const endIndexInLine = s.selectionEnd - posByLine(s, selectionEndLine);
+    const startIndexInLine = indexInLine(s, s.selectionStart);
+    const endIndexInLine = indexInLine(s, s.selectionEnd);
 
     let firstLineRemoved = 0;
     let firstLineRemovedIndex = 0;
