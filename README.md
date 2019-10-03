@@ -80,19 +80,19 @@ When a single _group_ isn't enough, you can add a _group delimiter_ to create a 
 
 Targetblank is meant to be usable and productive using only a keyboard. The [document format](#document-format) goes a long way towards making that a reality, but these shortcuts help complete the story, adding quick navigation and useful text-editing commands. The editor shortcuts are inspired by common text editor keybindings and work on multi-line selections. If your favorite shortcut is missing, please [let me know](https://github.com/g-harel/targetblank/issues/new).
 
-page     | shortcut       | description
--------- | -------------- | -----------------------
-homepage | `ctrl + enter` | Navigate to editor
-&nbsp;   | `<any>`        | Highlight link
-&nbsp;   | `enter`        | Follow highlighted link
-editor   | `ctrl + enter` | Navigate to homepage
-&nbsp;   | `tab`          | Indent
-&nbsp;   | `shift + tab`  | Un-indent
-&nbsp;   | `ctrl + ]`     | Indent
-&nbsp;   | `ctrl + [`     | Un-indent
-&nbsp;   | `ctrl + /`     | Toggle comment
-&nbsp;   | `alt + up`     | Move up
-&nbsp;   | `alt + down`   | Move down
+page     | shortcut                | keys
+-------- | ----------------------- | ---------------
+homepage | Navigate to editor      | `ctrl + enter`
+&nbsp;   | Highlight link          | `<any letters>`
+&nbsp;   | Follow highlighted link | `enter`
+editor   | Navigate to homepage    | `ctrl + enter`
+&nbsp;   | Indent                  | `tab`
+&nbsp;   | &nbsp;                  | `ctrl + ]`
+&nbsp;   | Un-indent               | `shift + tab`
+&nbsp;   | &nbsp;                  | `ctrl + [`
+&nbsp;   | Move up                 | `alt + up`
+&nbsp;   | Move down               | `alt + down`
+&nbsp;   | Toggle comment          | `ctrl + /`
 
 ## Development
 
@@ -111,7 +111,7 @@ The built-in `go test` command can be used to validate changes to backend code.
 
 <!-- TODO extension dev -->
 
-## Deployment
+### Deployment
 
 This project is hosted on AWS and uses [Terraform](https://www.terraform.io/) to manage the cloud resources.
 
@@ -141,17 +141,5 @@ dynamodb schema {
     password: string (hashed),
     published: bool,
 }
-
-links
-- https://undraw.co/illustrations
-- https://gauger.io/fonticon/
-- http://www.alexedwards.net/blog/serverless-api-with-go-and-aws-lambda
-- https://github.com/nzoschke/gofaas
-- https://read.acloud.guru/how-to-keep-your-lambda-functions-warm-9d7e1aa6e2f0
-- https://gist.github.com/prwhite/8168133
-- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html
-- https://scene-si.org/2018/05/08/protecting-api-access-with-jwt/
-- https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html
-- https://github.com/hashicorp/best-practices/tree/master/terraform
 
 -->
