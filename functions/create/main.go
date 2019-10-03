@@ -19,40 +19,17 @@ var mailerSend = mailer.Send
 var secretsKey = secrets.Key
 var storagePageCreate = storage.PageCreate
 
-var defaultDocument = `# Everything after a pound character (#), trailing whitespace and empty lines are ignored.
-
-# Documents must start with their version (currently only 1).
-version 1
-
-# Document metadata key-value pairs can be added at the top of the document.
-key=value
-
-# The "title" key can be used to name the document.
-title=Hello World
-
-# The first group starts after the header line.
+var defaultDocument = `version 1
+title = Welcome!
 ===
-
-# Group metadata key-value pairs can be added at the start of each group.
-# These values are currently ignored, but may be used in the future.
-key=value
-
-# Groups hold entries containing a label and a link.
-labelled link [example.com]
-
-# Both the label and the link are optional.
-label without link
-[google.com]
-amazon.com
-
-# New groups are started using the group delimiter.
+This is your new page, make sure you save the url so that you can come back to it.
+You can also share the url with others if you want to show off your links!
+Click the edit button in the top right to start making changes.
 ---
+Helpful Links
+    Document Format [https://github.com/g-harel/targetblank/#document-format]
+    Keyboard Shortcuts [https://github.com/g-harel/targetblank/#keyboard-shortcuts]
 
-# Group entries can be nested using indentation.
-entry 1
-    entry 2
-        entry 3
-    entry 4
 `
 
 // Generates a pseudorandom page id.

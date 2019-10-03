@@ -3,41 +3,16 @@ import {read, write} from "../storage";
 import {IPageData} from "../types";
 import {Client, localAddr} from ".";
 
-// tslint:disable-next-line:max-line-length
-const defaultPage = `# Everything after a pound character (#), trailing whitespace and empty lines are ignored.
-
-# Documents must start with their version (currently only 1).
-version 1
-
-# Document metadata key-value pairs can be added at the top of the document.
-key=value
-
-# The "title" key can be used to name the document.
-title=Hello World
-
-# The first group starts after the header line.
+const defaultPage = `version 1
+title = Welcome!
 ===
-
-# Group metadata key-value pairs can be added at the start of each group.
-# These values are currently ignored, but may be used in the future.
-key=value
-
-# Groups hold entries containing a label and a link.
-labelled link [example.com]
-
-# Both the label and the link are optional.
-label without link
-[google.com]
-amazon.com
-
-# New groups are started using the group delimiter.
+This is your local page, it behaves exactly like a regular page, but it's for your eyes only!
+The contents are only saved on this browser, so they may get reset when clearing browser data.
+Click the edit button in the top right to start making changes.
 ---
-
-# Group entries can be nested using indentation.
-entry 1
-    entry 2
-        entry 3
-    entry 4
+Helpful Links
+    Document Format [https://github.com/g-harel/targetblank/#document-format]
+    Keyboard Shortcuts [https://github.com/g-harel/targetblank/#keyboard-shortcuts]
 `;
 
 const writeData = (data: IPageData) => {

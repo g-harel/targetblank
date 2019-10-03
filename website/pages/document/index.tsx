@@ -17,6 +17,7 @@ const Wrapper = styled("div")({
     height: "100%",
     maxWidth: "1200px",
     margin: "0 auto",
+    width: "100%",
 });
 
 const Action = styled("div")({
@@ -54,7 +55,8 @@ const Group = styled("div")({
     border: `1px solid ${colors.decoration}`,
     borderRadius: "2px",
     flexBasis: "30%",
-    flexGrow: 1,
+    flexShrink: 0,
+    flexGrow: 0,
     margin: "0 1rem 2rem",
     padding: "1rem 1.4rem 1.6rem",
 
