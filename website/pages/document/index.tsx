@@ -115,6 +115,15 @@ export const Document: PageComponent = ({addr}, update) => {
 
         document.title = data.meta.title || "targetblank";
 
+        // Also give focus to most recently highlighted link.
+        setTimeout(() => {
+            if (!highlighted) return;
+            const link = document.querySelector(
+                `a[href="${highlighted.link}"]`,
+            );
+            if (link) (link as any).focus();
+        });
+
         // Checker given to pick the highlighted item.
         highlighted = null;
         const isHighlighted: ItemProps["isHighlighted"] = (item) => {

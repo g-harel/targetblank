@@ -11,8 +11,6 @@ firefox
 TODO
 - local (file) links
 - auto deploy to extension stores
-- group metadata to sort entries
-- tab through highlight matches
 - parser tests as files (document + json)
 
 -->
