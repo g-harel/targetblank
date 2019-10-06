@@ -1,6 +1,7 @@
 export interface Event {
-    key: KeyboardEvent["key"];
     ctrl: boolean;
+    key: KeyboardEvent["key"];
+    shift: boolean;
 }
 
 export type Handler = (e: Event) => any;
@@ -9,8 +10,9 @@ let handlers: Handler[] = [];
 
 window.onkeydown = (e: KeyboardEvent) => {
     const event: Event = {
-        key: e.key,
         ctrl: navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey,
+        key: e.key,
+        shift: e.shiftKey,
     };
     handlers.forEach((h) => h(event));
 };

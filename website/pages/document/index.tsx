@@ -35,7 +35,7 @@ const Edit = styled("div")({
         "&:hover": {
             $nest: {
                 "&::before": {
-                    content: `"ctrl + enter"`,
+                    content: `"shift + e"`,
                     color: colors.textSecondaryLarge,
                     margin: "0 0.7rem",
                 },
@@ -85,16 +85,10 @@ export const Document: PageComponent = ({addr}, update) => {
     let highlighTimer: any = null;
 
     keyboard((e) => {
-        // Navigate to the edit page with "ctrl+enter".
-        if (e.ctrl && e.key === "Enter") {
+        // Navigate to the edit page with keyboard.
+        if (e.shift && e.key === "E") {
             safeRedirect(routes.edit, addr!);
             return;
-        }
-
-        // Follow highlighted link when enter is pressed.
-        if (e.key === "Enter" && highlighted) {
-            console.log(e, highlighted);
-            return Anchor({immediate: true, href: highlighted.link}, () => {});
         }
 
         // Update highlight on keyboard clicks.

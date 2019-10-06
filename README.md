@@ -80,19 +80,19 @@ When a single _group_ isn't enough, you can add a _group delimiter_ to create a 
 
 Targetblank is meant to be usable and productive using only a keyboard. The [document format](#document-format) goes a long way towards making that a reality, but these shortcuts help complete the story, adding quick navigation and useful text-editing commands. The editor shortcuts are inspired by common text editor keybindings and work on multi-line selections. If your favorite shortcut is missing, please [let me know](https://github.com/g-harel/targetblank/issues/new).
 
-page     | shortcut                | keys
--------- | ----------------------- | ---------------
-homepage | Navigate to editor      | `ctrl + enter`
-&nbsp;   | Highlight link          | `<any letters>`
-&nbsp;   | Follow highlighted link | `enter`
-editor   | Navigate to homepage    | `ctrl + enter`
-&nbsp;   | Indent                  | `tab`
-&nbsp;   | &nbsp;                  | `ctrl + ]`
-&nbsp;   | Un-indent               | `shift + tab`
-&nbsp;   | &nbsp;                  | `ctrl + [`
-&nbsp;   | Move up                 | `alt + up`
-&nbsp;   | Move down               | `alt + down`
-&nbsp;   | Toggle comment          | `ctrl + /`
+page     | shortcut       | keys
+-------- | -------------- | ---------------
+homepage | Open editor    | `shift + e`
+&nbsp;   | Search links   | `<any letters>`
+&nbsp;   | Follow link    | `enter`
+editor   | Close editor   | `esc`
+&nbsp;   | Indent         | `tab`
+&nbsp;   | &nbsp;         | `ctrl + ]`
+&nbsp;   | Un-indent      | `shift + tab`
+&nbsp;   | &nbsp;         | `ctrl + [`
+&nbsp;   | Move up        | `alt + up`
+&nbsp;   | Move down      | `alt + down`
+&nbsp;   | Toggle comment | `ctrl + /`
 
 ## Development
 

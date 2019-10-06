@@ -50,7 +50,7 @@ const Done = styled("div")({
         "&:hover": {
             $nest: {
                 "&::before": {
-                    content: `"ctrl + enter"`,
+                    content: `"esc"`,
                     color: colors.textSecondaryLarge,
                     margin: "0 0.7rem",
                 },
@@ -112,10 +112,10 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
         }, saveDelay);
     };
 
-    // Navigate to the document page with "ctrl+enter".
+    // Navigate to the document page with keyboard.
     let saving = false;
     keyboard((e) => {
-        if (!saving && e.ctrl && e.key === "Enter") {
+        if (!saving && e.key === "Escape") {
             safeRedirect(routes.document, addr!);
         }
     });
