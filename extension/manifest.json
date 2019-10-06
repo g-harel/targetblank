@@ -1,7 +1,8 @@
 {
     "manifest_version": 2,
+    "version": "1.0.0",
     "name": "targetblank",
-    "version": "0.0.0",
+    "description": "organize your links",
     "applications": {
         "gecko": {
             "id": "targetblank"

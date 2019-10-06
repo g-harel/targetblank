@@ -1,3 +1,17 @@
+<!--
+
+chrome
+    dev chrome://extensions/
+    deployment https://github.com/DrewML/chrome-webstore-upload-cli
+firefox
+    dev about:debugging#/runtime/this-firefox
+    deployment https://github.com/fregante/web-ext-submit
+
+TODO
+- auto deploy to extension stores
+
+-->
+
 <p align="center">
     <a href="https://targetblank.org">
         <img src="https://svgsaur.us/?t=targetblank&o=b&s=26&c=332832&w=152&y=55" />
