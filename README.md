@@ -121,9 +121,35 @@ This will launch a local server which watches and serves contents from [`./websi
 
 _The api is not mocked in dev mode, it points to production endpoints._
 
-The built-in `go test` command can be used to validate changes to backend code.
+### Testing
 
-<!-- TODO extension dev -->
+```bash
+$ go test ./...
+```
+
+Tests all backend packages (routing, handler logic and document parsing).
+
+```bash
+$ npm run test
+```
+
+Checks code quality, runs unit tests on helpers and builds the bundle.
+
+### Extension
+
+Testing the extension starts the same as usual website development.
+
+```bash
+$ npm run dev
+```
+
+**Chrome**: navigate to `chrome://extensions`, enable developer mode, and load unpacked from the `.dist` directory.
+
+**Firefox**: navigate to `about:debugging#/runtime/this-firefox`, and load temporary add-on from any file in the `.dist` directory.
+
+_You will need to open a new tab to view the most recent version of the extension (no hot-reload)._
+
+_Sourcing the extension contents from `.website` will use the actual bundle, but will not be updated on save._
 
 ### Deployment
 
@@ -131,7 +157,7 @@ This project is hosted on AWS and uses [Terraform](https://www.terraform.io/) to
 
 The [deployment workflow](./.github/main.workflow) uses [GitHub Actions](https://developer.github.com/actions/) to package and apply changes on every change to master.
 
-<!-- TODO browser deploy -->
+<!-- TODO extension deploy -->
 
 ## License
 

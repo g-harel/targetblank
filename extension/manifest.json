@@ -5,7 +5,7 @@
     "description": "organize your links",
     "applications": {
         "gecko": {
-            "id": "targetblank"
+            "id": "extension@targetblank.org"
         }
     },
 
