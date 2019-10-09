@@ -30,7 +30,7 @@ export const moveDown: Command = (state) => {
 
     const selectionStartLine = lineByPos(s, s.selectionStart);
     const selectionEndLine = lineByPos(s, s.selectionEnd);
-    if (selectionEndLine >= s.lines.length) return render(s);
+    if (selectionEndLine >= s.lines.length - 1) return render(s);
 
     // Swap lines in place till the entire selection is moved.
     for (let i = selectionEndLine; i >= selectionStartLine; i--) {

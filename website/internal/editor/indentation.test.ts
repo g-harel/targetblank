@@ -66,7 +66,7 @@ describe("website/internal/editor/indentation", () => {
             const value = "abc";
             const selectionStart = 0;
             const selectionEnd = selectionStart;
-            const expected = "abc";
+            const expected = value;
 
             const temp = unindent({value, selectionStart, selectionEnd});
 
