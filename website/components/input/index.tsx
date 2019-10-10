@@ -56,6 +56,7 @@ const Hint = styled("span")({
 });
 
 const StyledInput = styled("input")({
+    backgroundColor: colors.backgroundPrimary,
     border: `1px solid ${colors.textSecondarySmall}`,
     borderRadius: "2px",
     boxShadow: "none",

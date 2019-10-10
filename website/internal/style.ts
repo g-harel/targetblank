@@ -1,4 +1,10 @@
-import {style, types} from "typestyle";
+import {style, types, cssRule} from "typestyle";
+
+// Detect if the os/browser is using a dark theme.
+// This is the equivalent of the css media query.
+const darkMode =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 // Helper to conveniently use typestyle alongside components.
 export const styled = (tag: string) => (s: types.NestedCSSProperties) => {
@@ -30,7 +36,16 @@ export const size = {
 };
 
 // Standardized colors.
-export const colors = {
+export const colors = darkMode ? {
+    success: "yellowgreen",
+    error: "tomato",
+    decoration: "#363636",
+    backgroundPrimary: "#282828",
+    backgroundSecondary: "#1f1f1f",
+    textPrimary: "#ffffff",
+    textSecondarySmall: "#aaaaaa",
+    textSecondaryLarge: "#aaaaaa",
+} : {
     success: "yellowgreen",
     error: "tomato",
     decoration: "#e8e3e6",
@@ -76,3 +91,21 @@ const unique = (s: types.NestedCSSProperties) => {
     s.$unique = true;
     return s;
 };
+
+// Global css rules.
+cssRule("html", {
+    color: colors.textPrimary,
+    fontSize: size.normal,
+});
+cssRule("body", {
+    backgroundColor: colors.backgroundSecondary,
+    fontSize: "100%",
+    height: "100vh",
+});
+cssRule("*", {
+    boxSizing: "border-box",
+    fontFamily: fonts.normal,
+});
+cssRule("a", {
+    textDecoration: "none",
+});
