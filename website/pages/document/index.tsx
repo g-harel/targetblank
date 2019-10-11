@@ -82,7 +82,7 @@ export const Document: PageComponent = ({addr}, update) => {
     );
 
     let highlight: string = "";
-    let highlighted: IPageEntry | null = null;
+    let highlightedID: string | null = null;
     let highlighTimer: any = null;
 
     keyboard((e) => {
@@ -112,17 +112,21 @@ export const Document: PageComponent = ({addr}, update) => {
 
         // Also give focus to most recently highlighted link.
         setTimeout(() => {
-            if (!highlighted) return;
-            const link = document.querySelector(
-                `a[href="${highlighted.link}"]`,
-            );
+            if (!highlightedID) return;
+            const link = document.querySelector(`#${highlightedID}`);
             if (link) (link as any).focus();
         });
 
+        // Generate a unique ID for each entry to be able to highlight it.
+        let lastID = 0;
+        const generateID: ItemProps["generateID"] = () => {
+            return `entry-${lastID++}`;
+        };
+
         // Checker given to pick the highlighted item.
-        highlighted = null;
-        const isHighlighted: ItemProps["isHighlighted"] = (item) => {
-            if (highlighted) {
+        highlightedID = null;
+        const isHighlighted: ItemProps["isHighlighted"] = (item, key) => {
+            if (highlightedID) {
                 return false;
             }
             if (highlight.length === 0) {
@@ -138,7 +142,7 @@ export const Document: PageComponent = ({addr}, update) => {
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "");
             if (formattedString.indexOf(highlight) >= 0) {
-                highlighted = item;
+                highlightedID = key;
                 return true;
             }
 
@@ -166,6 +170,7 @@ export const Document: PageComponent = ({addr}, update) => {
                                 {...group.entries.map((item) => (
                                     <Item
                                         item={item}
+                                        generateID={generateID}
                                         isHighlighted={isHighlighted}
                                     />
                                 ))}

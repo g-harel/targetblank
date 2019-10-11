@@ -11,6 +11,7 @@ const isRelative = (href: String): boolean => {
 };
 
 export interface Props {
+    id?: string;
     href: string;
     immediate?: boolean;
 }
@@ -40,7 +41,7 @@ export const Anchor: Component<Props> = (props) => {
     }
 
     return () => (
-        <Wrapper href={href} onclick={onClick}>
+        <Wrapper id={props.id} href={href} onclick={onClick}>
             {...(props as any).children}
         </Wrapper>
     );

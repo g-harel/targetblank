@@ -26,22 +26,33 @@ const ItemTitle = styled("span")({
 
 export interface Props {
     item: IPageEntry;
-    isHighlighted: (item: IPageEntry) => boolean;
+    generateID: () => string;
+    isHighlighted: (item: IPageEntry, key: string) => boolean;
 }
 
 export const Item: Component<Props> = (props) => () => {
+    const id = props.generateID();
+
     let Title = null;
     if (props.item.link) {
-        Title = <Anchor href={props.item.link}>{props.item.label}</Anchor>;
+        Title = (
+            <Anchor id={id} href={props.item.link}>
+                {props.item.label}
+            </Anchor>
+        );
     } else {
         Title = <ItemTitle>{props.item.label}</ItemTitle>;
     }
 
     return (
-        <Wrapper className={{highlighted: props.isHighlighted(props.item)}}>
+        <Wrapper className={{highlighted: props.isHighlighted(props.item, id)}}>
             {Title}
             {...props.item.entries.map((item) => (
-                <Item item={item} isHighlighted={props.isHighlighted} />
+                <Item
+                    item={item}
+                    isHighlighted={props.isHighlighted}
+                    generateID={props.generateID}
+                />
             ))}
         </Wrapper>
     );
