@@ -2,6 +2,7 @@ import {Component, IPageEntry} from "../../internal/types";
 import {styled} from "../../internal/style";
 import {color} from "../../internal/style/theme";
 import {Anchor} from "../../components/anchor";
+import {Icon} from "../../components/icon";
 
 const Wrapper = styled("div")({
     color: color.textPrimary,
@@ -14,10 +15,24 @@ const Wrapper = styled("div")({
             paddingLeft: "2rem",
         },
 
-        "&.highlighted": {
-            color: color.error,
+        "& > *": {
+            padding: "0.3em 0.4em",
+        },
+
+        "& > a:focus": {
+            backgroundColor: color.decoration,
+            borderRadius: "4px",
+            outline: "none",
         },
     },
+});
+
+const Indicator = styled("div")({
+    display: "inline-block",
+    height: 0,
+    padding: 0,
+    transform: "translate(-1.1em, -0.15em)",
+    width: 0,
 });
 
 const ItemTitle = styled("span")({
@@ -32,6 +47,7 @@ export interface Props {
 
 export const Item: Component<Props> = (props) => () => {
     const id = props.generateID();
+    const isHighlighted = props.isHighlighted(props.item, id);
 
     let Title = null;
     if (props.item.link) {
@@ -45,7 +61,16 @@ export const Item: Component<Props> = (props) => () => {
     }
 
     return (
-        <Wrapper className={{highlighted: props.isHighlighted(props.item, id)}}>
+        <Wrapper>
+            {isHighlighted && (
+                <Indicator>
+                    <Icon
+                        name="arrow"
+                        size={0.7}
+                        color={color.textSecondaryLarge}
+                    />
+                </Indicator>
+            )}
             {Title}
             {...props.item.entries.map((item) => (
                 <Item

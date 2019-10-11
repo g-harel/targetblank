@@ -8,7 +8,6 @@ import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, safeRedirect} from "../../routes";
-import {IPageEntry} from "../../internal/types";
 
 const keyboardTimeout = 1000;
 
