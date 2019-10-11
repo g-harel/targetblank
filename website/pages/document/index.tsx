@@ -1,6 +1,7 @@
 import {client, IPageData} from "../../internal/client";
 import {PageComponent} from "../../components/page";
-import {styled, breakpoint, colors} from "../../internal/style";
+import {styled} from "../../internal/style";
+import {breakpoint, color} from "../../internal/style/theme";
 import {Loading} from "../../components/loading";
 import {Item, Props as ItemProps} from "./item";
 import {Anchor} from "../../components/anchor";
@@ -36,7 +37,7 @@ const Edit = styled("div")({
             $nest: {
                 "&::before": {
                     content: `"shift + e"`,
-                    color: colors.textSecondaryLarge,
+                    color: color.textSecondaryLarge,
                     margin: "0 0.7rem",
                 },
             },
@@ -52,7 +53,7 @@ const Groups = styled("div")({
 });
 
 const Group = styled("div")({
-    border: `1px solid ${colors.decoration}`,
+    border: `1px solid ${color.decoration}`,
     borderRadius: "2px",
     flexBasis: "30%",
     flexShrink: 0,

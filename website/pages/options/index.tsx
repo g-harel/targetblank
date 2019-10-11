@@ -1,5 +1,6 @@
 import {Input} from "../../components/input";
-import {styled, colors, size, fonts} from "../../internal/style";
+import {styled} from "../../internal/style";
+import {color, size, font} from "../../internal/style/theme";
 import {Header} from "../../components/header";
 import {PageComponent} from "../../components/page";
 import {write, ExtensionStore, read} from "../../internal/extension";
@@ -13,7 +14,7 @@ const Wrapper = styled("div")({
 });
 
 const Info = styled("div")({
-    color: colors.textSecondarySmall,
+    color: color.textSecondarySmall,
     fontSize: size.tiny,
     fontWeight: 600,
     marginTop: "-0.5rem",
@@ -31,10 +32,10 @@ const Current = styled("div")({
 
 const Address = styled("div")({
     border: "1px solid black",
-    borderColor: colors.decoration,
+    borderColor: color.decoration,
     borderRadius: "3px",
     display: "block",
-    fontFamily: fonts.monospace,
+    fontFamily: font.monospace,
     fontSize: size.normal,
     margin: "0.25em",
     padding: "0.5em 1em",

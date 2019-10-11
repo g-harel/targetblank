@@ -1,4 +1,5 @@
-import {styled, reset, placeholder, colors, size} from "../../internal/style";
+import {styled, reset, placeholder} from "../../internal/style";
+import {color, size, font} from "../../internal/style/theme";
 import {Component} from "../../internal/types";
 import {Icon} from "../icon";
 
@@ -21,7 +22,7 @@ const Form = styled("form")({
                 },
 
                 "& button": {
-                    color: colors.textPrimary,
+                    color: color.textPrimary,
                     cursor: "default",
                 },
             },
@@ -38,28 +39,30 @@ const Title = styled("span")({
 
     $nest: {
         "&.error": {
-            color: colors.error,
+            color: color.error,
         },
     },
 });
 
 const Hint = styled("span")({
-    color: colors.textSecondaryLarge,
+    color: color.textSecondaryLarge,
     fontSize: size.tiny,
     marginLeft: "0.5rem",
 
     $nest: {
         "&.error": {
-            color: colors.error,
+            color: color.error,
         },
     },
 });
 
 const StyledInput = styled("input")({
-    backgroundColor: colors.backgroundPrimary,
-    border: `1px solid ${colors.textSecondarySmall}`,
+    backgroundColor: color.backgroundPrimary,
+    border: `1px solid ${color.textSecondarySmall}`,
     borderRadius: "2px",
     boxShadow: "none",
+    color: color.textPrimary,
+    fontFamily: font.normal,
     height: "1.85rem",
     margin: "0.3rem 0.5rem 0",
     padding: "1rem 1.8rem 1rem 0.5rem",
@@ -67,16 +70,16 @@ const StyledInput = styled("input")({
 
     $nest: {
         "&:focus": {
-            boxShadow: `0 0 0.5px 1px ${colors.decoration}`,
-            borderColor: colors.textPrimary,
+            boxShadow: `0 0 0.5px 1px ${color.decoration}`,
+            borderColor: color.textPrimary,
         },
 
         "&.error": {
-            borderColor: colors.error,
+            borderColor: color.error,
         },
 
         ...placeholder({
-            color: colors.textSecondarySmall,
+            color: color.textSecondarySmall,
             opacity: 1,
         }),
     },
@@ -90,7 +93,7 @@ const Button = styled("button")({
     display: "inline-block",
     pointerEvents: "none",
     cursor: "default",
-    color: colors.textSecondaryLarge,
+    color: color.textSecondaryLarge,
     float: "right",
     lineHeight: 1,
 
@@ -102,13 +105,13 @@ const Button = styled("button")({
         },
 
         "&.error": {
-            color: colors.error,
+            color: color.error,
         },
     },
 });
 
 const Error = styled("div")({
-    color: colors.error,
+    color: color.error,
     fontSize: size.tiny,
     fontWeight: 600,
     height: "1.15rem",

@@ -1,5 +1,6 @@
 import {Component} from "../../internal/types";
-import {styled, colors, fonts} from "../../internal/style";
+import {styled} from "../../internal/style";
+import {color, font} from "../../internal/style/theme";
 import {Command, command} from "../../internal/editor";
 
 // Values used to compute the approximate size of the the textbox without hacks.
@@ -22,8 +23,8 @@ const LineNumbers = styled("div")({
 
 const LineNumber = styled("div")({
     "-moz-user-select": "none",
-    backgroundColor: colors.backgroundSecondary,
-    color: colors.textSecondarySmall,
+    backgroundColor: color.backgroundSecondary,
+    color: color.textSecondarySmall,
     lineHeight: `${lineHeight}rem`,
     textAlign: "right",
     userSelect: "none",
@@ -38,11 +39,11 @@ const ScrollWrapper = styled("div")({
 });
 
 const StyledTextarea = styled("textarea")({
-    backgroundColor: colors.backgroundSecondary,
+    backgroundColor: color.backgroundSecondary,
     border: "none",
-    color: colors.textPrimary,
+    color: color.textPrimary,
     flexGrow: 1,
-    fontFamily: fonts.monospace,
+    fontFamily: font.monospace,
     lineHeight: `${lineHeight}rem`,
     outline: "none",
     overflow: "hidden",

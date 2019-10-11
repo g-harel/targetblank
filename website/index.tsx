@@ -2,8 +2,7 @@
 import h from "okwolo/src/h";
 (window as any).h = h;
 
-import "normalize.css";
-import "./internal/style";
+import "./internal/style/global";
 
 import {app} from "./internal/app";
 import {registerRoutes} from "./routes";

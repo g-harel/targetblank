@@ -1,6 +1,7 @@
 import {Missing} from "../../pages/missing";
 import {Component} from "../../internal/types";
-import {styled, colors, size} from "../../internal/style";
+import {styled} from "../../internal/style";
+import {color, size} from "../../internal/style/theme";
 import {reset} from "../../internal/keyboard";
 import {localAddr} from "../../internal/client";
 import {Anchor} from "../anchor";
@@ -20,7 +21,7 @@ const Content = styled("main")({
 });
 
 const Footer = styled("footer")({
-    color: colors.textSecondaryLarge,
+    color: color.textSecondaryLarge,
     flexShrink: 0,
     fontSize: size.tiny,
     fontWeight: 600,
@@ -30,7 +31,7 @@ const Footer = styled("footer")({
 
 const ExtensionOptions = styled("div")({
     padding: "1rem",
-    color: colors.textPrimary,
+    color: color.textPrimary,
 });
 
 export interface PageProps {

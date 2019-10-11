@@ -1,9 +1,10 @@
 import {Component, IPageEntry} from "../../internal/types";
-import {styled, colors} from "../../internal/style";
+import {styled} from "../../internal/style";
+import {color} from "../../internal/style/theme";
 import {Anchor} from "../../components/anchor";
 
 const Wrapper = styled("div")({
-    color: colors.textPrimary,
+    color: color.textPrimary,
     fontWeight: 600,
     lineHeight: "1.6rem",
     padding: "0.6rem 0.3rem 0",
@@ -14,13 +15,13 @@ const Wrapper = styled("div")({
         },
 
         "&.highlighted": {
-            color: colors.error,
+            color: color.error,
         },
     },
 });
 
 const ItemTitle = styled("span")({
-    color: colors.textSecondarySmall,
+    color: color.textSecondarySmall,
 });
 
 export interface Props {
