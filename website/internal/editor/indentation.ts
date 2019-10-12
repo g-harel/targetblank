@@ -20,12 +20,13 @@ export const indent: Command = (state) => {
 
     const selectionStartLine = lineByPos(s, s.selectionStart);
     const selectionEndLine = lineByPos(s, s.selectionEnd);
+    const multiline = isMultilineSelection(s);
 
     // Modify line contents.
     let firstLineAdded = 0;
     let totalAdded = 0;
     for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-        if (lineIsEmpty(s, i) && isMultilineSelection(s)) continue;
+        if (lineIsEmpty(s, i) && multiline) continue;
         const add = INDENT_LENGTH - (leadingSpace(s, i) % INDENT_LENGTH);
         s.lines[i] = INDENT.slice(0, add) + s.lines[i];
         if (i === selectionStartLine) firstLineAdded = add;
@@ -46,12 +47,13 @@ export const unindent: Command = (state) => {
 
     const selectionStartLine = lineByPos(s, s.selectionStart);
     const selectionEndLine = lineByPos(s, s.selectionEnd);
+    const multiline = isMultilineSelection(s);
 
     // Modify line contents (if they start with an indent).
     let firstLineRemoved = 0;
     let totalRemoved = 0;
     for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-        if (lineIsEmpty(s, i) && isMultilineSelection(s)) continue;
+        if (lineIsEmpty(s, i) && multiline) continue;
         const whitespace = leadingSpace(s, i);
         if (whitespace === 0) continue;
         const remove = whitespace % INDENT_LENGTH || INDENT_LENGTH;

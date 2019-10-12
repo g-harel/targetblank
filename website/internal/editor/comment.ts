@@ -19,12 +19,13 @@ export const toggleComment: Command = (state) => {
 
     const selectionStartLine = lineByPos(s, s.selectionStart);
     const selectionEndLine = lineByPos(s, s.selectionEnd);
+    const multiline = isMultilineSelection(s);
 
     // Decide whether to comment or un-comment selection. Lines will be
     // commented out if any of the selected lines is not currently commented.
     let comment = false;
     for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-        if (lineIsEmpty(s, i) && isMultilineSelection(s)) continue;
+        if (lineIsEmpty(s, i) && multiline) continue;
         comment = comment || !s.lines[i].trim().startsWith(COMMENT);
     }
 
@@ -38,11 +39,12 @@ const commentOn: Command = (state) => {
     const selectionEndLine = lineByPos(s, s.selectionEnd);
     const startIndexInLine = indexInLine(s, s.selectionStart);
     const endIndexInLine = indexInLine(s, s.selectionEnd);
+    const multiline = isMultilineSelection(s);
 
     // Find highest possible level that can be commented.
     let level = Infinity;
     for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-        if (lineIsEmpty(s, i) && isMultilineSelection(s)) {
+        if (lineIsEmpty(s, i) && multiline) {
             continue;
         }
         level = Math.min(level, leadingSpace(s, i));
@@ -52,7 +54,7 @@ const commentOn: Command = (state) => {
     level = level - (level % INDENT_LENGTH);
     let totalAdded = 0;
     for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-        if (lineIsEmpty(s, i) && isMultilineSelection(s)) {
+        if (lineIsEmpty(s, i) && multiline) {
             continue;
         }
         const line = s.lines[i];
@@ -80,6 +82,7 @@ const commentOff: Command = (state) => {
     const selectionEndLine = lineByPos(s, s.selectionEnd);
     const startIndexInLine = indexInLine(s, s.selectionStart);
     const endIndexInLine = indexInLine(s, s.selectionEnd);
+    const multiline = isMultilineSelection(s);
 
     let firstLineRemoved = 0;
     let firstLineRemovedIndex = 0;
@@ -87,7 +90,7 @@ const commentOff: Command = (state) => {
     let lastLineRemovedIndex = 0;
     let totalRemoved = 0;
     for (let i = selectionStartLine; i <= selectionEndLine; i++) {
-        if (lineIsEmpty(s, i) && isMultilineSelection(s)) {
+        if (lineIsEmpty(s, i) && multiline) {
             continue;
         }
         if (i === selectionStartLine) {
