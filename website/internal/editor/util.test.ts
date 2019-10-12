@@ -35,5 +35,12 @@ describe("website/internal/editor/util", () => {
                 init({value, selectionStart: 0, selectionEnd: 10}),
             ).toThrow();
         });
+
+        it("should reject invalid start and end ranges", () => {
+            const value = "aaaaaaaaaaaaaaaa";
+            expect(() =>
+                init({value, selectionStart: 10, selectionEnd: 0}),
+            ).toThrow();
+        });
     });
 });

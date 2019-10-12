@@ -13,11 +13,33 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
+        it("should work correctly on a single empty line", () => {
+            const value = "";
+            const selectionStart = 0;
+            const selectionEnd = selectionStart;
+            const expected = "    ";
+
+            const temp = indent({value, selectionStart, selectionEnd});
+
+            expect(temp.value).toBe(expected);
+        });
+
         it("should work correctly on multiple lines", () => {
             const value = "abc\n    123\n456\n    xyz";
             const selectionStart = 6;
             const selectionEnd = 14;
             const expected = "abc\n        123\n    456\n    xyz";
+
+            const temp = indent({value, selectionStart, selectionEnd});
+
+            expect(temp.value).toBe(expected);
+        });
+
+        it("should not indent empty lines when multiple lines", () => {
+            const value = "abc\n\n123";
+            const selectionStart = 2;
+            const selectionEnd = 6;
+            const expected = "    abc\n\n    123";
 
             const temp = indent({value, selectionStart, selectionEnd});
 
@@ -89,6 +111,17 @@ describe("website/internal/editor/indentation", () => {
             const selectionStart = 6;
             const selectionEnd = 14;
             const expected = "abc\n123\n456\n    xyz";
+
+            const temp = unindent({value, selectionStart, selectionEnd});
+
+            expect(temp.value).toBe(expected);
+        });
+
+        it("should ignore empty lines when un-indenting", () => {
+            const value = "    abc\n\n        123";
+            const selectionStart = 3;
+            const selectionEnd = 19;
+            const expected = "abc\n\n    123";
 
             const temp = unindent({value, selectionStart, selectionEnd});
 
