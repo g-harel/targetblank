@@ -81,17 +81,16 @@ export const newline: Command = (state) => {
     const selectionLine = lineByPos(s, s.selectionEnd);
     const cursorPositionInLine = indexInLine(s, s.selectionEnd);
 
+    const whitespace = leadingSpace(s, selectionLine);
     const before = s.lines[selectionLine].slice(0, cursorPositionInLine);
     const after = s.lines[selectionLine].slice(cursorPositionInLine);
-    const whitespace = leadingSpace(s, selectionLine);
     const lineIndex = selectionLine + 1;
-    const indentCount = Math.max(whitespace / INDENT_LENGTH);
 
     s.lines[selectionLine] = before;
-    const line = INDENT.repeat(indentCount).slice(0, whitespace) + after;
-    s.lines.splice(lineIndex, 0, line);
+    s.lines.splice(lineIndex, 0, before.slice(0, whitespace) + after);
 
-    const newSelection = posByLine(s, lineIndex) + whitespace;
+    const newSelection =
+        posByLine(s, lineIndex) + Math.min(whitespace, before.length);
     s.selectionStart = newSelection;
     s.selectionEnd = newSelection;
 

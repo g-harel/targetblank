@@ -8,7 +8,9 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
+- render whitespace characters
 - auto deploy to extension stores
+- undo/redo with editor commands
 
 -->
 
@@ -96,17 +98,17 @@ Targetblank is meant to be usable and productive using only a keyboard. The [doc
 
 page     | shortcut       | keys
 -------- | -------------- | ---------------
-homepage | Open editor    | `shift + e`
-&nbsp;   | Search links   | `<any letters>`
-&nbsp;   | Follow link    | `enter`
-editor   | Close editor   | `esc`
-&nbsp;   | Indent         | `tab`
+homepage | open editor    | `shift + e`
+&nbsp;   | search links   | `<any letters>`
+&nbsp;   | follow link    | `enter`
+editor   | close editor   | `esc`
+&nbsp;   | indent         | `tab`
 &nbsp;   | &nbsp;         | `ctrl + ]`
-&nbsp;   | Un-indent      | `shift + tab`
+&nbsp;   | un-indent      | `shift + tab`
 &nbsp;   | &nbsp;         | `ctrl + [`
-&nbsp;   | Move up        | `alt + up`
-&nbsp;   | Move down      | `alt + down`
-&nbsp;   | Toggle comment | `ctrl + /`
+&nbsp;   | move up        | `alt + up`
+&nbsp;   | move down      | `alt + down`
+&nbsp;   | toggle comment | `ctrl + /`
 
 ## Development
 
