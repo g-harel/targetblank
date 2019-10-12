@@ -8,7 +8,6 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- render whitespace characters
 - auto deploy to extension stores
 - undo/redo with editor commands
 

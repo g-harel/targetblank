@@ -30,6 +30,28 @@ const LineNumber = styled("div")({
     userSelect: "none",
 });
 
+const Whitespace = styled("div")({
+    display: "flex",
+    flexDirection: "column",
+    height: 0,
+    width: 0,
+    zIndex: 2,
+});
+
+const WhitespaceLine = styled("div")({
+    "-moz-user-select": "none",
+    color: color.textPrimary,
+    fontFamily: font.monospace,
+    lineHeight: `${lineHeight}rem`,
+    // Use opacity and primary text color for whitespace overlay to be invisible
+    // when document content contains whitespace character. A single-phase
+    // character replacement pass would remove the need for this workaround.
+    opacity: 0.2,
+    pointerEvents: "none",
+    userSelect: "none",
+    whiteSpace: "pre",
+});
+
 // Wrapper to prevent the scrollbar from moving the content on chrome.
 const ScrollWrapper = styled("div")({
     display: "flex",
@@ -39,16 +61,19 @@ const ScrollWrapper = styled("div")({
 });
 
 const StyledTextarea = styled("textarea")({
+    "-moz-tab-size": 1,
     backgroundColor: color.backgroundSecondary,
     border: "none",
     color: color.textPrimary,
     flexGrow: 1,
     fontFamily: font.monospace,
     lineHeight: `${lineHeight}rem`,
+    minWidth: "100%",
     outline: "none",
     overflow: "hidden",
     resize: "none",
-    minWidth: "100%",
+    // Characters of width more than one break white space rendering.
+    tabSize: 1,
     whiteSpace: "pre",
 });
 
@@ -166,6 +191,13 @@ export const Editor: Component<Props> = (props) => () => {
             <LineNumbers>
                 {...lineNumbers.map((n) => <LineNumber>{n}</LineNumber>)}
             </LineNumbers>
+            <Whitespace>
+                {...lines.map((l) => (
+                    <WhitespaceLine>
+                        {l.replace(/ /g, "·").replace(/[^·]/g, " ")}
+                    </WhitespaceLine>
+                ))}
+            </Whitespace>
             <ScrollWrapper>
                 <StyledTextarea
                     id={props.id}
