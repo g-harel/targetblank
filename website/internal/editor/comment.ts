@@ -96,7 +96,7 @@ const commentOff: Command = (state) => {
         if (i === selectionStartLine) {
             firstLineRemovedIndex = leadingSpace(s, i);
         }
-        if (i === selectionEndLine - 1) {
+        if (i === selectionEndLine) {
             lastLineRemovedIndex = leadingSpace(s, i);
         }
         const line = s.lines[i];
@@ -104,7 +104,7 @@ const commentOff: Command = (state) => {
         const removed = line.length - s.lines[i].length;
         totalRemoved += removed;
         if (i === selectionStartLine) firstLineRemoved = removed;
-        if (i === selectionEndLine - 1) lastLineRemoved = removed;
+        if (i === selectionEndLine) lastLineRemoved = removed;
     }
 
     // Modify selection indecies.
