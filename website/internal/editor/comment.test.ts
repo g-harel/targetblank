@@ -58,8 +58,23 @@ describe("website/internal/editor/comment", () => {
             expect(temp.value).toBe(expected);
         });
 
+        it("should ignore empty lines when toggling multiple", () => {
+            const value = "# 123\n\n# 456";
+            const selectionStart = 3;
+            const selectionEnd = 10;
+            const expected = "123\n\n456";
+
+            const temp = toggleComment({
+                value,
+                selectionStart,
+                selectionEnd,
+            });
+
+            expect(temp.value).toBe(expected);
+        });
+
         describe("commentOn", () => {
-            it("should not modify empty lines", () => {
+            it("should not comment empty lines when multiple selected", () => {
                 const value = "123\n\n456";
                 const selectionStart = 2;
                 const selectionEnd = 6;
@@ -74,7 +89,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.value).toBe(expected);
             });
 
-            it("should comment at highest possible indentation level", () => {
+            it("should add comment at highest possible indentation level", () => {
                 const value = "        123\n\n    456";
                 const selectionStart = 9;
                 const selectionEnd = 16;
@@ -104,7 +119,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.value).toBe(expected);
             });
 
-            it("should correctly adjust cursor position when cursor after content start", () => {
+            it("should adjust cursor position when after comment", () => {
                 const value = "    123";
                 const selectionStart = 5;
                 const selectionEnd = selectionStart;
@@ -120,7 +135,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.selectionEnd).toBe(expectedCursor);
             });
 
-            it("should correctly adjust cursor position when cursor before content start", () => {
+            it("should not adjust cursor position when before comment", () => {
                 const value = "    123";
                 const selectionStart = 2;
                 const selectionEnd = selectionStart;
@@ -136,7 +151,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.selectionEnd).toBe(expectedCursor);
             });
 
-            it("should correctly adjust cursor position on multiple lines", () => {
+            it("should correctly adjust cursor position when multiple selected", () => {
                 const value = "    abc\n    123\n    456\n      xyz";
                 const selectionStart = 5;
                 const selectionEnd = 27;
@@ -155,21 +170,6 @@ describe("website/internal/editor/comment", () => {
         });
 
         describe("commentOff", () => {
-            it("should not modify empty lines", () => {
-                const value = "# 123\n\n# 456";
-                const selectionStart = 3;
-                const selectionEnd = 10;
-                const expected = "123\n\n456";
-
-                const temp = toggleComment({
-                    value,
-                    selectionStart,
-                    selectionEnd,
-                });
-
-                expect(temp.value).toBe(expected);
-            });
-
             it("should remove comments at any indentation level", () => {
                 const value = "       # 123\n\n  # 456";
                 const selectionStart = 9;
@@ -185,7 +185,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.value).toBe(expected);
             });
 
-            it("should correctly adjust cursor position when cursor after content start", () => {
+            it("should adjust cursor position when cursor after comment", () => {
                 const value = "   # 123";
                 const selectionStart = 5;
                 const selectionEnd = selectionStart;
@@ -201,7 +201,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.selectionEnd).toBe(expectedCursor);
             });
 
-            it("should correctly adjust cursor position when cursor before content start", () => {
+            it("should not adjust cursor position when before comment", () => {
                 const value = "    # 123";
                 const selectionStart = 1;
                 const selectionEnd = selectionStart;
@@ -217,7 +217,7 @@ describe("website/internal/editor/comment", () => {
                 expect(temp.selectionEnd).toBe(expectedCursor);
             });
 
-            it("should correctly adjust cursor position on multiple lines", () => {
+            it("should correctly adjust cursor position when multiple selected", () => {
                 const value = "    # abc\n    # 123\n    # 456\n      # xyz";
                 const selectionStart = 7;
                 const selectionEnd = 32;
@@ -236,7 +236,7 @@ describe("website/internal/editor/comment", () => {
         });
 
         // Checks that randomly generated states return to the initial state
-        // after being commented and un-commented.
+        // after being toggled twice (commented + un-commented).
         for (let i = 0; i < 32; i++) {
             it(`it should be stable #${i}`, () => {
                 const lineCount = Math.ceil(16 * Math.random());

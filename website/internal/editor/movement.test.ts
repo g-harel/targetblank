@@ -2,7 +2,7 @@ import {moveUp, moveDown} from "./movement";
 
 describe("website/internal/editor/movement", () => {
     describe("moveUp", () => {
-        it("should work correctly on a single line", () => {
+        it("should move line up", () => {
             const value = "a\nbc";
             const selectionStart = 2;
             const selectionEnd = selectionStart;
@@ -13,7 +13,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on multiple lines", () => {
+        it("should move all selected lines", () => {
             const value = "a\n\nabc";
             const selectionStart = 2;
             const selectionEnd = 4;
@@ -24,7 +24,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should correctly adjust cursor position", () => {
+        it("should adjust cursor position", () => {
             const value = "\n123\n\n456";
             const selectionStart = 8;
             const selectionEnd = selectionStart;
@@ -36,7 +36,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.selectionEnd).toBe(expectedCursor);
         });
 
-        it("should correctly adjust cursor position on multiple lines", () => {
+        it("should adjust cursor position when multiple selected", () => {
             const value = "123\n    456\n\n789";
             const selectionStart = 6;
             const selectionEnd = 16;
@@ -49,7 +49,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.selectionEnd).toBe(expectedCursorEnd);
         });
 
-        it("should be a noop on the first line", () => {
+        it("should not make any changes when used on the first line", () => {
             const value = "xyz\n123";
             const selectionStart = 1;
             const selectionEnd = 2;
@@ -66,7 +66,7 @@ describe("website/internal/editor/movement", () => {
     });
 
     describe("moveDown", () => {
-        it("should work correctly on a single line", () => {
+        it("should move line down", () => {
             const value = "a\nbc";
             const selectionStart = 1;
             const selectionEnd = selectionStart;
@@ -77,7 +77,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on multiple lines", () => {
+        it("should move all selected lines", () => {
             const value = "a\n\nabc";
             const selectionStart = 0;
             const selectionEnd = 2;
@@ -88,7 +88,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should correctly adjust cursor position", () => {
+        it("should adjust cursor position", () => {
             const value = "\n123\n\n456";
             const selectionStart = 5;
             const selectionEnd = selectionStart;
@@ -100,7 +100,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.selectionEnd).toBe(expectedCursor);
         });
 
-        it("should correctly adjust cursor position on multiple lines", () => {
+        it("should adjust cursor position when multiple selected", () => {
             const value = "123\n    456\n\n789";
             const selectionStart = 6;
             const selectionEnd = 12;
@@ -113,7 +113,7 @@ describe("website/internal/editor/movement", () => {
             expect(temp.selectionEnd).toBe(expectedCursorEnd);
         });
 
-        it("should be a noop on the last line", () => {
+        it("should not make any changes when used on the last line", () => {
             const value = "xyz\n123";
             const selectionStart = 1;
             const selectionEnd = 5;

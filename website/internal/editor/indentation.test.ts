@@ -2,7 +2,7 @@ import {indent, unindent, newline} from "./indentation";
 
 describe("website/internal/editor/indentation", () => {
     describe("indent", () => {
-        it("should work correctly on a single line", () => {
+        it("should correctly add indentation on a single line", () => {
             const value = "abc";
             const selectionStart = 0;
             const selectionEnd = selectionStart;
@@ -13,7 +13,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on a single empty line", () => {
+        it("should add indentation on a single empty line", () => {
             const value = "";
             const selectionStart = 0;
             const selectionEnd = selectionStart;
@@ -24,7 +24,18 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on multiple lines", () => {
+        it("should snap to the nearest higher indentation level", () => {
+            const value = "  abc";
+            const selectionStart = 0;
+            const selectionEnd = selectionStart;
+            const expected = "    abc";
+
+            const temp = indent({value, selectionStart, selectionEnd});
+
+            expect(temp.value).toBe(expected);
+        });
+
+        it("should indent all lines when multiple selected", () => {
             const value = "abc\n    123\n456\n    xyz";
             const selectionStart = 6;
             const selectionEnd = 14;
@@ -35,7 +46,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should not indent empty lines when multiple lines", () => {
+        it("should not indent empty lines when multiple selected", () => {
             const value = "abc\n\n123";
             const selectionStart = 2;
             const selectionEnd = 6;
@@ -46,7 +57,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should correctly adjust cursor position", () => {
+        it("should adjust cursor position", () => {
             const value = "  123";
             const selectionStart = 2;
             const selectionEnd = selectionStart;
@@ -58,7 +69,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.selectionEnd).toBe(expectedCursor);
         });
 
-        it("should correctly adjust cursor position on multiple lines", () => {
+        it("should adjust cursor position when multiple selected", () => {
             const value = "  abc\n  123\n 456\nxyz";
             const selectionStart = 10;
             const selectionEnd = 18;
@@ -73,7 +84,7 @@ describe("website/internal/editor/indentation", () => {
     });
 
     describe("unindent", () => {
-        it("should work correctly on a single line", () => {
+        it("should correctly remove indentation from single line", () => {
             const value = "    abc";
             const selectionStart = 0;
             const selectionEnd = selectionStart;
@@ -84,7 +95,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should be a noop if the line is not indented", () => {
+        it("should make not changes if line is not indented", () => {
             const value = "abc";
             const selectionStart = 0;
             const selectionEnd = selectionStart;
@@ -95,18 +106,18 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on partially indented lines", () => {
-            const value = "  abc";
+        it("should snap to the nearest lower indentation level", () => {
+            const value = "      abc";
             const selectionStart = 0;
             const selectionEnd = selectionStart;
-            const expected = "abc";
+            const expected = "    abc";
 
             const temp = unindent({value, selectionStart, selectionEnd});
 
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on multiple lines", () => {
+        it("should un-indent all selected lines", () => {
             const value = "abc\n    123\n456\n    xyz";
             const selectionStart = 6;
             const selectionEnd = 14;
@@ -128,7 +139,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should correctly adjust cursor position", () => {
+        it("should adjust cursor position", () => {
             const value = "        123";
             const selectionStart = 7;
             const selectionEnd = selectionStart;
@@ -140,7 +151,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.selectionEnd).toBe(expectedCursor);
         });
 
-        it("should correctly adjust cursor position on multiple lines", () => {
+        it("should adjust cursor position when multiple selected", () => {
             const value = "  abc\n    123\n  456\n      xyz";
             const selectionStart = 10;
             const selectionEnd = 25;
@@ -153,7 +164,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.selectionEnd).toBe(expectedEnd);
         });
 
-        it("should not change the cursor's line when it close to the start", () => {
+        it("should not change the cursor's line when it bottoms out", () => {
             const value = "  abc\n    123\n  456\n      xyz";
             const selectionStart = 6;
             const selectionEnd = 21;
@@ -179,7 +190,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should preserve exact indentation", () => {
+        it("should keep the same indentation", () => {
             const value = "   abc";
             const selectionStart = 6;
             const selectionEnd = selectionStart;
@@ -190,7 +201,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should preserve exact indentation in whitespace", () => {
+        it("should keep the same indentation when cursor in whitespace", () => {
             const value = "     123";
             const selectionStart = 3;
             const selectionEnd = selectionStart;
@@ -201,7 +212,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should split up lines correctly", () => {
+        it("should split up lines when cursor in content", () => {
             const value = "  123";
             const selectionStart = 4;
             const selectionEnd = selectionStart;
@@ -212,7 +223,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should work correctly on multiple lines", () => {
+        it("should add new line after the end of the selection", () => {
             const value = "abc\n    123\n 456\nxyz";
             const selectionStart = 10;
             const selectionEnd = 14;
@@ -223,7 +234,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.value).toBe(expected);
         });
 
-        it("should correctly adjust cursor position", () => {
+        it("should adjust cursor position", () => {
             const value = "    123";
             const selectionStart = 4;
             const selectionEnd = selectionStart;
@@ -235,7 +246,7 @@ describe("website/internal/editor/indentation", () => {
             expect(temp.selectionEnd).toBe(expectedCursor);
         });
 
-        it("should correctly adjust cursor position on multiple lines", () => {
+        it("should adjust cursor position when multiple selected", () => {
             const value = "  abc\n    123\n  456\n      xyz";
             const selectionStart = 10;
             const selectionEnd = 25;

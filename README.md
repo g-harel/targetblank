@@ -8,7 +8,8 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- better editor test descriptions
+- add documentation about api to readme
+- editor test utils (random doc gen, assertion helper)
 - auto deploy to extension stores
 - undo/redo with editor commands
 
