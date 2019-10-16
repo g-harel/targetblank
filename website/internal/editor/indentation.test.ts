@@ -1,5 +1,5 @@
 import {indent, unindent, newline} from "./indentation";
-import {genRandomState} from "./testing";
+import {genRandomState, expectEqual} from "./testing";
 
 describe("website/internal/editor/indentation", () => {
     describe("indent", () => {
@@ -188,9 +188,7 @@ describe("website/internal/editor/indentation", () => {
                 // and avoid bottoming out the line with unindent.
                 const initialEditorState = indent(genRandomState(16));
                 const indentedEditorState = indent(initialEditorState);
-                expect(unindent(indentedEditorState)).toEqual(
-                    initialEditorState,
-                );
+                expectEqual(unindent(indentedEditorState), initialEditorState);
             });
         }
     });

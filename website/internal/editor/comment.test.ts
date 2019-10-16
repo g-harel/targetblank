@@ -1,5 +1,5 @@
 import {toggleComment} from "./comment";
-import {genRandomState} from "./testing";
+import {genRandomState, expectEqual} from "./testing";
 
 describe("website/internal/editor/comment", () => {
     describe("toggleComment", () => {
@@ -241,7 +241,8 @@ describe("website/internal/editor/comment", () => {
             it(`it should be stable #${i}`, () => {
                 const initialEditorState = genRandomState(16);
                 const commentedEditorState = toggleComment(initialEditorState);
-                expect(toggleComment(commentedEditorState)).toEqual(
+                expectEqual(
+                    toggleComment(commentedEditorState),
                     initialEditorState,
                 );
             });
