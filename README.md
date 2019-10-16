@@ -10,6 +10,7 @@ firefox
 TODO
 - add documentation about api to readme
 - editor test utils (random doc gen, assertion helper)
+- fix movement stability
 - auto deploy to extension stores
 - undo/redo with editor commands
 
