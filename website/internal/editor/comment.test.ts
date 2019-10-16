@@ -1,5 +1,5 @@
 import {toggleComment} from "./comment";
-import {EditorState} from ".";
+import {genRandomState} from "./testing";
 
 describe("website/internal/editor/comment", () => {
     describe("toggleComment", () => {
@@ -239,26 +239,11 @@ describe("website/internal/editor/comment", () => {
         // after being toggled twice (commented + un-commented).
         for (let i = 0; i < 32; i++) {
             it(`it should be stable #${i}`, () => {
-                const lineCount = Math.ceil(16 * Math.random());
-                const lines = [];
-                for (let j = 0; j < lineCount; j++) {
-                    const whitespaceCount = Math.floor(16 * Math.random());
-                    const contentCount = Math.ceil(16 * Math.random());
-                    lines.push(
-                        " ".repeat(whitespaceCount) + "a".repeat(contentCount),
-                    );
-                }
-                const value = lines.join("\n");
-                const a = Math.floor(value.length * Math.random());
-                const b = Math.floor(value.length * Math.random());
-
-                const initialEditorState: EditorState = {
-                    value,
-                    selectionStart: Math.min(a, b),
-                    selectionEnd: Math.max(a, b),
-                };
+                const initialEditorState = genRandomState(16);
                 const commentedEditorState = toggleComment(initialEditorState);
-                expect(toggleComment(commentedEditorState)).toEqual(initialEditorState);
+                expect(toggleComment(commentedEditorState)).toEqual(
+                    initialEditorState,
+                );
             });
         }
     });

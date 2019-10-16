@@ -1,4 +1,5 @@
 import {moveUp, moveDown} from "./movement";
+import {genRandomState} from "./testing";
 
 describe("website/internal/editor/movement", () => {
     describe("moveUp", () => {
@@ -127,5 +128,20 @@ describe("website/internal/editor/movement", () => {
             expect(temp.selectionStart).toBe(expectedStart);
             expect(temp.selectionEnd).toBe(expectedEnd);
         });
+    });
+
+    describe("moveUp/moveDown", () => {
+        // Checks that randomly generated states return to the initial state
+        // after being cycled (up + down).
+        for (let i = 0; i < 32; i++) {
+            it(`it should be stable #${i}`, () => {
+                // Initial state value is wrapped in newlines so it is always
+                // possible to move the selection.
+                const initialEditorState = genRandomState(16);
+                initialEditorState.value = `\n${initialEditorState.value}\n`;
+                const movedEditorState = moveUp(initialEditorState);
+                expect(moveDown(movedEditorState)).toEqual(initialEditorState);
+            });
+        }
     });
 });
