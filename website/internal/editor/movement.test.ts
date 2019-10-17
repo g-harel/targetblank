@@ -79,15 +79,15 @@ describe("website/internal/editor/movement", () => {
     describe("moveUp/moveDown", () => {
         // Checks that randomly generated states return to the initial state
         // after being cycled (up + down).
-        for (let i = 0; i < 32; i++) {
-            xit(`it should be stable #${i}`, () => {
+        xit("should be stable", () => {
+            for (let i = 0; i < 32; i++) {
                 // Initial state value is wrapped in newlines so it is always
                 // possible to move the selection.
                 const initialEditorState = genRandomState(16);
                 initialEditorState.value = `\n${initialEditorState.value}\n`;
                 const movedEditorState = moveUp(initialEditorState);
                 expectEqual(moveDown(movedEditorState), initialEditorState);
-            });
-        }
+            }
+        });
     });
 });

@@ -179,17 +179,15 @@ describe("website/internal/editor/indentation", () => {
         });
     });
 
-    describe("indent/unindent", () => {
-        // Checks that randomly generated states return to the initial state
-        // after being cycled (unindent + indent).
+    // Checks that randomly generated states return to the initial state
+    // after being cycled (unindent + indent).
+    it("should be stable", () => {
         for (let i = 0; i < 32; i++) {
-            it(`it should be stable #${i}`, () => {
-                // Initial state is pre-indented to normalize indentation levels
-                // and avoid bottoming out the line with unindent.
-                const initialEditorState = indent(genRandomState(16));
-                const indentedEditorState = indent(initialEditorState);
-                expectEqual(unindent(indentedEditorState), initialEditorState);
-            });
+            // Initial state is pre-indented to normalize indentation levels
+            // and avoid bottoming out the line with unindent.
+            const initialEditorState = indent(genRandomState(16));
+            const indentedEditorState = indent(initialEditorState);
+            expectEqual(unindent(indentedEditorState), initialEditorState);
         }
     });
 
