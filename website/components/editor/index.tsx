@@ -194,7 +194,7 @@ export const Editor: Component<Props> = (props) => () => {
             <Whitespace>
                 {...lines.map((l) => (
                     <WhitespaceLine>
-                        {l.replace(/ /g, "·").replace(/[^·]/g, " ")}
+                        {l.replace(/ /g, "·").replace(/[^·]/g, " ")}&nbsp;
                     </WhitespaceLine>
                 ))}
             </Whitespace>
