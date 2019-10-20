@@ -8,7 +8,6 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- add documentation about api to readme
 - fix movement stability
 - auto deploy to extension stores
 - undo/redo with editor commands
@@ -97,19 +96,19 @@ When a single _group_ isn't enough, you can add a _group delimiter_ to create a 
 
 Targetblank is meant to be usable and productive using only a keyboard. The [document format](#document-format) goes a long way towards making that a reality, but these shortcuts help complete the story, adding quick navigation and useful text-editing commands. The editor shortcuts are inspired by common text editor keybindings and work on multi-line selections. If your favorite shortcut is missing, please [let me know](https://github.com/g-harel/targetblank/issues/new).
 
-page     | shortcut       | keys
+Page     | Shortcut       | Keys
 -------- | -------------- | ---------------
-homepage | open editor    | `shift + e`
-&nbsp;   | search links   | `<any letters>`
-&nbsp;   | follow link    | `enter`
-editor   | close editor   | `esc`
-&nbsp;   | indent         | `tab`
+Homepage | Open editor    | `shift + e`
+&nbsp;   | Search links   | `<any letters>`
+&nbsp;   | Follow link    | `enter`
+Editor   | Close editor   | `esc`
+&nbsp;   | Indent         | `tab`
 &nbsp;   | &nbsp;         | `ctrl + ]`
-&nbsp;   | un-indent      | `shift + tab`
+&nbsp;   | Un-indent      | `shift + tab`
 &nbsp;   | &nbsp;         | `ctrl + [`
-&nbsp;   | move up        | `alt + up`
-&nbsp;   | move down      | `alt + down`
-&nbsp;   | toggle comment | `ctrl + /`
+&nbsp;   | Move up        | `alt + up`
+&nbsp;   | Move down      | `alt + down`
+&nbsp;   | Toggle comment | `ctrl + /`
 
 ## Development
 
@@ -140,7 +139,7 @@ Checks code quality, runs unit tests on helpers and builds the bundle.
 
 ### Extension
 
-Testing the extension starts the same as usual website development.
+Developing the extension starts the same as usual website development.
 
 ```bash
 $ npm run dev
@@ -162,27 +161,38 @@ The [deployment workflow](./.github/main.workflow) uses [GitHub Actions](https:/
 
 <!-- TODO extension deploy -->
 
+### API
+
+The API is rooted at `https://api.targetblank.org`. Details about arguments and return values can be found by following the links to the function implementations.
+
+_The `addr` path parameter represents the six character string which identifies a page._
+
+Function                                         | Description                 | Method   | Path
+------------------------------------------------ | --------------------------- | -------- | ----------------
+[authenticate](./functions/authenticate/main.go) | Create authentication token | `POST`   | `/auth/:addr`
+[passwd *](./functions/passwd/main.go)            | Update page password        | `PUT`    | `/auth/:addr`
+[reset](./functions/reset/main.go)               | Request page password reset | `DELETE` | `/auth/:addr`
+[create](./functions/create/main.go)             | Create new page             | `POST`   | `/page`
+[read **](./functions/read/main.go)                | Fetch page content          | `GET`    | `/page/:addr`
+[update *](./functions/update/main.go)            | Edit page document          | `PUT`    | `/page/:addr`
+[validate](./functions/validate/main.go)         | Validate page document      | `POST`   | `/page/validate`
+
+_* Authentication required._
+
+_** Authentication may be required depending on page configuration._
+
+### Schema
+
+All data is stored in a single `page` table. Each item represents both a single page and its owner.
+
+Attribute   | Raw Type | Description
+----------- | -------- | ---------------------------------------------------
+`addr`      | `string` | Page address (key)
+`document`  | `string` | Parsed document stored as JSON
+`email`     | `string` | Hashed page
+`password`  | `string` | Hashed page password
+`published` | `bool`   | Published pages are readable without authentication
+
 ## License
 
 [MIT](./LICENSE)
-
-<!--
-
-endpoints (/api/v1..)
-- authenticate per page  (POST   /auth/:address        password)
-- change page password   (PUT    /auth/:address [auth] password)
-- reset page password    (DELETE /auth/:address        email   )
-- create new page        (POST   /page                 email   )
-- validate page document (POST   /page/validate        doc     )
-- fetch page             (GET    /page/:address [auth]         )
-- edit page document     (PUT    /page/:address [auth] data    )
-
-dynamodb schema {
-    addr: string (6 alphanumeric chars),
-    document: string
-    email: string (hashed),
-    password: string (hashed),
-    published: bool,
-}
-
--->
