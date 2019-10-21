@@ -8,7 +8,6 @@ firefox
     deployment https://github.com/fregante/web-ext-submit
 
 TODO
-- fix movement stability
 - auto deploy to extension stores
 - undo/redo with editor commands
 
