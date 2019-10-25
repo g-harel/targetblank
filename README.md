@@ -1,11 +1,13 @@
 <!--
 
-chrome
-    deployment https://github.com/DrewML/chrome-webstore-upload-cli
-firefox
-    deployment https://github.com/fregante/web-ext-submit
+https://addons.mozilla.org/en-US/firefox/addon/targetblank/
+https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjofapamgd
 
 TODO
+- add favicon
+- link preview content
+- mobile editor
+- multi-line label indentation
 - auto deploy to extension stores
 - undo/redo with editor commands
 
