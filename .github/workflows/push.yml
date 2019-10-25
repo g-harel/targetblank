@@ -103,3 +103,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TF_ACTION_WORKING_DIR: .
+
+    - name: npm release
+      uses: actions/npm@59b64a5
+      with:
+        args: run release
