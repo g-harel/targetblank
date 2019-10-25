@@ -106,5 +106,11 @@ jobs:
 
     - name: npm release
       uses: actions/npm@59b64a5
+      env:
+        WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+        WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
       with:
         args: run release
