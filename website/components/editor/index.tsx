@@ -26,6 +26,7 @@ const LineNumber = styled("div")({
     backgroundColor: color.backgroundSecondary,
     color: color.textSecondarySmall,
     lineHeight: `${lineHeight}rem`,
+    minWidth: "2em",
     textAlign: "right",
     userSelect: "none",
 });
