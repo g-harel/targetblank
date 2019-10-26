@@ -29,7 +29,6 @@ Click the edit button in the top right to start making changes.
 Helpful Links
     Document Format [https://github.com/g-harel/targetblank/#document-format]
     Keyboard Shortcuts [https://github.com/g-harel/targetblank/#keyboard-shortcuts]
-
 `
 
 // Generates a pseudorandom page id.
