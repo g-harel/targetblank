@@ -4,7 +4,6 @@ https://addons.mozilla.org/en-US/firefox/addon/targetblank/
 https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjofapamgd
 
 TODO
-- add favicon
 - link preview content
 - mobile editor
 - multi-line label indentation
