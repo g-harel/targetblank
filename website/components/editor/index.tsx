@@ -192,14 +192,14 @@ export const Editor: Component<Props> = (props) => () => {
             <LineNumbers>
                 {...lineNumbers.map((n) => <LineNumber>{n}</LineNumber>)}
             </LineNumbers>
-            <Whitespace>
-                {...lines.map((l) => (
-                    <WhitespaceLine>
-                        {l.replace(/ /g, "·").replace(/[^·]/g, " ")}&nbsp;
-                    </WhitespaceLine>
-                ))}
-            </Whitespace>
             <ScrollWrapper>
+                <Whitespace>
+                    {...lines.map((l) => (
+                        <WhitespaceLine>
+                            {l.replace(/ /g, "·").replace(/[^·]/g, " ")}&nbsp;
+                        </WhitespaceLine>
+                    ))}
+                </Whitespace>
                 <StyledTextarea
                     id={props.id}
                     style={style}
