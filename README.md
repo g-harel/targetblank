@@ -5,8 +5,6 @@ https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjof
 
 TODO
 - link preview content
-- mobile editor
-- multi-line label indentation
 - auto deploy to extension stores
 - undo/redo with editor commands
 

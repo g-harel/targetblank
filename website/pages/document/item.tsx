@@ -8,14 +8,17 @@ const Wrapper = styled("div")({
     color: color.textPrimary,
     fontWeight: 600,
     lineHeight: "1.6rem",
-    padding: "0.6rem 0.3rem 0",
+    padding: "0 0.3rem",
 
     $nest: {
         "& &": {
             paddingLeft: "2rem",
         },
 
-        "& > *": {
+        "& > span, & > a": {
+            display: "inline-block",
+            lineHeight: 1.2,
+            margin: "0.3rem 0 0",
             padding: "0.3em 0.4em",
         },
 
