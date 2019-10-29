@@ -13,6 +13,7 @@ cssRule("html", {
 cssRule("body", {
     backgroundColor: color.backgroundSecondary,
     fontSize: "100%",
+    maxWidth: "100vw",
     height: "100vh",
 });
 
