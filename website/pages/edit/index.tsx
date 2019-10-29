@@ -29,7 +29,7 @@ const Header = styled("header")({
     position: "fixed",
     userSelect: "none",
     width: "100%",
-    zIndex: 1,
+    zIndex: 3,
 });
 
 // Inline element to ensure no content is rendered under the header.
