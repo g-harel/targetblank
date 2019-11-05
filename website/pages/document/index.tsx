@@ -56,13 +56,16 @@ const Group = styled("div")({
     borderRadius: "2px",
     flexBasis: "30%",
     flexShrink: 0,
-    flexGrow: 0,
+    flexGrow: 0.5,
     margin: "0 1rem 2rem",
     padding: "1rem 1.4rem 1.6rem",
 
     $nest: {
         [breakpoint.sm]: {
             flexBasis: "50%",
+        },
+        [breakpoint.xs]: {
+            flexGrow: 1,
         },
     },
 });

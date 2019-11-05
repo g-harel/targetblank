@@ -7,6 +7,7 @@ const darkMode =
 // Standardized breakpoints.
 export const breakpoint = {
     sm: "@media(max-width: 720px)",
+    xs: "@media(max-width: 480px)",
 };
 
 // Standardized font families.
