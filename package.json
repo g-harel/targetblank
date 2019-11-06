@@ -4,7 +4,7 @@
     "build:clean": "trash .website/*",
     "build:website": "parcel build website/index.html -d .website --no-source-maps",
     "release": "run-s build release:* || true",
-    "release:chrome": "exit; cd .website; webstore upload --extension-id oghkdhbenjnikkhobfmcfobjofapamgd",
+    "release:chrome": "cd .website; webstore upload --extension-id oghkdhbenjnikkhobfmcfobjofapamgd",
     "release:firefox": "cd .website; web-ext-submit",
     "dev": "parcel -p 1324 -d .dist website/index.html",
     "test": "run-s fmt lint check test:unit build",
