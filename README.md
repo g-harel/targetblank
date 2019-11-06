@@ -26,11 +26,7 @@ TODO
 
 - **Optimized for performance** &nbsp; Aggressive caching, small code bundles and native font stacks.
 
-<!-- TODO extension blurb
-
-- **Browser Extension** An even snappier homepage and built-in conveniences.
-
- -->
+- **Browser Extension** Packaged as an extension to replace your homepage ([firefox](https://addons.mozilla.org/en-US/firefox/addon/targetblank/), [chrome](https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjofapamgd)).
 
 ## Document Format
 
@@ -155,7 +151,7 @@ This project is hosted on AWS and uses [Terraform](https://www.terraform.io/) to
 
 The [deployment workflow](./.github/main.workflow) uses [GitHub Actions](https://developer.github.com/actions/) to package and apply changes on every change to master.
 
-<!-- TODO extension deploy -->
+Deployment to the extension stores runs in the same deployment pipeline as the website. New versions will only be published when the [manifest's version](./extension/manifest.json) changes.
 
 ### API
 

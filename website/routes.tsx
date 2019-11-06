@@ -111,7 +111,6 @@ export const routes = routeTable({
 });
 
 // Transparently injects address when running in an extension context.
-// TODO default extension path should not be homepage.
 const PageLoader: Component<PageProps> = (params, update) => {
     let addr = params.addr;
     let addrIsLoading =
