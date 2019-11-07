@@ -1,11 +1,7 @@
 <!--
 
-https://addons.mozilla.org/en-US/firefox/addon/targetblank/
-https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjofapamgd
-
 TODO
 - link preview content
-- auto deploy to extension stores
 - undo/redo with editor commands
 
 -->
