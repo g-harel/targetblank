@@ -14,6 +14,6 @@
         "newtab": "index.html"
     },
     "chrome_settings_overrides": {
-        "homepage": "index.html"
+        "homepage": ["index.html"]
     }
 }
