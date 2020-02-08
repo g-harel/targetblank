@@ -145,7 +145,7 @@ _Sourcing the extension contents from `.website` will use the actual bundle, but
 
 This project is hosted on AWS and uses [Terraform](https://www.terraform.io/) to manage the cloud resources.
 
-The [deployment workflow](./.github/main.workflow) uses [GitHub Actions](https://developer.github.com/actions/) to package and apply changes on every change to master.
+The [deployment workflow](./.github/workflows/push.yml) uses [GitHub Actions](https://developer.github.com/actions/) to package and apply changes on every change to master.
 
 Deployment to the extension stores runs in the same deployment pipeline as the website. New versions will only be published when the [manifest's version](./extension/manifest.json) changes.
 
