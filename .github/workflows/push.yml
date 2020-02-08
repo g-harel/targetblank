@@ -17,7 +17,7 @@ jobs:
         TF_ACTION_WORKING_DIR: .
 
     - name: npm install
-      uses: actions/npm@59b64a5
+      uses: actions/setup-node@v1
       with:
         args: install
 
@@ -29,7 +29,7 @@ jobs:
         args: go mod download
 
     - name: npm build
-      uses: actions/npm@59b64a5
+      uses: actions/setup-node@v1
       with:
         args: run build
 
@@ -105,7 +105,7 @@ jobs:
         TF_ACTION_WORKING_DIR: .
 
     - name: npm release
-      uses: actions/npm@59b64a5
+      uses: actions/setup-node@v1
       env:
         WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
         WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
@@ -114,3 +114,4 @@ jobs:
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
       with:
         args: run release
+        node-version: '12.x'
