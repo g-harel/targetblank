@@ -18,8 +18,7 @@ jobs:
 
     - name: npm install
       uses: actions/setup-node@v1
-      with:
-        args: install
+      run: npm install
 
     - name: go mod download
       uses: cedrickring/golang-action@1.1.0
@@ -30,8 +29,7 @@ jobs:
 
     - name: npm build
       uses: actions/setup-node@v1
-      with:
-        args: run build
+      run: npm run build
 
     - name: go build validate
       uses: cedrickring/golang-action@1.1.0
@@ -113,5 +111,5 @@ jobs:
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
       with:
-        args: run release
         node-version: '12.x'
+      run: npm run release
