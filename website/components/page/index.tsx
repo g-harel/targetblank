@@ -83,13 +83,20 @@ export const Page: Component<Props> = (props) => () => {
                         </Anchor>
                     </ExtensionOptions>
                 )}
-                <Anchor href="/">home</Anchor>
+                <Anchor id="home" href="/">
+                    home
+                </Anchor>
                 &nbsp;&nbsp;&nbsp;
-                <Anchor href="https://github.com/g-harel/targetblank/#readme">
+                <Anchor
+                    id="about"
+                    href="https://github.com/g-harel/targetblank/#readme"
+                >
                     about
                 </Anchor>
                 &nbsp;&nbsp;&nbsp;
-                <Anchor href="mailto:gabrielj.harel@gmail.com">contact</Anchor>
+                <Anchor id="contact" href="mailto:gabrielj.harel@gmail.com">
+                    contact
+                </Anchor>
             </Footer>
         </Wrapper>
     );

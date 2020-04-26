@@ -146,7 +146,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
             <Wrapper>
                 <Header>
                     <Done className={{disabled: data.status === "saving"}}>
-                        <Anchor href={path(routes.document, addr!)}>
+                        <Anchor id="done" href={path(routes.document, addr!)}>
                             done
                         </Anchor>
                     </Done>

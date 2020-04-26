@@ -40,7 +40,7 @@ export const Login: PageComponent = ({addr}) => () => {
                 autocomplete="current-password"
             />
             <Recover>
-                <Anchor href={path(routes.recover, addr!)}>
+                <Anchor id="reset" href={path(routes.recover, addr!)}>
                     reset password
                 </Anchor>
             </Recover>

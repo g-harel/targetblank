@@ -85,7 +85,10 @@ export const Landing: PageComponent = (_, update) => {
                     </Info>
                     <Spacer />
                     <Try>
-                        <Anchor href={path(routes.document, localAddr)}>
+                        <Anchor
+                            id="try"
+                            href={path(routes.document, localAddr)}
+                        >
                             try it out locally
                         </Anchor>
                     </Try>

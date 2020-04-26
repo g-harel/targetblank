@@ -156,12 +156,14 @@ export const Document: PageComponent = ({addr}, update) => {
                 <Action>
                     {client(addr!).isAuthorized() ? (
                         <Edit>
-                            <Anchor href={path(routes.edit, addr!)}>
+                            <Anchor id="edit" href={path(routes.edit, addr!)}>
                                 edit
                             </Anchor>
                         </Edit>
                     ) : (
-                        <Anchor href={path(routes.login, addr!)}>login</Anchor>
+                        <Anchor id="login" href={path(routes.login, addr!)}>
+                            login
+                        </Anchor>
                     )}
                 </Action>
                 <Header muted title={data.meta.title} />

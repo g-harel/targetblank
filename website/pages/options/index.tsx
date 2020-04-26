@@ -76,7 +76,10 @@ export const Options: PageComponent = (_, update) => {
             {options && !!options.addr && (
                 <Current>
                     current address
-                    <Anchor href={path(routes.document, options.addr)}>
+                    <Anchor
+                        id="document"
+                        href={path(routes.document, options.addr)}
+                    >
                         <Address>{options.addr}</Address>
                     </Anchor>
                 </Current>
