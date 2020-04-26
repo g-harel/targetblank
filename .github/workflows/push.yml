@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     - name: terraform init
       uses: hashicorp/terraform-github-actions/init@v0.1.2
@@ -16,8 +16,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TF_ACTION_WORKING_DIR: .
 
-    - name: npm install
+    - name: setup node
       uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: npm install
       run: npm install
 
     - name: go mod download
@@ -28,7 +32,6 @@ jobs:
         args: go mod download
 
     - name: npm build
-      uses: actions/setup-node@v1
       run: npm run build
 
     - name: go build validate
@@ -103,13 +106,10 @@ jobs:
         TF_ACTION_WORKING_DIR: .
 
     - name: npm release
-      uses: actions/setup-node@v1
+      run: npm run release
       env:
         WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
         WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-      with:
-        node-version: '12.x'
-      run: npm run release
