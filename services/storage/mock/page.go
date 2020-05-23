@@ -44,13 +44,6 @@ func PageUpdatePassword(addr, pass string) error {
 	return nil
 }
 
-// PageUpdatePublished updates the published status of a page in the internal store.
-func PageUpdatePublished(addr string, published bool) error {
-	p, _ := PageRead(addr)
-	p.Published = published
-	return nil
-}
-
 // PageUpdateDocument updates the document of a page in the internal store.
 func PageUpdateDocument(addr, document string) error {
 	p, _ := PageRead(addr)

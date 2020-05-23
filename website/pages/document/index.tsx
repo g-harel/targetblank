@@ -80,6 +80,7 @@ export const Document: PageComponent = ({addr}, update) => {
             data = d;
             update();
         },
+        // TODO add chip to tell user reason for redirect.
         () => safeRedirect(routes.login, addr!),
     );
 

@@ -173,13 +173,14 @@ _** Authentication may be required depending on page configuration._
 
 All data is stored in a single `page` table. Each item represents both a single page and its owner.
 
-Attribute   | Raw Type | Description
------------ | -------- | ---------------------------------------------------
-`addr`      | `string` | Page address (key)
-`document`  | `string` | Parsed document stored as JSON
-`email`     | `string` | Hashed page
-`password`  | `string` | Hashed page password
-`published` | `bool`   | Published pages are readable without authentication
+Attribute              | Raw Type | Description
+---------------------- | -------- | ---------------------------------------------------
+`addr`                 | `string` | Page address (key)
+`document`             | `string` | Parsed document stored as JSON
+`email`                | `string` | Hashed page
+`password`             | `string` | Hashed page password
+`password_last_update` | `string` | Timestamp of when the password was last updated
+`published`            | `bool`   | Published pages are readable without authentication
 
 ## License
 
