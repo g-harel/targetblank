@@ -23,7 +23,7 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	funcErr = req.Authenticate(key, addr)
+	_, funcErr = req.Authenticate(key, addr)
 	if funcErr != nil {
 		return funcErr
 	}

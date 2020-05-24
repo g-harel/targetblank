@@ -18,9 +18,11 @@ const (
 var longTTL = time.Hour * 24 * 3
 var shortTTL = time.Minute * 10
 
+// Changing the json encoding field names will break issued tokens.
 type tokenPayload struct {
 	ExpireAt int64  `json:"a"`
 	Secret   string `json:"b"`
+	IssuedAt int64  `json:"c"`
 }
 
 // CreateToken creates a new authentication token.
@@ -35,6 +37,7 @@ func CreateToken(key string, short bool, secret string) (string, error) {
 	payload, err := json.Marshal(&tokenPayload{
 		ExpireAt: expire.UnixNano(),
 		Secret:   secret,
+		IssuedAt: time.Now().UnixNano(),
 	})
 	if err != nil {
 		return "", fmt.Errorf("marshall token: %v", err)
@@ -49,34 +52,35 @@ func CreateToken(key string, short bool, secret string) (string, error) {
 }
 
 // Authenticate validates the token in the request.
-func (r *Request) Authenticate(key, secret string) *Error {
+func (r *Request) Authenticate(key, secret string) (*time.Time, *Error) {
 	raw := r.Headers[AuthHeader]
 	if raw == "" {
-		return ClientErr("missing authorization (no \"%v\" header)", AuthHeader)
+		return nil, ClientErr("missing authorization (no \"%v\" header)", AuthHeader)
 	}
 
 	values := strings.Fields(raw)
 	if len(values) < 2 || values[0] != AuthType {
-		return ClientErr("invalid authorization")
+		return nil, ClientErr("invalid authorization")
 	}
 
 	payload, err := crypto.Decrypt(key, values[1])
 	if err != nil {
-		return ClientErr("invalid authorization")
+		return nil, ClientErr("invalid authorization")
 	}
 
 	token := &tokenPayload{}
 	err = json.Unmarshal(payload, token)
 	if err != nil {
-		return ClientErr("invalid authorization")
+		return nil, ClientErr("invalid authorization")
 	}
 
 	if token.ExpireAt < time.Now().UnixNano() {
-		return ClientErr("expired authorization")
+		return nil, ClientErr("expired authorization")
 	}
 	if token.Secret != secret {
-		return ClientErr("invalid authorization")
+		return nil, ClientErr("invalid authorization")
 	}
 
-	return nil
+	issuedAt := time.Unix(token.IssuedAt/int64(time.Second), 0)
+	return &issuedAt, nil
 }

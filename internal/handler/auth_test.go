@@ -59,7 +59,8 @@ func TestAuthenticate(t *testing.T) {
 			Headers: map[string]string{},
 		}
 		req.Headers[AuthHeader] = AuthType + " " + token
-		return req.Authenticate(mockSecrets.RawKey, secret)
+		_, err := req.Authenticate(mockSecrets.RawKey, secret)
+		return err
 	}
 
 	t.Run("should produce an error if the secret is wrong", func(t *testing.T) {
