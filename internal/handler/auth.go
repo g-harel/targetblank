@@ -25,6 +25,8 @@ type tokenPayload struct {
 	IssuedAt int64  `json:"c"`
 }
 
+// TODO CreatePasswordToken that can only be used to update the password and has a shorter timeout.
+
 // CreateToken creates a new authentication token.
 func CreateToken(key string, short bool, secret string) (string, error) {
 	expire := time.Now()

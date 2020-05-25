@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -10,9 +11,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
+// ErrFailedCondition when condition expression fails.
+var ErrFailedCondition = errors.New("failed condition")
+
+// ISO8601 is the layout used for fields representing dates.
+const ISO8601 = "2006-01-02T15:04:05-0700"
+
 const pageTable = "targetblank-pages"
 const pageKey = "addr"
-const layoutISO8601 = "2006-01-02T15:04:05-0700"
 
 // Page represents a DynamoDB page item.
 type Page struct {
@@ -26,22 +32,26 @@ type Page struct {
 
 // PageCreate writes the page to storage.
 // Conflict flag will be set if the address is already taken.
+// TODO replace conflict flag with ErrFailedCondition.
 func PageCreate(p *Page) (conflict bool, err error) {
 	page, err := dynamodbattribute.MarshalMap(p)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("marshal page: %v", err)
 	}
 
 	_, err = client.PutItem(&dynamodb.PutItemInput{
 		TableName:           aws.String(pageTable),
-		ConditionExpression: aws.String(fmt.Sprintf("attribute_not_exists(%v)", pageKey)),
+		ConditionExpression: aws.String("attribute_not_exists(:page_key)"),
 		Item:                page,
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":page_key": {S: aws.String(pageKey)},
+		},
 	})
 	if err != nil {
 		if awsErr, ok := err.(awserr.Error); ok {
 			conflict = awsErr.Code() == dynamodb.ErrCodeConditionalCheckFailedException
 		}
-		return conflict, err
+		return conflict, fmt.Errorf("put item: %v", err)
 	}
 
 	return false, nil
@@ -49,7 +59,6 @@ func PageCreate(p *Page) (conflict bool, err error) {
 
 // PageRead reads a page from storage.
 // A null value pointer for page indicates the address was not found.
-// TODO check if token was issued before last password update.
 func PageRead(addr string) (*Page, error) {
 	result, err := client.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(pageTable),
@@ -60,7 +69,7 @@ func PageRead(addr string) (*Page, error) {
 		},
 	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get item: %v", err)
 	}
 	if len(result.Item) == 0 {
 		return nil, nil
@@ -69,17 +78,17 @@ func PageRead(addr string) (*Page, error) {
 	page := &Page{}
 	err = dynamodbattribute.UnmarshalMap(result.Item, page)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unmarshal page: %v", err)
 	}
 
 	return page, nil
 }
 
 // PageUpdate can update any attribute of a stored page.
-func pageUpdate(addr, expr string, values map[string]*dynamodb.AttributeValue) error {
+func pageUpdate(addr, expr, cond string, values map[string]*dynamodb.AttributeValue) error {
 	_, err := client.UpdateItem(&dynamodb.UpdateItemInput{
 		TableName:           aws.String(pageTable),
-		ConditionExpression: aws.String(fmt.Sprintf("attribute_exists(%v)", pageKey)),
+		ConditionExpression: aws.String(cond),
 		Key: map[string]*dynamodb.AttributeValue{
 			pageKey: {
 				S: aws.String(addr),
@@ -95,10 +104,12 @@ func pageUpdate(addr, expr string, values map[string]*dynamodb.AttributeValue) e
 // PageUpdatePassword updates a stored page's password hash.
 // TODO only allow password updates from email links.
 func PageUpdatePassword(addr, pass string) error {
-	currentTime := time.Now().Format(layoutISO8601)
+	currentTime := time.Now().Format(ISO8601)
 	return pageUpdate(addr,
 		"SET password = :password, password_last_update = :password_last_update",
+		"attribute_exists(:page_key)",
 		map[string]*dynamodb.AttributeValue{
+			":page_key":             {S: aws.String(pageKey)},
 			":password":             {S: aws.String(pass)},
 			":password_last_update": {S: aws.String(currentTime)},
 		},
@@ -106,27 +117,24 @@ func PageUpdatePassword(addr, pass string) error {
 }
 
 // PageUpdateDocument updates a stored page's document.
-// TODO check if token was issued before last password update.
-func PageUpdateDocument(addr string, document string) error {
-	return pageUpdate(addr,
+// TODO special error about auth
+func PageUpdateDocument(addr string, document string, authTimestamp *time.Time) error {
+	err := pageUpdate(addr,
 		"SET document = :document",
+		"attribute_exists(:page_key) AND (attribute_not_exists(password_last_update) OR password_last_update < :auth_timestamp)",
 		map[string]*dynamodb.AttributeValue{
-			":document": {S: aws.String(document)},
+			":document":       {S: aws.String(document)},
+			":page_key":       {S: aws.String(pageKey)},
+			":auth_timestamp": {S: aws.String(authTimestamp.Format(ISO8601))},
 		},
 	)
-}
-
-// PageDelete removes a page from storage.
-// TODO check if token was issued before last password update.
-func PageDelete(addr string) error {
-	_, err := client.DeleteItem(&dynamodb.DeleteItemInput{
-		TableName: aws.String(pageTable),
-		Key: map[string]*dynamodb.AttributeValue{
-			pageKey: {
-				S: aws.String(addr),
-			},
-		},
-	})
+	if err != nil {
+		if awsErr, ok := err.(awserr.Error); ok {
+			if awsErr.Code() == dynamodb.ErrCodeConditionalCheckFailedException {
+				return ErrFailedCondition
+			}
+		}
+	}
 
 	return err
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/g-harel/targetblank/internal/handler"
 	"github.com/g-harel/targetblank/services/secrets"
@@ -32,8 +34,17 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 			return handler.InternalErr("read secret key: %v", err)
 		}
 
-		_, funcErr = req.Authenticate(key, addr)
+		authTimestamp, funcErr := req.Authenticate(key, addr)
 		if funcErr != nil {
+			// Page existence is kept hidden.
+			return handler.ClientErr(handler.ErrPageNotFound)
+		}
+
+		passwordLastUpdate, err := time.Parse(storage.ISO8601, page.PasswordLastUpdate)
+		if err != nil {
+			return handler.InternalErr("parse 'PasswordLastUpdate' timestamp: %v", err)
+		}
+		if passwordLastUpdate.After(*authTimestamp) {
 			// Page existence is kept hidden.
 			return handler.ClientErr(handler.ErrPageNotFound)
 		}

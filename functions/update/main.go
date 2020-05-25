@@ -23,7 +23,7 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	_, funcErr = req.Authenticate(key, addr)
+	authTimestamp, funcErr := req.Authenticate(key, addr)
 	if funcErr != nil {
 		return funcErr
 	}
@@ -33,7 +33,11 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.ClientErr("parsing error: %v", err)
 	}
 
-	err = storagePageUpdateDocument(addr, doc)
+	err = storagePageUpdateDocument(addr, doc, authTimestamp)
+	if err == storage.ErrFailedCondition {
+		// Page existence is kept hidden.
+		return handler.ClientErr(handler.ErrPageNotFound)
+	}
 	if err != nil {
 		return handler.InternalErr("update page document: %v", err)
 	}

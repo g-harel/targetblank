@@ -2,11 +2,13 @@ package mock
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/g-harel/targetblank/services/storage"
 )
 
 // Pages stores the test pages being added and removed.
+// TODO use map.
 var pages = []*storage.Page{}
 
 // PageCreate adds a page to the internal store.
@@ -45,18 +47,8 @@ func PageUpdatePassword(addr, pass string) error {
 }
 
 // PageUpdateDocument updates the document of a page in the internal store.
-func PageUpdateDocument(addr, document string) error {
+func PageUpdateDocument(addr, document string, authTimestamp *time.Time) error {
 	p, _ := PageRead(addr)
 	p.Document = document
-	return nil
-}
-
-// PageDelete removes a page from the internal store.
-func PageDelete(addr string) error {
-	for i, p := range pages {
-		if p.Addr == addr {
-			pages = append(pages[:i], pages[i+1:]...)
-		}
-	}
 	return nil
 }

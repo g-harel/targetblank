@@ -15,6 +15,8 @@ func init() {
 	storagePageRead = mockStorage.PageRead
 }
 
+// TODO add test reading when password's last update is more recent than now.
+
 func TestRead(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
 		err := Read(&handler.Request{
@@ -35,8 +37,9 @@ func TestRead(t *testing.T) {
 		doc := "test page"
 
 		page := &storage.Page{
-			Document:  doc,
-			Published: false,
+			Document:           doc,
+			Published:          false,
+			PasswordLastUpdate: "2006-01-02T15:04:05-0700",
 		}
 		_, err := mockStorage.PageCreate(page)
 		if err != nil {

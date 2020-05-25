@@ -26,6 +26,8 @@ func (e *Error) Code() int {
 	return e.code
 }
 
+// TODO add AuthError since it's the most common use of ClientErr.
+
 // ClientErr creates a new 400 status function error.
 func ClientErr(format string, a ...interface{}) *Error {
 	return &Error{
