@@ -40,13 +40,15 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 			return handler.ClientErr(handler.ErrPageNotFound)
 		}
 
-		passwordLastUpdate, err := time.Parse(storage.ISO8601, page.PasswordLastUpdate)
-		if err != nil {
-			return handler.InternalErr("parse 'PasswordLastUpdate' timestamp: %v", err)
-		}
-		if passwordLastUpdate.After(*authTimestamp) {
-			// Page existence is kept hidden.
-			return handler.ClientErr(handler.ErrPageNotFound)
+		if page.PasswordLastUpdate != "" {
+			passwordLastUpdate, err := time.Parse(storage.ISO8601, page.PasswordLastUpdate)
+			if err != nil {
+				return handler.InternalErr("parse 'PasswordLastUpdate' timestamp: %v", err)
+			}
+			if passwordLastUpdate.After(*authTimestamp) {
+				// Page existence is kept hidden.
+				return handler.ClientErr(handler.ErrPageNotFound)
+			}
 		}
 	}
 
