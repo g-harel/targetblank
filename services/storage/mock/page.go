@@ -8,8 +8,7 @@ import (
 )
 
 // Pages stores the test pages being added and removed.
-// TODO use map.
-var pages = []*storage.Page{}
+var pages = map[string]*storage.Page{}
 
 // PageCreate adds a page to the internal store.
 func PageCreate(p *storage.Page) (bool, error) {
@@ -25,18 +24,13 @@ func PageCreate(p *storage.Page) (bool, error) {
 		return true, nil
 	}
 
-	pages = append(pages, p)
+	pages[p.Addr] = p
 	return false, nil
 }
 
 // PageRead reads a page from the internal store.
 func PageRead(addr string) (*storage.Page, error) {
-	for _, p := range pages {
-		if p.Addr == addr {
-			return p, nil
-		}
-	}
-	return nil, nil
+	return pages[addr], nil
 }
 
 // PageUpdatePassword updates the password of a page in the internal store.
