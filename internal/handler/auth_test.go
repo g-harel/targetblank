@@ -54,7 +54,7 @@ func TestCreateToken(t *testing.T) {
 }
 
 func TestAuthenticate(t *testing.T) {
-	Authenticate := func(token, secret string) *Error {
+	Authenticate := func(token, secret string) error {
 		req := &Request{
 			Headers: map[string]string{},
 		}

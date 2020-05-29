@@ -90,10 +90,10 @@ func TestAuthenticate(t *testing.T) {
 		if funcErr == nil {
 			t.Fatalf("Should produce an error if the password is invalid")
 		}
-		if funcErr.Code() != http.StatusBadRequest {
+		if funcErr.Code() != http.StatusNotFound {
 			t.Fatalf(
 				"Incorrect status code for password error, expected %v but got %v: %v",
-				http.StatusBadRequest, funcErr.Code(), funcErr,
+				http.StatusNotFound, funcErr.Code(), funcErr,
 			)
 		}
 	})

@@ -24,6 +24,22 @@ func TestClientErr(t *testing.T) {
 	})
 }
 
+func TestObfuscatedAuthErr(t *testing.T) {
+	t.Run("should have 400 status", func(t *testing.T) {
+		err := ObfuscatedAuthErr()
+		if err.code != http.StatusNotFound {
+			t.Fatal("Error status is not 404")
+		}
+	})
+
+	t.Run("should contain page not found message", func(t *testing.T) {
+		err := ObfuscatedAuthErr()
+		if err.Error() != ErrPageNotFound {
+			t.Fatal("Error message does not match")
+		}
+	})
+}
+
 func TestInternalErr(t *testing.T) {
 	log.SetOutput(ioutil.Discard)
 

@@ -25,7 +25,7 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handler.ClientErr(handler.ErrPageNotFound)
+		return handler.ObfuscatedAuthErr()
 	}
 
 	if !page.Published {
@@ -36,8 +36,7 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 
 		authTimestamp, funcErr := req.Authenticate(key, addr)
 		if funcErr != nil {
-			// Page existence is kept hidden.
-			return handler.ClientErr(handler.ErrPageNotFound)
+			return handler.ObfuscatedAuthErr()
 		}
 
 		if page.PasswordLastUpdate != "" {
@@ -46,8 +45,7 @@ func Read(req *handler.Request, res *handler.Response) *handler.Error {
 				return handler.InternalErr("parse 'PasswordLastUpdate' timestamp: %v", err)
 			}
 			if passwordLastUpdate.After(*authTimestamp) {
-				// Page existence is kept hidden.
-				return handler.ClientErr(handler.ErrPageNotFound)
+				return handler.ObfuscatedAuthErr()
 			}
 		}
 	}

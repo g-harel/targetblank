@@ -23,9 +23,9 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	authTimestamp, funcErr := req.Authenticate(key, addr)
-	if funcErr != nil {
-		return funcErr
+	authTimestamp, err := req.Authenticate(key, addr)
+	if err != nil {
+		return handler.ObfuscatedAuthErr()
 	}
 
 	doc, err := parse.Document(req.Body)
@@ -35,8 +35,7 @@ func Update(req *handler.Request, res *handler.Response) *handler.Error {
 
 	err = storagePageUpdateDocument(addr, doc, authTimestamp)
 	if err == storage.ErrFailedCondition {
-		// Page existence is kept hidden.
-		return handler.ClientErr(handler.ErrPageNotFound)
+		return handler.ObfuscatedAuthErr()
 	}
 	if err != nil {
 		return handler.InternalErr("update page document: %v", err)

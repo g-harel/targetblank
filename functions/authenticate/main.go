@@ -23,12 +23,11 @@ func Authenticate(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read page: %v", err)
 	}
 	if page == nil {
-		return handler.ClientErr(handler.ErrPageNotFound)
+		return handler.ObfuscatedAuthErr()
 	}
 
 	if !crypto.HashCheck(req.Body, page.Password) {
-		// Page existence is kept hidden.
-		return handler.ClientErr(handler.ErrPageNotFound)
+		return handler.ObfuscatedAuthErr()
 	}
 
 	key, err := secretsKey()

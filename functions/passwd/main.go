@@ -25,9 +25,9 @@ func Passwd(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	_, funcErr = req.Authenticate(key, addr)
-	if funcErr != nil {
-		return funcErr
+	_, err = req.Authenticate(key, addr)
+	if err != nil {
+		return handler.ObfuscatedAuthErr()
 	}
 
 	pass := strings.TrimSpace(req.Body)

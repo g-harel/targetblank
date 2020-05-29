@@ -44,10 +44,10 @@ func TestPasswd(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Bad token should produce error")
 		}
-		if err.Code() != http.StatusBadRequest {
+		if err.Code() != http.StatusNotFound {
 			t.Fatalf(
 				"Incorrect status code for bad token, expected %v but got %v: %v",
-				http.StatusBadRequest, err.Code(), err,
+				http.StatusNotFound, err.Code(), err,
 			)
 		}
 
@@ -60,10 +60,10 @@ func TestPasswd(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Missing token should produce error")
 		}
-		if err.Code() != http.StatusBadRequest {
+		if err.Code() != http.StatusNotFound {
 			t.Fatalf(
 				"Incorrect status code for missing token, expected %v but got %v: %v",
-				http.StatusBadRequest, err.Code(), err,
+				http.StatusNotFound, err.Code(), err,
 			)
 		}
 	})

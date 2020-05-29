@@ -54,33 +54,33 @@ func CreateToken(key string, short bool, secret string) (string, error) {
 }
 
 // Authenticate validates the token in the request.
-func (r *Request) Authenticate(key, secret string) (*time.Time, *Error) {
+func (r *Request) Authenticate(key, secret string) (*time.Time, error) {
 	raw := r.Headers[AuthHeader]
 	if raw == "" {
-		return nil, ClientErr("missing authorization (no \"%v\" header)", AuthHeader)
+		return nil, fmt.Errorf("missing authorization (no \"%v\" header)", AuthHeader)
 	}
 
 	values := strings.Fields(raw)
 	if len(values) < 2 || values[0] != AuthType {
-		return nil, ClientErr("invalid authorization")
+		return nil, fmt.Errorf("invalid authorization")
 	}
 
 	payload, err := crypto.Decrypt(key, values[1])
 	if err != nil {
-		return nil, ClientErr("invalid authorization")
+		return nil, fmt.Errorf("invalid authorization")
 	}
 
 	token := &tokenPayload{}
 	err = json.Unmarshal(payload, token)
 	if err != nil {
-		return nil, ClientErr("invalid authorization")
+		return nil, fmt.Errorf("invalid authorization")
 	}
 
 	if token.ExpireAt < time.Now().UnixNano() {
-		return nil, ClientErr("expired authorization")
+		return nil, fmt.Errorf("expired authorization")
 	}
 	if token.Secret != secret {
-		return nil, ClientErr("invalid authorization")
+		return nil, fmt.Errorf("invalid authorization")
 	}
 
 	issuedAt := time.Unix(token.IssuedAt/int64(time.Second), 0)

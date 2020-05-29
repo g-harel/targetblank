@@ -123,10 +123,10 @@ func TestRead(t *testing.T) {
 		if funcErr == nil {
 			t.Fatalf("Bad token should produce error")
 		}
-		if funcErr.Code() != http.StatusBadRequest {
+		if funcErr.Code() != http.StatusNotFound {
 			t.Fatalf(
 				"Incorrect error code, expected %v but got %v: %v",
-				http.StatusBadRequest, funcErr.Code(), funcErr,
+				http.StatusNotFound, funcErr.Code(), funcErr,
 			)
 		}
 
@@ -140,10 +140,10 @@ func TestRead(t *testing.T) {
 		if funcErr == nil {
 			t.Fatalf("Missing token should produce error")
 		}
-		if funcErr.Code() != http.StatusBadRequest {
+		if funcErr.Code() != http.StatusNotFound {
 			t.Fatalf(
 				"Incorrect error code, expected %v but got %v: %v",
-				http.StatusBadRequest, funcErr.Code(), funcErr,
+				http.StatusNotFound, funcErr.Code(), funcErr,
 			)
 		}
 	})
