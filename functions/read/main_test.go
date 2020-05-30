@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/g-harel/targetblank/internal/handler"
 	mockSecrets "github.com/g-harel/targetblank/services/secrets/mock"
@@ -14,8 +15,6 @@ func init() {
 	secretsKey = mockSecrets.Key
 	storagePageRead = mockStorage.PageRead
 }
-
-// TODO add test reading when password's last update is more recent than now.
 
 func TestRead(t *testing.T) {
 	t.Run("should require an address param", func(t *testing.T) {
@@ -139,6 +138,42 @@ func TestRead(t *testing.T) {
 		}, res)
 		if funcErr == nil {
 			t.Fatalf("Missing token should produce error")
+		}
+		if funcErr.Code() != http.StatusNotFound {
+			t.Fatalf(
+				"Incorrect error code, expected %v but got %v: %v",
+				http.StatusNotFound, funcErr.Code(), funcErr,
+			)
+		}
+	})
+
+	t.Run("should not fetch pages when token was issued before last update", func(t *testing.T) {
+		page := &storage.Page{
+			Document:           "test page",
+			Published:          false,
+			PasswordLastUpdate: time.Now().Add(time.Hour).Format(storage.ISO8601),
+		}
+		_, err := mockStorage.PageCreate(page)
+		if err != nil {
+			t.Fatalf("Unexpected error when creating new page: %v", err)
+		}
+
+		token, err := handler.CreateToken(mockSecrets.RawKey, false, page.Addr)
+		if err != nil {
+			t.Fatalf("Unexpected error when creating token: %v", err)
+		}
+
+		res := &handler.Response{}
+		funcErr := Read(&handler.Request{
+			PathParameters: map[string]string{
+				"addr": page.Addr,
+			},
+			Headers: map[string]string{
+				handler.AuthHeader: handler.AuthType + " " + token,
+			},
+		}, res)
+		if funcErr == nil {
+			t.Fatalf("Invalidated token should produce error")
 		}
 		if funcErr.Code() != http.StatusNotFound {
 			t.Fatalf(
