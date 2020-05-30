@@ -10,10 +10,9 @@ import (
 type Request events.APIGatewayProxyRequest
 
 // Param reads a path parameter from the request.
-// TODO make return client err.
 func (r *Request) Param(n string) (string, *Error) {
 	if r.PathParameters == nil || r.PathParameters[n] == "" {
-		return "", InternalErr("read path param: %v", n)
+		return "", ClientErr("missing path param '%v'.", n)
 	}
 	return r.PathParameters[n], nil
 }

@@ -27,10 +27,10 @@ func TestReset(t *testing.T) {
 		if err == nil {
 			t.Fatalf("Missing address produce error")
 		}
-		if err.Code() != http.StatusInternalServerError {
+		if err.Code() != http.StatusBadRequest {
 			t.Fatalf(
 				"Incorrect error code, expected %v but got %v: %v",
-				http.StatusInternalServerError, err.Code(), err,
+				http.StatusBadRequest, err.Code(), err,
 			)
 		}
 	})
