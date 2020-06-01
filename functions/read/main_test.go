@@ -40,7 +40,7 @@ func TestRead(t *testing.T) {
 			Published:          false,
 			PasswordLastUpdate: "2006-01-02T15:04:05-0700",
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -78,7 +78,7 @@ func TestRead(t *testing.T) {
 			Document:  doc,
 			Published: true,
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -105,7 +105,7 @@ func TestRead(t *testing.T) {
 		page := &storage.Page{
 			Published: false,
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -153,7 +153,7 @@ func TestRead(t *testing.T) {
 			Published:          false,
 			PasswordLastUpdate: time.Now().Add(time.Hour).Format(storage.ISO8601),
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}

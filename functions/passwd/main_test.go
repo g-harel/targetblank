@@ -75,7 +75,7 @@ func TestPasswd(t *testing.T) {
 		page := &storage.Page{
 			Addr: addr,
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}

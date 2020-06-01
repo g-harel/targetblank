@@ -88,13 +88,15 @@ func Create(req *handler.Request, res *handler.Response) *handler.Error {
 	// Loop until an available address is found.
 	for {
 		page.Addr = genPageID()
-		conflict, err := storagePageCreate(page)
+		err := storagePageCreate(page)
+		if err == storage.ErrFailedCondition {
+			// Try again.
+			continue
+		}
 		if err != nil {
 			return handler.InternalErr("create page: %v", err)
 		}
-		if !conflict {
-			break
-		}
+		break
 	}
 
 	key, err := secretsKey()

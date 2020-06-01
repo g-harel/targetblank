@@ -11,7 +11,7 @@ import (
 var pages = map[string]*storage.Page{}
 
 // PageCreate adds a page to the internal store.
-func PageCreate(p *storage.Page) (bool, error) {
+func PageCreate(p *storage.Page) error {
 	if p.Addr == "" {
 		p.Addr = fmt.Sprintf("%06d", len(pages))
 	}
@@ -21,11 +21,11 @@ func PageCreate(p *storage.Page) (bool, error) {
 
 	page, _ := PageRead(p.Addr)
 	if page != nil {
-		return true, nil
+		return storage.ErrFailedCondition
 	}
 
 	pages[p.Addr] = p
-	return false, nil
+	return nil
 }
 
 // PageRead reads a page from the internal store.

@@ -30,12 +30,11 @@ type Page struct {
 }
 
 // PageCreate writes the page to storage.
-// Conflict flag will be set if the address is already taken.
-// TODO replace conflict flag with ErrFailedCondition.
-func PageCreate(p *Page) (conflict bool, err error) {
+// Returns "ErrFailedCondition" when page address is already in use.
+func PageCreate(p *Page) error {
 	page, err := dynamodbattribute.MarshalMap(p)
 	if err != nil {
-		return false, fmt.Errorf("marshal page: %v", err)
+		return fmt.Errorf("marshal page: %v", err)
 	}
 
 	_, err = client.PutItem(&dynamodb.PutItemInput{
@@ -45,12 +44,14 @@ func PageCreate(p *Page) (conflict bool, err error) {
 	})
 	if err != nil {
 		if awsErr, ok := err.(awserr.Error); ok {
-			conflict = awsErr.Code() == dynamodb.ErrCodeConditionalCheckFailedException
+			if awsErr.Code() == dynamodb.ErrCodeConditionalCheckFailedException {
+				return ErrFailedCondition
+			}
 		}
-		return conflict, fmt.Errorf("put item: %v", err)
+		return fmt.Errorf("put item: %v", err)
 	}
 
-	return false, nil
+	return nil
 }
 
 // PageRead reads a page from storage.

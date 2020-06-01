@@ -38,7 +38,7 @@ func TestUpdate(t *testing.T) {
 		page := &storage.Page{
 			Email: email,
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -58,7 +58,7 @@ func TestUpdate(t *testing.T) {
 		label := "uMmETQtzy85kPOjU"
 
 		page := &storage.Page{}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -96,7 +96,7 @@ func TestUpdate(t *testing.T) {
 
 	t.Run("should reject invalid page document", func(t *testing.T) {
 		page := &storage.Page{}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}

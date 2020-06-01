@@ -41,7 +41,7 @@ func TestReset(t *testing.T) {
 		page := &storage.Page{
 			Email: email,
 		}
-		_, err := mockStorage.PageCreate(page)
+		err := mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -68,7 +68,7 @@ func TestReset(t *testing.T) {
 		page := &storage.Page{
 			Email: h,
 		}
-		_, err = mockStorage.PageCreate(page)
+		err = mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
@@ -109,7 +109,7 @@ func TestReset(t *testing.T) {
 		page := &storage.Page{
 			Email: h,
 		}
-		_, err = mockStorage.PageCreate(page)
+		err = mockStorage.PageCreate(page)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
