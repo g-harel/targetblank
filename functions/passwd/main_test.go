@@ -80,7 +80,7 @@ func TestPasswd(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handler.CreateToken(mockSecrets.RawKey, false, addr)
+		token, err := handler.CreateToken(mockSecrets.RawKey, addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}

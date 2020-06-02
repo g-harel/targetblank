@@ -104,11 +104,12 @@ func Create(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	token, err := handler.CreateToken(key, true, page.Addr)
+	token, err := handler.CreateToken(key, page.Addr)
 	if err != nil {
 		return handler.InternalErr("create token: %v", err)
 	}
 
+	// TODO make fancier
 	err = mailerSend(
 		email,
 		"Your page is ready!",

@@ -63,7 +63,7 @@ func TestUpdate(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handler.CreateToken(mockSecrets.RawKey, false, page.Addr)
+		token, err := handler.CreateToken(mockSecrets.RawKey, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
@@ -101,7 +101,7 @@ func TestUpdate(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handler.CreateToken(mockSecrets.RawKey, false, page.Addr)
+		token, err := handler.CreateToken(mockSecrets.RawKey, page.Addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}

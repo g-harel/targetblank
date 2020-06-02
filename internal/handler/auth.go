@@ -15,30 +15,34 @@ const (
 	AuthType   = "Targetblank"
 )
 
-var longTTL = time.Hour * 24 * 3
-var shortTTL = time.Minute * 10
+var (
+	restrictedTokenTTL = time.Minute * 10
+	ErrRestrictedToken = fmt.Errorf("restricted token")
+)
 
 // Changing the json encoding field names will break issued tokens.
 type tokenPayload struct {
 	ExpireAt int64  `json:"a"`
-	Secret   string `json:"b"`
+	Identity string `json:"b"`
 	IssuedAt int64  `json:"c"`
 }
 
-// TODO CreatePasswordToken that can only be used to update the password and has a shorter timeout.
+// TODO CreateRestrictedToken that can only be used to update the password and has a shorter timeout.
 
 // CreateToken creates a new authentication token.
-func CreateToken(key string, short bool, secret string) (string, error) {
-	expire := time.Now()
-	if short {
-		expire = expire.Add(shortTTL)
-	} else {
-		expire = expire.Add(longTTL)
+func CreateToken(key string, identity string) (string, error) {
+	return createToken(key, identity, nil)
+}
+
+func createToken(key string, identity string, duration *time.Duration) (string, error) {
+	var expireAt int64 = 0
+	if duration != nil {
+		time.Now().Add(*duration).UnixNano()
 	}
 
 	payload, err := json.Marshal(&tokenPayload{
-		ExpireAt: expire.UnixNano(),
-		Secret:   secret,
+		ExpireAt: expireAt,
+		Identity: identity,
 		IssuedAt: time.Now().UnixNano(),
 	})
 	if err != nil {
@@ -54,7 +58,7 @@ func CreateToken(key string, short bool, secret string) (string, error) {
 }
 
 // Authenticate validates the token in the request.
-func (r *Request) Authenticate(key, secret string) (*time.Time, error) {
+func (r *Request) Authenticate(key, identity string) (*time.Time, error) {
 	raw := r.Headers[AuthHeader]
 	if raw == "" {
 		return nil, fmt.Errorf("missing authorization (no \"%v\" header)", AuthHeader)
@@ -62,7 +66,7 @@ func (r *Request) Authenticate(key, secret string) (*time.Time, error) {
 
 	values := strings.Fields(raw)
 	if len(values) < 2 || values[0] != AuthType {
-		return nil, fmt.Errorf("invalid authorization")
+		return nil, fmt.Errorf("could not parse auth header")
 	}
 
 	payload, err := crypto.Decrypt(key, values[1])
@@ -73,14 +77,14 @@ func (r *Request) Authenticate(key, secret string) (*time.Time, error) {
 	token := &tokenPayload{}
 	err = json.Unmarshal(payload, token)
 	if err != nil {
-		return nil, fmt.Errorf("invalid authorization")
+		return nil, fmt.Errorf("unmarshal: %v", err)
 	}
 
-	if token.ExpireAt < time.Now().UnixNano() {
-		return nil, fmt.Errorf("expired authorization")
+	if token.ExpireAt != 0 && token.ExpireAt < time.Now().UnixNano() {
+		return nil, fmt.Errorf("expired token")
 	}
-	if token.Secret != secret {
-		return nil, fmt.Errorf("invalid authorization")
+	if token.Identity != identity {
+		return nil, fmt.Errorf("incorrect identity")
 	}
 
 	issuedAt := time.Unix(token.IssuedAt/int64(time.Second), 0)

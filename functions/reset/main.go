@@ -45,11 +45,13 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	token, err := handler.CreateToken(key, true, addr)
+	// TODO restricted token
+	token, err := handler.CreateToken(key, addr)
 	if err != nil {
 		return handler.InternalErr("create token: %v", err)
 	}
 
+	// TODO make fancier.
 	err = mailerSend(
 		email,
 		"Reset your page password!",

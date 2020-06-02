@@ -58,6 +58,7 @@ export const Confirmation: Component<Props> = (props) => {
     const {email} = props;
 
     // Attempt to find the web interface link from the email's domain.
+    // TODO add a search query to url.
     let link: string | null = null;
     const match = /.*@([^\.]+).*/g.exec(email);
     if (match !== null) {
