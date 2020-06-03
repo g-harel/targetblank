@@ -26,7 +26,7 @@ func Passwd(req *handler.Request, res *handler.Response) *handler.Error {
 	}
 
 	_, err = req.Authenticate(key, addr)
-	if err != nil {
+	if err != handler.ErrRestrictedToken {
 		return handler.ObfuscatedAuthErr()
 	}
 

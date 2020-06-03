@@ -17,6 +17,8 @@ const (
 
 var (
 	restrictedTokenTTL = time.Minute * 10
+
+	// ErrRestrictedToken is returned when authenticating restricted tokens.
 	ErrRestrictedToken = fmt.Errorf("restricted token")
 )
 
@@ -27,9 +29,12 @@ type tokenPayload struct {
 	IssuedAt int64  `json:"c"`
 }
 
-// TODO CreateRestrictedToken that can only be used to update the password and has a shorter timeout.
+// CreateRestrictedToken creates a new authentication token that expires.
+func CreateRestrictedToken(key string, identity string) (string, error) {
+	return createToken(key, identity, &restrictedTokenTTL)
+}
 
-// CreateToken creates a new authentication token.
+// CreateToken creates a new authentication token that never expires.
 func CreateToken(key string, identity string) (string, error) {
 	return createToken(key, identity, nil)
 }
@@ -58,6 +63,8 @@ func createToken(key string, identity string, duration *time.Duration) (string, 
 }
 
 // Authenticate validates the token in the request.
+// Returns time at which token was issued and/or an authentication error.
+// Returns ErrRestrictedToken if token is restricted.
 func (r *Request) Authenticate(key, identity string) (*time.Time, error) {
 	raw := r.Headers[AuthHeader]
 	if raw == "" {
@@ -88,5 +95,10 @@ func (r *Request) Authenticate(key, identity string) (*time.Time, error) {
 	}
 
 	issuedAt := time.Unix(token.IssuedAt/int64(time.Second), 0)
+
+	if token.ExpireAt != 0 {
+		return &issuedAt, ErrRestrictedToken
+	}
+
 	return &issuedAt, nil
 }

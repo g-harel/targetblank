@@ -45,10 +45,9 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("read secret key: %v", err)
 	}
 
-	// TODO restricted token
-	token, err := handler.CreateToken(key, addr)
+	token, err := handler.CreateRestrictedToken(key, addr)
 	if err != nil {
-		return handler.InternalErr("create token: %v", err)
+		return handler.InternalErr("create restricted token: %v", err)
 	}
 
 	// TODO make fancier.

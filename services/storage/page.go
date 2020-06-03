@@ -99,7 +99,6 @@ func pageUpdate(addr, expr, cond string, values map[string]*dynamodb.AttributeVa
 }
 
 // PageUpdatePassword updates a stored page's password hash.
-// TODO only allow password updates from email links.
 func PageUpdatePassword(addr, pass string) error {
 	currentTime := time.Now().Format(ISO8601)
 	return pageUpdate(addr,
@@ -113,7 +112,7 @@ func PageUpdatePassword(addr, pass string) error {
 }
 
 // PageUpdateDocument updates a stored page's document.
-// TODO special error about auth
+// TODO handle ErrFailedCondition differently at callsite.
 func PageUpdateDocument(addr string, document string, authTimestamp *time.Time) error {
 	err := pageUpdate(addr,
 		"SET document = :document",
