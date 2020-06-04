@@ -40,9 +40,9 @@ func CreateToken(key string, identity string) (string, error) {
 }
 
 func createToken(key string, identity string, duration *time.Duration) (string, error) {
-	var expireAt int64 = 0
+	var expireAt int64
 	if duration != nil {
-		time.Now().Add(*duration).UnixNano()
+		expireAt = time.Now().Add(*duration).UnixNano()
 	}
 
 	payload, err := json.Marshal(&tokenPayload{

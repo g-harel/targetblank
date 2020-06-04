@@ -32,7 +32,7 @@ func TestPasswd(t *testing.T) {
 		}
 	})
 
-	t.Run("should require a validation token", func(t *testing.T) {
+	t.Run("should require a restricted validation token", func(t *testing.T) {
 		err := Passwd(&handler.Request{
 			PathParameters: map[string]string{
 				"addr": "123456",
@@ -66,6 +66,30 @@ func TestPasswd(t *testing.T) {
 				http.StatusNotFound, err.Code(), err,
 			)
 		}
+
+		addr := "567"
+		token, funcErr := handler.CreateRestrictedToken(mockSecrets.RawKey, addr)
+		if funcErr != nil {
+			t.Fatalf("Unexpected error when creating token: %v", funcErr)
+		}
+
+		err = Passwd(&handler.Request{
+			PathParameters: map[string]string{
+				"addr": addr,
+			},
+			Headers: map[string]string{
+				"token": handler.AuthType + " " + token,
+			},
+		}, &handler.Response{})
+		if err == nil {
+			t.Fatalf("Non-restricted token should produce error")
+		}
+		if err.Code() != http.StatusNotFound {
+			t.Fatalf(
+				"Incorrect status code for missing token, expected %v but got %v: %v",
+				http.StatusNotFound, err.Code(), err,
+			)
+		}
 	})
 
 	t.Run("should change the page's password", func(t *testing.T) {
@@ -80,7 +104,7 @@ func TestPasswd(t *testing.T) {
 			t.Fatalf("Unexpected error when creating new page: %v", err)
 		}
 
-		token, err := handler.CreateToken(mockSecrets.RawKey, addr)
+		token, err := handler.CreateRestrictedToken(mockSecrets.RawKey, addr)
 		if err != nil {
 			t.Fatalf("Unexpected error when creating token: %v", err)
 		}
@@ -110,5 +134,4 @@ func TestPasswd(t *testing.T) {
 			t.Fatal("Fetched page's password does not match")
 		}
 	})
-
 }
