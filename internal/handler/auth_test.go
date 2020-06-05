@@ -84,26 +84,23 @@ func TestAuthenticate(t *testing.T) {
 		}
 	})
 
-	// TODO test restricted token expiry.
-	t.Run("should reject expired tokens", func(t *testing.T) {
-		return // TODO
-
+	t.Run("should reject expired restricted tokens", func(t *testing.T) {
 		identity := "identity"
 
-		tkn, err := CreateToken(mockSecrets.RawKey, identity)
+		tkn, err := CreateRestrictedToken(mockSecrets.RawKey, identity)
 		if err != nil {
 			t.Fatalf("Unexpected error creating token: %v", err)
 		}
 
 		funcErr := Authenticate(tkn, identity)
-		if funcErr != nil {
+		if funcErr != ErrRestrictedToken {
 			t.Fatalf("Unexpected error reading token: %v", funcErr)
 		}
 
 		time.Sleep(restrictedTokenTTL)
 
 		funcErr = Authenticate(tkn, identity)
-		if funcErr == nil {
+		if funcErr == ErrRestrictedToken {
 			t.Fatalf("Expected expired token to be rejected")
 		}
 	})

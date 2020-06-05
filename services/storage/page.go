@@ -112,7 +112,6 @@ func PageUpdatePassword(addr, pass string) error {
 }
 
 // PageUpdateDocument updates a stored page's document.
-// TODO handle ErrFailedCondition differently at callsite.
 func PageUpdateDocument(addr string, document string, authTimestamp *time.Time) error {
 	err := pageUpdate(addr,
 		"SET document = :document",
