@@ -57,9 +57,7 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 			<body>
 				<p>
 					<a href="https://targetblank.org">
-						<img src="https://svgsaur.us/?t=targetblank&o=b&s=26&c=332832&w=152&y=55" />
-						<br>
-						<img src="https://svgsaur.us/?t=organize_your_links&s=16&c=766873&w=152&y=12" />
+						<img src="https://user-images.githubusercontent.com/9319710/84103267-2c54b380-a9d8-11ea-857b-718185e9e396.png" />
 					</a>
 				</p>
 				<h3>
