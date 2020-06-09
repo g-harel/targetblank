@@ -109,14 +109,26 @@ func Create(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("create restricted token: %v", err)
 	}
 
-	// TODO make fancier
 	err = mailerSend(
 		email,
-		"Your page is ready!",
+		"Your page is ready",
 		`<html>
 			<body>
-				<h3>Follow the link to confirm you're the owner.</h3>
-				<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
+				<p>
+					<a href="https://targetblank.org">
+						<img src="https://svgsaur.us/?t=targetblank&o=b&s=26&c=332832&w=152&y=55" />
+						<br>
+						<img src="https://svgsaur.us/?t=organize_your_links&s=16&c=766873&w=152&y=12" />
+					</a>
+				</p>
+				<h3>
+					<a href="https://targetblank.org/{{.Addr}}/reset/{{.Token}}">
+						Claim your page.
+					</a>
+				</h3>
+				<p>
+					<sup>Link will expire in 10 minutes.</sup>
+				</p>
 			</body>
 		</html>`,
 		&struct {

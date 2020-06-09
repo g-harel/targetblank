@@ -50,16 +50,26 @@ func Reset(req *handler.Request, res *handler.Response) *handler.Error {
 		return handler.InternalErr("create restricted token: %v", err)
 	}
 
-	// TODO make fancier.
 	err = mailerSend(
 		email,
-		"Reset your page password!",
+		"Reset your page password",
 		`<html>
 			<body>
-				<h3>Follow the link to update your password.</h3>
-				<span>https://targetblank.org/{{.Addr}}/reset/{{.Token}}</span>
-				<br />
-				<sup>This link will expire in 10 minutes</sup>
+				<p>
+					<a href="https://targetblank.org">
+						<img src="https://svgsaur.us/?t=targetblank&o=b&s=26&c=332832&w=152&y=55" />
+						<br>
+						<img src="https://svgsaur.us/?t=organize_your_links&s=16&c=766873&w=152&y=12" />
+					</a>
+				</p>
+				<h3>
+					<a href="https://targetblank.org/{{.Addr}}/reset/{{.Token}}">
+						Update your password.
+					</a>
+				</h3>
+				<p>
+					<sup>Link will expire in 10 minutes.</sup>
+				</p>
 			</body>
 		</html>`,
 		&struct {
