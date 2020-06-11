@@ -46,5 +46,5 @@ export const read = async (): Promise<ExtensionStore> => {
 export const write = async (values: Partial<ExtensionStore>) => {
     const current = await read();
     const updated = Object.assign(current, values);
-    await crossWrite({[storageKey]: updated});
+    await crossWrite({[storageKey]: updated} as Record<string, any>);
 };

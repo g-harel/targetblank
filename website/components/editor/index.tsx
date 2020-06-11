@@ -2,6 +2,7 @@ import {Component} from "../../internal/types";
 import {styled} from "../../internal/style";
 import {color, font} from "../../internal/style/theme";
 import {Command, command} from "../../internal/editor";
+import {readCursorPosition, updateCursorPosition} from "./cursor";
 
 // Values used to compute the approximate size of the the textbox without hacks.
 // https://stackoverflow.com/q/2803880
@@ -80,7 +81,7 @@ const StyledTextarea = styled("textarea")({
 
 export interface Props {
     id: string;
-    callback: (input: string) => any;
+    callback: (value: string) => any;
     value: string;
 }
 
@@ -90,7 +91,7 @@ export interface Props {
 // since the parent is expected to already get re-rendered.
 export const Editor: Component<Props> = (props) => () => {
     const onKeydown = (e: KeyboardEvent) => {
-        updateCursorPosition(e);
+        updateCursorPosition(props.id)(e);
 
         // Swallow `ctrl+s` to prevent browser popup.
         const ctrl = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
@@ -144,25 +145,25 @@ export const Editor: Component<Props> = (props) => () => {
         }
     };
 
-    const updateCursorPosition = (e: any) => {
-        (window as any).editor = (window as any).editor || {};
-        (window as any).editor[props.id] = e.target.selectionStart;
-    };
-
     const onInput = (e: any) => {
         props.callback(e.target.value);
     };
 
+    // Set focus to last known position.
     setTimeout(() =>
         requestAnimationFrame(() => {
             const editor = document.getElementById(props.id);
+            if (editor === null) return;
+            if (document.activeElement === editor) return;
 
-            // Set focus to last known position.
-            if (editor && document.activeElement !== editor) {
-                editor.focus({preventScroll: true});
-                const position = ((window as any).editor || {})[props.id];
-                (editor as any).setSelectionRange(position, position);
-            }
+            const lastCursorPosition = readCursorPosition(props.id);
+            if (lastCursorPosition === undefined) return;
+
+            editor.focus({preventScroll: true});
+            (editor as any).setSelectionRange(
+                lastCursorPosition,
+                lastCursorPosition,
+            );
         }),
     );
 
@@ -206,7 +207,7 @@ export const Editor: Component<Props> = (props) => () => {
                     value={props.value}
                     oninput={onInput}
                     onkeydown={onKeydown}
-                    onclick={updateCursorPosition}
+                    onclick={updateCursorPosition(props.id)}
                     spellcheck={false}
                 />
             </ScrollWrapper>
