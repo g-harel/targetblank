@@ -20,6 +20,11 @@ const Recover = styled("div")({
 });
 
 export const Login: PageComponent = ({addr}) => () => {
+    if (client(addr!).isAuthorized()) {
+        setTimeout(() => safeRedirect(routes.document, addr!));
+        return null;
+    }
+
     const submit = (pass: string) => {
         return new Promise<string>((resolve) => {
             client(addr!).tokenCreate(
