@@ -7,6 +7,7 @@ import {localAddr} from "../../internal/client";
 import {Anchor} from "../anchor";
 import {path, routes} from "../../routes";
 import {isExtension} from "../../internal/extension";
+import {Chips} from "./chips";
 
 const Wrapper = styled("div")({
     display: "flex",
@@ -72,6 +73,7 @@ export const Page: Component<Props> = (props) => () => {
 
     return (
         <Wrapper>
+            <Chips />
             <Content>
                 <Component addr={addr} token={token} />
             </Content>
