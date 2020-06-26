@@ -8,6 +8,7 @@ import {Editor} from "../../components/editor";
 import {Icon} from "../../components/icon";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, safeRedirect} from "../../routes";
+import {showChip} from "../../components/page/chips";
 
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
@@ -79,6 +80,7 @@ export interface Data {
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
     if (!client(addr!).isAuthorized()) {
+        showChip("Missing authentication", 4000);
         setTimeout(() => safeRedirect(routes.login, addr!));
         return () => null;
     }
@@ -86,7 +88,11 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
     // Load page data.
     client(addr!).pageRead(
         (data: IPageData) => update({value: data.raw, status: "saved"}),
-        () => safeRedirect(routes.login, addr!),
+        () => {
+            // TODO handle auth and network errors differently.
+            showChip("Unable to verify authentication status", 6000);
+            safeRedirect(routes.login, addr!);
+        },
     );
 
     // Save editor contents after a delay.

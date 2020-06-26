@@ -10,6 +10,7 @@ const Wrapper = styled("div")({});
 export const Reset: PageComponent = ({addr, token}) => () => {
     // Token must be taken from URL to reset password.
     if (!token) {
+        // Silently redirect, invalid URL state.
         setTimeout(() => safeRedirect(routes.document, addr!));
         return null;
     }

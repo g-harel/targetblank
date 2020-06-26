@@ -8,6 +8,7 @@ import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, safeRedirect} from "../../routes";
+import {showChip} from "../../components/page/chips";
 
 const keyboardTimeout = 1000;
 
@@ -80,8 +81,10 @@ export const Document: PageComponent = ({addr}, update) => {
             data = d;
             update();
         },
-        // TODO add chip to tell user reason for redirect.
-        () => safeRedirect(routes.login, addr!),
+        () => {
+            showChip("Missing authentication", 4000);
+            safeRedirect(routes.login, addr!)
+        },
     );
 
     let highlight: string = "";

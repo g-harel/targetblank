@@ -6,6 +6,7 @@ import {color, size} from "../../internal/style/theme";
 import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {path, routes, safeRedirect} from "../../routes";
+import {showChip} from "../../components/page/chips";
 
 const Wrapper = styled("div")({});
 
@@ -21,6 +22,7 @@ const Recover = styled("div")({
 
 export const Login: PageComponent = ({addr}) => () => {
     if (client(addr!).isAuthorized()) {
+        showChip("Already signed in!", 2000);
         setTimeout(() => safeRedirect(routes.document, addr!));
         return null;
     }

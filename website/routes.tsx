@@ -11,6 +11,7 @@ import {Page, Props as PageProps} from "./components/page";
 import {isExtension, read} from "./internal/extension";
 import {Options} from "./pages/options";
 import {Loading} from "./components/loading";
+import {showChip} from "./components/page/chips";
 
 const hostname = "targetblank.org";
 
@@ -121,6 +122,7 @@ const PageLoader: Component<PageProps> = (params, update) => {
     if (addrIsLoading) {
         read().then(({addr: storedAddr}) => {
             if (storedAddr == null) {
+                showChip("Please select your page", 6000);
                 safeRedirect(routes.options);
                 return;
             }
