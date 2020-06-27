@@ -83,7 +83,7 @@ export const Document: PageComponent = ({addr}, update) => {
         },
         () => {
             showChip("Missing authentication", 4000);
-            safeRedirect(routes.login, addr!)
+            safeRedirect(routes.login, addr!);
         },
     );
 

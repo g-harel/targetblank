@@ -68,7 +68,7 @@ export const Landing: PageComponent = (_, update) => {
                 update();
                 resolve("");
             };
-            client.pageCreate(callback, resolve, newEmail);
+            client.pageCreate(callback, () => resolve(), newEmail);
         });
     };
 

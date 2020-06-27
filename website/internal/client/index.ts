@@ -8,7 +8,7 @@ export {IPageData} from "../types";
 export const localAddr = "local";
 
 export type Callback<T = void> = (value: T) => void;
-export type ErrHandler = Callback<string>;
+export type ErrHandler = Callback<api.IRequestError>;
 
 export interface Client {
     isAuthorized(): boolean;

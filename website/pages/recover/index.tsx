@@ -12,7 +12,7 @@ export const Recover: PageComponent = ({addr}) => () => {
         return new Promise<string>((resolve) => {
             client(addr!).passReset(
                 () => safeRedirect(routes.login, addr!),
-                resolve,
+                () => resolve(),
                 email,
             );
         });

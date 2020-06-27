@@ -21,11 +21,11 @@ export const Reset: PageComponent = ({addr, token}) => () => {
                 () => {
                     client(addr!).tokenCreate(
                         () => safeRedirect(routes.document, addr!),
-                        resolve,
+                        () => resolve(),
                         pass,
                     );
                 },
-                resolve,
+                () => resolve(),
                 pass,
                 token,
             );

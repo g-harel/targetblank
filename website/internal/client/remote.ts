@@ -3,9 +3,9 @@ import {read, write} from "../storage";
 import {IPageData} from "../types";
 import {Client} from ".";
 
-const missingToken = (name: string, addr: string): string => {
+const missingToken = (name: string, addr: string): api.IRequestError => {
     console.error(`Missing access token for "${name}" on address "${addr}"`);
-    return "Unauthorized";
+    return {message: "Unauthorized", isAuth: true};
 };
 
 const writeToken = (addr: string) => (token: string) => {

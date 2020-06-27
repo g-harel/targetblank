@@ -112,7 +112,7 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                 },
                 (m) => {
                     if (selfCounter !== counter) return;
-                    update({value, status: "error", error: m});
+                    update({value, status: "error", error: m.message});
                 },
                 value,
             );

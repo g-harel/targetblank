@@ -10,6 +10,12 @@ interface IRequest {
     json?: boolean;
 }
 
+export interface IRequestError {
+    isAuth?: boolean;
+    isTimeout?: boolean;
+    message: string;
+}
+
 // Helper to send the request using browser's fetch api.
 // Conditionally translates to and from json.
 // Appends the correct host to the request path.
@@ -17,48 +23,60 @@ interface IRequest {
 // Rejects if the status code is in the error range.
 const send = (req: IRequest) => {
     return new Promise<any>(async (resolve, reject) => {
-        req.body = req.body || "";
-        req.json = req.json || false;
+        const typedReject = (err: IRequestError) => reject(err);
 
-        if (req.method === "GET" || req.method === "HEAD") {
-            req.body = undefined;
-        }
+        try {
+            req.body = req.body || "";
+            req.json = req.json || false;
 
-        // Arbitrary headers are not allowed because they would interfere with CORS.
-        const headers: Record<string, string> = {};
-        headers["Authorization"] = `Targetblank ${req.token}`;
+            if (req.method === "GET" || req.method === "HEAD") {
+                req.body = undefined;
+            }
 
-        // Time out request after interval.
-        // All other resolve/rejects will have no effect.
-        setTimeout(() => reject("request timeout"), 5 * 1000);
+            // Arbitrary headers are not allowed because they would interfere with CORS.
+            const headers: Record<string, string> = {};
+            headers["Authorization"] = `Targetblank ${req.token}`;
 
-        const res = await fetch(hostname + req.path, {
-            headers,
-            method: req.method,
-            body: req.body,
-        });
+            // Time out request after interval.
+            // All other resolve/rejects will have no effect.
+            setTimeout(() => {
+                typedReject({
+                    message: "request timeout",
+                    isTimeout: true,
+                });
+            }, 5 * 1000);
 
-        // Message is forwarded to user-space only when status code is 400.
-        if (res.status === 400) {
-            return res.text().then(reject);
-        }
-
-        // Any other status code in the error range will have been encrypted.
-        if (res.status > 400) {
-            return res.text().then((message) => {
-                console.error(`Status Code Error\n${message}`);
-                reject("something went wrong");
+            const res = await fetch(hostname + req.path, {
+                headers,
+                method: req.method,
+                body: req.body,
             });
-        }
 
-        if (req.json) {
-            res.json().then(resolve);
-        } else {
-            res.text().then(resolve);
+            // Likely auth related in the 4xx range.
+            if (res.status >= 400 && res.status < 500) {
+                return res.text().then((message) => {
+                    typedReject({message, isAuth: true});
+                });
+            }
+
+            // Unexpected errors.
+            if (res.status >= 300) {
+                return res.text().then((message) => {
+                    console.error(`Status Code Error\n${message}`);
+                    typedReject({message: "something went wrong"});
+                });
+            }
+
+            if (req.json) {
+                res.json().then(resolve);
+            } else {
+                res.text().then(resolve);
+            }
+        } catch (e) {
+            // Fallback when function fails unexpectedly.
+            console.warn(e.toString());
+            typedReject({message: e.toString()});
         }
-    }).catch((e) => {
-        console.warn(e.toString());
-        throw e;
     });
 };
 

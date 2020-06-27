@@ -31,7 +31,7 @@ export const Login: PageComponent = ({addr}) => () => {
         return new Promise<string>((resolve) => {
             client(addr!).tokenCreate(
                 () => safeRedirect(routes.document, addr!),
-                resolve,
+                () => resolve(),
                 pass,
             );
         });
