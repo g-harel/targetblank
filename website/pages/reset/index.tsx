@@ -4,6 +4,7 @@ import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/style";
 import {Header} from "../../components/header";
 import {routes, safeRedirect} from "../../routes";
+import {handleErr} from "../../internal/errors";
 
 const Wrapper = styled("div")({});
 
@@ -21,11 +22,11 @@ export const Reset: PageComponent = ({addr, token}) => () => {
                 () => {
                     client(addr!).tokenCreate(
                         () => safeRedirect(routes.document, addr!),
-                        () => resolve(),
+                        () => handleErr(resolve),
                         pass,
                     );
                 },
-                () => resolve(),
+                () => handleErr(resolve),
                 pass,
                 token,
             );

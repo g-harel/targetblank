@@ -8,7 +8,7 @@ import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, safeRedirect} from "../../routes";
-import {showChip} from "../../components/page/chips";
+import {genRequestErrHandler} from "../../internal/errors";
 
 const keyboardTimeout = 1000;
 
@@ -76,16 +76,10 @@ const Items = styled("div")({});
 export const Document: PageComponent = ({addr}, update) => {
     let data: IPageData | null = null;
 
-    client(addr!).pageRead(
-        (d) => {
-            data = d;
-            update();
-        },
-        () => {
-            showChip("Missing authentication", 4000);
-            safeRedirect(routes.login, addr!);
-        },
-    );
+    client(addr!).pageRead((d) => {
+        data = d;
+        update();
+    }, genRequestErrHandler(addr!));
 
     let highlight: string = "";
     let highlightedID: string | null = null;

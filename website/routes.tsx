@@ -122,7 +122,7 @@ const PageLoader: Component<PageProps> = (params, update) => {
     if (addrIsLoading) {
         read().then(({addr: storedAddr}) => {
             if (storedAddr == null) {
-                showChip("Please select your page", 6000);
+                showChip("configure your page", 4000);
                 safeRedirect(routes.options);
                 return;
             }

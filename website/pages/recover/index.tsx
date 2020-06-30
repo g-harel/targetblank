@@ -4,6 +4,7 @@ import {PageComponent} from "../../components/page";
 import {styled} from "../../internal/style";
 import {Header} from "../../components/header";
 import {routes, safeRedirect} from "../../routes";
+import {handleErr} from "../../internal/errors";
 
 const Wrapper = styled("div")({});
 
@@ -12,7 +13,7 @@ export const Recover: PageComponent = ({addr}) => () => {
         return new Promise<string>((resolve) => {
             client(addr!).passReset(
                 () => safeRedirect(routes.login, addr!),
-                () => resolve(),
+                () => handleErr(resolve),
                 email,
             );
         });

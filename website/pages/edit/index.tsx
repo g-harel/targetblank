@@ -8,7 +8,7 @@ import {Editor} from "../../components/editor";
 import {Icon} from "../../components/icon";
 import {keyboard} from "../../internal/keyboard";
 import {path, routes, safeRedirect} from "../../routes";
-import {showChip} from "../../components/page/chips";
+import {genRequestErrHandler, handleAuthErr} from "../../internal/errors";
 
 const headerHeight = "2.9rem";
 const saveDelay = 1400;
@@ -80,19 +80,14 @@ export interface Data {
 
 export const Edit: PageComponent<Data> = ({addr}, update) => {
     if (!client(addr!).isAuthorized()) {
-        showChip("Missing authentication", 4000);
-        setTimeout(() => safeRedirect(routes.login, addr!));
+        setTimeout(() => handleAuthErr(addr!));
         return () => null;
     }
 
     // Load page data.
     client(addr!).pageRead(
         (data: IPageData) => update({value: data.raw, status: "saved"}),
-        () => {
-            // TODO handle auth and network errors differently.
-            showChip("Unable to verify authentication status", 6000);
-            safeRedirect(routes.login, addr!);
-        },
+        genRequestErrHandler(addr!),
     );
 
     // Save editor contents after a delay.
@@ -110,9 +105,10 @@ export const Edit: PageComponent<Data> = ({addr}, update) => {
                     if (selfCounter !== counter) return;
                     update({value, status: "saved"});
                 },
-                (m) => {
+                (err) => {
+                    if (err.isAuth) return handleAuthErr(addr!);
                     if (selfCounter !== counter) return;
-                    update({value, status: "error", error: m.message});
+                    update({value, status: "error", error: err.message});
                 },
                 value,
             );

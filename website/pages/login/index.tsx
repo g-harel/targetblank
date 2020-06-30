@@ -7,6 +7,7 @@ import {Anchor} from "../../components/anchor";
 import {Header} from "../../components/header";
 import {path, routes, safeRedirect} from "../../routes";
 import {showChip} from "../../components/page/chips";
+import {handleErr} from "../../internal/errors";
 
 const Wrapper = styled("div")({});
 
@@ -31,7 +32,7 @@ export const Login: PageComponent = ({addr}) => () => {
         return new Promise<string>((resolve) => {
             client(addr!).tokenCreate(
                 () => safeRedirect(routes.document, addr!),
-                () => resolve(),
+                () => handleErr(resolve),
                 pass,
             );
         });

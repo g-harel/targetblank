@@ -7,6 +7,7 @@ import {Header} from "../../components/header";
 import {Confirmation} from "./confirmation";
 import {Anchor} from "../../components/anchor";
 import {path, routes} from "../../routes";
+import {handleErr} from "../../internal/errors";
 
 const screenWidth = 20;
 
@@ -68,7 +69,7 @@ export const Landing: PageComponent = (_, update) => {
                 update();
                 resolve("");
             };
-            client.pageCreate(callback, () => resolve(), newEmail);
+            client.pageCreate(callback, () => handleErr(resolve), newEmail);
         });
     };
 
