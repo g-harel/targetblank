@@ -1,6 +1,6 @@
 import {Component} from "../../internal/types";
 import {styled} from "../../internal/style";
-import {color, font} from "../../internal/style/theme";
+import {color, font, breakpoint} from "../../internal/style/theme";
 import {Command, command} from "../../internal/editor";
 import {readCursorPosition, updateCursorPosition} from "./cursor";
 
@@ -14,6 +14,12 @@ const Wrapper = styled("div")({
     flexDirection: "row",
     flexGrow: 1,
     padding: "1.8rem 0 0 1.8rem",
+
+    $nest: {
+        [breakpoint.sm]: {
+            padding: "1rem 0 0 0",
+        },
+    },
 });
 
 const LineNumbers = styled("div")({
