@@ -19,6 +19,10 @@ const writeData = (addr: string) => (data: IPageData) => {
 };
 
 export const remoteClient = (addr: string): Client => ({
+    resetAuth() {
+        write(addr, {token: null});
+    },
+
     isAuthorized() {
         return !!read(addr).token;
     },

@@ -21,6 +21,8 @@ const writeData = (data: IPageData) => {
 };
 
 export const localClient = (): Client => ({
+    resetAuth() {},
+
     isAuthorized() {
         return true;
     },

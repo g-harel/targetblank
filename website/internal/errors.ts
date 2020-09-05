@@ -1,6 +1,7 @@
 import {showChip} from "../components/page/chips";
 import {safeRedirect, routes} from "../routes";
 import {IRequestError} from "./api";
+import {client} from "./client";
 
 export const genRequestErrHandler = (addr: string) => (err: IRequestError) => {
     if (err.isAuth) {
@@ -12,6 +13,7 @@ export const genRequestErrHandler = (addr: string) => (err: IRequestError) => {
 
 export const handleAuthErr = (addr: string) => {
     showChip("not authorized", 4000);
+    client(addr).resetAuth();
     safeRedirect(routes.login, addr!);
 };
 

@@ -11,6 +11,7 @@ export type Callback<T = void> = (value: T) => void;
 export type ErrHandler = Callback<api.IRequestError>;
 
 export interface Client {
+    resetAuth(): void;
     isAuthorized(): boolean;
     pageUpdate(cb: Callback<IPageData>, err: ErrHandler, doc: string): void;
     pageRead(cb: Callback<IPageData>, err: ErrHandler): void;
