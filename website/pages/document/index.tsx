@@ -140,8 +140,10 @@ export const Document: PageComponent = ({addr}, update) => {
             const formattedString = item.label
                 .toLowerCase()
                 .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
-            if (formattedString.indexOf(highlight) >= 0) {
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/\s/g, "");
+            const formattedHighlight = highlight.replace(/\s/g, "");
+            if (formattedString.indexOf(formattedHighlight) >= 0) {
                 highlightedID = key;
                 return true;
             }
