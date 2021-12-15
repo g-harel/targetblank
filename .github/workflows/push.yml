@@ -110,7 +110,7 @@ jobs:
         args: go build -o .functions/authenticate ./functions/authenticate
 
     - name: terraform apply
-      uses: g-harel/terraform-github-actions-apply@d49255c
+      uses: g-harel/terraform-github-actions-apply@d49255c20ffbecaf9d9d72b3b426afb152e8a3f9
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
