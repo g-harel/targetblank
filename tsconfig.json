@@ -23,6 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "stripInternal": true,
-    "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"]
+    "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
+    "skipLibCheck": true
   }
 }
