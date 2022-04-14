@@ -17,7 +17,7 @@ export const handleAuthErr = (addr: string) => {
     safeRedirect(routes.login, addr!);
 };
 
-export const handleErr = (resolve?: () => void) => {
+export const handleErr = (resolve?: (value: string) => void) => {
     showChip("something went wrong", 4000);
-    if (resolve) resolve();
+    if (resolve) resolve(""); // Resolve with empty error string.
 };

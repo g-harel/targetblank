@@ -154,7 +154,7 @@ export const Input: Component<Props> = (props, update) => {
 
     let timeout: any;
 
-    const oninput = (event: TextEvent) => {
+    const oninput = (event: Event) => {
         // Reset any pending error message.
         clearTimeout(timeout);
 

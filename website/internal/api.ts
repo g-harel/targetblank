@@ -74,8 +74,8 @@ const send = (req: IRequest) => {
             }
         } catch (e) {
             // Fallback when function fails unexpectedly.
-            console.warn(e.toString());
-            typedReject({message: e.toString()});
+            console.warn(String(e));
+            typedReject({message: String(e)});
         }
     });
 };
