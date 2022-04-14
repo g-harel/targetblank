@@ -22,8 +22,8 @@ jobs:
       with:
         node-version: '12.x'
 
-    - name: npm install
-      run: npm ci
+    - name: js install
+      run: yarn install --frozen-lockfile
 
     - name: go mod download
       uses: cedrickring/golang-action@1.1.0
@@ -32,11 +32,11 @@ jobs:
       with:
         args: go mod download
 
-    - name: npm test
-      run: npm run test
+    - name: js test
+      run: yarn run test
 
-    - name: npm build
-      run: npm run build
+    - name: js build
+      run: yarn run build
 
     - name: go test
       uses: cedrickring/golang-action@1.1.0
@@ -119,8 +119,8 @@ jobs:
       with:
         terraform_version: 1.0.11
 
-    - name: npm release
-      run: npm run release
+    - name: extension release
+      run: yarn run release
       env:
         WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
         WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
