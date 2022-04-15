@@ -5,18 +5,10 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     steps:
-
     - uses: actions/checkout@v2
 
-    - name: terraform init
-      uses: hashicorp/setup-terraform@v1
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        terraform_version: 1.0.11
 
+    # Build JS
     - name: setup node
       uses: actions/setup-node@v1
       with:
@@ -25,18 +17,20 @@ jobs:
     - name: js install
       run: yarn install --frozen-lockfile
 
+    - name: js test
+      run: yarn run test
+
+    - name: js build
+      run: yarn run build
+
+
+    # Build Go
     - name: go mod download
       uses: cedrickring/golang-action@1.1.0
       env:
         GO111MODULE: "on"
       with:
         args: go mod download
-
-    - name: js test
-      run: yarn run test
-
-    - name: js build
-      run: yarn run build
 
     - name: go test
       uses: cedrickring/golang-action@1.1.0
@@ -110,6 +104,29 @@ jobs:
       with:
         args: go build -o .functions/authenticate ./functions/authenticate
 
+
+    # Terraform apply
+    - name: terraform init
+      uses: hashicorp/setup-terraform@v1
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        terraform_version: 1.0.11
+      run: terraform init
+
+    - name: terraform fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: terraform Init
+      run: terraform init
+
+    - name: terraform Validate
+      run: terraform validate -no-color
+
+    # TODO terraform apply -no-color -input=false -auto-approve
     - name: terraform apply
       uses: hashicorp/setup-terraform@v1
       env:
@@ -119,6 +136,8 @@ jobs:
       with:
         terraform_version: 1.0.11
 
+
+    # Publish extension
     - name: extension release
       run: yarn run release
       env:
