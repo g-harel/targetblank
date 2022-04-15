@@ -52,21 +52,14 @@ export const remoteClient = (addr: string): Client => ({
         if (t === null) {
             return err(missingToken("change password", addr));
         }
-        api.passUpdate(addr, t, pass)
-            .then(cb)
-            .catch(err);
+        api.passUpdate(addr, t, pass).then(cb).catch(err);
     },
 
     passReset(cb, err, email) {
-        api.passReset(addr, email)
-            .then(cb)
-            .catch(err);
+        api.passReset(addr, email).then(cb).catch(err);
     },
 
     tokenCreate(cb, err, pass) {
-        api.tokenCreate(addr, pass)
-            .then(writeToken(addr))
-            .then(cb)
-            .catch(err);
+        api.tokenCreate(addr, pass).then(writeToken(addr)).then(cb).catch(err);
     },
 });

@@ -28,10 +28,7 @@ export const localClient = (): Client => ({
     },
 
     pageUpdate(cb, err, doc) {
-        api.pageValidate(doc)
-            .then(writeData)
-            .then(cb)
-            .catch(err);
+        api.pageValidate(doc).then(writeData).then(cb).catch(err);
     },
 
     pageRead(cb, err) {
@@ -40,10 +37,7 @@ export const localClient = (): Client => ({
             return cb(data);
         }
 
-        api.pageValidate(defaultPage)
-            .then(writeData)
-            .then(cb)
-            .catch(err);
+        api.pageValidate(defaultPage).then(writeData).then(cb).catch(err);
     },
 
     passUpdate(cb) {

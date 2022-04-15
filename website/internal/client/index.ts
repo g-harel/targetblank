@@ -47,14 +47,10 @@ const clientGenerator: ClientGenerator = (addr) => {
 
 const staticClient: StaticClient = {
     pageCreate: (cb, err, email) => {
-        api.pageCreate(email)
-            .then(cb)
-            .catch(err);
+        api.pageCreate(email).then(cb).catch(err);
     },
     pageValidate: (cb, err, doc) => {
-        api.pageValidate(doc)
-            .then(cb)
-            .catch(err);
+        api.pageValidate(doc).then(cb).catch(err);
     },
 };
 

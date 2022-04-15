@@ -109,7 +109,7 @@ export const Editor: Component<Props> = (props) => () => {
         const editFile = (command: Command) => {
             e.preventDefault();
 
-            const target = (e.target as any) as HTMLTextAreaElement;
+            const target = e.target as any as HTMLTextAreaElement;
             const initialValue = target.value;
 
             const out = command(target);

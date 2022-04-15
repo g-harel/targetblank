@@ -1,148 +1,144 @@
 on: push
 name: Deploy
 jobs:
-  deploy:
-    name: deploy
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+    deploy:
+        name: deploy
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
 
+            # Build JS
+            - name: setup node
+              uses: actions/setup-node@v1
+              with:
+                  node-version: "16.x"
 
-    # Build JS
-    - name: setup node
-      uses: actions/setup-node@v1
-      with:
-        node-version: '16.x'
+            - name: js install
+              run: yarn install --frozen-lockfile
 
-    - name: js install
-      run: yarn install --frozen-lockfile
+            - name: js test
+              run: yarn run test
 
-    - name: js test
-      run: yarn run test
+            - name: js build
+              run: yarn run build
 
-    - name: js build
-      run: yarn run build
+            # Build Go
+            - name: go mod download
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+              with:
+                  args: go mod download
 
+            - name: go test
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go test ./...
 
-    # Build Go
-    - name: go mod download
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-      with:
-        args: go mod download
+            - name: go build validate
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/validate ./functions/validate
 
-    - name: go test
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go test ./...
+            - name: go build update
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/update ./functions/update
 
-    - name: go build validate
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/validate ./functions/validate
+            - name: go build reset
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/reset ./functions/reset
 
-    - name: go build update
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/update ./functions/update
+            - name: go build read
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/read ./functions/read
 
-    - name: go build reset
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/reset ./functions/reset
+            - name: go build passwd
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/passwd ./functions/passwd
 
-    - name: go build read
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/read ./functions/read
+            - name: go build create
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/create ./functions/create
 
-    - name: go build passwd
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/passwd ./functions/passwd
+            - name: go build authenticate
+              uses: cedrickring/golang-action@1.1.0
+              env:
+                  GO111MODULE: "on"
+                  GOARCH: amd64
+                  GOOS: linux
+              with:
+                  args: go build -o .functions/authenticate ./functions/authenticate
 
-    - name: go build create
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/create ./functions/create
+            # Terraform apply
+            - name: terraform init
+              uses: hashicorp/setup-terraform@v1
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  terraform_version: 1.0.11
+              run: terraform init
 
-    - name: go build authenticate
-      uses: cedrickring/golang-action@1.1.0
-      env:
-        GO111MODULE: "on"
-        GOARCH: amd64
-        GOOS: linux
-      with:
-        args: go build -o .functions/authenticate ./functions/authenticate
+            - name: terraform fmt
+              run: terraform fmt -check
+              continue-on-error: true
 
+            - name: terraform Init
+              run: terraform init
 
-    # Terraform apply
-    - name: terraform init
-      uses: hashicorp/setup-terraform@v1
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        terraform_version: 1.0.11
-      run: terraform init
+            - name: terraform Validate
+              run: terraform validate -no-color
 
-    - name: terraform fmt
-      run: terraform fmt -check
-      continue-on-error: true
+            # TODO terraform apply -no-color -input=false -auto-approve
+            - name: terraform apply
+              uses: hashicorp/setup-terraform@v1
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  terraform_version: 1.0.11
 
-    - name: terraform Init
-      run: terraform init
-
-    - name: terraform Validate
-      run: terraform validate -no-color
-
-    # TODO terraform apply -no-color -input=false -auto-approve
-    - name: terraform apply
-      uses: hashicorp/setup-terraform@v1
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        terraform_version: 1.0.11
-
-
-    # Publish extension
-    - name: extension release
-      run: yarn run release
-      env:
-        WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
-        WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+            # Publish extension
+            - name: extension release
+              run: yarn run release
+              env:
+                  WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+                  WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+                  CLIENT_ID: ${{ secrets.CLIENT_ID }}
+                  CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+                  REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}

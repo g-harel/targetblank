@@ -34,11 +34,12 @@ export interface Props {
     sub?: string;
 }
 
-export const Header: Component<Props> = (props) => () => (
-    <Wrapper className={{muted: props.muted}}>
-        &nbsp;
-        {props.title === undefined ? "targetblank" : props.title}
-        &nbsp;
-        {props.sub ? <Subtitle>{props.sub}</Subtitle> : ""}
-    </Wrapper>
-);
+export const Header: Component<Props> = (props) => () =>
+    (
+        <Wrapper className={{muted: props.muted}}>
+            &nbsp;
+            {props.title === undefined ? "targetblank" : props.title}
+            &nbsp;
+            {props.sub ? <Subtitle>{props.sub}</Subtitle> : ""}
+        </Wrapper>
+    );

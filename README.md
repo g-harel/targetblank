@@ -16,13 +16,13 @@ TODO
 
 <!-- TODO example pages -->
 
-- **Productivity focused** &nbsp; [Do everything from the comfort of your keyboard.](#keyboard-shortcuts)
+-   **Productivity focused** &nbsp; [Do everything from the comfort of your keyboard.](#keyboard-shortcuts)
 
-- **Shareable** &nbsp; Pages are publicly readable by anyone with the link.
+-   **Shareable** &nbsp; Pages are publicly readable by anyone with the link.
 
-- **Optimized for performance** &nbsp; Aggressive caching, small code bundles and native font stacks.
+-   **Optimized for performance** &nbsp; Aggressive caching, small code bundles and native font stacks.
 
-- **Browser Extension** Packaged as an extension to replace your homepage ([firefox](https://addons.mozilla.org/en-US/firefox/addon/targetblank/), [chrome](https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjofapamgd)).
+-   **Browser Extension** Packaged as an extension to replace your homepage ([firefox](https://addons.mozilla.org/en-US/firefox/addon/targetblank/), [chrome](https://chrome.google.com/webstore/detail/targetblank/oghkdhbenjnikkhobfmcfobjofapamgd)).
 
 ## Document Format
 
@@ -84,19 +84,19 @@ When a single _group_ isn't enough, you can add a _group delimiter_ to create a 
 
 Targetblank is meant to be usable and productive using only a keyboard. The [document format](#document-format) goes a long way towards making that a reality, but these shortcuts help complete the story, adding quick navigation and useful text-editing commands. The editor shortcuts are inspired by common text editor keybindings and work on multi-line selections. If your favorite shortcut is missing, please [let me know](https://github.com/g-harel/targetblank/issues/new).
 
-Page     | Shortcut       | Keys
--------- | -------------- | ---------------
-Homepage | Open editor    | `shift + e`
-&nbsp;   | Search links   | `<any letters>`
-&nbsp;   | Follow link    | `enter`
-Editor   | Close editor   | `esc`
-&nbsp;   | Indent         | `tab`
-&nbsp;   | &nbsp;         | `ctrl + ]`
-&nbsp;   | Un-indent      | `shift + tab`
-&nbsp;   | &nbsp;         | `ctrl + [`
-&nbsp;   | Move up        | `alt + up`
-&nbsp;   | Move down      | `alt + down`
-&nbsp;   | Toggle comment | `ctrl + /`
+| Page     | Shortcut       | Keys            |
+| -------- | -------------- | --------------- |
+| Homepage | Open editor    | `shift + e`     |
+| &nbsp;   | Search links   | `<any letters>` |
+| &nbsp;   | Follow link    | `enter`         |
+| Editor   | Close editor   | `esc`           |
+| &nbsp;   | Indent         | `tab`           |
+| &nbsp;   | &nbsp;         | `ctrl + ]`      |
+| &nbsp;   | Un-indent      | `shift + tab`   |
+| &nbsp;   | &nbsp;         | `ctrl + [`      |
+| &nbsp;   | Move up        | `alt + up`      |
+| &nbsp;   | Move down      | `alt + down`    |
+| &nbsp;   | Toggle comment | `ctrl + /`      |
 
 ## Development
 
@@ -155,32 +155,32 @@ The API is rooted at `https://api.targetblank.org`. Details about arguments and 
 
 _The `addr` path parameter represents the six character string which identifies a page._
 
-Function                                         | Description                 | Method   | Path
------------------------------------------------- | --------------------------- | -------- | ----------------
-[authenticate](./functions/authenticate/main.go) | Create authentication token | `POST`   | `/auth/:addr`
-[passwd *](./functions/passwd/main.go)            | Update page password        | `PUT`    | `/auth/:addr`
-[reset](./functions/reset/main.go)               | Request page password reset | `DELETE` | `/auth/:addr`
-[create](./functions/create/main.go)             | Create new page             | `POST`   | `/page`
-[read **](./functions/read/main.go)                | Fetch page content          | `GET`    | `/page/:addr`
-[update *](./functions/update/main.go)            | Edit page document          | `PUT`    | `/page/:addr`
-[validate](./functions/validate/main.go)         | Validate page document      | `POST`   | `/page/validate`
+| Function                                         | Description                 | Method   | Path             |
+| ------------------------------------------------ | --------------------------- | -------- | ---------------- |
+| [authenticate](./functions/authenticate/main.go) | Create authentication token | `POST`   | `/auth/:addr`    |
+| [passwd \*](./functions/passwd/main.go)          | Update page password        | `PUT`    | `/auth/:addr`    |
+| [reset](./functions/reset/main.go)               | Request page password reset | `DELETE` | `/auth/:addr`    |
+| [create](./functions/create/main.go)             | Create new page             | `POST`   | `/page`          |
+| [read \*\*](./functions/read/main.go)            | Fetch page content          | `GET`    | `/page/:addr`    |
+| [update \*](./functions/update/main.go)          | Edit page document          | `PUT`    | `/page/:addr`    |
+| [validate](./functions/validate/main.go)         | Validate page document      | `POST`   | `/page/validate` |
 
-_* Authentication required._
+_\* Authentication required._
 
-_** Authentication may be required depending on page configuration._
+_\*\* Authentication may be required depending on page configuration._
 
 ### Schema
 
 All data is stored in a single `page` table. Each item represents both a single page and its owner.
 
-Attribute              | Raw Type | Description
----------------------- | -------- | ---------------------------------------------------
-`addr`                 | `string` | Page address (key)
-`document`             | `string` | Parsed document stored as JSON
-`email`                | `string` | Hashed page
-`password`             | `string` | Hashed page password
-`password_last_update` | `string` | Timestamp of when the password was last updated
-`published`            | `bool`   | Published pages are readable without authentication
+| Attribute              | Raw Type | Description                                         |
+| ---------------------- | -------- | --------------------------------------------------- |
+| `addr`                 | `string` | Page address (key)                                  |
+| `document`             | `string` | Parsed document stored as JSON                      |
+| `email`                | `string` | Hashed page email                                   |
+| `password`             | `string` | Hashed page password                                |
+| `password_last_update` | `string` | Timestamp of when the password was last updated     |
+| `published`            | `bool`   | Published pages are readable without authentication |
 
 ## License
 

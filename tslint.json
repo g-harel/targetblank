@@ -1,7 +1,5 @@
 {
-    "extends": [
-        "tslint-config-airbnb"
-    ],
+    "extends": ["tslint-config-airbnb"],
     "rules": {
         "align": false,
         "import-name": [true, {"standard": "okwolo"}],
