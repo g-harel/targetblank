@@ -3,7 +3,7 @@
     "build": "run-s build:*",
     "build:clean": "trash .website/* .extension/*",
     "build:website": "parcel build website/index.html --dist-dir .website --no-source-maps",
-    "build:extension": "parcel build website/index.html --dist-dir .extension --no-minify",
+    "build:extension": "parcel build website/index.html --dist-dir .extension --no-optimize",
     "release": "run-s build release:* || true",
     "release:firefox": "cd .extension; web-ext-submit",
     "release:chrome-edit": "grep -v homepage extension/manifest.json > m.temp; mv m.temp extension/manifest.json",
