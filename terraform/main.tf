@@ -27,7 +27,7 @@ module "website" {
 
   files = [
     "${lookup(data.external.manifest.result["index"], "tsx")}",
-    "${lookup(data.external.manifest.result["favicon"], "ico")}",
+    "${lookup(data.external.manifest.result["favicon"], "png")}",
   ]
 }
 
