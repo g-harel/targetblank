@@ -22,7 +22,7 @@ resource "aws_api_gateway_method_response" "cors" {
     "method.response.header.Access-Control-Allow-Credentials" = true
   }
 
-  depends_on = ["aws_api_gateway_method.cors"]
+  depends_on = [aws_api_gateway_method.cors]
 }
 
 resource "aws_api_gateway_integration" "cors" {
