@@ -4,13 +4,13 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 
 resource "aws_api_gateway_deployment" "deployment" {
   depends_on = [
-    "module.authenticate",
-    "module.create",
-    "module.passwd",
-    "module.read",
-    "module.reset",
-    "module.update",
-    "module.validate",
+    module.authenticate,
+    module.create,
+    module.passwd,
+    module.read,
+    module.reset,
+    module.update,
+    module.validate,
   ]
 
   rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"

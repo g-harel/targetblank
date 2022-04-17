@@ -24,7 +24,7 @@ variable "role" {
 
 variable "tags" {
   description = "Tags to assign to the Lambda function."
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 

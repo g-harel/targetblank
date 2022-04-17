@@ -1,6 +1,6 @@
 variable aliases {
   description = "The Cloudfront distribution's aliases."
-  type        = "list"
+  type        = list(string)
 }
 
 variable cert_arn {
@@ -21,5 +21,5 @@ variable "root_document" {
 
 variable "files" {
   description = "List of files to be included in the bucket."
-  type        = "list"
+  type        = list(string)
 }

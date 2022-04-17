@@ -8,24 +8,24 @@ variable "gateway_resource_id" {
 
 variable "allow_origin" {
   description = "Allowed origin."
-  type        = "string"
+  type        = string
   default     = "*"
 }
 
 variable "allow_methods" {
   description = "Allowed HTTP methods."
-  type        = "list"
+  type        = list(string)
   default     = ["GET", "POST", "PUT", "DELETE", "PATCH"]
 }
 
 variable "allow_headers" {
   description = "Allowed HTTP headers."
-  type        = "list"
+  type        = list(string)
   default     = ["Content-Type", "Authorization"]
 }
 
 variable "allow_credentials" {
   description = "Allow caller to view response after sending credentials."
-  type        = "string"
+  type        = string
   default     = "true"
 }

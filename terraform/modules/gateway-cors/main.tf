@@ -11,7 +11,7 @@ resource "aws_api_gateway_method_response" "cors" {
   http_method = "${aws_api_gateway_method.cors.http_method}"
   status_code = "200"
 
-  response_models {
+  response_models = {
     "application/json" = "Empty"
   }
 
@@ -33,7 +33,7 @@ resource "aws_api_gateway_integration" "cors" {
 
   passthrough_behavior = "WHEN_NO_MATCH"
 
-  request_templates {
+  request_templates = {
     "application/json" = "{'statusCode': 200}"
   }
 
