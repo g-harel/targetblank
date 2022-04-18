@@ -1,9 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-provider "archive" {}
-
 terraform {
   backend "s3" {
     encrypt = true
@@ -11,6 +5,22 @@ terraform {
     key     = "targetblank.tfstate"
     region  = "us-east-1"
   }
+  required_providers {
+    archive = {
+      source = "hashicorp/archive"
+      version = "2.2.0"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.10.0"
+    }
+  }
+}
+
+provider "archive" {}
+
+provider "aws" {
+  region = "us-east-1"
 }
 
 module "targetblank" {

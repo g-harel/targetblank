@@ -37,7 +37,7 @@ resource "aws_api_gateway_integration" "cors" {
     "application/json" = "{'statusCode': 200}"
   }
 
-  depends_on = ["aws_api_gateway_method.cors"]
+  depends_on = [aws_api_gateway_method.cors]
 }
 
 resource "aws_api_gateway_integration_response" "cors" {
@@ -53,5 +53,5 @@ resource "aws_api_gateway_integration_response" "cors" {
     "method.response.header.Access-Control-Allow-Credentials" = "'${var.allow_credentials}'"
   }
 
-  depends_on = ["aws_api_gateway_method_response.cors"]
+  depends_on = [aws_api_gateway_method_response.cors]
 }
