@@ -33,7 +33,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: terraform replace-provider archive
-              if: succeeded() || failed()
+              if: success() || failure()
               run: terraform state replace-provider -auto-approve "registry.terraform.io/-/archive" "hashicorp/archive"
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -41,7 +41,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
             - name: terraform replace-provider aws
-              if: succeeded() || failed()
+              if: success() || failure()
               run: terraform state replace-provider -auto-approve "registry.terraform.io/-/aws" "hashicorp/aws"
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
