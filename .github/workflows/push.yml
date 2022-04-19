@@ -25,28 +25,28 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: terraform init
-              run: terraform init -migrate-state
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # - name: terraform init
+            #   run: terraform init -migrate-state
+            #   env:
+            #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: terraform replace-provider local
-              if: success() || failure()
-              run: terraform state replace-provider -auto-approve "registry.terraform.io/-/local" "hashicorp/local"
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # - name: terraform replace-provider local
+            #   if: success() || failure()
+            #   run: terraform state replace-provider -auto-approve "registry.terraform.io/-/local" "hashicorp/local"
+            #   env:
+            #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
-            - name: terraform replace-provider external
-              if: success() || failure()
-              run: terraform state replace-provider -auto-approve "registry.terraform.io/-/external" "hashicorp/external"
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # - name: terraform replace-provider external
+            #   if: success() || failure()
+            #   run: terraform state replace-provider -auto-approve "registry.terraform.io/-/external" "hashicorp/external"
+            #   env:
+            #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: terraform init
               run: terraform init
