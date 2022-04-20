@@ -14,6 +14,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "4.10.0"
     }
+    external = {
+      source  = "hashicorp/external"
+      version = "2.2.2"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "2.2.2"
+    }
   }
 }
 

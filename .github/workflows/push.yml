@@ -62,6 +62,13 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: terraform plan
+              run: terraform plan
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
             # Build JS
             - name: setup node
               uses: actions/setup-node@v1
