@@ -2,10 +2,6 @@ resource "aws_s3_bucket" "public_bucket" {
   bucket = "${var.bucket_name}"
   acl    = "public-read"
 
-  website {
-    index_document = "${var.root_document}"
-  }
-
   policy = <<EOF
 {
   "Version":"2012-10-17",
@@ -20,6 +16,14 @@ resource "aws_s3_bucket" "public_bucket" {
   ]
 }
 EOF
+}
+
+resource "aws_s3_bucket_website_configuration" "website_configuration" {
+  bucket = aws_s3_bucket.public_bucket
+
+  index_document {
+    suffix = "${var.root_document}"
+  }
 }
 
 resource "aws_s3_bucket_object" "root" {
