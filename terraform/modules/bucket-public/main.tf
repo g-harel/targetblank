@@ -1,25 +1,30 @@
 resource "aws_s3_bucket" "public_bucket" {
   bucket = "${var.bucket_name}"
-
-  policy = <<EOF
-{
-  "Version":"2012-10-17",
-  "Statement":[
-    {
-      "Sid":"PublicRead",
-      "Effect":"Allow",
-      "Principal": "*",
-      "Action":["s3:GetObject"],
-      "Resource":["arn:aws:s3:::${var.bucket_name}/*"]
-    }
-  ]
-}
-EOF
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
   bucket = aws_s3_bucket.public_bucket.id
   acl    = "public-read"
+}
+
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  bucket = aws_s3_bucket.public_bucket.id
+  policy = data.aws_iam_policy_document.policy_document.json
+}
+
+data "aws_iam_policy_document" "policy_document" {
+  statement {
+    sid = "PublicRead"
+    effect = "Allow"
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.public_bucket.arn}/*"]
+  }
 }
 
 resource "aws_s3_bucket_website_configuration" "website_configuration" {
