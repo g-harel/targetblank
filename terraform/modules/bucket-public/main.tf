@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "public_bucket" {
   bucket = "${var.bucket_name}"
-  acl    = "public-read"
 
   policy = <<EOF
 {
@@ -18,8 +17,13 @@ resource "aws_s3_bucket" "public_bucket" {
 EOF
 }
 
+resource "aws_s3_bucket_acl" "bucket_acl" {
+  bucket = aws_s3_bucket.public_bucket.id
+  acl    = "public-read"
+}
+
 resource "aws_s3_bucket_website_configuration" "website_configuration" {
-  bucket = aws_s3_bucket.public_bucket
+  bucket = aws_s3_bucket.public_bucket.bucket
 
   index_document {
     suffix = "${var.root_document}"
