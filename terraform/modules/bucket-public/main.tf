@@ -36,7 +36,7 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
 }
 
 resource "aws_s3_bucket_object" "root" {
-  bucket        = "${aws_s3_bucket.public_bucket.bucket}"
+  bucket        = aws_s3_bucket.public_bucket.bucket_name
   key           = "${var.root_document}"
   source        = "${var.source_dir}/${var.root_document}"
   content_type  = "text/html"
@@ -46,7 +46,7 @@ resource "aws_s3_bucket_object" "root" {
 
 resource "aws_s3_bucket_object" "files" {
   count        = "${length(var.files)}"
-  bucket       = "${aws_s3_bucket.public_bucket.bucket}"
+  bucket       = aws_s3_bucket.public_bucket.bucket_name
   key          = "${element(var.files, count.index)}"
   source       = "${var.source_dir}/${element(var.files, count.index)}"
   content_type = "${lookup(local.mime, replace(element(var.files, count.index), "/^.*\\.(\\w+)$/", "$1"), "text/plain")}"
