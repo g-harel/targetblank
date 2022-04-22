@@ -35,7 +35,7 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
   }
 }
 
-resource "aws_s3_bucket_object" "root" {
+resource "aws_s3_object" "root" {
   bucket        = aws_s3_bucket.public_bucket.id
   key           = "${var.root_document}"
   source        = "${var.source_dir}/${var.root_document}"
@@ -44,7 +44,7 @@ resource "aws_s3_bucket_object" "root" {
   etag          = "${md5(file("${var.source_dir}/${var.root_document}"))}"
 }
 
-resource "aws_s3_bucket_object" "files" {
+resource "aws_s3_object" "files" {
   count        = "${length(var.files)}"
   bucket       = aws_s3_bucket.public_bucket.id
   key          = "${element(var.files, count.index)}"
