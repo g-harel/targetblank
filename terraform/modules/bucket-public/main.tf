@@ -67,14 +67,14 @@ resource "aws_cloudfront_distribution" "public_bucket" {
   }
 
   enabled             = true
-  default_root_object = "${aws_s3_bucket_object.root.key}"
+  default_root_object = "${aws_s3_object.root.key}"
   aliases             = "${var.aliases}"
   http_version        = "http2"
 
   custom_error_response {
     error_code         = 404
     response_code      = 200
-    response_page_path = "/${aws_s3_bucket_object.root.key}"
+    response_page_path = "/${aws_s3_object.root.key}"
   }
 
   default_cache_behavior {
