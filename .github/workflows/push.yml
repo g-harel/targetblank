@@ -102,6 +102,9 @@ jobs:
               with:
                   args: go build -o .functions/authenticate ./functions/authenticate
 
+            - name: make go binaries readable
+              run: chmod -R +r .functions
+
             # Terraform apply
             - name: terraform setup
               uses: hashicorp/setup-terraform@v1
