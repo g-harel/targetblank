@@ -47,10 +47,10 @@ resource "aws_s3_object" "root" {
 resource "aws_s3_object" "files" {
   count        = "${length(var.files)}"
   bucket       = aws_s3_bucket.public_bucket.id
-  key          = "${element(var.files, count.index)}"
-  source       = "${var.source_dir}/${element(var.files, count.index)}"
+  key          = "${replace(element(var.files, count.index), "/^\\//", "")}"
+  source       = "${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}"
   content_type = "${lookup(local.mime, replace(element(var.files, count.index), "/^.*\\.(\\w+)$/", "$1"), "text/plain")}"
-  etag         = "${md5(file("${var.source_dir}/${element(var.files, count.index)}"))}"
+  etag         = "${md5(file("${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}"))}"
 }
 
 resource "aws_cloudfront_distribution" "public_bucket" {
