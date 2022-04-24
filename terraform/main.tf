@@ -1,18 +1,11 @@
 locals {
   domain_name = "targetblank.org"
 
+  parcel_manifest = jsondecode(file(".website/parcel-manifest.json"))
+
   lambda_tags = {
     project = "targetblank"
   }
-}
-
-data "local_file" "manifest" {
-  filename = ".website/parcel-manifest.json"
-}
-
-# Using external data source to parse manifest contents as JSON.
-data "external" "manifest" {
-  program = ["echo", "${data.local_file.manifest.content}"]
 }
 
 module "website" {
@@ -26,8 +19,8 @@ module "website" {
   root_document = "index.html"
 
   files = [
-    "${lookup(data.external.manifest.result["index"], "tsx")}",
-    "${lookup(data.external.manifest.result["favicon"], "png")}",
+    "${lookup(local.parcel_manifest, "index.tsx")}",
+    "${lookup(local.parcel_manifest, "favicon.png")}",
   ]
 }
 
