@@ -41,7 +41,7 @@ resource "aws_s3_object" "root" {
   source        = "${var.source_dir}/${var.root_document}"
   content_type  = "text/html"
   cache_control = "no-cache"
-  etag          = "${md5(file("${var.source_dir}/${var.root_document}"))}"
+  etag          = "${filemd5("${var.source_dir}/${var.root_document}")}"
 }
 
 resource "aws_s3_object" "files" {
@@ -50,7 +50,7 @@ resource "aws_s3_object" "files" {
   key          = "${replace(element(var.files, count.index), "/^\\//", "")}"
   source       = "${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}"
   content_type = "${lookup(local.mime, replace(element(var.files, count.index), "/^.*\\.(\\w+)$/", "$1"), "text/plain")}"
-  etag         = "${md5(file("${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}"))}"
+  etag         = "${filemd5("${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}")}"
 }
 
 resource "aws_cloudfront_distribution" "public_bucket" {
