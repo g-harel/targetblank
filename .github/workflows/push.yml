@@ -6,80 +6,76 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-
-            # Build JS
             - uses: actions/setup-node@v1
               with:
                   node-version: "16.x"
+            - uses: actions/setup-go@v3
+              with:
+                  go-version: '1.18.1'
+            - uses: hashicorp/setup-terraform@v1
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  terraform_version: 1.0.11
 
+            # Build JS
             - name: js install
               run: yarn install --frozen-lockfile
-
             - name: js test
               run: yarn run test
-
             - name: js build
               run: yarn run build
 
             # Build Go
-            - uses: actions/setup-go@v3
-              with:
-                  go-version: '1.18.1'
-
+            # TODO build all in same step
             - name: go mod download
               env:
                   GO111MODULE: "on"
               run: go mod download
-
             - name: go test
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go test ./...
-
             - name: go build validate
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go build -o .functions/validate ./functions/validate
-
             - name: go build update
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go build -o .functions/update ./functions/update
-
             - name: go build reset
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go build -o .functions/reset ./functions/reset
-
             - name: go build read
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go build -o .functions/read ./functions/read
-
             - name: go build passwd
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go build -o .functions/passwd ./functions/passwd
-
             - name: go build create
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
               run: go build -o .functions/create ./functions/create
-
             - name: go build authenticate
               env:
                   GO111MODULE: "on"
@@ -88,15 +84,7 @@ jobs:
               run: go build -o .functions/authenticate ./functions/authenticate
 
             # Terraform apply
-            - name: terraform setup
-              uses: hashicorp/setup-terraform@v1
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  terraform_version: 1.0.11
-
+            # TODO remove environment vars when not necessary
             - name: terraform fmt
               run: terraform fmt -check
               continue-on-error: true
@@ -104,37 +92,24 @@ jobs:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
             - name: terraform init
               run: terraform init
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
             - name: terraform validate
               run: terraform validate -no-color
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: terraform plan
-              run: terraform plan
+            - name: terraform apply
+              run: terraform apply -input=false -auto-approve
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            # TODO terraform apply -no-color -input=false -auto-approve
-            # - name: terraform apply
-            #   uses: hashicorp/setup-terraform@v1
-            #   env:
-            #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   with:
-            #       terraform_version: 1.0.11
 
             # Publish extension
             - name: extension release

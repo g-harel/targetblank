@@ -9,7 +9,7 @@
         "release:chrome-edit": "grep -v homepage extension/manifest.json > m.temp; mv m.temp extension/manifest.json",
         "release:chrome": "cd .extension; webstore upload --extension-id oghkdhbenjnikkhobfmcfobjofapamgd",
         "dev": "parcel -p 1324 --dist-dir .dist website/index.html",
-        "test": "run-s fmt lint check test:unit build",
+        "test": "run-s fmt lint check test:unit",
         "test:unit": "jest",
         "lint": "tslint --project tsconfig.json website/**/*.ts --fix",
         "check": "tsc -noEmit",
