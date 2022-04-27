@@ -1,3 +1,4 @@
+# TODO run every week/day
 on: push
 name: Deploy
 jobs:
