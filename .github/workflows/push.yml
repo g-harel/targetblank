@@ -1,6 +1,8 @@
-# TODO run every week/day
-on: push
-name: Deploy
+on:
+    push:
+    schedule:
+        - cron: 0 8 * * *
+
 jobs:
     deploy:
         name: deploy
@@ -12,7 +14,7 @@ jobs:
                   node-version: "16.x"
             - uses: actions/setup-go@v3
               with:
-                  go-version: '1.18.1'
+                  go-version: "1.18.1"
             - uses: hashicorp/setup-terraform@v1
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
