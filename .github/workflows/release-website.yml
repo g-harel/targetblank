@@ -41,13 +41,14 @@ jobs:
             - name: go build
               env:
                   GO111MODULE: "on"
-              run: go build -o .functions/validate ./functions/validate && \
-                  go build -o .functions/update ./functions/update && \
-                  go build -o .functions/reset ./functions/reset && \
-                  go build -o .functions/read ./functions/read && \
-                  go build -o .functions/passwd ./functions/passwd && \
-                  go build -o .functions/create ./functions/create && \
-                  go build -o .functions/authenticate ./functions/authenticate
+              run: >
+                  go build -o .functions/validate ./functions/validate &&
+                    go build -o .functions/update ./functions/update &&
+                    go build -o .functions/reset ./functions/reset &&
+                    go build -o .functions/read ./functions/read &&
+                    go build -o .functions/passwd ./functions/passwd &&
+                    go build -o .functions/create ./functions/create &&
+                    go build -o .functions/authenticate ./functions/authenticate
 
             # Terraform apply
             # TODO remove environment vars when not necessary
