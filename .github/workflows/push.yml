@@ -32,87 +32,45 @@ jobs:
               run: yarn run build
 
             # Build Go
-            # TODO build all in same step
             - name: go mod download
               env:
                   GO111MODULE: "on"
               run: go mod download
             - name: go test
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
               run: go test ./...
-            - name: go build validate
+            - name: go build
               env:
                   GO111MODULE: "on"
                   GOARCH: amd64
                   GOOS: linux
-              run: go build -o .functions/validate ./functions/validate
-            - name: go build update
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
-              run: go build -o .functions/update ./functions/update
-            - name: go build reset
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
-              run: go build -o .functions/reset ./functions/reset
-            - name: go build read
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
-              run: go build -o .functions/read ./functions/read
-            - name: go build passwd
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
-              run: go build -o .functions/passwd ./functions/passwd
-            - name: go build create
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
-              run: go build -o .functions/create ./functions/create
-            - name: go build authenticate
-              env:
-                  GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
-              run: go build -o .functions/authenticate ./functions/authenticate
+              run: go build -o .functions/validate ./functions/validate && \
+                  go build -o .functions/update ./functions/update && \
+                  go build -o .functions/reset ./functions/reset && \
+                  go build -o .functions/read ./functions/read && \
+                  go build -o .functions/passwd ./functions/passwd && \
+                  go build -o .functions/create ./functions/create && \
+                  go build -o .functions/authenticate ./functions/authenticate
 
             # Terraform apply
             # TODO remove environment vars when not necessary
             - name: terraform fmt
               run: terraform fmt -check -recursive
               continue-on-error: true
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: terraform init
               run: terraform init
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: terraform validate
               run: terraform validate -no-color
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: terraform apply
               run: terraform apply -input=false -auto-approve
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             # Publish extension
             - name: extension release
