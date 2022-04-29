@@ -12,7 +12,7 @@ module "website" {
   source = "./modules/bucket-public"
 
   aliases     = ["${local.domain_name}"]
-  cert_arn    = "${aws_acm_certificate_validation.cert.certificate_arn}"
+  cert_arn    = aws_acm_certificate_validation.cert.certificate_arn
   bucket_name = "targetblank-static-website"
 
   source_dir    = ".website"
@@ -29,11 +29,11 @@ module "authenticate" {
 
   name = "authenticate"
   bin  = ".functions/authenticate"
-  role = "${aws_iam_role.lambda.arn}"
-  tags = "${local.lambda_tags}"
+  role = aws_iam_role.lambda.arn
+  tags = local.lambda_tags
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.auth_addr.id
   http_method         = "POST"
 }
 
@@ -42,12 +42,12 @@ module "create" {
 
   name   = "create"
   bin    = ".functions/create"
-  role   = "${aws_iam_role.lambda.arn}"
-  tags   = "${local.lambda_tags}"
+  role   = aws_iam_role.lambda.arn
+  tags   = local.lambda_tags
   memory = 320
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.page.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.page.id
   http_method         = "POST"
 }
 
@@ -56,11 +56,11 @@ module "passwd" {
 
   name = "passwd"
   bin  = ".functions/passwd"
-  role = "${aws_iam_role.lambda.arn}"
-  tags = "${local.lambda_tags}"
+  role = aws_iam_role.lambda.arn
+  tags = local.lambda_tags
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.auth_addr.id
   http_method         = "PUT"
 }
 
@@ -69,11 +69,11 @@ module "read" {
 
   name = "read"
   bin  = ".functions/read"
-  role = "${aws_iam_role.lambda.arn}"
-  tags = "${local.lambda_tags}"
+  role = aws_iam_role.lambda.arn
+  tags = local.lambda_tags
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.page_addr.id
   http_method         = "GET"
 }
 
@@ -82,11 +82,11 @@ module "reset" {
 
   name = "reset"
   bin  = ".functions/reset"
-  role = "${aws_iam_role.lambda.arn}"
-  tags = "${local.lambda_tags}"
+  role = aws_iam_role.lambda.arn
+  tags = local.lambda_tags
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.auth_addr.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.auth_addr.id
   http_method         = "DELETE"
 }
 
@@ -95,11 +95,11 @@ module "update" {
 
   name = "update"
   bin  = ".functions/update"
-  role = "${aws_iam_role.lambda.arn}"
-  tags = "${local.lambda_tags}"
+  role = aws_iam_role.lambda.arn
+  tags = local.lambda_tags
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.page_addr.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.page_addr.id
   http_method         = "PUT"
 }
 
@@ -108,10 +108,10 @@ module "validate" {
 
   name = "validate"
   bin  = ".functions/validate"
-  role = "${aws_iam_role.lambda.arn}"
-  tags = "${local.lambda_tags}"
+  role = aws_iam_role.lambda.arn
+  tags = local.lambda_tags
 
-  rest_api_id         = "${aws_api_gateway_rest_api.rest_api.id}"
-  gateway_resource_id = "${aws_api_gateway_resource.page_validate.id}"
+  rest_api_id         = aws_api_gateway_rest_api.rest_api.id
+  gateway_resource_id = aws_api_gateway_resource.page_validate.id
   http_method         = "POST"
 }

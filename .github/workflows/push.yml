@@ -87,7 +87,7 @@ jobs:
             # Terraform apply
             # TODO remove environment vars when not necessary
             - name: terraform fmt
-              run: terraform fmt -check
+              run: terraform fmt -check -recursive
               continue-on-error: true
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

@@ -1,9 +1,9 @@
-variable aliases {
+variable "aliases" {
   description = "The Cloudfront distribution's aliases."
   type        = list(string)
 }
 
-variable cert_arn {
+variable "cert_arn" {
   description = "The ARN of the certificate used by the Cloudfront distribution."
 }
 

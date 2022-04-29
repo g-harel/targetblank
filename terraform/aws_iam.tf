@@ -19,7 +19,7 @@ EOF
 
 resource "aws_iam_role_policy" "lambda_logs" {
   name = "logs-policy"
-  role = "${aws_iam_role.lambda.id}"
+  role = aws_iam_role.lambda.id
 
   policy = <<EOF
 {
@@ -41,7 +41,7 @@ EOF
 
 resource "aws_iam_role_policy" "lambda_dynamodb" {
   name = "dynamo-policy"
-  role = "${aws_iam_role.lambda.id}"
+  role = aws_iam_role.lambda.id
 
   policy = <<EOF
 {
@@ -59,7 +59,7 @@ EOF
 
 resource "aws_iam_role_policy" "lambda_ses" {
   name = "ses-policy"
-  role = "${aws_iam_role.lambda.id}"
+  role = aws_iam_role.lambda.id
 
   policy = <<EOF
 {
@@ -77,7 +77,7 @@ EOF
 
 resource "aws_iam_role_policy" "lambda_ssm" {
   name = "ssm-policy"
-  role = "${aws_iam_role.lambda.id}"
+  role = aws_iam_role.lambda.id
 
   policy = <<EOF
 {

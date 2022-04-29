@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "public_bucket" {
-  bucket = "${var.bucket_name}"
+  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
@@ -14,7 +14,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 
 data "aws_iam_policy_document" "policy_document" {
   statement {
-    sid = "PublicRead"
+    sid    = "PublicRead"
     effect = "Allow"
 
     principals {
@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "policy_document" {
       identifiers = ["*"]
     }
 
-    actions = ["s3:GetObject"]
+    actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.public_bucket.arn}/*"]
   }
 }
@@ -31,26 +31,26 @@ resource "aws_s3_bucket_website_configuration" "website_configuration" {
   bucket = aws_s3_bucket.public_bucket.bucket
 
   index_document {
-    suffix = "${var.root_document}"
+    suffix = var.root_document
   }
 }
 
 resource "aws_s3_object" "root" {
   bucket        = aws_s3_bucket.public_bucket.id
-  key           = "${var.root_document}"
+  key           = var.root_document
   source        = "${var.source_dir}/${var.root_document}"
   content_type  = "text/html"
   cache_control = "no-cache"
-  etag          = "${filemd5("${var.source_dir}/${var.root_document}")}"
+  etag          = filemd5("${var.source_dir}/${var.root_document}")
 }
 
 resource "aws_s3_object" "files" {
-  count        = "${length(var.files)}"
+  count        = length(var.files)
   bucket       = aws_s3_bucket.public_bucket.id
-  key          = "${replace(element(var.files, count.index), "/^\\//", "")}"
+  key          = replace(element(var.files, count.index), "/^\\//", "")
   source       = "${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}"
-  content_type = "${lookup(local.mime, replace(element(var.files, count.index), "/^.*\\.(\\w+)$/", "$1"), "text/plain")}"
-  etag         = "${filemd5("${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}")}"
+  content_type = lookup(local.mime, replace(element(var.files, count.index), "/^.*\\.(\\w+)$/", "$1"), "text/plain")
+  etag         = filemd5("${var.source_dir}/${replace(element(var.files, count.index), "/^\\//", "")}")
 }
 
 resource "aws_cloudfront_distribution" "public_bucket" {
@@ -63,12 +63,12 @@ resource "aws_cloudfront_distribution" "public_bucket" {
     }
 
     domain_name = "${aws_s3_bucket.public_bucket.id}.s3-website.${aws_s3_bucket.public_bucket.region}.amazonaws.com"
-    origin_id   = "${aws_s3_bucket.public_bucket.id}"
+    origin_id   = aws_s3_bucket.public_bucket.id
   }
 
   enabled             = true
-  default_root_object = "${aws_s3_object.root.key}"
-  aliases             = "${var.aliases}"
+  default_root_object = aws_s3_object.root.key
+  aliases             = var.aliases
   http_version        = "http2"
 
   custom_error_response {
@@ -80,7 +80,7 @@ resource "aws_cloudfront_distribution" "public_bucket" {
   default_cache_behavior {
     allowed_methods        = ["HEAD", "GET", "OPTIONS"]
     cached_methods         = ["HEAD", "GET", "OPTIONS"]
-    target_origin_id       = "${aws_s3_bucket.public_bucket.id}"
+    target_origin_id       = aws_s3_bucket.public_bucket.id
     viewer_protocol_policy = "redirect-to-https"
     compress               = true
 
@@ -100,7 +100,7 @@ resource "aws_cloudfront_distribution" "public_bucket" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "${var.cert_arn}"
+    acm_certificate_arn = var.cert_arn
     ssl_support_method  = "sni-only"
   }
 }

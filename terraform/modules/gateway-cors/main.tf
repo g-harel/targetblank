@@ -1,14 +1,14 @@
 resource "aws_api_gateway_method" "cors" {
-  rest_api_id   = "${var.rest_api_id}"
-  resource_id   = "${var.gateway_resource_id}"
+  rest_api_id   = var.rest_api_id
+  resource_id   = var.gateway_resource_id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
 
 resource "aws_api_gateway_method_response" "cors" {
-  rest_api_id = "${var.rest_api_id}"
-  resource_id = "${var.gateway_resource_id}"
-  http_method = "${aws_api_gateway_method.cors.http_method}"
+  rest_api_id = var.rest_api_id
+  resource_id = var.gateway_resource_id
+  http_method = aws_api_gateway_method.cors.http_method
   status_code = "200"
 
   response_models = {
@@ -26,9 +26,9 @@ resource "aws_api_gateway_method_response" "cors" {
 }
 
 resource "aws_api_gateway_integration" "cors" {
-  rest_api_id = "${var.rest_api_id}"
-  resource_id = "${var.gateway_resource_id}"
-  http_method = "${aws_api_gateway_method.cors.http_method}"
+  rest_api_id = var.rest_api_id
+  resource_id = var.gateway_resource_id
+  http_method = aws_api_gateway_method.cors.http_method
   type        = "MOCK"
 
   passthrough_behavior = "WHEN_NO_MATCH"
@@ -41,10 +41,10 @@ resource "aws_api_gateway_integration" "cors" {
 }
 
 resource "aws_api_gateway_integration_response" "cors" {
-  rest_api_id = "${var.rest_api_id}"
-  resource_id = "${var.gateway_resource_id}"
-  http_method = "${aws_api_gateway_method.cors.http_method}"
-  status_code = "${aws_api_gateway_method_response.cors.status_code}"
+  rest_api_id = var.rest_api_id
+  resource_id = var.gateway_resource_id
+  http_method = aws_api_gateway_method.cors.http_method
+  status_code = aws_api_gateway_method_response.cors.status_code
 
   response_parameters = {
     "method.response.header.Access-Control-Allow-Origin"      = "'${var.allow_origin}'"
