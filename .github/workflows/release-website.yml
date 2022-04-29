@@ -41,8 +41,6 @@ jobs:
             - name: go build
               env:
                   GO111MODULE: "on"
-                  GOARCH: amd64
-                  GOOS: linux
               run: go build -o .functions/validate ./functions/validate && \
                   go build -o .functions/update ./functions/update && \
                   go build -o .functions/reset ./functions/reset && \
