@@ -8,6 +8,7 @@ jobs:
         name: deploy
         runs-on: ubuntu-latest
         steps:
+            # Setup
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
@@ -51,7 +52,6 @@ jobs:
                     go build -o .functions/authenticate ./functions/authenticate
 
             # Terraform apply
-            # TODO remove environment vars when not necessary
             - name: terraform fmt
               run: terraform fmt -check -recursive
               continue-on-error: true
@@ -62,9 +62,6 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             - name: terraform validate
               run: terraform validate -no-color
-              env:
-                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             - name: terraform apply
               run: terraform apply -input=false -auto-approve
               env:
