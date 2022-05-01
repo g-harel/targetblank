@@ -1,6 +1,7 @@
 on:
     push:
     schedule:
+        # Daily at 8:00 AM Central 
         - cron: 00 13 * * *
 
 jobs:
