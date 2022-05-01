@@ -72,8 +72,9 @@ jobs:
             - name: extension release
               run: yarn run release
               env:
-                  WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
-                  WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
                   CLIENT_ID: ${{ secrets.CLIENT_ID }}
                   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+                  EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
                   REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+                  WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+                  WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
