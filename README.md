@@ -130,12 +130,12 @@ Checks code quality, runs unit tests on helpers and builds the bundle.
 Developing the extension starts the same as usual website development.
 
 ```bash
-$ npm run dev
+$ npm run build:extension
 ```
 
-**Chrome**: navigate to `chrome://extensions`, enable developer mode, and load unpacked from the `.dist` directory.
+**Chrome**: navigate to `chrome://extensions`, enable developer mode, and load unpacked from the `.extension` directory. You will need to manually delete the homepage key in the "chrome_settings_overrides" of the extension manifest.
 
-**Firefox**: navigate to `about:debugging#/runtime/this-firefox`, and load temporary add-on from any file in the `.dist` directory.
+**Firefox**: navigate to `about:debugging#/runtime/this-firefox`, and load temporary add-on from any file in the `.extension` directory.
 
 _You will need to open a new tab to view the most recent version of the extension (no hot-reload)._
 

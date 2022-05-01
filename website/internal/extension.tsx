@@ -1,4 +1,5 @@
 const storageKey = "targetblank-storage";
+const fallbackLocalStorageKey = "targetblank-storage-key";
 
 export const isExtension = !!(
     (window as any).chrome &&
@@ -14,8 +15,26 @@ export interface ExtensionStore {
 // Generates a zeroed-out page storage value.
 const empty = (): ExtensionStore => ({addr: null});
 
+// Check if storage permission had been granted.
+const hasStoragePermission = async (): Promise<boolean> => {
+    if (!isExtension) return false;
+    return new Promise((res) => {
+        (window as any).chrome.permissions.contains(
+            {
+                permissions: ["storage"],
+            },
+            (result: any) => res(!!result),
+        );
+    });
+};
+
 // Wrapper around browser's `storage.sync.get` to support both Chrome and Firefox.
-const crossRead = (keys: any): Promise<any> => {
+const crossRead = async (keys: any): Promise<any> => {
+    if (!(await hasStoragePermission())) {
+        return JSON.parse(
+            localStorage.getItem(fallbackLocalStorageKey) || "{}",
+        );
+    }
     if (isChromeExtension) {
         return new Promise((resolve) => {
             (window as any).chrome.storage.sync.get(keys, resolve);
@@ -25,7 +44,12 @@ const crossRead = (keys: any): Promise<any> => {
 };
 
 // Wrapper around browser's `storage.sync.set` to support both Chrome and Firefox.
-const crossWrite = (keys: browser.storage.StorageObject): Promise<void> => {
+const crossWrite = async (
+    keys: browser.storage.StorageObject,
+): Promise<void> => {
+    if (!(await hasStoragePermission())) {
+        localStorage.setItem(fallbackLocalStorageKey, JSON.stringify(keys));
+    }
     if (isChromeExtension) {
         return new Promise((resolve) => {
             (window as any).chrome.storage.sync.set(keys);

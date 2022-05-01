@@ -9,7 +9,7 @@
         }
     },
 
-    "permissions": ["storage"],
+    "optional_permissions": ["storage"],
     "chrome_url_overrides": {
         "newtab": "index.html"
     },

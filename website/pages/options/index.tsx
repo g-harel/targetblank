@@ -41,6 +41,7 @@ const Address = styled("div")({
     padding: "0.5em 1em",
 });
 
+// TODO add button/option to use extesion storage for address.
 export const Options: PageComponent = (_, update) => {
     document.title = "targetblank - options";
     let options: ExtensionStore | null = null;
