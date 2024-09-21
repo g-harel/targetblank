@@ -1,8 +1,10 @@
 {
-    "manifest_version": 2,
-    "version": "1.0.5",
+    "manifest_version": 3,
+    "version": "1.1.5",
     "name": "targetblank",
     "description": "organize your links",
+    "homepage_url": "https://targetblank.org",
+    "incognito": "spanning",
     "applications": {
         "gecko": {
             "id": "extension@targetblank.org"
@@ -12,8 +14,5 @@
     "optional_permissions": ["storage"],
     "chrome_url_overrides": {
         "newtab": "index.html"
-    },
-    "chrome_settings_overrides": {
-        "homepage": "index.html"
     }
 }
