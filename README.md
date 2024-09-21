@@ -133,7 +133,7 @@ Developing the extension starts the same as usual website development.
 $ npm run build:extension
 ```
 
-**Chrome**: navigate to `chrome://extensions`, enable developer mode, and load unpacked from the `.extension` directory. You will need to manually delete the homepage key in the "chrome_settings_overrides" of the extension manifest.
+**Chrome**: navigate to `chrome://extensions`, enable developer mode, and load unpacked from the `.extension` directory.
 
 **Firefox**: navigate to `about:debugging#/runtime/this-firefox`, and load temporary add-on from any file in the `.extension` directory.
 
